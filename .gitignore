@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Supabase Env files
+.env.testing
+.env.production
+
 # Personal
 /project-dumper.ps1
 /project_content.txt
