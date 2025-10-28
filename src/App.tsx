@@ -6,7 +6,12 @@ import { cn } from './lib/utils'
 function App() {
   const { loading } = useAuth()
   const location = useLocation()
-  const isAuthPage = ['/login', '/unauthorized'].includes(location.pathname)
+  const isAuthPage = [
+    '/login',
+    '/unauthorized',
+    '/auth-confirmed',
+    '/update-password',
+  ].includes(location.pathname)
 
   if (loading) {
     return <GlobalLoader />
@@ -17,7 +22,7 @@ function App() {
       className={cn(
         'flex h-screen w-full',
         isAuthPage
-          ? 'min-h-screen flex-col items-center justify-center bg-[length:200%_200%] bg-gradient-to-br from-background via-stone-200 to-background p-4 animate-gradient-shift'
+          ? 'min-h-screen flex-col items-center justify-center bg-[length:300%_300%] bg-gradient-to-br from-secondary/75 via-primary/50 to-background p-4 animate-gradient-shift'
           : '',
       )}
     >

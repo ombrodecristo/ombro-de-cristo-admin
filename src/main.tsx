@@ -15,6 +15,8 @@ import { GlobalLoader } from './components/GlobalLoader'
 const Login = lazy(() => import('./pages/Login'))
 const Unauthorized = lazy(() => import('./pages/Unauthorized'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
+const AuthConfirmed = lazy(() => import('./pages/AuthConfirmed'))
+const UpdatePassword = lazy(() => import('./pages/UpdatePassword'))
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,8 @@ const router = createBrowserRouter([
     children: [
       { path: '/login', element: <Login /> },
       { path: '/unauthorized', element: <Unauthorized /> },
+      { path: '/auth-confirmed', element: <AuthConfirmed /> },
+      { path: '/update-password', element: <UpdatePassword /> },
       {
         element: <ProtectedRoute />,
         children: [
