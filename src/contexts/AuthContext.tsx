@@ -12,6 +12,7 @@ type AuthContextType = {
   user: User | null
   role: UserRole | null
   loading: boolean
+  signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -28,8 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       const currentUser = session?.user as User | null
       setUser(currentUser)
-
-      setRole(currentUser?.app_meta_data?.role ?? null)
+      setRole(currentUser?.app_metadata?.role ?? null)
       setLoading(false)
     })
 
@@ -38,10 +38,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    setUser(null)
+    setRole(null)
+  }
+
   const value = {
     user,
     role,
     loading,
+    signOut,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

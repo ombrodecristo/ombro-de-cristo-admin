@@ -1,13 +1,20 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext'
-import Login from './pages/Login'
-import Unauthorized from './pages/Unauthorized'
-import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminLayout from './components/AdminLayout'
+import { GlobalLoader } from './components/GlobalLoader'
+
+const Login = lazy(() => import('./pages/Login'))
+const Unauthorized = lazy(() => import('./pages/Unauthorized'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
 
 const router = createBrowserRouter([
   {
@@ -16,13 +23,22 @@ const router = createBrowserRouter([
     children: [
       { path: '/login', element: <Login /> },
       { path: '/unauthorized', element: <Unauthorized /> },
-
       {
         element: <ProtectedRoute />,
         children: [
           {
             path: '/',
-            element: <Dashboard />,
+            element: <AdminLayout />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/users" replace />,
+              },
+              {
+                path: 'users',
+                element: <Dashboard />,
+              },
+            ],
           },
         ],
       },
@@ -33,7 +49,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <Suspense fallback={<GlobalLoader />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </AuthProvider>
   </StrictMode>,
 )
