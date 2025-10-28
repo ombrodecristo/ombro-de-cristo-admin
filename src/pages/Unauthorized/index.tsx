@@ -27,10 +27,6 @@ export default function Unauthorized() {
     return <Navigate to="/" replace />
   }
 
-  if (!user && !authLoading) {
-    return <Navigate to="/login" replace />
-  }
-
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="items-center text-center">
@@ -43,7 +39,8 @@ export default function Unauthorized() {
         <p className="text-muted-foreground">
           Esta área é restrita a Administradores.
           <br />
-          Você foi desconectado.
+          <br />
+          Se você acredita que isso é um erro, por favor, entre em contato com a equipe de suporte.
         </p>
       </CardContent>
     </Card>
