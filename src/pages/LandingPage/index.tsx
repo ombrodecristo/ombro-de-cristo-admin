@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { type UserGender } from "@/types/database";
-
 export default function LandingPage() {
   const {
     fullName,
@@ -42,23 +41,20 @@ export default function LandingPage() {
     success,
     handleSubmit,
   } = useLandingPageViewModel();
-
   return (
     <div className="flex w-full min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
       <div
         className="flex flex-col items-center justify-center gap-2 bg-primary p-6 text-center text-primary-foreground 
-                  md:h-full md:w-1/3 md:gap-6 md:p-12"
+                  md:h-full md:w-1/3 md:gap-2 md:p-12"
       >
         <div className="flex flex-row items-center justify-center gap-3 md:flex-col md:gap-6">
           <ShieldHalf className="h-8 w-8 md:h-24 md:w-24" />
           <h1 className="text-2xl font-bold md:text-4xl">Ombro de Cristo</h1>
         </div>
-
         <p className="text-sm text-primary-foreground/80 md:text-lg">
           Sua missão, fortalecida pela mentoria.
         </p>
       </div>
-
       <div className="flex flex-1 items-center justify-center bg-background p-4 md:w-2/3 md:overflow-y-auto">
         <Card className="w-full max-w-md">
           <CardHeader className="items-center text-center">
@@ -66,7 +62,6 @@ export default function LandingPage() {
               Junte-se à nossa comunidade
             </CardTitle>
           </CardHeader>
-
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
@@ -84,7 +79,6 @@ export default function LandingPage() {
                   </AlertDescription>
                 </Alert>
               )}
-
               <div className="space-y-3">
                 <Label htmlFor="fullName">Nome Completo</Label>
                 <div className="relative">
@@ -101,7 +95,6 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="gender">Gênero</Label>
                 <div className="relative">
@@ -113,7 +106,7 @@ export default function LandingPage() {
                     required
                   >
                     <SelectTrigger id="gender-select" className="pl-9">
-                      <SelectValue placeholder="Selecione seu gênero" />
+                      <SelectValue placeholder="Seu gênero" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="MALE">Masculino</SelectItem>
@@ -122,7 +115,6 @@ export default function LandingPage() {
                   </Select>
                 </div>
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="email">E-mail</Label>
                 <div className="relative">
@@ -140,7 +132,6 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="password">Senha</Label>
                 <div className="relative">
@@ -158,7 +149,6 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                 <div className="relative">
@@ -176,7 +166,6 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
-
               <Button
                 type="submit"
                 variant="default"
@@ -191,9 +180,7 @@ export default function LandingPage() {
                 Criar conta
               </Button>
             </form>
-
             <div className="border-t my-6" />
-
             <div className="space-y-4 text-center">
               <p className="text-sm font-medium text-muted-foreground">
                 O aplicativo completo chega em breve.

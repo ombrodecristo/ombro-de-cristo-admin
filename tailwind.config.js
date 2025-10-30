@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 import tailwindcssAnimate from "tailwindcss-animate";
-
 export default {
   darkMode: null,
   content: ["./index.html", "./src/**/*.{js,ts,tsx}"],
@@ -65,14 +64,9 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "gradient-shift": {
-          "30%": { backgroundPosition: "0% 0%" },
-          "100%": { backgroundPosition: "0% 0%" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
-        "gradient-shift": "gradient-shift 4s linear infinite",
       },
     },
   },
