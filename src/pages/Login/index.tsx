@@ -17,14 +17,14 @@ import { PasswordInput } from "@/components/ui/password-input";
 export default function Login() {
   const { email, setEmail, password, setPassword, loading, handleLogin } =
     useLoginViewModel();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, role } = useAuth();
 
   if (authLoading) {
     return <GlobalLoader />;
   }
 
-  if (user) {
-    return <Navigate to="/admin" />;
+  if (user && role === "ADMIN") {
+    return <Navigate to="/admin" replace />;
   }
 
   return (

@@ -9,12 +9,9 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isAuthPage = [
-    "/login",
-    "/unauthorized",
-    "/auth-confirmed",
-    "/update-password",
-  ].includes(location.pathname);
+  const isAuthPage = ["/login", "/auth-confirmed", "/update-password"].includes(
+    location.pathname
+  );
 
   useEffect(() => {
     if (loading) {
@@ -23,7 +20,7 @@ function App() {
 
     if (user && role !== "ADMIN" && !isAuthPage) {
       signOut();
-      navigate("/unauthorized", { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [loading, user, role, location.pathname, isAuthPage, navigate, signOut]);
 

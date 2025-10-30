@@ -14,7 +14,7 @@ export default function ProtectedRoute() {
   }
 
   if (role !== "ADMIN") {
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return <Outlet />;
