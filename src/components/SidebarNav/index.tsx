@@ -12,7 +12,7 @@ export function SidebarNav({ isDesktopClosed, onLinkClick }: SidebarNavProps) {
   return (
     <nav className="flex flex-col gap-2 px-2 text-primary-foreground">
       <NavLink
-        to="/users"
+        to="/admin/users"
         className={({ isActive }) =>
           cn(
             buttonVariants({

@@ -19,7 +19,7 @@ export default function Unauthorized() {
   }
 
   if (role === "ADMIN") {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
   return (
