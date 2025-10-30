@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { authService } from "../../services/authService";
 import { type UserGender } from "../../types/database";
+import { logService } from "../../services/logService";
+import { toast } from "sonner";
 
 export function useLandingPageViewModel() {
   const [fullName, setFullName] = useState("");
@@ -9,29 +11,26 @@ export function useLandingPageViewModel() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     if (!gender) {
-      setError("Por favor, selecione o gênero.");
+      toast.error("Por favor, selecione o gênero.");
       return;
     }
+
     if (password.length < 6) {
-      setError("A senha deve ter no mínimo 6 caracteres.");
+      toast.error("A senha deve ter no mínimo 6 caracteres.");
       return;
     }
+
     if (password !== confirmPassword) {
-      setError("As senhas não conferem.");
+      toast.error("As senhas não conferem.");
       return;
     }
 
     setLoading(true);
-    setSuccess(false);
-
     const { error } = await authService.signUp(
       fullName,
       gender,
@@ -41,15 +40,19 @@ export function useLandingPageViewModel() {
 
     setLoading(false);
     if (error) {
+      let friendlyMessage = "Ocorreu um erro ao tentar criar a conta.";
       if (error.message === "User already registered") {
-        setError(
-          "Este e-mail já está cadastrado. Tente fazer login ou recuperar sua senha."
-        );
-      } else {
-        setError(error.message);
+        friendlyMessage =
+          "Este e-mail já está cadastrado. Tente fazer login ou recuperar sua senha.";
       }
+
+      toast.error(friendlyMessage);
+      await logService.logError(error, {
+        component: "useLandingPageViewModel",
+        context: { email: email.substring(0, 3) + "..." },
+      });
     } else {
-      setSuccess(true);
+      toast.success("Cadastro realizado! Por favor, verifique seu e-mail.");
       setFullName("");
       setGender("");
       setEmail("");
@@ -70,8 +73,6 @@ export function useLandingPageViewModel() {
     confirmPassword,
     setConfirmPassword,
     loading,
-    error,
-    success,
     handleSubmit,
   };
 }

@@ -26,7 +26,6 @@ export default function UpdatePassword() {
     confirmPassword,
     setConfirmPassword,
     loading,
-    error,
     success,
     isTokenValid,
     handleSubmit,
@@ -65,13 +64,6 @@ export default function UpdatePassword() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
             <div className="space-y-3">
               <Label htmlFor="password">Nova Senha</Label>
               <div className="relative">

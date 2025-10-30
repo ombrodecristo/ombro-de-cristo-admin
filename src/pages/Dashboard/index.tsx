@@ -10,7 +10,6 @@ export default function Dashboard() {
   const { user } = useAuth();
   const {
     loading,
-    error,
     editingProfile,
     searchQuery,
     setSearchQuery,
@@ -32,10 +31,6 @@ export default function Dashboard() {
         <Skeleton className="h-96 w-full" />
       </div>
     );
-  }
-
-  if (error) {
-    return <div>Erro ao carregar usuários: {error}</div>;
   }
 
   return (

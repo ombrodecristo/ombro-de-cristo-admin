@@ -4,6 +4,8 @@ import {
   profileService,
   type ProfileWithRelations,
 } from "../../services/profileService";
+import { logService } from "../../services/logService";
+import { toast } from "sonner";
 
 export type { ProfileWithRelations };
 
@@ -21,7 +23,7 @@ export function useDashboardViewModel({
 }: UseDashboardViewModelProps) {
   const [profiles, setProfiles] = useState<ProfileWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
   const [editingProfile, setEditingProfile] =
     useState<ProfileWithRelations | null>(null);
   const [sortConfig, setSortConfig] = useState<SortConfig>({
@@ -32,16 +34,18 @@ export function useDashboardViewModel({
 
   async function fetchProfiles() {
     setLoading(true);
-    setError(null);
-
     const { data, error } = await profileService.getProfilesWithRelations();
 
     if (error) {
       console.error("Erro ao buscar profiles:", error);
-      setError(error.message);
+      toast.error("Erro ao carregar usuários.");
+      await logService.logError(error, {
+        component: "useDashboardViewModel",
+      });
     } else if (data) {
       setProfiles(data);
     }
+
     setLoading(false);
   }
 
@@ -55,13 +59,12 @@ export function useDashboardViewModel({
         profile.full_name.toLowerCase().includes(searchQuery.toLowerCase()) &&
         profile.id !== currentUserId
     );
-
     let sortableProfiles = [...filteredProfiles];
+
     if (sortConfig.key !== null) {
       sortableProfiles.sort((a, b) => {
         let aValue: any;
         let bValue: any;
-
         if (sortConfig.key === "churches") {
           aValue = a.churches?.name ?? "";
           bValue = b.churches?.name ?? "";
@@ -69,8 +72,8 @@ export function useDashboardViewModel({
           aValue = a.mentor?.full_name ?? "";
           bValue = b.mentor?.full_name ?? "";
         } else {
-          aValue = a[sortConfig.key as keyof Profile];
-          bValue = b[sortConfig.key as keyof Profile];
+          aValue = a[sortConfig.key as keyof ProfileWithRelations];
+          bValue = b[sortConfig.key as keyof ProfileWithRelations];
         }
 
         if (aValue < bValue) {
@@ -84,7 +87,6 @@ export function useDashboardViewModel({
         return 0;
       });
     }
-
     return sortableProfiles;
   }, [profiles, sortConfig, searchQuery, currentUserId]);
 
@@ -111,7 +113,6 @@ export function useDashboardViewModel({
   return {
     profiles,
     loading,
-    error,
     editingProfile,
     searchQuery,
     setSearchQuery,

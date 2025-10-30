@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useEditUserRoleViewModel, allRoles } from "./useEditUserRoleViewModel";
 
 type EditUserRoleModalProps = {
@@ -32,7 +32,7 @@ export default function EditUserRoleModal({
   onClose,
   onSuccess,
 }: EditUserRoleModalProps) {
-  const { newRole, setNewRole, loading, error, handleSubmit } =
+  const { newRole, setNewRole, loading, handleSubmit } =
     useEditUserRoleViewModel({
       profile,
       onClose,
@@ -51,13 +51,6 @@ export default function EditUserRoleModal({
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="role-select">Permissão</Label>
               <Select

@@ -1,13 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import {
-  Mail,
-  Lock,
-  LogIn,
-  ShieldHalf,
-  AlertCircle,
-  Loader2,
-} from "lucide-react";
+import { Mail, Lock, LogIn, ShieldHalf, Loader2 } from "lucide-react";
 import { useLoginViewModel } from "./useLoginViewModel";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,19 +11,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { GlobalLoader } from "@/components/GlobalLoader";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export default function Login() {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    loading,
-    error,
-    handleLogin,
-  } = useLoginViewModel();
+  const { email, setEmail, password, setPassword, loading, handleLogin } =
+    useLoginViewModel();
   const { user, loading: authLoading } = useAuth();
 
   if (authLoading) {
@@ -54,16 +40,8 @@ export default function Login() {
           </CardDescription>
         </div>
       </CardHeader>
-
       <CardContent>
         <form onSubmit={handleLogin} className="space-y-5">
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
           <div className="space-y-3">
             <Label htmlFor="email">E-mail</Label>
             <div className="relative">
@@ -81,14 +59,12 @@ export default function Login() {
               />
             </div>
           </div>
-
           <div className="space-y-3">
             <Label htmlFor="password">Senha</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 placeholder="••••••••"
                 className="pl-9"
                 value={password}
@@ -99,7 +75,6 @@ export default function Login() {
               />
             </div>
           </div>
-
           <Button
             type="submit"
             variant="default"

@@ -11,6 +11,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/AdminLayout";
 import { GlobalLoader } from "./components/GlobalLoader";
+import { Toaster } from "sonner";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Login = lazy(() => import("./pages/Login"));
@@ -57,6 +58,7 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <Suspense fallback={<GlobalLoader />}>
         <RouterProvider router={router} />
+        <Toaster richColors closeButton />
       </Suspense>
     </AuthProvider>
   </StrictMode>

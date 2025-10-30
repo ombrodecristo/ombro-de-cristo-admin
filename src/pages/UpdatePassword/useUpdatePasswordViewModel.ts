@@ -1,12 +1,13 @@
 import { useState, type FormEvent, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { authService } from "../../services/authService";
+import { logService } from "../../services/logService";
+import { toast } from "sonner";
 
 export function useUpdatePasswordViewModel() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isTokenValid, setIsTokenValid] = useState(false);
 
@@ -30,21 +31,25 @@ export function useUpdatePasswordViewModel() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError("As senhas não conferem.");
+      toast.error("As senhas não conferem.");
       return;
     }
+
     if (password.length < 6) {
-      setError("A senha deve ter no mínimo 6 caracteres.");
+      toast.error("A senha deve ter no mínimo 6 caracteres.");
       return;
     }
+
     setLoading(true);
-    setError(null);
 
     const { error } = await authService.updateUserPassword(password);
     setLoading(false);
 
     if (error) {
-      setError(error.message);
+      toast.error(error.message);
+      await logService.logError(error, {
+        component: "useUpdatePasswordViewModel",
+      });
     } else {
       setSuccess(true);
     }
@@ -56,7 +61,6 @@ export function useUpdatePasswordViewModel() {
     confirmPassword,
     setConfirmPassword,
     loading,
-    error,
     success,
     isTokenValid,
     handleSubmit,

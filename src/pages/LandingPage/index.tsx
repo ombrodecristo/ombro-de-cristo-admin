@@ -1,13 +1,4 @@
-import {
-  Mail,
-  Lock,
-  User,
-  Users,
-  ShieldHalf,
-  AlertCircle,
-  Loader2,
-  CheckCircle,
-} from "lucide-react";
+import { Mail, Lock, User, Users, ShieldHalf, Loader2 } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import { useLandingPageViewModel } from "./useLandingPageViewModel";
@@ -22,8 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { type UserGender } from "@/types/database";
+import { PasswordInput } from "@/components/ui/password-input";
+
 export default function LandingPage() {
   const {
     fullName,
@@ -37,8 +29,6 @@ export default function LandingPage() {
     confirmPassword,
     setConfirmPassword,
     loading,
-    error,
-    success,
     handleSubmit,
   } = useLandingPageViewModel();
   return (
@@ -64,21 +54,6 @@ export default function LandingPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              {success && (
-                <Alert variant="default">
-                  <CheckCircle className="h-4 w-4 text-primary" />
-                  <AlertDescription>
-                    Cadastro realizado! Por favor, verifique seu e-mail para
-                    confirmar sua conta.
-                  </AlertDescription>
-                </Alert>
-              )}
               <div className="space-y-3">
                 <Label htmlFor="fullName">Nome Completo</Label>
                 <div className="relative">
@@ -136,9 +111,8 @@ export default function LandingPage() {
                 <Label htmlFor="password">Senha</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
+                  <PasswordInput
                     id="password"
-                    type="password"
                     placeholder="••••••••"
                     className="pl-9"
                     value={password}
@@ -153,9 +127,8 @@ export default function LandingPage() {
                 <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
+                  <PasswordInput
                     id="confirmPassword"
-                    type="password"
                     placeholder="••••••••"
                     className="pl-9"
                     value={confirmPassword}
@@ -183,7 +156,7 @@ export default function LandingPage() {
             <div className="border-t my-6" />
             <div className="space-y-4 text-center">
               <p className="text-sm font-medium text-muted-foreground">
-                O aplicativo completo chega em breve.
+                Em breve nas principais lojas de aplicativos!
               </p>
               <div className="flex gap-4">
                 <Button

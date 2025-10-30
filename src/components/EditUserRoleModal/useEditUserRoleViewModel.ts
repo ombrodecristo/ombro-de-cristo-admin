@@ -4,6 +4,8 @@ import {
   type ProfileWithRelations,
   profileService,
 } from "../../services/profileService";
+import { logService } from "../../services/logService";
+import { toast } from "sonner";
 
 export const allRoles: UserRole[] = ["MISSIONARY", "MENTOR", "ADMIN"];
 
@@ -20,7 +22,6 @@ export function useEditUserRoleViewModel({
 }: UseEditUserRoleViewModelProps) {
   const [newRole, setNewRole] = useState<UserRole>(profile.role);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setNewRole(profile.role);
@@ -29,10 +30,10 @@ export function useEditUserRoleViewModel({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     if (newRole === profile.role) {
       onClose();
+      setLoading(false);
       return;
     }
 
@@ -43,8 +44,13 @@ export function useEditUserRoleViewModel({
 
     setLoading(false);
     if (error) {
-      setError(error.message);
+      toast.error(error.message);
+      await logService.logError(error, {
+        component: "useEditUserRoleViewModel",
+        context: { profileId: profile.id, newRole },
+      });
     } else if (data) {
+      toast.success("Permissão alterada com sucesso!");
       onSuccess(data);
       onClose();
     }
@@ -54,7 +60,6 @@ export function useEditUserRoleViewModel({
     newRole,
     setNewRole,
     loading,
-    error,
     handleSubmit,
     allRoles,
   };
