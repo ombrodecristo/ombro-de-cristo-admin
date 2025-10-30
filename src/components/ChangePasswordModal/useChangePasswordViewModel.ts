@@ -28,6 +28,9 @@ export function useChangePasswordViewModel({
     setLoading(true);
     const { error } = await authService.updateUserPassword(password);
     setLoading(false);
+    setPassword("");
+    setConfirmPassword("");
+
     if (error) {
       toast.error(error.message);
       await logService.logError(error, {
