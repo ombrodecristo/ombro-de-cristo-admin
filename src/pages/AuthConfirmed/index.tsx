@@ -1,10 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { CheckCircle } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle } from "lucide-react";
 
 export default function AuthConfirmed() {
   return (
@@ -15,13 +10,15 @@ export default function AuthConfirmed() {
           E-mail Confirmado!
         </CardTitle>
       </CardHeader>
+
       <CardContent className="text-center">
         <p className="text-muted-foreground">
           Sua conta foi verificada com sucesso.
+          <br />
           <br />
           Você já pode fechar esta página e retornar ao aplicativo.
         </p>
       </CardContent>
     </Card>
-  )
+  );
 }

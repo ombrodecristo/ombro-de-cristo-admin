@@ -1,6 +1,5 @@
-import { type Profile } from '../../types/database'
-import { Edit, ArrowUp, ArrowDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Edit, ArrowUp, ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,21 +7,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Card, CardContent } from '@/components/ui/card'
-import { type SortConfig } from '@/pages/Dashboard/useDashboardViewModel'
-
-type ProfileWithRelations = Profile & {
-  churches: { name: string } | null
-  mentor: { full_name: string } | null
-}
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
+import { type SortConfig } from "@/pages/Dashboard/useDashboardViewModel";
+import { type ProfileWithRelations } from "@/services/profileService";
 
 type UserTableProps = {
-  profiles: ProfileWithRelations[]
-  onEdit: (profile: ProfileWithRelations) => void
-  sortConfig: SortConfig
-  requestSort: (key: keyof ProfileWithRelations) => void
-}
+  profiles: ProfileWithRelations[];
+  onEdit: (profile: ProfileWithRelations) => void;
+  sortConfig: SortConfig;
+  requestSort: (key: keyof ProfileWithRelations) => void;
+};
 
 export default function UserTable({
   profiles,
@@ -32,14 +27,14 @@ export default function UserTable({
 }: UserTableProps) {
   const getSortIcon = (key: keyof ProfileWithRelations) => {
     if (sortConfig.key !== key) {
-      return null
+      return null;
     }
-    return sortConfig.direction === 'ascending' ? (
+    return sortConfig.direction === "ascending" ? (
       <ArrowUp className="ml-2 h-4 w-4" />
     ) : (
       <ArrowDown className="ml-2 h-4 w-4" />
-    )
-  }
+    );
+  };
 
   return (
     <Card>
@@ -49,47 +44,48 @@ export default function UserTable({
             <TableRow>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => requestSort('full_name')}
+                onClick={() => requestSort("full_name")}
               >
                 <div className="flex items-center">
-                  Nome {getSortIcon('full_name')}
+                  Nome {getSortIcon("full_name")}
                 </div>
               </TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => requestSort('role')}
+                onClick={() => requestSort("role")}
               >
                 <div className="flex items-center">
-                  Permissão {getSortIcon('role')}
+                  Permissão {getSortIcon("role")}
                 </div>
               </TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => requestSort('gender')}
+                onClick={() => requestSort("gender")}
               >
                 <div className="flex items-center">
-                  Gênero {getSortIcon('gender')}
+                  Gênero {getSortIcon("gender")}
                 </div>
               </TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => requestSort('churches')}
+                onClick={() => requestSort("churches")}
               >
                 <div className="flex items-center">
-                  Igreja {getSortIcon('churches')}
+                  Igreja {getSortIcon("churches")}
                 </div>
               </TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => requestSort('mentor')}
+                onClick={() => requestSort("mentor")}
               >
                 <div className="flex items-center">
-                  Mentor {getSortIcon('mentor')}
+                  Mentor {getSortIcon("mentor")}
                 </div>
               </TableHead>
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {profiles.length === 0 ? (
               <TableRow>
@@ -105,8 +101,8 @@ export default function UserTable({
                   </TableCell>
                   <TableCell>{profile.role}</TableCell>
                   <TableCell>{profile.gender}</TableCell>
-                  <TableCell>{profile.churches?.name ?? 'N/A'}</TableCell>
-                  <TableCell>{profile.mentor?.full_name ?? 'N/A'}</TableCell>
+                  <TableCell>{profile.churches?.name ?? "N/A"}</TableCell>
+                  <TableCell>{profile.mentor?.full_name ?? "N/A"}</TableCell>
                   <TableCell>
                     <Button
                       variant="default"
@@ -123,5 +119,5 @@ export default function UserTable({
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

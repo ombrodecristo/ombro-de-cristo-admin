@@ -1,16 +1,13 @@
-import { useAuth } from '../../contexts/AuthContext'
-import UserTable from '../../components/UserTable'
-import EditUserRoleModal from '../../components/EditUserRoleModal'
-import {
-  useDashboardViewModel,
-  type ProfileWithRelations,
-} from './useDashboardViewModel'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
+import { useAuth } from "../../contexts/AuthContext";
+import UserTable from "../../components/UserTable";
+import EditUserRoleModal from "../../components/EditUserRoleModal";
+import { useDashboardViewModel } from "./useDashboardViewModel";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function Dashboard() {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const {
     loading,
     error,
@@ -23,7 +20,7 @@ export default function Dashboard() {
     handleUpdateSuccess,
     handleEdit,
     handleCloseModal,
-  } = useDashboardViewModel({ currentUserId: user?.id || '' })
+  } = useDashboardViewModel({ currentUserId: user?.id || "" });
 
   if (loading && !editingProfile) {
     return (
@@ -34,11 +31,11 @@ export default function Dashboard() {
         </div>
         <Skeleton className="h-96 w-full" />
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <div>Erro ao carregar usuários: {error}</div>
+    return <div>Erro ao carregar usuários: {error}</div>;
   }
 
   return (
@@ -53,12 +50,14 @@ export default function Dashboard() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
+
       <UserTable
         profiles={sortedProfiles}
-        onEdit={handleEdit as (profile: ProfileWithRelations) => void}
+        onEdit={handleEdit}
         sortConfig={sortConfig}
         requestSort={requestSort}
       />
+
       {editingProfile && (
         <EditUserRoleModal
           profile={editingProfile}
@@ -67,5 +66,5 @@ export default function Dashboard() {
         />
       )}
     </div>
-  )
+  );
 }

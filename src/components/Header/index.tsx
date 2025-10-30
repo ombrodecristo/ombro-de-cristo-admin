@@ -1,10 +1,10 @@
-import { Menu, ShieldHalf } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import UserMenu from '../UserMenu'
+import { Menu, ShieldHalf } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import UserMenu from "../UserMenu";
 
 type HeaderProps = {
-  onToggleMobile: () => void
-}
+  onToggleMobile: () => void;
+};
 
 export default function Header({ onToggleMobile }: HeaderProps) {
   return (
@@ -19,14 +19,16 @@ export default function Header({ onToggleMobile }: HeaderProps) {
           <Menu className="h-5 w-5" />
           <span className="sr-only">Abrir menu</span>
         </Button>
+
         <div className="flex items-center gap-2">
           <ShieldHalf className="h-5 w-5" />
           <h1 className="text-md font-bold md:text-lg">Ombro de Cristo</h1>
         </div>
       </div>
+
       <div className="flex items-center justify-end gap-4">
         <UserMenu />
       </div>
     </header>
-  )
+  );
 }

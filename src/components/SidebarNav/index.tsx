@@ -1,12 +1,12 @@
-import { NavLink } from 'react-router-dom'
-import { Users } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { NavLink } from "react-router-dom";
+import { Users } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 type SidebarNavProps = {
-  isDesktopClosed: boolean
-  onLinkClick?: () => void
-}
+  isDesktopClosed: boolean;
+  onLinkClick?: () => void;
+};
 
 export function SidebarNav({ isDesktopClosed, onLinkClick }: SidebarNavProps) {
   return (
@@ -16,20 +16,20 @@ export function SidebarNav({ isDesktopClosed, onLinkClick }: SidebarNavProps) {
         className={({ isActive }) =>
           cn(
             buttonVariants({
-              variant: 'ghost',
+              variant: "ghost",
             }),
-            'w-full justify-start gap-2',
+            "w-full justify-start gap-2",
             isActive
-              ? 'bg-black/20 text-primary-foreground'
-              : 'hover:bg-black/10 hover:text-primary-foreground',
-            isDesktopClosed && 'justify-center',
+              ? "bg-black/20 text-primary-foreground"
+              : "hover:bg-black/10 hover:text-primary-foreground",
+            isDesktopClosed && "justify-center"
           )
         }
         onClick={onLinkClick}
       >
         <Users className="h-4 w-4" />
-        <span className={cn(isDesktopClosed && 'hidden')}>Usuários</span>
+        <span className={cn(isDesktopClosed && "hidden")}>Usuários</span>
       </NavLink>
     </nav>
-  )
+  );
 }

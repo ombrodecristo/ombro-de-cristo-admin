@@ -5,19 +5,19 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle,
-} from 'lucide-react'
-import { useUpdatePasswordViewModel } from './useUpdatePasswordViewModel'
-import { Button } from '@/components/ui/button'
+} from "lucide-react";
+import { useUpdatePasswordViewModel } from "./useUpdatePasswordViewModel";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function UpdatePassword() {
   const {
@@ -30,7 +30,7 @@ export default function UpdatePassword() {
     success,
     isTokenValid,
     handleSubmit,
-  } = useUpdatePasswordViewModel()
+  } = useUpdatePasswordViewModel();
 
   return (
     <Card className="w-full max-w-md">
@@ -41,8 +41,10 @@ export default function UpdatePassword() {
             Ombro de Cristo
           </CardDescription>
         </div>
+
         <CardTitle className="pt-2 text-xl">Redefinir Senha</CardTitle>
       </CardHeader>
+
       <CardContent>
         {!isTokenValid && !success ? (
           <Alert variant="destructive">
@@ -69,6 +71,7 @@ export default function UpdatePassword() {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
+
             <div className="space-y-3">
               <Label htmlFor="password">Nova Senha</Label>
               <div className="relative">
@@ -86,6 +89,7 @@ export default function UpdatePassword() {
                 />
               </div>
             </div>
+
             <div className="space-y-3">
               <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
               <div className="relative">
@@ -103,6 +107,7 @@ export default function UpdatePassword() {
                 />
               </div>
             </div>
+
             <Button
               type="submit"
               variant="default"
@@ -114,11 +119,11 @@ export default function UpdatePassword() {
               ) : (
                 <LogIn className="h-4 w-4" />
               )}
-              Salvar Nova Senha
+              Alterar Senha
             </Button>
           </form>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

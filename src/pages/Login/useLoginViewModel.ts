@@ -1,31 +1,28 @@
-import { useState, type FormEvent } from 'react'
-import { supabase } from '../../lib/supabaseClient'
+import { useState, type FormEvent } from "react";
+import { authService } from "../../services/authService";
 
 export function useLoginViewModel() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e: FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
+    const { error } = await authService.signIn(email, password);
     if (error) {
-      if (error.message === 'Invalid login credentials') {
-        setError('E-mail ou senha inválidos.')
+      if (error.message === "Invalid login credentials") {
+        setError("E-mail ou senha inválidos.");
       } else {
-        setError(error.message)
+        setError(error.message);
       }
     }
-    setLoading(false)
-  }
+
+    setLoading(false);
+  };
 
   return {
     email,
@@ -35,5 +32,5 @@ export function useLoginViewModel() {
     loading,
     error,
     handleLogin,
-  }
+  };
 }

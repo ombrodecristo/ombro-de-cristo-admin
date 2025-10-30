@@ -1,28 +1,28 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
-import Header from '../Header'
-import Sidebar from '../Sidebar'
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Header from "../Header";
+import Sidebar from "../Sidebar";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet'
-import { SidebarNav } from '../SidebarNav'
-import { ShieldHalf } from 'lucide-react'
+} from "@/components/ui/sheet";
+import { SidebarNav } from "../SidebarNav";
+import { ShieldHalf } from "lucide-react";
 
 export default function AdminLayout() {
-  const [isDesktopClosed, setIsDesktopClosed] = useState(true)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [isDesktopClosed, setIsDesktopClosed] = useState(true);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const toggleDesktopSidebar = () => {
-    setIsDesktopClosed(!isDesktopClosed)
-  }
+    setIsDesktopClosed(!isDesktopClosed);
+  };
 
   const toggleMobileSidebar = () => {
-    setIsMobileOpen(!isMobileOpen)
-  }
+    setIsMobileOpen(!isMobileOpen);
+  };
 
   return (
     <>
@@ -48,6 +48,7 @@ export default function AdminLayout() {
               Menu de navegação principal
             </SheetDescription>
           </SheetHeader>
+
           <div className="flex-1 overflow-auto py-2">
             <SidebarNav
               isDesktopClosed={false}
@@ -56,6 +57,7 @@ export default function AdminLayout() {
           </div>
         </SheetContent>
       </Sheet>
+
       <div className="flex w-full flex-col overflow-hidden">
         <Header onToggleMobile={toggleMobileSidebar} />
         <main className="flex-1 overflow-auto bg-background p-4 md:p-6">
@@ -63,5 +65,5 @@ export default function AdminLayout() {
         </main>
       </div>
     </>
-  )
+  );
 }
