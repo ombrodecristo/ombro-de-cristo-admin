@@ -34,9 +34,14 @@ async function signUp(
   });
 }
 
+async function deleteOwnUser() {
+  return supabase.rpc("delete_own_user");
+}
+
 export const authService = {
   signIn,
   signOut,
   updateUserPassword,
   signUp,
+  deleteOwnUser,
 };
