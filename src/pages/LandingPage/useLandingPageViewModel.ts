@@ -21,12 +21,12 @@ export function useLandingPageViewModel() {
     }
 
     if (password.length < 6) {
-      toast.error("A senha deve ter no mínimo 6 caracteres.");
+      toast.error("A sua senha deve ter no mínimo 6 caracteres.");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("As senhas não conferem.");
+      toast.error("As suas senhas não coincidem.");
       return;
     }
 

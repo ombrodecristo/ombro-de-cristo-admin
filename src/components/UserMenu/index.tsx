@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,20 +19,51 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { User, LogOut, Loader2, Trash2, AlertCircle } from "lucide-react";
+import {
+  User,
+  LogOut,
+  Loader2,
+  Trash2,
+  AlertCircle,
+  Edit,
+  Save,
+  KeyRound,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { authService } from "@/services/authService";
 import { logService } from "@/services/logService";
 import { toast } from "sonner";
+import { type Profile } from "@/types/database";
+import { profileService } from "@/services/profileService";
+import { Input } from "../ui/input";
+import ChangePasswordModal from "../ChangePasswordModal";
+import { Label } from "../ui/label";
 
 export default function UserMenu() {
   const { user, signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [isSavingName, setIsSavingName] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
-  if (!user) {
-    return null;
-  }
+  useEffect(() => {
+    async function loadProfile() {
+      if (user && isOpen) {
+        const { data, error } = await profileService.getProfileById(user.id);
+        if (error) {
+          toast.error("Erro ao buscar dados da conta.");
+          logService.logError(error, { component: "UserMenu.loadProfile" });
+        } else {
+          setProfile(data);
+          setFullName(data.full_name);
+        }
+      }
+    }
+    loadProfile();
+  }, [user, isOpen]);
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
@@ -52,9 +83,49 @@ export default function UserMenu() {
     }
   };
 
+  const handleSaveName = async () => {
+    if (!user || !profile || fullName.trim().length < 3) {
+      toast.error("O nome completo deve ter pelo menos 3 caracteres.");
+      return;
+    }
+    setIsSavingName(true);
+    const { data, error } = await profileService.updateProfile(user.id, {
+      full_name: fullName.trim(),
+    });
+    setIsSavingName(false);
+    if (error) {
+      toast.error("Erro ao atualizar o nome.");
+      logService.logError(error, { component: "UserMenu.handleSaveName" });
+    } else {
+      setProfile(data);
+      setFullName(data.full_name);
+      setIsEditingName(false);
+      toast.success("Nome atualizado com sucesso!");
+    }
+  };
+
+  const handleCloseModals = () => {
+    setIsChangePasswordOpen(false);
+    setIsOpen(false);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      setIsEditingName(false);
+      if (profile) {
+        setFullName(profile.full_name);
+      }
+    }
+  };
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog open={isOpen} onOpenChange={handleOpenChange}>
         <Button
           className={cn(
             "h-8 w-8 rounded-full p-0",
@@ -72,15 +143,86 @@ export default function UserMenu() {
             <DialogTitle className="text-center">Minha Conta</DialogTitle>
           </DialogHeader>
 
-          <DialogDescription asChild>
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground break-words">
-                {user.email}
-              </p>
+          {isEditingName ? (
+            <div className="space-y-2 pt-2">
+              <Label htmlFor="fullNameEdit" className="sr-only">
+                Nome Completo
+              </Label>
+              <div className="relative">
+                <Input
+                  id="fullNameEdit"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  disabled={isSavingName}
+                  className="pr-10"
+                />
+
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 transform text-muted-foreground hover:bg-transparent hover:text-foreground"
+                  onClick={handleSaveName}
+                  disabled={isSavingName}
+                >
+                  {isSavingName ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+
+              <Button
+                variant="link"
+                size="sm"
+                className="h-auto p-0"
+                onClick={() => {
+                  setIsEditingName(false);
+                  if (profile) {
+                    setFullName(profile.full_name);
+                  }
+                }}
+              >
+                Cancelar
+              </Button>
             </div>
-          </DialogDescription>
+          ) : (
+            <DialogDescription asChild>
+              <div className="text-center">
+                <div className="group relative mx-auto inline-block">
+                  <p className="text-md break-words font-medium text-foreground">
+                    {profile?.full_name ?? "..."}
+                  </p>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute -right-8 top-1/2 h-6 w-6 -translate-y-1/2 transform text-muted-foreground"
+                    onClick={() => setIsEditingName(true)}
+                    aria-label="Editar nome"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                </div>
+                <br />
+                <p className="text-sm text-muted-foreground break-words">
+                  {user.email}
+                </p>
+              </div>
+            </DialogDescription>
+          )}
 
           <div className="mt-4 space-y-4">
+            <Button
+              onClick={() => setIsChangePasswordOpen(true)}
+              className="w-full"
+              variant="outline"
+            >
+              <KeyRound className="mr-2 h-4 w-4" />
+              Alterar Senha
+            </Button>
+
             <Button
               onClick={() => {
                 signOut();
@@ -146,6 +288,12 @@ export default function UserMenu() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ChangePasswordModal
+        open={isChangePasswordOpen}
+        onOpenChange={setIsChangePasswordOpen}
+        onClose={handleCloseModals}
+      />
     </>
   );
 }

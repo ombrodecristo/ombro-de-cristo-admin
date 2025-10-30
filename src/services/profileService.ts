@@ -18,7 +18,7 @@ export type ProfileWithRelations = QueryData<
 >[number];
 
 async function getProfilesWithRelations() {
-  return profilesWithRelationsQuery.returns<ProfileWithRelations[]>();
+  return profilesWithRelationsQuery.overrideTypes<ProfileWithRelations[]>();
 }
 
 async function updateProfileRole(profileId: string, newRole: UserRole) {
@@ -30,7 +30,22 @@ async function updateProfileRole(profileId: string, newRole: UserRole) {
     .single<Profile>();
 }
 
+async function getProfileById(id: string) {
+  return supabase.from("profiles").select("*").eq("id", id).single<Profile>();
+}
+
+async function updateProfile(id: string, { full_name }: { full_name: string }) {
+  return supabase
+    .from("profiles")
+    .update({ full_name })
+    .eq("id", id)
+    .select()
+    .single<Profile>();
+}
+
 export const profileService = {
   getProfilesWithRelations,
   updateProfileRole,
+  getProfileById,
+  updateProfile,
 };

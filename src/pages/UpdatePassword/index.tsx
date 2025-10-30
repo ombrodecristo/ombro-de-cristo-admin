@@ -41,7 +41,7 @@ export default function UpdatePassword() {
           </CardDescription>
         </div>
 
-        <CardTitle className="pt-2 text-xl">Redefinir Senha</CardTitle>
+        <CardTitle className="pt-2 text-xl">Redefina sua Senha</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -49,15 +49,16 @@ export default function UpdatePassword() {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Link de redefinição inválido ou expirado. Por favor, solicite um
-              novo link no aplicativo.
+              Link de redefinição inválido ou expirado.
+              <br />
+              Por favor, solicite um novo link no aplicativo.
             </AlertDescription>
           </Alert>
         ) : success ? (
           <div className="flex flex-col items-center space-y-3 text-center">
             <CheckCircle className="h-12 w-12 text-primary" />
             <p className="text-muted-foreground">
-              Senha alterada com sucesso!
+              A sua senha foi alterada com sucesso!
               <br />
               Você já pode fechar esta página.
             </p>
