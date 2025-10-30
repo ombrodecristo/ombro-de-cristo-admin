@@ -24,7 +24,7 @@ export default function Login() {
   }
 
   if (user) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to="/admin" />;
   }
 
   return (
@@ -33,6 +33,7 @@ export default function Login() {
         <CardDescription className="text-sm text-primary font-normal">
           Painel Administrativo
         </CardDescription>
+
         <div className="flex items-center gap-2">
           <ShieldHalf className="h-7 w-7 text-primary" />
           <CardDescription className="text-2xl text-primary font-bold">
@@ -40,6 +41,7 @@ export default function Login() {
           </CardDescription>
         </div>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={handleLogin} className="space-y-5">
           <div className="space-y-3">
@@ -59,6 +61,7 @@ export default function Login() {
               />
             </div>
           </div>
+
           <div className="space-y-3">
             <Label htmlFor="password">Senha</Label>
             <div className="relative">
@@ -75,6 +78,7 @@ export default function Login() {
               />
             </div>
           </div>
+
           <Button
             type="submit"
             variant="default"

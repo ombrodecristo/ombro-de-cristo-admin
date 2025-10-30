@@ -1,6 +1,12 @@
 import { supabase } from "../lib/supabaseClient";
 import { type UserGender } from "../types/database";
 
+const SITE_URL = import.meta.env.VITE_SITE_URL;
+
+if (!SITE_URL) {
+  throw new Error("VITE_SITE_URL is not set in .env files");
+}
+
 async function signIn(email: string, password: string) {
   return supabase.auth.signInWithPassword({
     email,
@@ -30,6 +36,7 @@ async function signUp(
         full_name: fullName,
         gender: gender,
       },
+      emailRedirectTo: `${SITE_URL}/auth-confirmed`,
     },
   });
 }

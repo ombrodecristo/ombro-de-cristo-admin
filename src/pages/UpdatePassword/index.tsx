@@ -59,7 +59,7 @@ export default function UpdatePassword() {
             <p className="text-muted-foreground">
               Senha alterada com sucesso!
               <br />
-              Você já pode fechar esta página e retornar ao aplicativo.
+              Você já pode fechar esta página.
             </p>
           </div>
         ) : (

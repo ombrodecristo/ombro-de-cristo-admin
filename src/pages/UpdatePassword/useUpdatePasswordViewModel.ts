@@ -20,23 +20,18 @@ export function useUpdatePasswordViewModel() {
       }
     });
 
-    const hash = window.location.hash;
-    if (hash.includes("type=recovery") && hash.includes("access_token=")) {
-      setIsTokenValid(true);
-    }
-
     return () => subscription.unsubscribe();
   }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("As senhas não conferem.");
+      toast.error("As senhas não coincidem.");
       return;
     }
 
     if (password.length < 6) {
-      toast.error("A senha deve ter no mínimo 6 caracteres.");
+      toast.error("Sua senha deve ter no mínimo 6 caracteres.");
       return;
     }
 

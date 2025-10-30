@@ -1,7 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 export default function AuthConfirmed() {
+  const [searchParams] = useSearchParams();
+  const errorDescription = searchParams.get("error_description");
+
+  if (errorDescription) {
+    return (
+      <Card className="w-full max-w-md">
+        <CardHeader className="items-center text-center">
+          <AlertCircle className="h-12 w-12 text-destructive" />
+          <CardTitle className="text-2xl text-destructive">
+            Link Inválido
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="text-center">
+          <p className="text-muted-foreground">
+            Este link de confirmação é inválido ou já expirou.
+            <br />
+            <br />
+            Por favor, tente novamente ou entre em contato com a equipe de
+            suporte se o problema persistir.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="items-center text-center">
@@ -16,7 +43,7 @@ export default function AuthConfirmed() {
           Sua conta foi verificada com sucesso.
           <br />
           <br />
-          Você já pode fechar esta página e retornar ao aplicativo.
+          Você já pode fechar esta página.
         </p>
       </CardContent>
     </Card>

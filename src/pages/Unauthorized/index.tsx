@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,20 +5,18 @@ import { AlertCircle } from "lucide-react";
 import { GlobalLoader } from "@/components/GlobalLoader";
 
 export default function Unauthorized() {
-  const { role, loading: authLoading, signOut, user } = useAuth();
-
-  useEffect(() => {
-    if (user && role !== "ADMIN") {
-      signOut();
-    }
-  }, [user, role, signOut]);
+  const { role, loading: authLoading, user } = useAuth();
 
   if (authLoading) {
     return <GlobalLoader />;
   }
 
-  if (role === "ADMIN") {
+  if (user && role === "ADMIN") {
     return <Navigate to="/admin" replace />;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
   return (

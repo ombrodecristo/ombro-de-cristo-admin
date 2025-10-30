@@ -8,4 +8,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Supabase URL and Anon Key must be provided.");
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    flowType: "pkce",
+  },
+});
