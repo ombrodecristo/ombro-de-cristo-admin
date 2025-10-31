@@ -1,5 +1,7 @@
 export const PASSWORD_MIN_LENGTH = 6;
 export const CHURCH_NAME_MIN_LENGTH = 2;
+export const DEVOTIONAL_TITLE_MIN_LENGTH = 3;
+export const DEVOTIONAL_CONTENT_MIN_LENGTH = 10;
 
 export const validatePasswordLength = (
   password: string
@@ -33,6 +35,30 @@ export const validateChurchName = (
     return {
       isValid: false,
       message: `O nome da igreja deve ter no mínimo ${CHURCH_NAME_MIN_LENGTH} caracteres.`,
+    };
+  }
+  return { isValid: true };
+};
+
+export const validateDevotionalTitle = (
+  title: string
+): { isValid: true } | { isValid: false; message: string } => {
+  if (title.trim().length < DEVOTIONAL_TITLE_MIN_LENGTH) {
+    return {
+      isValid: false,
+      message: `O título deve ter no mínimo ${DEVOTIONAL_TITLE_MIN_LENGTH} caracteres.`,
+    };
+  }
+  return { isValid: true };
+};
+
+export const validateDevotionalContent = (
+  content: string
+): { isValid: true } | { isValid: false; message: string } => {
+  if (content.trim().length < DEVOTIONAL_CONTENT_MIN_LENGTH) {
+    return {
+      isValid: false,
+      message: `O conteúdo deve ter no mínimo ${DEVOTIONAL_CONTENT_MIN_LENGTH} caracteres.`,
     };
   }
   return { isValid: true };
