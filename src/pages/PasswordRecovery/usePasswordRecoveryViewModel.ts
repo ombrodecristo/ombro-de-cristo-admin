@@ -1,10 +1,9 @@
 import { useState, type FormEvent, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
-import { authService } from "../../services/authService";
 import { logService } from "../../services/logService";
 import { toast } from "sonner";
 
-export function useUpdatePasswordViewModel() {
+export function usePasswordRecoveryViewModel() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,14 +19,25 @@ export function useUpdatePasswordViewModel() {
       }
     });
 
-    return () => subscription.unsubscribe();
+    const urlHash = window.location.hash;
+    if (urlHash.includes("type=recovery")) {
+      setIsTokenValid(true);
+    }
+
+    if (urlHash.includes("error=access_denied")) {
+      setIsTokenValid(false);
+    }
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (password.length < 6) {
-      toast.error("Sua senha deve ter no mínimo 6 caracteres.");
+      toast.error("A sua nova senha deve ter no mínimo 6 caracteres.");
       return;
     }
 
@@ -37,17 +47,20 @@ export function useUpdatePasswordViewModel() {
     }
 
     setLoading(true);
-
-    const { error } = await authService.updateUserPassword(password);
+    const { error } = await supabase.auth.updateUser({ password });
     setLoading(false);
+    setPassword("");
+    setConfirmPassword("");
 
     if (error) {
       toast.error(error.message);
       await logService.logError(error, {
-        component: "useUpdatePasswordViewModel",
+        component: "usePasswordRecoveryViewModel",
       });
     } else {
       setSuccess(true);
+
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
   };
 

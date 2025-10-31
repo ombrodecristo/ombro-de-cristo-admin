@@ -1,25 +1,19 @@
 import {
   Lock,
   LogIn,
-  ShieldHalf,
   AlertCircle,
   Loader2,
   CheckCircle,
+  LockIcon,
 } from "lucide-react";
-import { useUpdatePasswordViewModel } from "./useUpdatePasswordViewModel";
+import { usePasswordRecoveryViewModel } from "./usePasswordRecoveryViewModel";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertDescription } from "@/components/ui/alert";
+import { PasswordInput } from "@/components/ui/password-input";
 
-export default function UpdatePassword() {
+export default function PasswordRecovery() {
   const {
     password,
     setPassword,
@@ -29,49 +23,55 @@ export default function UpdatePassword() {
     success,
     isTokenValid,
     handleSubmit,
-  } = useUpdatePasswordViewModel();
+  } = usePasswordRecoveryViewModel();
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="items-center text-center">
-        <div className="flex items-center gap-2">
-          <ShieldHalf className="h-7 w-7 text-primary" />
-          <CardDescription className="text-2xl text-primary font-bold">
-            Ombro de Cristo
-          </CardDescription>
-        </div>
-
-        <CardTitle className="pt-2 text-xl">Redefina sua Senha</CardTitle>
+        {!isTokenValid && !success ? (
+          <>
+            <AlertCircle className="h-12 w-12 text-destructive" />
+            <CardTitle className="text-2xl text-destructive">
+              Link Inválido
+            </CardTitle>
+          </>
+        ) : success ? (
+          <>
+            <CheckCircle className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl text-primary">
+              Senha Alterada
+            </CardTitle>
+          </>
+        ) : (
+          <>
+            <LockIcon className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl text-primary">
+              Redefina sua Senha
+            </CardTitle>
+          </>
+        )}
       </CardHeader>
-
       <CardContent>
         {!isTokenValid && !success ? (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Link de redefinição inválido ou expirado.
-              <br />
-              Por favor, solicite um novo link no aplicativo.
-            </AlertDescription>
-          </Alert>
+          <AlertDescription className="text-center text-muted-foreground">
+            Link de redefinição de senha inválido ou expirado.
+            <br />
+            Por favor, solicite um novo link no aplicativo.
+          </AlertDescription>
         ) : success ? (
-          <div className="flex flex-col items-center space-y-3 text-center">
-            <CheckCircle className="h-12 w-12 text-primary" />
-            <p className="text-muted-foreground">
-              A sua senha foi alterada com sucesso!
-              <br />
-              Você já pode fechar esta página.
-            </p>
-          </div>
+          <p className="text-center text-muted-foreground">
+            Sua senha foi alterada com sucesso!
+            <br />
+            Você já pode fechar esta página.
+          </p>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-3">
               <Label htmlFor="password">Nova Senha</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
+                <PasswordInput
                   id="password"
-                  type="password"
                   placeholder="••••••••"
                   className="pl-9"
                   value={password}
@@ -87,9 +87,8 @@ export default function UpdatePassword() {
               <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
+                <PasswordInput
                   id="confirmPassword"
-                  type="password"
                   placeholder="••••••••"
                   className="pl-9"
                   value={confirmPassword}

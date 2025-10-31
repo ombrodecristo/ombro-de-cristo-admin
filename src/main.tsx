@@ -17,7 +17,9 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AuthConfirmed = lazy(() => import("./pages/AuthConfirmed"));
-const UpdatePassword = lazy(() => import("./pages/UpdatePassword"));
+const PasswordRecovery = lazy(
+  () => import("./pages/PasswordRecovery/index.tsx")
+);
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: "/login", element: <Login /> },
       { path: "/auth-confirmed", element: <AuthConfirmed /> },
-      { path: "/update-password", element: <UpdatePassword /> },
+      { path: "/password-recovery", element: <PasswordRecovery /> },
       {
         path: "/admin",
         element: <ProtectedRoute />,

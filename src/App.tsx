@@ -8,12 +8,24 @@ function App() {
   const { loading, user, role, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const isAuthPage = ["/login", "/auth-confirmed", "/update-password"].includes(
-    location.pathname
-  );
+  const isAuthPage = [
+    "/login",
+    "/auth-confirmed",
+    "/password-recovery",
+  ].includes(location.pathname);
 
   useEffect(() => {
+    const hash = window.location.hash;
+    const isRecoveryFlow =
+      hash.includes("type=recovery") ||
+      hash.includes("error_code") ||
+      hash.includes("error=access_denied");
+
+    if (isRecoveryFlow && location.pathname !== "/password-recovery") {
+      navigate("/password-recovery" + hash, { replace: true });
+      return;
+    }
+
     if (loading) {
       return;
     }
