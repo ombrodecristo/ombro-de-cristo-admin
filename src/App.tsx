@@ -8,7 +8,15 @@ function App() {
   const { loading, user, role, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
   const isAuthPage = [
+    "/login",
+    "/auth-confirmed",
+    "/password-recovery",
+  ].includes(location.pathname);
+
+  const isPublicPage = [
+    "/",
     "/login",
     "/auth-confirmed",
     "/password-recovery",
@@ -30,11 +38,11 @@ function App() {
       return;
     }
 
-    if (user && role !== "ADMIN" && !isAuthPage) {
+    if (user && role !== "ADMIN" && !isPublicPage) {
       signOut();
       navigate("/login", { replace: true });
     }
-  }, [loading, user, role, location.pathname, isAuthPage, navigate, signOut]);
+  }, [loading, user, role, location.pathname, isPublicPage, navigate, signOut]);
 
   if (loading) {
     return <GlobalLoader />;
