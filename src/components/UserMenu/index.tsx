@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -144,7 +144,13 @@ export default function UserMenu() {
           </DialogHeader>
 
           {isEditingName ? (
-            <div className="space-y-2 pt-2">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSaveName();
+              }}
+              className="space-y-2 pt-2"
+            >
               <Label htmlFor="fullNameEdit" className="sr-only">
                 Nome Completo
               </Label>
@@ -156,13 +162,11 @@ export default function UserMenu() {
                   disabled={isSavingName}
                   className="pr-10"
                 />
-
                 <Button
-                  type="button"
+                  type="submit"
                   size="icon"
                   variant="ghost"
                   className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 transform text-muted-foreground hover:bg-transparent hover:text-foreground"
-                  onClick={handleSaveName}
                   disabled={isSavingName}
                 >
                   {isSavingName ? (
@@ -172,8 +176,8 @@ export default function UserMenu() {
                   )}
                 </Button>
               </div>
-
               <Button
+                type="button"
                 variant="link"
                 size="sm"
                 className="h-auto p-0"
@@ -186,7 +190,7 @@ export default function UserMenu() {
               >
                 Cancelar
               </Button>
-            </div>
+            </form>
           ) : (
             <DialogDescription asChild>
               <div className="text-center">
@@ -265,7 +269,13 @@ export default function UserMenu() {
                   </AlertDialogHeader>
 
                   <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isDeleting}>
+                    <AlertDialogCancel
+                      disabled={isDeleting}
+                      className={cn(
+                        buttonVariants({ variant: "ghost" }),
+                        "mt-0"
+                      )}
+                    >
                       Cancelar
                     </AlertDialogCancel>
 
