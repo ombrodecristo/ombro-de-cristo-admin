@@ -24,10 +24,7 @@ function App() {
 
   useEffect(() => {
     const hash = window.location.hash;
-    const isRecoveryFlow =
-      hash.includes("type=recovery") ||
-      hash.includes("error_code") ||
-      hash.includes("error=access_denied");
+    const isRecoveryFlow = hash.includes("type=recovery");
 
     if (isRecoveryFlow && location.pathname !== "/password-recovery") {
       navigate("/password-recovery" + hash, { replace: true });

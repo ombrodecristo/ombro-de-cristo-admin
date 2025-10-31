@@ -37,7 +37,6 @@ export function useDashboardViewModel({
     const { data, error } = await profileService.getProfilesWithRelations();
 
     if (error) {
-      console.error("Erro ao buscar profiles:", error);
       toast.error("Erro ao carregar usuários.");
       await logService.logError(error, {
         component: "useDashboardViewModel",

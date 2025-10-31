@@ -39,6 +39,7 @@ export function useLandingPageViewModel() {
     );
 
     setLoading(false);
+
     if (error) {
       let friendlyMessage = "Ocorreu um erro ao tentar criar a conta.";
       if (error.message === "User already registered") {
@@ -52,7 +53,7 @@ export function useLandingPageViewModel() {
         context: { email: email.substring(0, 3) + "..." },
       });
     } else {
-      toast.success("Cadastro realizado! Por favor, verifique seu e-mail.");
+      toast.success("Seja bem-vindo(a)! Por favor, verifique seu e-mail.");
       setFullName("");
       setGender("");
       setEmail("");

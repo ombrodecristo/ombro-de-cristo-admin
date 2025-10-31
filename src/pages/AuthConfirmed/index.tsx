@@ -1,10 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, AlertCircle } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function AuthConfirmed() {
-  const [searchParams] = useSearchParams();
-  const errorDescription = searchParams.get("error_description");
+  const { hash } = useLocation();
+  const hashParams = new URLSearchParams(hash.substring(1));
+  const errorDescription = hashParams.get("error_description");
 
   if (errorDescription) {
     return (

@@ -12,18 +12,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { AlertDescription } from "@/components/ui/alert";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useAuth } from "@/contexts/AuthContext";
+import { GlobalLoader } from "@/components/GlobalLoader";
 
 export default function PasswordRecovery() {
+  const { loading: authLoading } = useAuth();
   const {
     password,
     setPassword,
     confirmPassword,
     setConfirmPassword,
     loading,
+    pageLoading,
     success,
     isTokenValid,
     handleSubmit,
-  } = usePasswordRecoveryViewModel();
+  } = usePasswordRecoveryViewModel({ authLoading });
+
+  if (pageLoading) {
+    return <GlobalLoader />;
+  }
 
   return (
     <Card className="w-full max-w-md">
@@ -51,6 +59,7 @@ export default function PasswordRecovery() {
           </>
         )}
       </CardHeader>
+
       <CardContent>
         {!isTokenValid && !success ? (
           <AlertDescription className="text-center text-muted-foreground">
