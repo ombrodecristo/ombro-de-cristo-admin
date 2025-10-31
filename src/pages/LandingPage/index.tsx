@@ -1,4 +1,4 @@
-import { Mail, Lock, User, Users, ShieldHalf, Loader2 } from "lucide-react";
+import { Mail, Lock, User, Users, ShieldHalf } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import { useLandingPageViewModel } from "./useLandingPageViewModel";
@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/select";
 import { type UserGender } from "@/types/database";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LandingPage() {
   const {
@@ -29,8 +32,23 @@ export default function LandingPage() {
     confirmPassword,
     setConfirmPassword,
     loading,
+    error,
+    successMessage,
     handleSubmit,
   } = useLandingPageViewModel();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+    }
+  }, [successMessage]);
+
   return (
     <div className="flex w-full min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
       <div
@@ -45,6 +63,7 @@ export default function LandingPage() {
           Sua missão, fortalecida pela mentoria.
         </p>
       </div>
+
       <div className="flex flex-1 items-center justify-center bg-background p-4 md:w-2/3 md:overflow-y-auto">
         <Card className="w-full max-w-md">
           <CardHeader className="items-center text-center">
@@ -52,6 +71,7 @@ export default function LandingPage() {
               Junte-se à nossa comunidade
             </CardTitle>
           </CardHeader>
+
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-3">
@@ -70,6 +90,7 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
+
               <div className="space-y-3">
                 <Label htmlFor="gender">Gênero</Label>
                 <div className="relative">
@@ -90,6 +111,7 @@ export default function LandingPage() {
                   </Select>
                 </div>
               </div>
+
               <div className="space-y-3">
                 <Label htmlFor="email">E-mail</Label>
                 <div className="relative">
@@ -107,6 +129,7 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
+
               <div className="space-y-3">
                 <Label htmlFor="password">Senha</Label>
                 <div className="relative">
@@ -123,6 +146,7 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
+
               <div className="space-y-3">
                 <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                 <div className="relative">
@@ -139,6 +163,7 @@ export default function LandingPage() {
                   />
                 </div>
               </div>
+
               <Button
                 type="submit"
                 variant="default"
@@ -146,14 +171,16 @@ export default function LandingPage() {
                 className="w-full"
               >
                 {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Spinner className="h-4 w-4" />
                 ) : (
                   <User className="h-4 w-4" />
                 )}
                 Criar conta
               </Button>
             </form>
+
             <div className="border-t my-6" />
+
             <div className="space-y-4 text-center">
               <p className="text-sm font-medium text-muted-foreground">
                 Em breve nas principais lojas de aplicativos!
@@ -167,6 +194,7 @@ export default function LandingPage() {
                 >
                   <IoLogoGooglePlaystore className="h-4 w-4" /> Google Play
                 </Button>
+
                 <Button
                   variant="outline"
                   className="w-full"

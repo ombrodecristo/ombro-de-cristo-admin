@@ -5,11 +5,14 @@ import { useDashboardViewModel } from "./useDashboardViewModel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const {
     loading,
+    error,
     editingProfile,
     searchQuery,
     setSearchQuery,
@@ -20,6 +23,12 @@ export default function Dashboard() {
     handleEdit,
     handleCloseModal,
   } = useDashboardViewModel({ currentUserId: user?.id || "" });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   if (loading && !editingProfile) {
     return (

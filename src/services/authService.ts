@@ -2,7 +2,6 @@ import { supabase } from "../lib/supabaseClient";
 import { type UserGender } from "../types/database";
 
 const SITE_URL = import.meta.env.VITE_SITE_URL;
-
 if (!SITE_URL) {
   throw new Error("VITE_SITE_URL is not set in .env files");
 }
@@ -45,10 +44,15 @@ async function deleteOwnUser() {
   return supabase.rpc("delete_own_user");
 }
 
+async function getSession() {
+  return supabase.auth.getSession();
+}
+
 export const authService = {
   signIn,
   signOut,
   updateUserPassword,
   signUp,
   deleteOwnUser,
+  getSession,
 };

@@ -5,7 +5,6 @@ import {
   type ProfileWithRelations,
 } from "../../services/profileService";
 import { logService } from "../../services/logService";
-import { toast } from "sonner";
 
 export type { ProfileWithRelations };
 
@@ -23,7 +22,6 @@ export function useDashboardViewModel({
 }: UseDashboardViewModelProps) {
   const [profiles, setProfiles] = useState<ProfileWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [editingProfile, setEditingProfile] =
     useState<ProfileWithRelations | null>(null);
   const [sortConfig, setSortConfig] = useState<SortConfig>({
@@ -31,14 +29,16 @@ export function useDashboardViewModel({
     direction: "ascending",
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   async function fetchProfiles() {
     setLoading(true);
-    const { data, error } = await profileService.getProfilesWithRelations();
-
-    if (error) {
-      toast.error("Erro ao carregar usuários.");
-      await logService.logError(error, {
+    setError(null);
+    const { data, error: fetchError } =
+      await profileService.getProfilesWithRelations();
+    if (fetchError) {
+      setError("Erro ao carregar usuários.");
+      await logService.logError(fetchError, {
         component: "useDashboardViewModel",
       });
     } else if (data) {
@@ -112,6 +112,7 @@ export function useDashboardViewModel({
   return {
     profiles,
     loading,
+    error,
     editingProfile,
     searchQuery,
     setSearchQuery,

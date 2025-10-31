@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { Mail, Lock, LogIn, ShieldHalf, Loader2 } from "lucide-react";
+import { Mail, Lock, LogIn, ShieldHalf } from "lucide-react";
 import { useLoginViewModel } from "./useLoginViewModel";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,11 +13,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GlobalLoader } from "@/components/GlobalLoader";
 import { PasswordInput } from "@/components/ui/password-input";
+import { type FormEvent } from "react";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Login() {
   const { email, setEmail, password, setPassword, loading, handleLogin } =
     useLoginViewModel();
   const { user, loading: authLoading, role } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLoginSubmit = async (e: FormEvent) => {
+    const { success, error } = await handleLogin(e);
+    if (error) {
+      toast.error(error);
+    }
+    if (success) {
+      navigate("/admin", { replace: true });
+    }
+  };
 
   if (authLoading) {
     return <GlobalLoader />;
@@ -43,7 +57,7 @@ export default function Login() {
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleLogin} className="space-y-5">
+        <form onSubmit={handleLoginSubmit} className="space-y-5">
           <div className="space-y-3">
             <Label htmlFor="email">E-mail</Label>
             <div className="relative">
@@ -86,7 +100,7 @@ export default function Login() {
             className="w-full"
           >
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Spinner className="h-4 w-4" />
             ) : (
               <LogIn className="h-4 w-4" />
             )}

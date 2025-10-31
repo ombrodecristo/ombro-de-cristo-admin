@@ -18,7 +18,9 @@ export type ProfileWithRelations = QueryData<
 >[number];
 
 async function getProfilesWithRelations() {
-  return profilesWithRelationsQuery.overrideTypes<ProfileWithRelations[]>();
+  return await profilesWithRelationsQuery.overrideTypes<
+    ProfileWithRelations[]
+  >();
 }
 
 async function updateProfileRole(profileId: string, newRole: UserRole) {

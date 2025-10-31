@@ -1,11 +1,4 @@
-import {
-  Lock,
-  LogIn,
-  AlertCircle,
-  Loader2,
-  CheckCircle,
-  LockIcon,
-} from "lucide-react";
+import { Lock, LogIn, AlertCircle, CheckCircle, LockIcon } from "lucide-react";
 import { usePasswordRecoveryViewModel } from "./usePasswordRecoveryViewModel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,9 +7,12 @@ import { AlertDescription } from "@/components/ui/alert";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useAuth } from "@/contexts/AuthContext";
 import { GlobalLoader } from "@/components/GlobalLoader";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function PasswordRecovery() {
-  const { loading: authLoading } = useAuth();
+  const { loading: authLoading, initialHash } = useAuth();
   const {
     password,
     setPassword,
@@ -26,8 +22,21 @@ export default function PasswordRecovery() {
     pageLoading,
     success,
     isTokenValid,
+    error,
     handleSubmit,
-  } = usePasswordRecoveryViewModel({ authLoading });
+  } = usePasswordRecoveryViewModel({ authLoading, initialHash });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [success]);
 
   if (pageLoading) {
     return <GlobalLoader />;
@@ -116,7 +125,7 @@ export default function PasswordRecovery() {
               className="w-full"
             >
               {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Spinner className="h-4 w-4" />
               ) : (
                 <LogIn className="h-4 w-4" />
               )}

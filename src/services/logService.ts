@@ -14,10 +14,6 @@ async function writeLog(
   message: string,
   metadata?: LogMetadata
 ) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   if (level === "ERROR") {
     console.error(message, metadata ?? "");
   } else if (level === "WARN") {
@@ -30,7 +26,6 @@ async function writeLog(
     level,
     message,
     metadata: metadata as Json,
-    user_id: user?.id ?? null,
   });
 
   if (error) {

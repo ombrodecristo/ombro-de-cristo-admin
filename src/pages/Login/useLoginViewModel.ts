@@ -1,17 +1,19 @@
 import { useState, type FormEvent } from "react";
 import { authService } from "../../services/authService";
 import { logService } from "../../services/logService";
-import { toast } from "sonner";
 import { type User } from "@/types/database";
-import { useNavigate } from "react-router-dom";
+
+type LoginResult = {
+  success: boolean;
+  error?: string;
+};
 
 export function useLoginViewModel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleLogin = async (e: FormEvent): Promise<LoginResult> => {
     e.preventDefault();
     setLoading(true);
 
@@ -19,12 +21,9 @@ export function useLoginViewModel() {
 
     if (error) {
       let friendlyMessage = "Ocorreu um erro ao tentar fazer login.";
-
       if (error.message === "Invalid login credentials") {
         friendlyMessage = "E-mail ou senha inválidos.";
       }
-
-      toast.error(friendlyMessage);
 
       await logService.logError(error, {
         component: "useLoginViewModel",
@@ -32,7 +31,7 @@ export function useLoginViewModel() {
       });
       setPassword("");
       setLoading(false);
-      return;
+      return { success: false, error: friendlyMessage };
     }
 
     if (data.user) {
@@ -40,19 +39,20 @@ export function useLoginViewModel() {
       const role = user.app_metadata?.role;
 
       if (role !== "ADMIN") {
-        toast.error(
-          "Esta área é restrita a Administradores. Se você acredita que isso é um erro, por favor, entre em contato com a equipe de suporte."
-        );
+        const errorMessage =
+          "Esta área é restrita a Administradores. Se você acredita que isso é um erro, por favor, entre em contato com a equipe de suporte.";
         await authService.signOut();
         setPassword("");
         setLoading(false);
-        return;
+        return { success: false, error: errorMessage };
       }
 
-      navigate("/admin", { replace: true });
+      setLoading(false);
+      return { success: true };
     }
 
     setLoading(false);
+    return { success: false, error: "Ocorreu um erro desconhecido." };
   };
 
   return {

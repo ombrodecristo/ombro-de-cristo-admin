@@ -1,7 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { authService } from "../../services/authService";
 import { logService } from "../../services/logService";
-import { toast } from "sonner";
+import {
+  validatePasswordLength,
+  validatePasswordMatch,
+} from "@/lib/validators";
 
 export function useChangePasswordViewModel({
   onClose,
@@ -11,33 +14,39 @@ export function useChangePasswordViewModel({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setSuccess(false);
 
-    if (password.length < 6) {
-      toast.error("A sua nova senha deve ter no mínimo 6 caracteres.");
+    const lengthValidation = validatePasswordLength(password);
+    if (!lengthValidation.isValid) {
+      setError(lengthValidation.message);
       return;
     }
 
-    if (password !== confirmPassword) {
-      toast.error("As suas senhas não coincidem.");
+    const matchValidation = validatePasswordMatch(password, confirmPassword);
+    if (!matchValidation.isValid) {
+      setError(matchValidation.message);
       return;
     }
 
     setLoading(true);
-    const { error } = await authService.updateUserPassword(password);
+    const { error: authError } = await authService.updateUserPassword(password);
     setLoading(false);
-    setPassword("");
-    setConfirmPassword("");
 
-    if (error) {
-      toast.error(error.message);
-      await logService.logError(error, {
+    if (authError) {
+      setError(authError.message);
+      await logService.logError(authError, {
         component: "useChangePasswordViewModel",
       });
     } else {
-      toast.success("A sua senha foi alterada com sucesso!");
+      setSuccess(true);
+      setPassword("");
+      setConfirmPassword("");
       onClose();
     }
   };
@@ -48,6 +57,8 @@ export function useChangePasswordViewModel({
     confirmPassword,
     setConfirmPassword,
     loading,
+    error,
+    success,
     handleSubmit,
   };
 }

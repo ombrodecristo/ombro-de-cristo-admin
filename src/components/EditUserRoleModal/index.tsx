@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
 import { useEditUserRoleViewModel, allRoles } from "./useEditUserRoleViewModel";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { Spinner } from "../ui/spinner";
 
 type EditUserRoleModalProps = {
   profile: ProfileWithRelations;
@@ -32,12 +34,24 @@ export default function EditUserRoleModal({
   onClose,
   onSuccess,
 }: EditUserRoleModalProps) {
-  const { newRole, setNewRole, loading, handleSubmit } =
+  const { newRole, setNewRole, loading, error, success, handleSubmit } =
     useEditUserRoleViewModel({
       profile,
       onClose,
       onSuccess,
     });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      toast.success("Permissão alterada com sucesso!");
+    }
+  }, [success]);
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
@@ -87,7 +101,7 @@ export default function EditUserRoleModal({
             </DialogClose>
 
             <Button type="submit" variant="default" disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <Spinner className="mr-2 h-4 w-4" />}
               Salvar
             </Button>
           </DialogFooter>

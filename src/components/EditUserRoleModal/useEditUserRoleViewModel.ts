@@ -5,7 +5,6 @@ import {
   profileService,
 } from "../../services/profileService";
 import { logService } from "../../services/logService";
-import { toast } from "sonner";
 
 export const allRoles: UserRole[] = ["MISSIONARY", "MENTOR", "ADMIN"];
 
@@ -22,14 +21,20 @@ export function useEditUserRoleViewModel({
 }: UseEditUserRoleViewModelProps) {
   const [newRole, setNewRole] = useState<UserRole>(profile.role);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     setNewRole(profile.role);
+    setError(null);
+    setSuccess(false);
   }, [profile]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+    setSuccess(false);
 
     if (newRole === profile.role) {
       onClose();
@@ -37,20 +42,21 @@ export function useEditUserRoleViewModel({
       return;
     }
 
-    const { data, error } = await profileService.updateProfileRole(
+    const { data, error: updateError } = await profileService.updateProfileRole(
       profile.id,
       newRole
     );
 
     setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      await logService.logError(error, {
+
+    if (updateError) {
+      setError(updateError.message);
+      await logService.logError(updateError, {
         component: "useEditUserRoleViewModel",
         context: { profileId: profile.id, newRole },
       });
     } else if (data) {
-      toast.success("Permissão alterada com sucesso!");
+      setSuccess(true);
       onSuccess(data);
       onClose();
     }
@@ -60,6 +66,8 @@ export function useEditUserRoleViewModel({
     newRole,
     setNewRole,
     loading,
+    error,
+    success,
     handleSubmit,
     allRoles,
   };

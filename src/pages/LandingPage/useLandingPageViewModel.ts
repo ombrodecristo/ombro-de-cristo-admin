@@ -2,7 +2,10 @@ import { useState, type FormEvent } from "react";
 import { authService } from "../../services/authService";
 import { type UserGender } from "../../types/database";
 import { logService } from "../../services/logService";
-import { toast } from "sonner";
+import {
+  validatePasswordLength,
+  validatePasswordMatch,
+} from "@/lib/validators";
 
 export function useLandingPageViewModel() {
   const [fullName, setFullName] = useState("");
@@ -11,27 +14,33 @@ export function useLandingPageViewModel() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
 
     if (!gender) {
-      toast.error("Por favor, selecione o gênero.");
+      setError("Por favor, selecione o gênero.");
       return;
     }
 
-    if (password.length < 6) {
-      toast.error("A sua senha deve ter no mínimo 6 caracteres.");
+    const lengthValidation = validatePasswordLength(password);
+    if (!lengthValidation.isValid) {
+      setError(lengthValidation.message);
       return;
     }
 
-    if (password !== confirmPassword) {
-      toast.error("As suas senhas não coincidem.");
+    const matchValidation = validatePasswordMatch(password, confirmPassword);
+    if (!matchValidation.isValid) {
+      setError(matchValidation.message);
       return;
     }
 
     setLoading(true);
-    const { error } = await authService.signUp(
+    const { error: signUpError } = await authService.signUp(
       fullName,
       gender,
       email,
@@ -40,20 +49,20 @@ export function useLandingPageViewModel() {
 
     setLoading(false);
 
-    if (error) {
+    if (signUpError) {
       let friendlyMessage = "Ocorreu um erro ao tentar criar a conta.";
-      if (error.message === "User already registered") {
+      if (signUpError.message === "User already registered") {
         friendlyMessage =
           "Este e-mail já está cadastrado. Tente fazer login ou recuperar sua senha.";
       }
 
-      toast.error(friendlyMessage);
-      await logService.logError(error, {
+      setError(friendlyMessage);
+      await logService.logError(signUpError, {
         component: "useLandingPageViewModel",
         context: { email: email.substring(0, 3) + "..." },
       });
     } else {
-      toast.success("Seja bem-vindo(a)! Por favor, verifique seu e-mail.");
+      setSuccessMessage("Cadastro realizado! Por favor, verifique seu e-mail.");
       setFullName("");
       setGender("");
       setEmail("");
@@ -74,6 +83,8 @@ export function useLandingPageViewModel() {
     confirmPassword,
     setConfirmPassword,
     loading,
+    error,
+    successMessage,
     handleSubmit,
   };
 }

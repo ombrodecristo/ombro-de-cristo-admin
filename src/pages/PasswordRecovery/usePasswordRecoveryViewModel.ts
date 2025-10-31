@@ -1,15 +1,19 @@
 import { useState, type FormEvent, useEffect } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { authService } from "../../services/authService";
 import { logService } from "../../services/logService";
-import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
+import {
+  validatePasswordLength,
+  validatePasswordMatch,
+} from "@/lib/validators";
 
 type UsePasswordRecoveryViewModelProps = {
   authLoading: boolean;
+  initialHash: string;
 };
 
 export function usePasswordRecoveryViewModel({
   authLoading,
+  initialHash,
 }: UsePasswordRecoveryViewModelProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,7 +21,7 @@ export function usePasswordRecoveryViewModel({
   const [success, setSuccess] = useState(false);
   const [isTokenValid, setIsTokenValid] = useState(false);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
-  const { initialHash } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (authLoading) {
@@ -36,7 +40,7 @@ export function usePasswordRecoveryViewModel({
     }
 
     if (hasRecoveryToken) {
-      supabase.auth.getSession().then(({ data }) => {
+      authService.getSession().then(({ data }) => {
         if (data.session) {
           setIsTokenValid(true);
         } else {
@@ -52,32 +56,35 @@ export function usePasswordRecoveryViewModel({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
 
-    if (password.length < 6) {
-      toast.error("A sua nova senha deve ter no mínimo 6 caracteres.");
+    const lengthValidation = validatePasswordLength(password);
+    if (!lengthValidation.isValid) {
+      setError(lengthValidation.message);
       return;
     }
 
-    if (password !== confirmPassword) {
-      toast.error("As suas senhas não coincidem.");
+    const matchValidation = validatePasswordMatch(password, confirmPassword);
+    if (!matchValidation.isValid) {
+      setError(matchValidation.message);
       return;
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password });
+    const { error: updateError } =
+      await authService.updateUserPassword(password);
     setLoading(false);
     setPassword("");
     setConfirmPassword("");
 
-    if (error) {
-      toast.error(error.message);
-      await logService.logError(error, {
+    if (updateError) {
+      setError(updateError.message);
+      await logService.logError(updateError, {
         component: "usePasswordRecoveryViewModel",
       });
     } else {
       setSuccess(true);
-      await supabase.auth.signOut();
-      window.history.replaceState({}, document.title, window.location.pathname);
+      await authService.signOut();
     }
   };
 
@@ -90,6 +97,7 @@ export function usePasswordRecoveryViewModel({
     pageLoading: authLoading || isCheckingToken,
     success,
     isTokenValid,
+    error,
     handleSubmit,
   };
 }

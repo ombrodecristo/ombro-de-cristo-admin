@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -22,7 +22,6 @@ import {
 import {
   User,
   LogOut,
-  Loader2,
   Trash2,
   AlertCircle,
   Edit,
@@ -30,94 +29,50 @@ import {
   KeyRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { authService } from "@/services/authService";
-import { logService } from "@/services/logService";
 import { toast } from "sonner";
-import { type Profile } from "@/types/database";
-import { profileService } from "@/services/profileService";
 import { Input } from "../ui/input";
 import ChangePasswordModal from "../ChangePasswordModal";
 import { Label } from "../ui/label";
+import { useUserMenuViewModel } from "./useUserMenuViewModel";
+import { Spinner } from "../ui/spinner";
 
 export default function UserMenu() {
   const { user, signOut } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [isSavingName, setIsSavingName] = useState(false);
-  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const {
+    isOpen,
+    isDeleting,
+    profile,
+    isEditingName,
+    setIsEditingName,
+    fullName,
+    setFullName,
+    isSavingName,
+    isChangePasswordOpen,
+    setIsChangePasswordOpen,
+    error,
+    successMessage,
+    handleDeleteAccount,
+    handleSaveName,
+    handleCloseModals,
+    handleOpenChange,
+    handleSignOut,
+    setError,
+    setSuccessMessage,
+  } = useUserMenuViewModel({ user, signOut });
 
   useEffect(() => {
-    async function loadProfile() {
-      if (user && isOpen) {
-        const { data, error } = await profileService.getProfileById(user.id);
-        if (error) {
-          toast.error("Erro ao buscar dados da conta.");
-          logService.logError(error, { component: "UserMenu.loadProfile" });
-        } else {
-          setProfile(data);
-          setFullName(data.full_name);
-        }
-      }
-    }
-    loadProfile();
-  }, [user, isOpen]);
-
-  const handleDeleteAccount = async () => {
-    setIsDeleting(true);
-    const { error } = await authService.deleteOwnUser();
-
     if (error) {
-      toast.error("Erro ao excluir sua conta. Tente novamente.");
-      await logService.logError(error, {
-        component: "UserMenu.handleDeleteAccount",
-      });
-
-      setIsDeleting(false);
-    } else {
-      toast.success("Conta excluída com sucesso.");
-      signOut();
-      setIsOpen(false);
+      toast.error(error);
+      setError(null);
     }
-  };
+  }, [error, setError]);
 
-  const handleSaveName = async () => {
-    if (!user || !profile || fullName.trim().length < 3) {
-      toast.error("O nome completo deve ter pelo menos 3 caracteres.");
-      return;
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      setSuccessMessage(null);
     }
-    setIsSavingName(true);
-    const { data, error } = await profileService.updateProfile(user.id, {
-      full_name: fullName.trim(),
-    });
-    setIsSavingName(false);
-    if (error) {
-      toast.error("Erro ao atualizar o nome.");
-      logService.logError(error, { component: "UserMenu.handleSaveName" });
-    } else {
-      setProfile(data);
-      setFullName(data.full_name);
-      setIsEditingName(false);
-      toast.success("Nome atualizado com sucesso!");
-    }
-  };
-
-  const handleCloseModals = () => {
-    setIsChangePasswordOpen(false);
-    setIsOpen(false);
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (!open) {
-      setIsEditingName(false);
-      if (profile) {
-        setFullName(profile.full_name);
-      }
-    }
-  };
+  }, [successMessage, setSuccessMessage]);
 
   if (!user) {
     return null;
@@ -132,7 +87,7 @@ export default function UserMenu() {
             "bg-black/10 text-primary-foreground",
             "hover:bg-black/20"
           )}
-          onClick={() => setIsOpen(true)}
+          onClick={() => handleOpenChange(true)}
           aria-label="Menu do usuário"
         >
           <User className="h-6 w-6" />
@@ -146,8 +101,7 @@ export default function UserMenu() {
           {isEditingName ? (
             <form
               onSubmit={(e) => {
-                e.preventDefault();
-                handleSaveName();
+                handleSaveName(e);
               }}
               className="space-y-2 pt-2"
             >
@@ -170,7 +124,7 @@ export default function UserMenu() {
                   disabled={isSavingName}
                 >
                   {isSavingName ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Spinner className="h-4 w-4" />
                   ) : (
                     <Save className="h-4 w-4" />
                   )}
@@ -227,13 +181,7 @@ export default function UserMenu() {
               Alterar Senha
             </Button>
 
-            <Button
-              onClick={() => {
-                signOut();
-                setIsOpen(false);
-              }}
-              className="w-full"
-            >
+            <Button onClick={handleSignOut} className="w-full">
               <LogOut className="mr-2 h-4 w-4" />
               Sair
             </Button>
@@ -285,7 +233,7 @@ export default function UserMenu() {
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
                       {isDeleting ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Spinner className="mr-2 h-4 w-4" />
                       ) : (
                         <Trash2 className="mr-2 h-4 w-4" />
                       )}

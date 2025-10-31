@@ -9,9 +9,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Loader2, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { useChangePasswordViewModel } from "./useChangePasswordViewModel";
 import { PasswordInput } from "../ui/password-input";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { Spinner } from "../ui/spinner";
 
 type ChangePasswordModalProps = {
   open: boolean;
@@ -30,8 +33,22 @@ export default function ChangePasswordModal({
     confirmPassword,
     setConfirmPassword,
     loading,
+    error,
+    success,
     handleSubmit,
   } = useChangePasswordViewModel({ onClose });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      toast.success("A sua senha foi alterada com sucesso!");
+    }
+  }, [success]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -88,7 +105,7 @@ export default function ChangePasswordModal({
             </DialogClose>
 
             <Button type="submit" variant="default" disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <Spinner className="mr-2 h-4 w-4" />}
               Alterar Senha
             </Button>
           </DialogFooter>
