@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { type SortConfig } from "@/pages/Dashboard/useDashboardViewModel";
+import { type SortConfig } from "@/pages/UserManagement/useUserManagementViewModel";
 import { type ProfileWithRelations } from "@/services/profileService";
 import { formatGender, formatRole } from "@/lib/formatters";
 

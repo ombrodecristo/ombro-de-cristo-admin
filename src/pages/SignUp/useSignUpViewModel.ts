@@ -7,7 +7,7 @@ import {
   validatePasswordMatch,
 } from "@/lib/validators";
 
-export function useLandingPageViewModel() {
+export function useSignUpViewModel() {
   const [fullName, setFullName] = useState("");
   const [gender, setGender] = useState<UserGender | "">("");
   const [email, setEmail] = useState("");
@@ -58,7 +58,7 @@ export function useLandingPageViewModel() {
 
       setError(friendlyMessage);
       await logService.logError(signUpError, {
-        component: "useLandingPageViewModel",
+        component: "useSignUpViewModel",
         context: { email: email.substring(0, 3) + "..." },
       });
     } else {

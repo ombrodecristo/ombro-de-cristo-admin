@@ -1,7 +1,7 @@
 import { useAuth } from "../../contexts/AuthContext";
 import UserTable from "../../components/UserTable";
-import EditUserRoleModal from "../../components/EditUserRoleModal";
-import { useDashboardViewModel } from "./useDashboardViewModel";
+import EditUserModal from "../../components/EditUserModal";
+import { useUserManagementViewModel } from "./useUserManagementViewModel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-export default function Dashboard() {
+export default function UserManagementPage() {
   const { user } = useAuth();
   const {
     loading,
@@ -23,7 +23,7 @@ export default function Dashboard() {
     handleUpdateSuccess,
     handleEdit,
     handleCloseModal,
-  } = useDashboardViewModel({ currentUserId: user?.id || "" });
+  } = useUserManagementViewModel({ currentUserId: user?.id || "" });
 
   useEffect(() => {
     if (error) {
@@ -54,6 +54,7 @@ export default function Dashboard() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+
         {searchQuery && (
           <Button
             type="button"
@@ -76,7 +77,7 @@ export default function Dashboard() {
       />
 
       {editingProfile && (
-        <EditUserRoleModal
+        <EditUserModal
           profile={editingProfile}
           onClose={handleCloseModal}
           onSuccess={handleUpdateSuccess}

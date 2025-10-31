@@ -23,37 +23,41 @@ import {
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  useEditUserRoleViewModel,
+  useEditUserModalViewModel,
   allRoles,
   allGenders,
-} from "./useEditUserRoleViewModel";
+} from "./useEditUserModalViewModel";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 import { formatGender, formatRole } from "@/lib/formatters";
 import { Info } from "lucide-react";
 
-type EditUserRoleModalProps = {
+type EditUserModalProps = {
   profile: ProfileWithRelations;
   onClose: () => void;
   onSuccess: (updatedProfile: Profile) => void;
 };
 
-export default function EditUserRoleModal({
+export default function EditUserModal({
   profile,
   onClose,
   onSuccess,
-}: EditUserRoleModalProps) {
+}: EditUserModalProps) {
   const {
     newRole,
     setNewRole,
     newGender,
     setNewGender,
+    newChurchId,
+    setNewChurchId,
+    churches,
+    loadingChurches,
     loading,
     error,
     success,
     handleSubmit,
-  } = useEditUserRoleViewModel({
+  } = useEditUserModalViewModel({
     profile,
     onClose,
     onSuccess,
@@ -123,6 +127,35 @@ export default function EditUserRoleModal({
               </Select>
             </div>
 
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="church-select">Igreja</Label>
+              <Select
+                value={newChurchId || "none"}
+                onValueChange={(value) =>
+                  setNewChurchId(value === "none" ? null : value)
+                }
+                disabled={loading || loadingChurches}
+              >
+                <SelectTrigger id="church-select">
+                  <SelectValue
+                    placeholder={
+                      loadingChurches
+                        ? "Carregando igrejas..."
+                        : "Selecione uma igreja"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Nenhuma</SelectItem>
+                  {churches.map((church) => (
+                    <SelectItem key={church.id} value={church.id}>
+                      {church.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <Alert
               variant="default"
               className="mt-2 flex items-center justify-center gap-2 [&>svg]:static [&>svg~*]:pl-0"
@@ -141,7 +174,6 @@ export default function EditUserRoleModal({
                 Cancelar
               </Button>
             </DialogClose>
-
             <Button type="submit" variant="default" disabled={loading}>
               {loading && <Spinner className="mr-2 h-4 w-4" />}
               Salvar

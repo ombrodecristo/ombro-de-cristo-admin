@@ -12,6 +12,7 @@ const profilesWithRelationsQuery = supabase.from("profiles").select(
     full_name,
     role,
     gender,
+    church_id,
     churches ( name ),
     mentor:mentor_id ( full_name )
   `
@@ -29,11 +30,15 @@ async function getProfilesWithRelations() {
 
 async function updateAdminProfileDetails(
   profileId: string,
-  details: { role: UserRole; gender: UserGender }
+  details: { role: UserRole; gender: UserGender; church_id: string | null }
 ) {
   return supabase
     .from("profiles")
-    .update({ role: details.role, gender: details.gender })
+    .update({
+      role: details.role,
+      gender: details.gender,
+      church_id: details.church_id,
+    })
     .eq("id", profileId)
     .select()
     .single<Profile>();

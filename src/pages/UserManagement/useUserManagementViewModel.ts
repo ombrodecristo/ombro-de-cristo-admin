@@ -7,19 +7,18 @@ import {
 import { logService } from "../../services/logService";
 
 export type { ProfileWithRelations };
-
 export type SortConfig = {
   key: keyof ProfileWithRelations | null;
   direction: "ascending" | "descending";
 };
 
-type UseDashboardViewModelProps = {
+type UseUserManagementViewModelProps = {
   currentUserId: string;
 };
 
-export function useDashboardViewModel({
+export function useUserManagementViewModel({
   currentUserId,
-}: UseDashboardViewModelProps) {
+}: UseUserManagementViewModelProps) {
   const [profiles, setProfiles] = useState<ProfileWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingProfile, setEditingProfile] =
@@ -36,15 +35,15 @@ export function useDashboardViewModel({
     setError(null);
     const { data, error: fetchError } =
       await profileService.getProfilesWithRelations();
+
     if (fetchError) {
       setError("Erro ao carregar usuários.");
       await logService.logError(fetchError, {
-        component: "useDashboardViewModel",
+        component: "useUserManagementViewModel",
       });
     } else if (data) {
       setProfiles(data);
     }
-
     setLoading(false);
   }
 
@@ -58,12 +57,13 @@ export function useDashboardViewModel({
         profile.full_name.toLowerCase().includes(searchQuery.toLowerCase()) &&
         profile.id !== currentUserId
     );
-    let sortableProfiles = [...filteredProfiles];
 
+    let sortableProfiles = [...filteredProfiles];
     if (sortConfig.key !== null) {
       sortableProfiles.sort((a, b) => {
         let aValue: any;
         let bValue: any;
+
         if (sortConfig.key === "churches") {
           aValue = a.churches?.name ?? "";
           bValue = b.churches?.name ?? "";
@@ -78,11 +78,9 @@ export function useDashboardViewModel({
         if (aValue < bValue) {
           return sortConfig.direction === "ascending" ? -1 : 1;
         }
-
         if (aValue > bValue) {
           return sortConfig.direction === "ascending" ? 1 : -1;
         }
-
         return 0;
       });
     }

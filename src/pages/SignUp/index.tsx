@@ -1,7 +1,7 @@
 import { Mail, Lock, User, Users, ShieldHalf } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
-import { useLandingPageViewModel } from "./useLandingPageViewModel";
+import { useSignUpViewModel } from "./useSignUpViewModel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 
-export default function LandingPage() {
+export default function SignUpPage() {
   const {
     fullName,
     setFullName,
@@ -35,7 +35,7 @@ export default function LandingPage() {
     error,
     successMessage,
     handleSubmit,
-  } = useLandingPageViewModel();
+  } = useSignUpViewModel();
 
   useEffect(() => {
     if (error) {
@@ -53,7 +53,7 @@ export default function LandingPage() {
     <div className="flex w-full min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
       <div
         className="flex flex-col items-center justify-center gap-2 bg-primary p-6 text-center text-primary-foreground 
-                  md:h-full md:w-1/3 md:gap-2 md:p-12"
+                   md:h-full md:w-1/3 md:gap-2 md:p-12"
       >
         <div className="flex flex-row items-center justify-center gap-3 md:flex-col md:gap-6">
           <ShieldHalf className="h-8 w-8 md:h-24 md:w-24" />
@@ -194,7 +194,6 @@ export default function LandingPage() {
                 >
                   <IoLogoGooglePlaystore className="h-4 w-4" /> Google Play
                 </Button>
-
                 <Button
                   variant="outline"
                   className="w-full"

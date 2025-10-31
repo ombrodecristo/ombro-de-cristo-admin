@@ -13,9 +13,9 @@ import AdminLayout from "./components/AdminLayout";
 import { GlobalLoader } from "./components/GlobalLoader";
 import { Toaster } from "sonner";
 
-const LandingPage = lazy(() => import("./pages/LandingPage"));
+const SignUpPage = lazy(() => import("./pages/SignUp"));
 const Login = lazy(() => import("./pages/Login"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
+const UserManagementPage = lazy(() => import("./pages/UserManagement"));
 const AuthConfirmed = lazy(() => import("./pages/AuthConfirmed"));
 const PasswordRecovery = lazy(
   () => import("./pages/PasswordRecovery/index.tsx")
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <LandingPage /> },
+      { index: true, element: <SignUpPage /> },
       { path: "/login", element: <Login /> },
       { path: "/auth-confirmed", element: <AuthConfirmed /> },
       { path: "/password-recovery", element: <PasswordRecovery /> },
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "users",
-                element: <Dashboard />,
+                element: <UserManagementPage />,
               },
             ],
           },
