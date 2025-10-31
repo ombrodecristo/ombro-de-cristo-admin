@@ -16,6 +16,7 @@ import { Toaster } from "sonner";
 const SignUpPage = lazy(() => import("./pages/SignUp"));
 const Login = lazy(() => import("./pages/Login"));
 const UserManagementPage = lazy(() => import("./pages/UserManagement"));
+const ChurchManagementPage = lazy(() => import("./pages/ChurchManagement"));
 const AuthConfirmed = lazy(() => import("./pages/AuthConfirmed"));
 const PasswordRecovery = lazy(
   () => import("./pages/PasswordRecovery/index.tsx")
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
               {
                 path: "users",
                 element: <UserManagementPage />,
+              },
+              {
+                path: "churches",
+                element: <ChurchManagementPage />,
               },
             ],
           },
