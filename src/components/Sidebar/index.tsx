@@ -78,7 +78,10 @@ export default function Sidebar({
       </div>
 
       <div className="flex-1 overflow-auto py-2">
-        <SidebarNav isDesktopClosed={isDesktopClosed} />
+        <SidebarNav
+          isDesktopClosed={isDesktopClosed}
+          onLinkClick={!isDesktopClosed ? onToggleDesktop : undefined}
+        />
       </div>
     </aside>
   );

@@ -11,6 +11,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { type SortConfig } from "@/pages/Dashboard/useDashboardViewModel";
 import { type ProfileWithRelations } from "@/services/profileService";
+import { formatGender, formatRole } from "@/lib/formatters";
 
 type UserTableProps = {
   profiles: ProfileWithRelations[];
@@ -99,8 +100,10 @@ export default function UserTable({
                   <TableCell className="font-medium">
                     {profile.full_name}
                   </TableCell>
-                  <TableCell>{profile.role}</TableCell>
-                  <TableCell>{profile.gender}</TableCell>
+                  <TableCell>
+                    {formatRole(profile.role, profile.gender)}
+                  </TableCell>
+                  <TableCell>{formatGender(profile.gender)}</TableCell>
                   <TableCell>{profile.churches?.name ?? "N/A"}</TableCell>
                   <TableCell>{profile.mentor?.full_name ?? "N/A"}</TableCell>
                   <TableCell>
@@ -109,7 +112,7 @@ export default function UserTable({
                       size="sm"
                       onClick={() => onEdit(profile)}
                     >
-                      <Edit className="mr-2 h-4 w-4" /> Alterar
+                      <Edit className="mr-2 h-4 w-4" /> Editar
                     </Button>
                   </TableCell>
                 </TableRow>

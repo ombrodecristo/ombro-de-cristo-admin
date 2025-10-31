@@ -1,5 +1,9 @@
 import { supabase } from "../lib/supabaseClient";
-import { type Profile, type UserRole } from "../types/database";
+import {
+  type Profile,
+  type UserRole,
+  type UserGender,
+} from "../types/database";
 import { type QueryData } from "@supabase/supabase-js";
 
 const profilesWithRelationsQuery = supabase.from("profiles").select(
@@ -23,10 +27,13 @@ async function getProfilesWithRelations() {
   >();
 }
 
-async function updateProfileRole(profileId: string, newRole: UserRole) {
+async function updateAdminProfileDetails(
+  profileId: string,
+  details: { role: UserRole; gender: UserGender }
+) {
   return supabase
     .from("profiles")
-    .update({ role: newRole })
+    .update({ role: details.role, gender: details.gender })
     .eq("id", profileId)
     .select()
     .single<Profile>();
@@ -47,7 +54,7 @@ async function updateProfile(id: string, { full_name }: { full_name: string }) {
 
 export const profileService = {
   getProfilesWithRelations,
-  updateProfileRole,
+  updateAdminProfileDetails,
   getProfileById,
   updateProfile,
 };

@@ -1,4 +1,8 @@
-import { type Profile, type UserRole } from "../../types/database";
+import {
+  type Profile,
+  type UserRole,
+  type UserGender,
+} from "../../types/database";
 import { type ProfileWithRelations } from "../../services/profileService";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,10 +22,16 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useEditUserRoleViewModel, allRoles } from "./useEditUserRoleViewModel";
+import {
+  useEditUserRoleViewModel,
+  allRoles,
+  allGenders,
+} from "./useEditUserRoleViewModel";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
+import { formatGender, formatRole } from "@/lib/formatters";
+import { Info } from "lucide-react";
 
 type EditUserRoleModalProps = {
   profile: ProfileWithRelations;
@@ -34,12 +44,20 @@ export default function EditUserRoleModal({
   onClose,
   onSuccess,
 }: EditUserRoleModalProps) {
-  const { newRole, setNewRole, loading, error, success, handleSubmit } =
-    useEditUserRoleViewModel({
-      profile,
-      onClose,
-      onSuccess,
-    });
+  const {
+    newRole,
+    setNewRole,
+    newGender,
+    setNewGender,
+    loading,
+    error,
+    success,
+    handleSubmit,
+  } = useEditUserRoleViewModel({
+    profile,
+    onClose,
+    onSuccess,
+  });
 
   useEffect(() => {
     if (error) {
@@ -49,7 +67,7 @@ export default function EditUserRoleModal({
 
   useEffect(() => {
     if (success) {
-      toast.success("Permissão alterada com sucesso!");
+      toast.success("Usuário atualizado com sucesso!");
     }
   }, [success]);
 
@@ -58,7 +76,7 @@ export default function EditUserRoleModal({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Alterar Permissão</DialogTitle>
+            <DialogTitle>Editar Usuário</DialogTitle>
             <p className="pt-1 text-sm text-muted-foreground">
               Usuário: <strong>{profile.full_name}</strong>
             </p>
@@ -78,17 +96,41 @@ export default function EditUserRoleModal({
                 <SelectContent>
                   {allRoles.map((role) => (
                     <SelectItem key={role} value={role}>
-                      {role}
+                      {formatRole(role, newGender || profile.gender)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <Alert variant="default" className="mt-2">
-              <AlertDescription className="text-xs">
-                Nota: O usuário precisará fazer logout e login novamente no app
-                para que suas permissões sejam atualizadas.
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="gender-select">Gênero</Label>
+              <Select
+                value={newGender}
+                onValueChange={(value) => setNewGender(value as UserGender)}
+                disabled={loading}
+              >
+                <SelectTrigger id="gender-select">
+                  <SelectValue placeholder="Selecione um gênero" />
+                </SelectTrigger>
+                <SelectContent>
+                  {allGenders.map((gender) => (
+                    <SelectItem key={gender} value={gender}>
+                      {formatGender(gender)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Alert
+              variant="default"
+              className="mt-2 flex items-center justify-center gap-2 [&>svg]:static [&>svg~*]:pl-0"
+            >
+              <Info className="h-12 w-12 ml-2" />
+              <AlertDescription className="text-xs ml-2 mt-2">
+                O usuário precisará sair da conta e fazer login novamente nas
+                plataformas para que as suas permissões sejam atualizadas.
               </AlertDescription>
             </Alert>
           </div>
