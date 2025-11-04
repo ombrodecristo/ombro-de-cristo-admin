@@ -163,8 +163,8 @@ export default function EditUserModal({
               <Info className="h-12 w-12 ml-2" />
               <AlertDescription className="text-xs ml-2 mt-2">
                 O usuário precisará sair da conta e fazer login novamente nas
-                plataformas para que as suas permissões sejam atualizadas.
-                <br />O usuário poderá alterar seu mentor pelo aplicativo móvel.
+                plataformas para que as suas permissões sejam atualizadas. O
+                mentor pode ser atualizado a partir do aplicativo móvel.
               </AlertDescription>
             </Alert>
           </div>
