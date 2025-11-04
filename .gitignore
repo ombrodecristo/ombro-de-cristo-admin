@@ -25,7 +25,6 @@ dist-ssr
 
 # Supabase Types files
 /supabase/
-src/types/supabase.ts
 
 # Supabase Env files
 .env.testing
