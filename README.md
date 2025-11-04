@@ -1,1 +1,1 @@
-# Ombro de Cristo - Admin
+# Ombro de Cristo - Painel de Administração
