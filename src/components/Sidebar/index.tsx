@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SidebarNav } from "../SidebarNav";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 type SidebarProps = {
   isDesktopClosed: boolean;
@@ -15,21 +15,17 @@ export default function Sidebar({
 }: SidebarProps) {
   const sidebarRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        !isDesktopClosed &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node)
-      ) {
-        onToggleDesktop();
-      }
+  const handleMouseEnter = () => {
+    if (isDesktopClosed) {
+      onToggleDesktop();
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isDesktopClosed, onToggleDesktop]);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDesktopClosed) {
+      onToggleDesktop();
+    }
+  };
 
   return (
     <aside
@@ -38,11 +34,10 @@ export default function Sidebar({
         "hidden md:flex md:flex-col md:border-r md:bg-primary md:text-primary-foreground md:transition-all",
         isDesktopClosed ? "w-16" : "w-64"
       )}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <div
-        className="flex h-14 items-center justify-between p-4 md:h-16 cursor-pointer"
-        onClick={onToggleDesktop}
-      >
+      <div className="flex h-14 items-center justify-between p-4 md:h-16 cursor-pointer">
         <div
           className={cn(
             "flex items-center gap-2",
@@ -63,7 +58,6 @@ export default function Sidebar({
         <Button
           variant="ghost"
           size="icon"
-          onClick={onToggleDesktop}
           className={cn(
             "text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground",
             isDesktopClosed && "mr-1"
