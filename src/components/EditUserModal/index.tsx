@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   useEditUserModalViewModel,
@@ -81,12 +82,26 @@ export default function EditUserModal({
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Editar Usuário</DialogTitle>
-            <p className="pt-1 text-sm text-muted-foreground">
-              Usuário: <strong>{profile.full_name}</strong>
-            </p>
           </DialogHeader>
-
           <div className="grid gap-4 py-4">
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="user-name">Nome Completo</Label>
+              <Input
+                id="user-name"
+                value={profile.full_name}
+                disabled
+                className="opacity-100 bg-muted text-muted-foreground"
+              />
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="mentor-name">Mentoria por</Label>
+              <Input
+                id="mentor-name"
+                value={profile.mentor?.full_name ?? "N/A"}
+                disabled
+                className="opacity-100 bg-muted text-muted-foreground"
+              />
+            </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="role-select">Permissão</Label>
               <Select
@@ -106,7 +121,6 @@ export default function EditUserModal({
                 </SelectContent>
               </Select>
             </div>
-
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="gender-select">Gênero</Label>
               <Select
@@ -126,7 +140,6 @@ export default function EditUserModal({
                 </SelectContent>
               </Select>
             </div>
-
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="church-select">Igreja</Label>
               <Select
@@ -155,7 +168,6 @@ export default function EditUserModal({
                 </SelectContent>
               </Select>
             </div>
-
             <Alert
               variant="default"
               className="mt-2 flex items-center justify-center gap-2 [&>svg]:static [&>svg~*]:pl-0"
@@ -163,12 +175,13 @@ export default function EditUserModal({
               <Info className="h-12 w-12 ml-2" />
               <AlertDescription className="text-xs ml-2 mt-2">
                 O usuário precisará sair da conta e fazer login novamente nas
-                plataformas para que as suas permissões sejam atualizadas. O
-                usuário pode atualizar seu mentor a partir do aplicativo móvel.
+                plataformas para que as suas permissões sejam atualizadas.
+                <br />
+                <br />O usuário pode atualizar seu nome completo e mentor a
+                partir do aplicativo móvel.
               </AlertDescription>
             </Alert>
           </div>
-
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="ghost" disabled={loading}>

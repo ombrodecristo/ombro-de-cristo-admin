@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { Mail, Lock, LogIn, ShieldHalf } from "lucide-react";
+import { Mail, Lock, LogIn } from "lucide-react";
 import { useLoginViewModel } from "./useLoginViewModel";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,9 +25,11 @@ export default function Login() {
 
   const handleLoginSubmit = async (e: FormEvent) => {
     const { success, error } = await handleLogin(e);
+
     if (error) {
       toast.error(error);
     }
+
     if (success) {
       navigate("/admin", { replace: true });
     }
@@ -44,18 +46,18 @@ export default function Login() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="items-center text-center">
-        <CardDescription className="text-sm text-primary font-normal">
+        <img
+          src="/logo.png"
+          alt="Logo Ombro de Cristo"
+          className="h-24 w-24 object-contain"
+        />
+        <CardDescription className="text-2xl font-bold">
+          Ombro de Cristo
+        </CardDescription>
+        <CardDescription className="text-md font-normal">
           Painel Administrativo
         </CardDescription>
-
-        <div className="flex items-center gap-2">
-          <ShieldHalf className="h-7 w-7 text-primary" />
-          <CardDescription className="text-2xl text-primary font-bold">
-            Ombro de Cristo
-          </CardDescription>
-        </div>
       </CardHeader>
-
       <CardContent>
         <form onSubmit={handleLoginSubmit} className="space-y-5">
           <div className="space-y-3">

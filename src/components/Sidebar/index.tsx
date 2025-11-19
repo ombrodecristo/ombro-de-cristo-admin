@@ -47,7 +47,7 @@ export default function Sidebar({
           <span
             className={cn("text-md font-semibold", isDesktopClosed && "hidden")}
           >
-            Administração
+            Navegação
           </span>
         </div>
       </div>

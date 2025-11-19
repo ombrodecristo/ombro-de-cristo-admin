@@ -1,4 +1,4 @@
-import { Mail, Lock, User, Users, ShieldHalf } from "lucide-react";
+import { Mail, Lock, User, Users, ArrowRight } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import { useSignUpViewModel } from "./useSignUpViewModel";
@@ -56,14 +56,17 @@ export default function SignUpPage() {
                    md:h-full md:w-1/3 md:gap-2 md:p-12"
       >
         <div className="flex flex-row items-center justify-center gap-3 md:flex-col md:gap-6">
-          <ShieldHalf className="h-8 w-8 md:h-24 md:w-24" />
+          <img
+            src="/logo.png"
+            alt="Logo Ombro de Cristo"
+            className="h-12 w-12 md:h-32 md:w-32 object-contain"
+          />
           <h1 className="text-2xl font-bold md:text-4xl">Ombro de Cristo</h1>
         </div>
         <p className="text-sm text-primary-foreground/80 md:text-lg">
           Sua missão, fortalecida pela mentoria.
         </p>
       </div>
-
       <div className="flex flex-1 items-center justify-center bg-background p-4 md:w-2/3 md:overflow-y-auto">
         <Card className="w-full max-w-md">
           <CardHeader className="items-center text-center">
@@ -71,7 +74,6 @@ export default function SignUpPage() {
               Junte-se à nossa comunidade
             </CardTitle>
           </CardHeader>
-
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-3">
@@ -90,7 +92,6 @@ export default function SignUpPage() {
                   />
                 </div>
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="gender">Gênero</Label>
                 <div className="relative">
@@ -111,7 +112,6 @@ export default function SignUpPage() {
                   </Select>
                 </div>
               </div>
-
               <div className="space-y-3">
                 <Label htmlFor="email">E-mail</Label>
                 <div className="relative">
@@ -173,14 +173,12 @@ export default function SignUpPage() {
                 {loading ? (
                   <Spinner className="h-4 w-4" />
                 ) : (
-                  <User className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" />
                 )}
                 Criar conta
               </Button>
             </form>
-
             <div className="border-t my-6" />
-
             <div className="space-y-4 text-center">
               <p className="text-sm font-medium text-muted-foreground">
                 Em breve nas principais lojas de aplicativos!

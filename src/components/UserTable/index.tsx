@@ -80,7 +80,7 @@ export default function UserTable({
                 onClick={() => requestSort("mentor")}
               >
                 <div className="flex items-center">
-                  Mentor {getSortIcon("mentor")}
+                  Mentoria por {getSortIcon("mentor")}
                 </div>
               </TableHead>
               <TableHead>Ações</TableHead>
