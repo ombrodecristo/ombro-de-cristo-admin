@@ -94,7 +94,7 @@ export default function EditUserModal({
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="mentor-name">Mentoria por</Label>
+              <Label htmlFor="mentor-name">Mentoria</Label>
               <Input
                 id="mentor-name"
                 value={profile.mentor?.full_name ?? "N/A"}
@@ -177,8 +177,8 @@ export default function EditUserModal({
                 O usuário precisará sair da conta e fazer login novamente nas
                 plataformas para que as suas permissões sejam atualizadas.
                 <br />
-                <br />O usuário pode atualizar seu nome completo e mentor a
-                partir do aplicativo móvel.
+                <br />O usuário pode atualizar seu nome completo e mentoria no
+                aplicativo móvel.
               </AlertDescription>
             </Alert>
           </div>
