@@ -58,7 +58,7 @@ export default function DevotionalTable({
                 onClick={() => requestSort("author")}
               >
                 <div className="flex items-center">
-                  Autor {getSortIcon("author")}
+                  Autoria {getSortIcon("author")}
                 </div>
               </TableHead>
               <TableHead

@@ -53,10 +53,10 @@ export function LegalContent({
     <div className="container mx-auto max-w-4xl py-8 px-4 sm:px-6 lg:px-8">
       <H1>Termos e Condições de Uso</H1>
       <P>
-        Bem-vindo ao Ombro de Cristo. Estes Termos de Uso ("Termos") regem seu
+        Boas-vindas ao Ombro de Cristo. Estes Termos de Uso ("Termos") regem seu
         acesso e uso de nosso aplicativo móvel e serviços web ("Plataforma"). Ao
-        criar uma conta ou usar nossa Plataforma, você concorda em estar
-        vinculado a estes Termos.
+        criar uma conta ou usar nossa Plataforma, você concorda com o vínculo a
+        estes Termos.
       </P>
 
       <H2>1. A Aceitação dos Termos</H2>
@@ -71,8 +71,8 @@ export function LegalContent({
       <P>
         A Plataforma Ombro de Cristo é destinada a fortalecer a jornada
         espiritual de missionários por meio de devocionais, um diário pessoal e
-        um sistema de mentoria. Os usuários podem ser classificados como
-        "Missionários" ou "Mentores".
+        um sistema de mentoria. As pessoas usuárias podem ser classificadas como
+        "Missionário(a)" ou "Mentor(a)".
       </P>
 
       <H2>3. Elegibilidade e Contas de Usuário</H2>
@@ -87,8 +87,8 @@ export function LegalContent({
           verdadeiras, precisas e completas.
         </LI>
         <LI>
-          Você é o único responsável por todas as atividades que ocorrem em sua
-          conta.
+          Você é a única pessoa responsável por todas as atividades que ocorrem
+          em sua conta.
         </LI>
       </ul>
 
@@ -109,13 +109,16 @@ export function LegalContent({
 
       <H2>5. Conteúdo do Diário e Compartilhamento</H2>
       <ul className="list-disc">
-        <LI>Os Missionários podem manter um diário pessoal.</LI>
+        <LI>
+          Pessoas com o papel de Missionário(a) podem manter um diário pessoal.
+        </LI>
         <LI>As entradas do diário são privadas por padrão.</LI>
         <LI>
-          Os Missionários têm a opção de compartilhar entradas específicas com
-          seu Mentor designado. Ao compartilhar, você concede ao seu Mentor
-          permissão para visualizar o conteúdo dessa entrada específica com o
-          propósito de fornecer apoio espiritual e orientação.
+          Pessoas com o papel de Missionário(a) têm a opção de compartilhar
+          entradas específicas com sua Mentoria designada. Ao compartilhar, você
+          concede à sua Mentoria permissão para visualizar o conteúdo dessa
+          entrada específica com o propósito de fornecer apoio espiritual e
+          orientação.
         </LI>
         <LI>
           Nem o Ombro de Cristo nem seus administradores têm acesso ao conteúdo
@@ -139,19 +142,19 @@ export function LegalContent({
       <H2>7. Isenção de Responsabilidade de Mentoria</H2>
       <ul className="list-disc">
         <LI>
-          O relacionamento entre Mentor e Missionário é baseado em voluntariado
-          e apoio espiritual.
+          O relacionamento entre Mentor(a) e Missionário(a) é baseado em
+          voluntariado e apoio espiritual.
         </LI>
         <LI>
-          Os Mentores não são conselheiros profissionais, terapeutas ou
-          profissionais de saúde mental licenciados, a menos que especificado de
-          outra forma. A orientação fornecida é de natureza espiritual e não
-          substitui o aconselhamento profissional.
+          As pessoas no papel de Mentor(a) não são conselheiras profissionais,
+          terapeutas ou profissionais de saúde mental licenciadas, a menos que
+          especificado de outra forma. A orientação fornecida é de natureza
+          espiritual e não substitui o aconselhamento profissional.
         </LI>
         <LI>
           O Ombro de Cristo não se responsabiliza pela conduta ou conselhos
-          dados pelos Mentores. Encorajamos os usuários a exercerem seu próprio
-          discernimento.
+          dados por pessoas no papel de Mentor(a). Encorajamos os usuários a
+          exercerem seu próprio discernimento.
         </LI>
       </ul>
 
@@ -210,13 +213,13 @@ export function LegalContent({
           <Bold>Cadastro de Conta:</Bold> Coletamos seu nome completo, endereço
           de e-mail, gênero e igreja. Estas informações são usadas para criar e
           gerenciar sua conta, personalizar sua experiência e, no caso do
-          gênero, para conectar Missionários a Mentores do mesmo gênero.
+          gênero, para conectar Missionários(as) a Mentores(as) do mesmo gênero.
         </LI>
         <LI>
           <Bold>Conteúdo do Diário:</Bold> As entradas do seu diário são
           armazenadas em nossos servidores. Este conteúdo é criptografado e
           privado. Você tem controle total sobre ele e pode optar por
-          compartilhá-lo com seu Mentor.
+          compartilhá-lo com sua Mentoria.
         </LI>
       </ul>
 
@@ -267,9 +270,9 @@ export function LegalContent({
       </P>
       <ul className="list-disc">
         <LI>
-          <Bold>Mentoria:</Bold> Se você é um Missionário e opta por
+          <Bold>Mentoria:</Bold> Se você atua como Missionário(a) e opta por
           compartilhar uma entrada de diário, essa entrada específica será
-          visível para o seu Mentor designado. Nenhuma outra informação ou
+          visível para sua Mentoria designada. Nenhuma outra informação ou
           entrada é compartilhada sem sua ação explícita.
         </LI>
         <LI>
@@ -321,8 +324,8 @@ export function LegalContent({
         </LI>
         <LI>
           <Bold>Compartilhamento do Diário:</Bold> Você tem controle total sobre
-          quais entradas do diário, se houver, são compartilhadas com seu
-          Mentor.
+          quais entradas do diário, se houver, são compartilhadas com sua
+          Mentoria.
         </LI>
       </ul>
 

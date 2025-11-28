@@ -72,7 +72,7 @@ export default function EditUserModal({
 
   useEffect(() => {
     if (success) {
-      toast.success("Usuário atualizado com sucesso!");
+      toast.success("Perfil atualizado com sucesso!");
     }
   }, [success]);
 
@@ -81,7 +81,7 @@ export default function EditUserModal({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Editar Usuário</DialogTitle>
+            <DialogTitle>Editar Perfil</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid w-full items-center gap-1.5">
@@ -174,11 +174,11 @@ export default function EditUserModal({
             >
               <Info className="h-12 w-12 ml-2" />
               <AlertDescription className="text-xs ml-2 mt-2">
-                O usuário precisará sair da conta e fazer login novamente nas
-                plataformas para que as suas permissões sejam atualizadas.
+                A pessoa usuária precisará sair da conta e fazer login novamente
+                nas plataformas para que as suas permissões sejam atualizadas.
                 <br />
-                <br />O usuário pode atualizar seu nome completo e mentoria no
-                aplicativo móvel.
+                <br />A pessoa usuária pode atualizar seu nome completo e
+                mentoria no aplicativo móvel.
               </AlertDescription>
             </Alert>
           </div>

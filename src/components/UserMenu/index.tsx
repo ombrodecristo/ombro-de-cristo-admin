@@ -88,7 +88,7 @@ export default function UserMenu() {
             "hover:bg-black/20"
           )}
           onClick={() => handleOpenChange(true)}
-          aria-label="Menu do usuário"
+          aria-label="Menu do perfil"
         >
           <User className="h-6 w-6" />
         </Button>

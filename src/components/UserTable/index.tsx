@@ -91,7 +91,7 @@ export default function UserTable({
             {profiles.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="h-24 text-center">
-                  Nenhum usuário encontrado.
+                  Nenhum perfil encontrado.
                 </TableCell>
               </TableRow>
             ) : (

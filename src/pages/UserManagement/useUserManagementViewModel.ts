@@ -37,7 +37,7 @@ export function useUserManagementViewModel({
       await profileService.getProfilesWithRelations();
 
     if (fetchError) {
-      setError("Erro ao carregar usuários.");
+      setError("Erro ao carregar perfis.");
       await logService.logError(fetchError, {
         component: "useUserManagementViewModel",
       });
