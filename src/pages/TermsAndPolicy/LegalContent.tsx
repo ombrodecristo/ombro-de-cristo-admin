@@ -70,17 +70,17 @@ export function LegalContent({
       <H2>2. Descrição do Serviço</H2>
       <P>
         A Plataforma Ombro de Cristo é destinada a fortalecer a jornada
-        espiritual de missionários por meio de devocionais, um diário pessoal e
-        um sistema de mentoria. As pessoas usuárias podem ser classificadas como
+        espiritual por meio de devocionais, um diário pessoal e um sistema de
+        mentoria. As pessoas na plataforma são classificadas com os papéis de
         "Missionário(a)" ou "Mentor(a)".
       </P>
 
-      <H2>3. Elegibilidade e Contas de Usuário</H2>
+      <H2>3. Elegibilidade e Contas</H2>
       <ul className="list-disc">
         <LI>Você deve ter pelo menos 18 anos para criar uma conta.</LI>
         <LI>
-          Você é responsável por manter a confidencialidade de sua senha e
-          conta.
+          Você tem a responsabilidade de manter a confidencialidade de sua senha
+          e conta.
         </LI>
         <LI>
           Todas as informações fornecidas durante o cadastro devem ser
@@ -92,12 +92,12 @@ export function LegalContent({
         </LI>
       </ul>
 
-      <H2>4. Conduta do Usuário</H2>
+      <H2>4. Conduta na Plataforma</H2>
       <P>Você concorda em não usar a Plataforma para:</P>
       <ul className="list-disc">
         <LI>
           Publicar conteúdo ilegal, ofensivo, difamatório, odioso ou que viole
-          os direitos de terceiros.
+          direitos de terceiros.
         </LI>
         <LI>Assediar, abusar ou prejudicar outra pessoa.</LI>
         <LI>Tentar obter acesso não autorizado a outras contas ou sistemas.</LI>
@@ -116,13 +116,13 @@ export function LegalContent({
         <LI>
           Pessoas com o papel de Missionário(a) têm a opção de compartilhar
           entradas específicas com sua Mentoria designada. Ao compartilhar, você
-          concede à sua Mentoria permissão para visualizar o conteúdo dessa
+          concede à sua Mentoria permissão para visualizar o conteúdo daquela
           entrada específica com o propósito de fornecer apoio espiritual e
           orientação.
         </LI>
         <LI>
-          Nem o Ombro de Cristo nem seus administradores têm acesso ao conteúdo
-          do seu diário, seja ele compartilhado ou não.
+          Nem o Ombro de Cristo nem sua equipe de administração têm acesso ao
+          conteúdo do seu diário, seja ele compartilhado ou não.
         </LI>
       </ul>
 
@@ -131,7 +131,7 @@ export function LegalContent({
         <LI>
           O conteúdo fornecido pela Plataforma, incluindo devocionais, textos,
           gráficos e logotipos, é de nossa propriedade ou de nossos
-          licenciadores e é protegido por leis de direitos autorais.
+          licenciadores e protegido por leis de direitos autorais.
         </LI>
         <LI>
           O conteúdo que você cria (como entradas de diário) permanece sua
@@ -148,13 +148,13 @@ export function LegalContent({
         <LI>
           As pessoas no papel de Mentor(a) não são conselheiras profissionais,
           terapeutas ou profissionais de saúde mental licenciadas, a menos que
-          especificado de outra forma. A orientação fornecida é de natureza
+          se especifique o contrário. A orientação fornecida é de natureza
           espiritual e não substitui o aconselhamento profissional.
         </LI>
         <LI>
           O Ombro de Cristo não se responsabiliza pela conduta ou conselhos
-          dados por pessoas no papel de Mentor(a). Encorajamos os usuários a
-          exercerem seu próprio discernimento.
+          dados por pessoas no papel de Mentor(a). Encorajamos que cada pessoa
+          exerça seu próprio discernimento.
         </LI>
       </ul>
 
@@ -165,10 +165,9 @@ export function LegalContent({
           qualquer motivo, incluindo a violação destes Termos.
         </LI>
         <LI>
-          Você pode excluir sua conta a qualquer momento através das
-          configurações do seu perfil. A exclusão da conta é permanente e
-          resultará na remoção de todos os seus dados, incluindo as entradas do
-          diário.
+          Você pode excluir sua conta a qualquer momento nas configurações do
+          seu perfil. A exclusão da conta é permanente e resultará na remoção de
+          todos os seus dados, incluindo as entradas do diário.
         </LI>
       </ul>
 
@@ -184,9 +183,9 @@ export function LegalContent({
       <H2>10. Alterações nos Termos</H2>
       <P>
         Reservamo-nos o direito de modificar estes Termos a qualquer momento.
-        Notificaremos você sobre quaisquer alterações significativas. O uso
-        contínuo da Plataforma após tais alterações constitui sua aceitação dos
-        novos Termos.
+        Notificaremos sobre quaisquer alterações significativas. O uso contínuo
+        da Plataforma após tais alterações constitui sua aceitação dos novos
+        Termos.
       </P>
 
       <H2>11. Contato</H2>
@@ -213,7 +212,8 @@ export function LegalContent({
           <Bold>Cadastro de Conta:</Bold> Coletamos seu nome completo, endereço
           de e-mail, gênero e igreja. Estas informações são usadas para criar e
           gerenciar sua conta, personalizar sua experiência e, no caso do
-          gênero, para conectar Missionários(as) a Mentores(as) do mesmo gênero.
+          gênero, para conectar pessoas com papel de Missionário(a) a Mentorias
+          do mesmo gênero.
         </LI>
         <LI>
           <Bold>Conteúdo do Diário:</Bold> As entradas do seu diário são
@@ -229,7 +229,7 @@ export function LegalContent({
       <ul className="list-disc">
         <LI>
           <Bold>Dados de Uso:</Bold> Podemos coletar informações sobre como você
-          interage com a Plataforma, como os recursos que você usa e o tempo
+          interage com a Plataforma, como os recursos que utiliza e o tempo
           gasto. Isso nos ajuda a melhorar nossos serviços.
         </LI>
         <LI>
@@ -243,7 +243,7 @@ export function LegalContent({
       <ul className="list-disc">
         <LI>
           <Bold>Para Fornecer e Manter o Serviço:</Bold> Usamos suas informações
-          para operar a Plataforma, autenticar usuários, fornecer devocionais e
+          para operar a Plataforma, autenticar o acesso, fornecer devocionais e
           facilitar a funcionalidade de diário e mentoria.
         </LI>
         <LI>
@@ -258,7 +258,7 @@ export function LegalContent({
         </LI>
         <LI>
           <Bold>Segurança e Proteção:</Bold> Usamos as informações para proteger
-          a segurança e a integridade de nosso serviço e de nossos usuários.
+          a segurança e a integridade de nosso serviço e de quem o utiliza.
         </LI>
       </ul>
 
@@ -270,8 +270,8 @@ export function LegalContent({
       </P>
       <ul className="list-disc">
         <LI>
-          <Bold>Mentoria:</Bold> Se você atua como Missionário(a) e opta por
-          compartilhar uma entrada de diário, essa entrada específica será
+          <Bold>Mentoria:</Bold> Se você tem o papel de Missionário(a) e opta
+          por compartilhar uma entrada de diário, essa entrada específica será
           visível para sua Mentoria designada. Nenhuma outra informação ou
           entrada é compartilhada sem sua ação explícita.
         </LI>
@@ -283,7 +283,7 @@ export function LegalContent({
         <LI>
           <Bold>Provedores de Serviço:</Bold> Usamos provedores de serviços de
           terceiros (como Supabase para backend e armazenamento) que processam
-          dados em nosso nome. Esses provedores são obrigados contratualmente a
+          dados em nosso nome. Tais provedores são obrigados contratualmente a
           proteger suas informações e só podem usá-las para os fins que
           especificamos.
         </LI>
@@ -301,8 +301,9 @@ export function LegalContent({
         </LI>
         <LI>
           <Bold>Acesso Restrito:</Bold> O acesso direto ao banco de dados é
-          estritamente limitado a pessoal autorizado. Nossos administradores não
-          podem visualizar o conteúdo das entradas do seu diário.
+          estritamente limitado a pessoal autorizado. Nossa equipe de
+          administração não pode visualizar o conteúdo das entradas do seu
+          diário.
         </LI>
         <LI>
           <Bold>Autenticação Segura:</Bold> Usamos métodos de autenticação

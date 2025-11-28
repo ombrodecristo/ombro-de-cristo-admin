@@ -174,11 +174,11 @@ export default function EditUserModal({
             >
               <Info className="h-12 w-12 ml-2" />
               <AlertDescription className="text-xs ml-2 mt-2">
-                A pessoa usuária precisará sair da conta e fazer login novamente
-                nas plataformas para que as suas permissões sejam atualizadas.
+                O perfil precisará fechar o aplicativo e abrir novamente para
+                que as permissões sejam atualizadas.
                 <br />
-                <br />A pessoa usuária pode atualizar seu nome completo e
-                mentoria no aplicativo móvel.
+                <br />O nome completo e a mentoria do perfil podem ser
+                atualizados no aplicativo móvel.
               </AlertDescription>
             </Alert>
           </div>

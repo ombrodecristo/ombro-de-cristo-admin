@@ -59,7 +59,7 @@ export function useSignUpViewModel() {
       let friendlyMessage = "Ocorreu um erro ao tentar criar a conta.";
       if (signUpError.message === "User already registered") {
         friendlyMessage =
-          "Este e-mail já está cadastrado. Tente fazer login ou recuperar sua senha.";
+          "Este e-mail já está em uso. Tente fazer login ou recuperar sua senha.";
       }
 
       setError(friendlyMessage);
@@ -68,7 +68,9 @@ export function useSignUpViewModel() {
         context: { email: email.substring(0, 3) + "..." },
       });
     } else {
-      setSuccessMessage("Cadastro realizado! Por favor, verifique seu e-mail.");
+      setSuccessMessage(
+        "Conta criada com sucesso! Verifique seu e-mail para concluir o cadastro."
+      );
       setFullName("");
       setGender("");
       setEmail("");

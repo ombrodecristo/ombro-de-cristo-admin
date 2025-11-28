@@ -35,13 +35,13 @@ export default function AuthConfirmed() {
       <CardHeader className="items-center text-center">
         <CheckCircle className="h-12 w-12 text-primary" />
         <CardTitle className="text-2xl text-primary">
-          E-mail Confirmado!
+          Conta Confirmada
         </CardTitle>
       </CardHeader>
 
       <CardContent className="text-center">
         <p className="text-muted-foreground">
-          Sua conta foi verificada com sucesso.
+          Sua conta foi confirmada com sucesso.
           <br />
           <br />
           Você já pode fechar esta página.

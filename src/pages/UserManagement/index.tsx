@@ -45,7 +45,7 @@ export default function UserManagementPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Usuários</h1>
+      <h1 className="text-2xl font-semibold">Perfis</h1>
       <div className="relative w-full max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input

@@ -28,7 +28,7 @@ export function SidebarNav({ isDesktopClosed, onLinkClick }: SidebarNavProps) {
         onClick={onLinkClick}
       >
         <Users className="h-4 w-4" />
-        <span className={cn(isDesktopClosed && "hidden")}>Usuários</span>
+        <span className={cn(isDesktopClosed && "hidden")}>Perfis</span>
       </NavLink>
       <NavLink
         to="/admin/churches"
