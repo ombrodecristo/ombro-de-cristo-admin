@@ -24,6 +24,7 @@ const AuthConfirmed = lazy(() => import("./pages/AuthConfirmed"));
 const PasswordRecovery = lazy(
   () => import("./pages/PasswordRecovery/index.tsx")
 );
+const TermsAndPolicyPage = lazy(() => import("./pages/TermsAndPolicy"));
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/auth-confirmed", element: <AuthConfirmed /> },
       { path: "/password-recovery", element: <PasswordRecovery /> },
+      { path: "/terms-and-policy", element: <TermsAndPolicyPage /> },
       {
         path: "/admin",
         element: <ProtectedRoute />,

@@ -18,6 +18,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { LegalAgreement } from "./LegalAgreement";
 
 export default function SignUpPage() {
   const {
@@ -31,6 +32,8 @@ export default function SignUpPage() {
     setPassword,
     confirmPassword,
     setConfirmPassword,
+    acceptedTerms,
+    setAcceptedTerms,
     loading,
     error,
     successMessage,
@@ -52,7 +55,7 @@ export default function SignUpPage() {
   return (
     <div className="flex w-full min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
       <div
-        className="flex flex-col items-center justify-center gap-2 bg-primary p-6 text-center text-primary-foreground 
+        className="flex flex-col items-center justify-center gap-2 bg-primary p-6 text-center text-primary-foreground
                    md:h-full md:w-1/3 md:gap-2 md:p-12"
       >
         <div className="flex flex-row items-center justify-center gap-3 md:flex-col md:gap-6">
@@ -163,6 +166,12 @@ export default function SignUpPage() {
                   />
                 </div>
               </div>
+
+              <LegalAgreement
+                accepted={acceptedTerms}
+                onToggle={setAcceptedTerms}
+                isDisabled={loading}
+              />
 
               <Button
                 type="submit"

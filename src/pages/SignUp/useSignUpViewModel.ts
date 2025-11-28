@@ -13,6 +13,7 @@ export function useSignUpViewModel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -36,6 +37,11 @@ export function useSignUpViewModel() {
     const matchValidation = validatePasswordMatch(password, confirmPassword);
     if (!matchValidation.isValid) {
       setError(matchValidation.message);
+      return;
+    }
+
+    if (!acceptedTerms) {
+      setError("Você deve aceitar os termos e políticas para continuar.");
       return;
     }
 
@@ -68,6 +74,7 @@ export function useSignUpViewModel() {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      setAcceptedTerms(false);
     }
   };
 
@@ -82,6 +89,8 @@ export function useSignUpViewModel() {
     setPassword,
     confirmPassword,
     setConfirmPassword,
+    acceptedTerms,
+    setAcceptedTerms,
     loading,
     error,
     successMessage,
