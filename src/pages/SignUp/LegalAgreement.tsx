@@ -47,7 +47,7 @@ export function LegalAgreement({
             className="text-primary hover:underline font-semibold disabled:text-muted-foreground disabled:no-underline"
             disabled={isDisabled}
           >
-            Termos e Políticas de Privacidade
+            Termos de Uso e Política de Privacidade
           </button>
           .
         </Label>
@@ -56,7 +56,7 @@ export function LegalAgreement({
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle>Termos de Uso e Políticas de Privacidade</DialogTitle>
+            <DialogTitle>Termos de Uso e Política de Privacidade</DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-y-auto pr-6 -mr-6">
             <LegalContent showAcceptButton onAccept={handleAccept} />

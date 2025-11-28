@@ -11,7 +11,7 @@ export default function TermsAndPolicyPage() {
             className="h-10 w-10 object-contain"
           />
           <h1 className="text-md font-bold md:text-lg">
-            Termos de Uso e Políticas de Privacidade
+            Termos de Uso e Política de Privacidade
           </h1>
         </div>
       </header>
