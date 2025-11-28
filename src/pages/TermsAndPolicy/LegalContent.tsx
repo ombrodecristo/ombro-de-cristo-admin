@@ -51,7 +51,7 @@ export function LegalContent({
 }: LegalContentProps) {
   return (
     <div className="container mx-auto max-w-4xl py-8 px-4 sm:px-6 lg:px-8">
-      <H1>- Termos e Condições de Uso -</H1>
+      <H1>Termos e Condições de Uso</H1>
       <P>
         Bem-vindo ao Ombro de Cristo. Estes Termos de Uso ("Termos") regem seu
         acesso e uso de nosso aplicativo móvel e serviços web ("Plataforma"). Ao
