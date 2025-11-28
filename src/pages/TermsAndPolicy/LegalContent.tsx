@@ -53,9 +53,6 @@ export function LegalContent({
     <div className="container mx-auto max-w-4xl py-8 px-4 sm:px-6 lg:px-8">
       <H1>Termos e Condições de Uso</H1>
       <P>
-        <Bold>Última atualização:</Bold> 28 de novembro de 2025
-      </P>
-      <P>
         Bem-vindo ao Ombro de Cristo. Estes Termos de Uso ("Termos") regem seu
         acesso e uso de nosso aplicativo móvel e serviços web ("Plataforma"). Ao
         criar uma conta ou usar nossa Plataforma, você concorda em estar
@@ -336,11 +333,7 @@ export function LegalContent({
       </P>
 
       <H2>7. Alterações a esta Política</H2>
-      <P>
-        Podemos atualizar nossa Política de Privacidade periodicamente. As
-        alterações serão publicadas nesta página com uma data de "última
-        atualização" revisada.
-      </P>
+      <P>Podemos atualizar nossa Política de Privacidade periodicamente.</P>
 
       <H2>8. Contato</H2>
       <P>
