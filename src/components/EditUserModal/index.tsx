@@ -97,7 +97,7 @@ export default function EditUserModal({
               <Label htmlFor="mentor-name">Mentoria</Label>
               <Input
                 id="mentor-name"
-                value={profile.mentor?.full_name ?? "N/A"}
+                value={profile.mentor?.full_name ?? "Nenhuma"}
                 disabled
                 className="opacity-100 bg-muted text-muted-foreground"
               />
@@ -170,16 +170,19 @@ export default function EditUserModal({
             </div>
             <Alert
               variant="default"
-              className="mt-2 flex items-center justify-center gap-2 [&>svg]:static [&>svg~*]:pl-0"
+              className="mt-2 flex items-start justify-start gap-2 [&>svg]:static [&>svg~*]:pl-0"
             >
-              <Info className="h-12 w-12 ml-2" />
-              <AlertDescription className="text-xs ml-2 mt-2">
-                O perfil precisará fechar o aplicativo e abrir novamente para
-                que as permissões sejam atualizadas.
-                <br />
-                <br />O nome completo e a mentoria do perfil podem ser
-                atualizados no aplicativo móvel.
-              </AlertDescription>
+              <Info className="h-5 w-5 mt-0.5" />
+              <div className="flex flex-col">
+                <AlertDescription className="text-xs">
+                  As alterações de permissão e gênero serão aplicadas no próximo
+                  login do perfil no aplicativo.
+                </AlertDescription>
+                <AlertDescription className="text-xs mt-1">
+                  O nome e a mentoria são gerenciados pelo próprio perfil no
+                  aplicativo.
+                </AlertDescription>
+              </div>
             </Alert>
           </div>
           <DialogFooter>

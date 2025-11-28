@@ -55,8 +55,8 @@ export function useChurchFormViewModel({
 
     if (apiError) {
       const friendlyMessage = isEditing
-        ? "Erro ao atualizar a igreja."
-        : "Erro ao criar a igreja.";
+        ? "Não foi possível salvar as alterações."
+        : "Não foi possível criar a nova igreja.";
       setError(friendlyMessage);
       await logService.logError(apiError, {
         component: "useChurchFormViewModel",

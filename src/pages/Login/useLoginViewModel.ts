@@ -40,7 +40,7 @@ export function useLoginViewModel() {
 
       if (role !== "ADMIN") {
         const errorMessage =
-          "Acesso restrito à equipe de Administração. Caso acredite que isto seja um erro, entre em contato com o suporte.";
+          "Acesso restrito à Equipe de Administração. Se acredita que isso é um erro, contate o suporte.";
         await authService.signOut();
         setPassword("");
         setLoading(false);

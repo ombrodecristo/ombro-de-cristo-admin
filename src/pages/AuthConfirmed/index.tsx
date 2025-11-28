@@ -19,11 +19,10 @@ export default function AuthConfirmed() {
 
         <CardContent className="text-center">
           <p className="text-muted-foreground">
-            Este link de confirmação é inválido ou já expirou.
+            Este link é inválido ou já expirou.
             <br />
             <br />
-            Por favor, tente novamente ou entre em contato com a equipe de
-            suporte se o problema persistir.
+            Por favor, solicite um novo link ou entre em contato com o suporte.
           </p>
         </CardContent>
       </Card>

@@ -43,16 +43,16 @@ export default function ChurchFormModal({
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? "Editar Igreja" : "Adicionar Igreja"}
+              {isEditing ? "Editar Igreja" : "Nova Igreja"}
             </DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="space-y-3">
-              <Label htmlFor="name">Nome</Label>
+              <Label htmlFor="name">Nome da igreja</Label>
               <Input
                 id="name"
-                placeholder="Nome da igreja"
+                placeholder="Ex: Igreja Central"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={loading}

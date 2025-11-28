@@ -4,6 +4,7 @@ import { authService } from "@/services/authService";
 import { logService } from "@/services/logService";
 import { profileService } from "@/services/profileService";
 import { type Profile } from "@/types/database";
+import { validateFullName } from "@/lib/validators";
 
 type UseUserMenuViewModelProps = {
   user: User | null;
@@ -31,7 +32,7 @@ export function useUserMenuViewModel({
         const { data, error: profileError } =
           await profileService.getProfileById(user.id);
         if (profileError) {
-          setError("Erro ao buscar dados da conta.");
+          setError("Não foi possível carregar os dados da sua conta.");
           logService.logError(profileError, {
             component: "UserMenu.loadProfile",
           });
@@ -50,13 +51,13 @@ export function useUserMenuViewModel({
 
     const { error: deleteError } = await authService.deleteOwnUser();
     if (deleteError) {
-      setError("Erro ao excluir sua conta. Tente novamente.");
+      setError("Não foi possível excluir sua conta. Tente novamente.");
       await logService.logError(deleteError, {
         component: "UserMenu.handleDeleteAccount",
       });
       setIsDeleting(false);
     } else {
-      setSuccessMessage("Conta excluída com sucesso.");
+      setSuccessMessage("Sua conta foi excluída com sucesso.");
       await signOut();
       setIsOpen(false);
     }
@@ -66,10 +67,13 @@ export function useUserMenuViewModel({
     e.preventDefault();
     setError(null);
 
-    if (!user || !profile || fullName.trim().length < 3) {
-      setError("O nome completo deve ter pelo menos 3 caracteres.");
+    const nameValidation = validateFullName(fullName);
+    if (!nameValidation.isValid) {
+      setError(nameValidation.message);
       return;
     }
+
+    if (!user || !profile) return;
 
     setIsSavingName(true);
     const { data, error: updateError } = await profileService.updateProfile(
@@ -81,7 +85,7 @@ export function useUserMenuViewModel({
     setIsSavingName(false);
 
     if (updateError) {
-      setError("Erro ao atualizar o nome.");
+      setError("Não foi possível atualizar seu nome.");
       logService.logError(updateError, {
         component: "UserMenu.handleSaveName",
       });
@@ -89,7 +93,7 @@ export function useUserMenuViewModel({
       setProfile(data);
       setFullName(data.full_name);
       setIsEditingName(false);
-      setSuccessMessage("Nome atualizado com sucesso!");
+      setSuccessMessage("Seu nome foi atualizado!");
     }
   };
 

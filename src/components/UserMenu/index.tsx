@@ -202,17 +202,12 @@ export default function UserMenu() {
                   <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center gap-2">
                       <AlertCircle className="h-5 w-5 text-destructive" />
-                      Você tem certeza?
+                      Excluir sua conta?
                     </AlertDialogTitle>
 
                     <AlertDialogDescription>
-                      Esta ação é{" "}
-                      <span className="font-semibold">IRREVERSÍVEL</span>.
-                      <br />
-                      <br />
-                      <span className="font-semibold">TODOS</span> os seus dados
-                      serão excluídos{" "}
-                      <span className="font-semibold">PERMANENTEMENTE</span>.
+                      Esta ação é permanente. Todos os seus dados, incluindo seu
+                      perfil e acesso, serão excluídos. Deseja continuar?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
 
@@ -237,7 +232,7 @@ export default function UserMenu() {
                       ) : (
                         <Trash2 className="mr-2 h-4 w-4" />
                       )}
-                      Sim, desejo excluir minha conta
+                      Sim, excluir
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

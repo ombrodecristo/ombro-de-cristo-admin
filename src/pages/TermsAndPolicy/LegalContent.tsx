@@ -3,13 +3,19 @@ import { cn } from "@/lib/utils";
 import React from "react";
 
 const H1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h1 {...props} className={cn("text-3xl font-bold mb-4", props.className)} />
+  <h1
+    {...props}
+    className={cn("text-2xl font-bold mb-4 md:text-3xl", props.className)}
+  />
 );
 
 const H2 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
   <h2
     {...props}
-    className={cn("text-xl font-bold mt-6 mb-2 text-primary", props.className)}
+    className={cn(
+      "text-lg font-bold mt-6 mb-2 text-primary md:text-xl",
+      props.className
+    )}
   />
 );
 
@@ -17,7 +23,7 @@ const P = (props: React.HTMLAttributes<HTMLParagraphElement>) => (
   <p
     {...props}
     className={cn(
-      "text-base leading-relaxed mb-4 text-muted-foreground",
+      "text-sm leading-relaxed mb-4 text-muted-foreground",
       props.className
     )}
   />
@@ -34,7 +40,7 @@ const LI = (props: React.LiHTMLAttributes<HTMLLIElement>) => (
   <li
     {...props}
     className={cn(
-      "mb-2 ml-6 text-base leading-relaxed text-muted-foreground",
+      "mb-2 ml-6 text-sm leading-relaxed text-muted-foreground",
       props.className
     )}
   />
@@ -59,7 +65,7 @@ export function LegalContent({
         estes Termos.
       </P>
 
-      <H2>1. A Aceitação dos Termos</H2>
+      <H2>1. Aceitação dos Termos</H2>
       <P>
         Ao usar a Plataforma, você confirma que leu, entendeu e concorda em
         cumprir estes Termos, nossa Política de Privacidade e todas as leis e
@@ -121,7 +127,7 @@ export function LegalContent({
           orientação.
         </LI>
         <LI>
-          Nem o Ombro de Cristo nem sua equipe de administração têm acesso ao
+          Nem o Ombro de Cristo nem sua Equipe de Administração têm acesso ao
           conteúdo do seu diário, seja ele compartilhado ou não.
         </LI>
       </ul>

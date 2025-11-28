@@ -65,7 +65,7 @@ export default function ChurchManagementPage() {
         <h1 className="text-2xl font-semibold">Igrejas</h1>
         <Button onClick={handleOpenCreate}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Adicionar Igreja
+          Nova Igreja
         </Button>
       </div>
 
@@ -121,14 +121,14 @@ export default function ChurchManagementPage() {
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-destructive" />
-                Você tem certeza?
+                Excluir Igreja?
               </AlertDialogTitle>
 
               <AlertDialogDescription>
-                Esta ação é <span className="font-semibold">IRREVERSÍVEL</span>.
                 A igreja{" "}
                 <span className="font-semibold">{selectedChurch.name}</span>{" "}
-                será excluída permanentemente.
+                será excluída permanentemente. Perfis associados perderão o
+                vínculo. Esta ação não pode ser desfeita.
               </AlertDialogDescription>
             </AlertDialogHeader>
 
@@ -146,7 +146,7 @@ export default function ChurchManagementPage() {
                 ) : (
                   <Trash2 className="mr-2 h-4 w-4" />
                 )}
-                Sim, desejo excluir
+                Sim, excluir
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

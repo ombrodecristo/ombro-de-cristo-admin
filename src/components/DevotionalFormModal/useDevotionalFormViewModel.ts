@@ -81,8 +81,8 @@ export function useDevotionalFormViewModel({
 
     if (apiError) {
       const friendlyMessage = isEditing
-        ? "Erro ao atualizar o devocional."
-        : "Erro ao criar o devocional.";
+        ? "Não foi possível salvar as alterações."
+        : "Não foi possível criar o novo devocional.";
       setError(friendlyMessage);
       await logService.logError(apiError, {
         component: "useDevotionalFormViewModel",

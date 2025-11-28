@@ -46,7 +46,7 @@ export default function ChangePasswordModal({
 
   useEffect(() => {
     if (success) {
-      toast.success("A sua senha foi alterada com sucesso!");
+      toast.success("Senha alterada com sucesso!");
     }
   }, [success]);
 
@@ -55,9 +55,9 @@ export default function ChangePasswordModal({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Altere sua Senha</DialogTitle>
+            <DialogTitle>Alterar Senha</DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground pt-1">
-              Defina uma nova senha para sua conta.
+              Crie uma nova senha segura para sua conta.
             </DialogDescription>
           </DialogHeader>
 

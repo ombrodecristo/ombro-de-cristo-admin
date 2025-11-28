@@ -24,7 +24,7 @@ export function useSignUpViewModel() {
     setSuccessMessage(null);
 
     if (!gender) {
-      setError("Por favor, selecione o gênero.");
+      setError("Selecione seu gênero.");
       return;
     }
 
@@ -41,7 +41,7 @@ export function useSignUpViewModel() {
     }
 
     if (!acceptedTerms) {
-      setError("Você deve aceitar os termos e políticas para continuar.");
+      setError("É preciso aceitar os termos para criar sua conta.");
       return;
     }
 
@@ -57,9 +57,8 @@ export function useSignUpViewModel() {
 
     if (signUpError) {
       let friendlyMessage = "Ocorreu um erro ao tentar criar a conta.";
-      if (signUpError.message === "User already registered") {
-        friendlyMessage =
-          "Este e-mail já está em uso. Tente fazer login ou recuperar sua senha.";
+      if (signUpError.message.includes("User already registered")) {
+        friendlyMessage = "Este e-mail já está em uso. Tente fazer login.";
       }
 
       setError(friendlyMessage);
@@ -69,7 +68,7 @@ export function useSignUpViewModel() {
       });
     } else {
       setSuccessMessage(
-        "Conta criada com sucesso! Verifique seu e-mail para concluir o cadastro."
+        "Quase lá! Enviamos um link de ativação para o seu e-mail."
       );
       setFullName("");
       setGender("");

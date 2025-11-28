@@ -125,15 +125,11 @@ export default function DevotionalManagementPage() {
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-destructive" />
-                Você tem certeza?
+                Excluir Devocional?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                Esta ação é <span className="font-semibold">IRREVERSÍVEL</span>.
-                O devocional "
-                <span className="font-semibold">
-                  {selectedDevotional.title}
-                </span>
-                " será excluído permanentemente.
+                Este devocional será excluído permanentemente. Esta ação não
+                pode ser desfeita.
               </AlertDialogDescription>
             </AlertDialogHeader>
 
@@ -151,7 +147,7 @@ export default function DevotionalManagementPage() {
                 ) : (
                   <Trash2 className="mr-2 h-4 w-4" />
                 )}
-                Sim, desejo excluir
+                Sim, excluir
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
