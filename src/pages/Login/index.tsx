@@ -70,7 +70,7 @@ export default function Login() {
                 placeholder="email@exemplo.com"
                 className="pl-9"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
                 autoComplete="email"
                 disabled={loading}
@@ -87,7 +87,7 @@ export default function Login() {
                 placeholder="••••••••"
                 className="pl-9"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
                 disabled={loading}

@@ -43,11 +43,11 @@ export function useChurchManagementViewModel() {
   }, []);
 
   const sortedChurches = useMemo(() => {
-    const filteredChurches = churches.filter((church) =>
+    const filteredChurches = churches.filter(church =>
       church.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    let sortableChurches = [...filteredChurches];
+    const sortableChurches = [...filteredChurches];
     if (sortConfig.key !== null) {
       sortableChurches.sort((a, b) => {
         const aValue = a[sortConfig.key as keyof Church];

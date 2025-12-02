@@ -73,7 +73,7 @@ export default function ChurchTable({
                 </TableCell>
               </TableRow>
             ) : (
-              churches.map((church) => (
+              churches.map(church => (
                 <TableRow key={church.id}>
                   <TableCell className="font-medium">{church.name}</TableCell>
                   <TableCell>{formatDate(church.updated_at)}</TableCell>

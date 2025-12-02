@@ -100,7 +100,7 @@ export default function UserMenu() {
 
           {isEditingName ? (
             <form
-              onSubmit={(e) => {
+              onSubmit={e => {
                 handleSaveName(e);
               }}
               className="space-y-2 pt-2"
@@ -112,7 +112,7 @@ export default function UserMenu() {
                 <Input
                   id="fullNameEdit"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={e => setFullName(e.target.value)}
                   disabled={isSavingName}
                   className="pr-10"
                 />

@@ -12,7 +12,7 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["**/.{ts,tsx}"],
     plugins: {
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
@@ -34,7 +34,47 @@ export default [
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+        },
+      ],
+      "padding-line-between-statements": [
+        "error",
+        {
+          blankLine: "always",
+          prev: "",
+          next: "return",
+        },
+        {
+          blankLine: "always",
+          prev: "import",
+          next: "",
+        },
+        {
+          blankLine: "any",
+          prev: "import",
+          next: "import",
+        },
+        {
+          blankLine: "always",
+          prev: "",
+          next: ["function", "class"],
+        },
+        {
+          blankLine: "always",
+          prev: ["function", "class"],
+          next: "",
+        },
+        {
+          blankLine: "always",
+          prev: ["multiline-const", "multiline-let"],
+          next: "",
+        },
+        {
+          blankLine: "always",
+          prev: "*",
+          next: ["multiline-const", "multiline-let"],
+        },
       ],
     },
   },

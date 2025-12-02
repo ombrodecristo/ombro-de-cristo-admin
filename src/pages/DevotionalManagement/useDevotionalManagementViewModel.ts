@@ -48,30 +48,45 @@ export function useDevotionalManagementViewModel() {
   }, []);
 
   const sortedDevotionals = useMemo(() => {
-    const filteredDevotionals = devotionals.filter((devotional) =>
+    const filteredDevotionals = devotionals.filter(devotional =>
       devotional.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    let sortableDevotionals = [...filteredDevotionals];
+    const sortableDevotionals = [...filteredDevotionals];
     if (sortConfig.key !== null) {
       sortableDevotionals.sort((a, b) => {
-        let aValue: any;
-        let bValue: any;
+        let aValue: string | number | null | undefined;
+        let bValue: string | number | null | undefined;
 
         if (sortConfig.key === "author") {
           aValue = a.author?.full_name ?? "";
           bValue = b.author?.full_name ?? "";
         } else {
-          aValue = a[sortConfig.key as keyof DevotionalWithAuthor];
-          bValue = b[sortConfig.key as keyof DevotionalWithAuthor];
+          aValue = a[sortConfig.key as keyof DevotionalWithAuthor] as
+            | string
+            | number
+            | null
+            | undefined;
+          bValue = b[sortConfig.key as keyof DevotionalWithAuthor] as
+            | string
+            | number
+            | null
+            | undefined;
         }
 
-        if (aValue < bValue) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
+        if (
+          aValue !== null &&
+          aValue !== undefined &&
+          bValue !== null &&
+          bValue !== undefined
+        ) {
+          if (aValue < bValue) {
+            return sortConfig.direction === "ascending" ? -1 : 1;
+          }
 
-        if (aValue > bValue) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
+          if (aValue > bValue) {
+            return sortConfig.direction === "ascending" ? 1 : -1;
+          }
         }
 
         return 0;

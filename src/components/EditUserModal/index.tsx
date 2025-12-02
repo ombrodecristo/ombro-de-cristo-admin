@@ -106,14 +106,14 @@ export default function EditUserModal({
               <Label htmlFor="role-select">Permissão</Label>
               <Select
                 value={newRole}
-                onValueChange={(value) => setNewRole(value as UserRole)}
+                onValueChange={value => setNewRole(value as UserRole)}
                 disabled={loading}
               >
                 <SelectTrigger id="role-select">
                   <SelectValue placeholder="Selecione uma permissão" />
                 </SelectTrigger>
                 <SelectContent>
-                  {allRoles.map((role) => (
+                  {allRoles.map(role => (
                     <SelectItem key={role} value={role}>
                       {formatRole(role, newGender || profile.gender)}
                     </SelectItem>
@@ -125,14 +125,14 @@ export default function EditUserModal({
               <Label htmlFor="gender-select">Gênero</Label>
               <Select
                 value={newGender}
-                onValueChange={(value) => setNewGender(value as UserGender)}
+                onValueChange={value => setNewGender(value as UserGender)}
                 disabled={loading}
               >
                 <SelectTrigger id="gender-select">
                   <SelectValue placeholder="Selecione um gênero" />
                 </SelectTrigger>
                 <SelectContent>
-                  {allGenders.map((gender) => (
+                  {allGenders.map(gender => (
                     <SelectItem key={gender} value={gender}>
                       {formatGender(gender)}
                     </SelectItem>
@@ -144,7 +144,7 @@ export default function EditUserModal({
               <Label htmlFor="church-select">Igreja</Label>
               <Select
                 value={newChurchId || "none"}
-                onValueChange={(value) =>
+                onValueChange={value =>
                   setNewChurchId(value === "none" ? null : value)
                 }
                 disabled={loading || loadingChurches}
@@ -160,7 +160,7 @@ export default function EditUserModal({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Nenhuma</SelectItem>
-                  {churches.map((church) => (
+                  {churches.map(church => (
                     <SelectItem key={church.id} value={church.id}>
                       {church.name}
                     </SelectItem>

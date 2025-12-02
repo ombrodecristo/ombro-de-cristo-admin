@@ -71,7 +71,7 @@ export default function ChangePasswordModal({
                   placeholder="••••••••"
                   className="pl-9"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   required
                   autoComplete="new-password"
                   disabled={loading}
@@ -88,7 +88,7 @@ export default function ChangePasswordModal({
                   placeholder="••••••••"
                   className="pl-9"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={e => setConfirmPassword(e.target.value)}
                   required
                   autoComplete="new-password"
                   disabled={loading}

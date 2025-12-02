@@ -54,7 +54,7 @@ export default function ChurchFormModal({
                 id="name"
                 placeholder="Ex: Igreja Central"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={e => setName(e.target.value)}
                 disabled={loading}
                 required
               />

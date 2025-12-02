@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export interface PasswordInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type PasswordInputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, ...props }, ref) => {
@@ -24,7 +23,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           variant="ghost"
           size="icon"
           className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 transform text-muted-foreground hover:bg-transparent hover:text-foreground"
-          onClick={() => setShowPassword((prev) => !prev)}
+          onClick={() => setShowPassword(prev => !prev)}
           disabled={props.disabled}
         >
           {showPassword ? (

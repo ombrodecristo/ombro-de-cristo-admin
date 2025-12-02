@@ -89,7 +89,7 @@ export default function SignUpPage() {
                     placeholder="Seu nome"
                     className="pl-9"
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    onChange={e => setFullName(e.target.value)}
                     required
                     disabled={loading}
                   />
@@ -101,7 +101,7 @@ export default function SignUpPage() {
                   <Users className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Select
                     value={gender}
-                    onValueChange={(value) => setGender(value as UserGender)}
+                    onValueChange={value => setGender(value as UserGender)}
                     disabled={loading}
                     required
                   >
@@ -125,7 +125,7 @@ export default function SignUpPage() {
                     placeholder="email@exemplo.com"
                     className="pl-9"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     required
                     autoComplete="email"
                     disabled={loading}
@@ -142,7 +142,7 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     className="pl-9"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
                     disabled={loading}
@@ -159,7 +159,7 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     className="pl-9"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={e => setConfirmPassword(e.target.value)}
                     required
                     autoComplete="new-password"
                     disabled={loading}

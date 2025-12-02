@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           event === "SIGNED_OUT" ||
           (event === "INITIAL_SESSION" && !session)
         ) {
+          // Ação ignorada intencionalmente durante fluxo de recuperação
         }
       } else {
         if (

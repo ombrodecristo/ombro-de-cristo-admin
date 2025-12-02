@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from "react";
-import { type Profile } from "../../types/database";
 import {
   profileService,
   type ProfileWithRelations,
@@ -53,16 +52,16 @@ export function useUserManagementViewModel({
 
   const sortedProfiles = useMemo(() => {
     const filteredProfiles = profiles.filter(
-      (profile) =>
+      profile =>
         profile.full_name.toLowerCase().includes(searchQuery.toLowerCase()) &&
         profile.id !== currentUserId
     );
 
-    let sortableProfiles = [...filteredProfiles];
+    const sortableProfiles = [...filteredProfiles];
     if (sortConfig.key !== null) {
       sortableProfiles.sort((a, b) => {
-        let aValue: any;
-        let bValue: any;
+        let aValue: string | number | null | undefined;
+        let bValue: string | number | null | undefined;
 
         if (sortConfig.key === "churches") {
           aValue = a.churches?.name ?? "";
@@ -71,15 +70,30 @@ export function useUserManagementViewModel({
           aValue = a.mentor?.full_name ?? "";
           bValue = b.mentor?.full_name ?? "";
         } else {
-          aValue = a[sortConfig.key as keyof ProfileWithRelations];
-          bValue = b[sortConfig.key as keyof ProfileWithRelations];
+          aValue = a[sortConfig.key as keyof ProfileWithRelations] as
+            | string
+            | number
+            | null
+            | undefined;
+          bValue = b[sortConfig.key as keyof ProfileWithRelations] as
+            | string
+            | number
+            | null
+            | undefined;
         }
 
-        if (aValue < bValue) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
+        if (
+          aValue !== null &&
+          aValue !== undefined &&
+          bValue !== null &&
+          bValue !== undefined
+        ) {
+          if (aValue < bValue) {
+            return sortConfig.direction === "ascending" ? -1 : 1;
+          }
+          if (aValue > bValue) {
+            return sortConfig.direction === "ascending" ? 1 : -1;
+          }
         }
         return 0;
       });
@@ -95,7 +109,7 @@ export function useUserManagementViewModel({
     setSortConfig({ key, direction });
   };
 
-  const handleUpdateSuccess = (_: Profile) => {
+  const handleUpdateSuccess = () => {
     fetchProfiles();
   };
 

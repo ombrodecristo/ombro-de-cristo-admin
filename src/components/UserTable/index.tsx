@@ -95,7 +95,7 @@ export default function UserTable({
                 </TableCell>
               </TableRow>
             ) : (
-              profiles.map((profile) => (
+              profiles.map(profile => (
                 <TableRow key={profile.id}>
                   <TableCell className="font-medium">
                     {profile.full_name}

@@ -81,7 +81,7 @@ export default function DevotionalTable({
                 </TableCell>
               </TableRow>
             ) : (
-              devotionals.map((devotional) => (
+              devotionals.map(devotional => (
                 <TableRow key={devotional.id}>
                   <TableCell className="font-medium">
                     {devotional.title}

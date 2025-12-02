@@ -52,7 +52,7 @@ export default function UserManagementPage() {
           placeholder="Pesquisar por nome..."
           className="pl-9 pr-10"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value)}
         />
 
         {searchQuery && (

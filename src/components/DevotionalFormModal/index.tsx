@@ -70,7 +70,7 @@ export default function DevotionalFormModal({
                 id="title"
                 placeholder="Título do devocional"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={e => setTitle(e.target.value)}
                 disabled={loading}
                 required
               />
@@ -82,7 +82,7 @@ export default function DevotionalFormModal({
                 id="content"
                 placeholder="Escreva o devocional aqui..."
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={e => setContent(e.target.value)}
                 disabled={loading}
                 required
                 className="min-h-[200px]"
