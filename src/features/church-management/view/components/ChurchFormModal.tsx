@@ -12,11 +12,12 @@ const Content = styled.form`
   width: 380px;
 `;
 
-const Title = styled.h2`
-  font-size: 22px;
-  font-weight: 700;
-  text-align: center;
-`;
+const Title = styled.h2(props => ({
+  ...props.theme.textVariants.subHeader,
+  fontSize: "22px",
+  color: props.theme.colors.mainForeground,
+  textAlign: "center",
+}));
 
 const Actions = styled.div`
   display: flex;

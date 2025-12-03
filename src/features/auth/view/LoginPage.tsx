@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useState, type FormEvent } from "react";
 import { useAuth } from "@/shared/hooks/useAuth";
@@ -41,6 +41,19 @@ const FormFields = styled.div`
   flex-direction: column;
   gap: ${props => props.theme.spacing.m}px;
 `;
+
+const ForgotPasswordLink = styled(Link)(props => ({
+  ...props.theme.textVariants.caption,
+  fontWeight: 700,
+  color: props.theme.colors.primaryBackground,
+  fontSize: "14px",
+  padding: props.theme.spacing.xs,
+  textDecoration: "none",
+
+  "&:hover": {
+    textDecoration: "underline",
+  },
+}));
 
 const Separator = styled.div`
   height: 1.5px;
@@ -118,6 +131,17 @@ export default function LoginPage() {
                   isPassword
                   error={viewModel.passwordError}
                 />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "8px",
+                  }}
+                >
+                  <ForgotPasswordLink to="/password-recovery">
+                    Esqueci minha senha
+                  </ForgotPasswordLink>
+                </div>
               </div>
             </FormFields>
 

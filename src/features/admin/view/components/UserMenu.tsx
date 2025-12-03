@@ -57,11 +57,11 @@ const NameWrapper = styled.div`
   gap: ${props => props.theme.spacing.s}px;
 `;
 
-const Name = styled.p`
-  font-size: 18px;
-  font-weight: 600;
-  color: ${props => props.theme.colors.mainForeground};
-`;
+const Name = styled.p(props => ({
+  ...props.theme.textVariants.bodyMedium,
+  fontSize: "18px",
+  color: props.theme.colors.mainForeground,
+}));
 
 const EditButton = styled.button`
   background: none;
@@ -74,11 +74,11 @@ const EditButton = styled.button`
   }
 `;
 
-const Email = styled.p`
-  font-size: 14px;
-  color: ${props => props.theme.colors.mutedForeground};
-  margin-top: 4px;
-`;
+const Email = styled.p(props => ({
+  ...props.theme.textVariants.caption,
+  fontSize: "14px",
+  marginTop: "4px",
+}));
 
 const ActionList = styled.div`
   display: flex;
@@ -86,20 +86,21 @@ const ActionList = styled.div`
   gap: ${props => props.theme.spacing.s}px;
 `;
 
-const DeleteLink = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: ${props => props.theme.colors.destructiveBackground};
-  text-align: center;
-  font-size: 14px;
-  margin-top: ${props => props.theme.spacing.m}px;
-  padding: ${props => props.theme.spacing.xs}px;
+const DeleteLink = styled.button(props => ({
+  ...props.theme.textVariants.defaults,
+  fontSize: "14px",
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+  color: props.theme.colors.destructiveBackground,
+  textAlign: "center",
+  marginTop: props.theme.spacing.m,
+  padding: props.theme.spacing.xs,
 
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+  "&:hover": {
+    textDecoration: "underline",
+  },
+}));
 
 const NameForm = styled.form`
   display: flex;

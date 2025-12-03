@@ -41,12 +41,11 @@ const MenuButton = styled.button`
   }
 `;
 
-const AppTitle = styled.h1`
-  font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
-  font-weight: ${props => props.theme.textVariants.bodyMedium.fontWeight};
-  font-size: 18px;
-  color: ${props => props.theme.colors.headerForeground};
-`;
+const AppTitle = styled.h1(props => ({
+  ...props.theme.textVariants.bodyMedium,
+  fontSize: "18px",
+  color: props.theme.colors.headerForeground,
+}));
 
 type HeaderProps = {
   onToggleSidebar: () => void;

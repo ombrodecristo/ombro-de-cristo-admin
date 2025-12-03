@@ -9,14 +9,12 @@ const HeaderContainer = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.border};
 `;
 
-const Title = styled.h1`
-  font-family: ${props => props.theme.textVariants.header.fontFamily};
-  font-weight: ${props => props.theme.textVariants.header.fontWeight};
-  font-size: 28px;
-  line-height: 34px;
-  color: ${props => props.theme.colors.headerForeground};
-  letter-spacing: -0.25px;
-`;
+const Title = styled.h1(props => ({
+  ...props.theme.textVariants.header,
+  fontSize: "28px",
+  lineHeight: "34px",
+  letterSpacing: "-0.25px",
+}));
 
 const ActionsContainer = styled.div`
   display: flex;

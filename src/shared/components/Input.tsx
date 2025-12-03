@@ -17,7 +17,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
   width: 100%;
   background-color: ${props => props.theme.colors.inputBackground};
   border-radius: ${props => props.theme.borderRadii.m}px;
-  border-width: 2px;
+  border-width: 1.5px;
   border-style: solid;
   border-color: ${props =>
     props.hasError
@@ -87,13 +87,10 @@ const ToggleButton = styled.button`
   color: ${props => props.theme.colors.mutedForeground};
 `;
 
-const ErrorMessage = styled.p`
-  margin-top: ${props => props.theme.spacing.s}px;
-  font-family: ${props => props.theme.textVariants.error.fontFamily};
-  font-weight: ${props => props.theme.textVariants.error.fontWeight};
-  font-size: ${props => props.theme.textVariants.error.fontSize};
-  color: ${props => props.theme.colors.destructiveBackground};
-`;
+const ErrorMessage = styled.p(props => ({
+  ...props.theme.textVariants.error,
+  marginTop: props.theme.spacing.s,
+}));
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;

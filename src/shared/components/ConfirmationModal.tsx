@@ -37,18 +37,17 @@ const IconWrapper = styled.div<{ variant: "primary" | "destructive" }>`
   }
 `;
 
-const Title = styled.h2`
-  font-family: ${props => props.theme.textVariants.subHeader.fontFamily};
-  font-weight: ${props => props.theme.textVariants.subHeader.fontWeight};
-  font-size: 20px;
-  color: ${props => props.theme.colors.mainForeground};
-`;
+const Title = styled.h2(props => ({
+  ...props.theme.textVariants.subHeader,
+  fontSize: "20px",
+  color: props.theme.colors.mainForeground,
+}));
 
-const Message = styled.p`
-  font-family: ${props => props.theme.textVariants.body.fontFamily};
-  color: ${props => props.theme.colors.mutedForeground};
-  line-height: 1.6;
-`;
+const Message = styled.p(props => ({
+  ...props.theme.textVariants.body,
+  color: props.theme.colors.mutedForeground,
+  lineHeight: 1.6,
+}));
 
 const Actions = styled.div`
   display: flex;

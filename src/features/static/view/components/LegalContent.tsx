@@ -6,57 +6,53 @@ const Container = styled.div`
   padding: ${props => props.theme.spacing.xl}px;
 `;
 
-const H1 = styled.h1`
-  font-family: ${props => props.theme.textVariants.header.fontFamily};
-  font-weight: ${props => props.theme.textVariants.header.fontWeight};
-  font-size: 24px;
-  line-height: 32px;
-  margin-bottom: ${props => props.theme.spacing.m}px;
-`;
+const H1 = styled.h1(props => ({
+  ...props.theme.textVariants.header,
+  fontSize: "24px",
+  lineHeight: "32px",
+  marginBottom: props.theme.spacing.m,
+}));
 
-const H2 = styled.h2`
-  font-family: ${props => props.theme.textVariants.subHeader.fontFamily};
-  font-weight: ${props => props.theme.textVariants.subHeader.fontWeight};
-  font-size: 18px;
-  color: ${props => props.theme.colors.mainForeground};
-  margin-top: ${props => props.theme.spacing.l}px;
-  margin-bottom: ${props => props.theme.spacing.s}px;
-`;
+const H2 = styled.h2(props => ({
+  ...props.theme.textVariants.subHeader,
+  color: props.theme.colors.mainForeground,
+  fontSize: "18px",
+  marginTop: props.theme.spacing.l,
+  marginBottom: props.theme.spacing.s,
+}));
 
-const P = styled.p`
-  font-family: ${props => props.theme.textVariants.body.fontFamily};
-  font-size: 16px;
-  line-height: 26px;
-  margin-bottom: ${props => props.theme.spacing.m}px;
-  color: ${props => props.theme.colors.mutedForeground};
-`;
+const P = styled.p(props => ({
+  ...props.theme.textVariants.body,
+  lineHeight: "26px",
+  marginBottom: props.theme.spacing.m,
+  color: props.theme.colors.mutedForeground,
+}));
 
-const Bold = styled.strong`
-  font-weight: 500;
-  color: ${props => props.theme.colors.mainForeground};
-`;
+const Bold = styled.strong(props => ({
+  ...props.theme.textVariants.bodyMedium,
+  color: props.theme.colors.mainForeground,
+}));
 
 const UL = styled.ul`
   padding-left: ${props => props.theme.spacing.m}px;
   list-style: none;
 `;
 
-const LI = styled.li`
-  font-family: ${props => props.theme.textVariants.body.fontFamily};
-  font-size: 16px;
-  line-height: 26px;
-  color: ${props => props.theme.colors.mutedForeground};
-  margin-bottom: ${props => props.theme.spacing.m}px;
-  padding-left: ${props => props.theme.spacing.m}px;
-  position: relative;
+const LI = styled.li(props => ({
+  ...props.theme.textVariants.body,
+  color: props.theme.colors.mutedForeground,
+  lineHeight: "26px",
+  marginBottom: props.theme.spacing.m,
+  paddingLeft: props.theme.spacing.m,
+  position: "relative",
 
-  &::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: ${props => props.theme.colors.primary};
-  }
-`;
+  "&::before": {
+    content: "'•'",
+    position: "absolute",
+    left: 0,
+    color: props.theme.colors.primary,
+  },
+}));
 
 const Divider = styled.div`
   height: 1px;

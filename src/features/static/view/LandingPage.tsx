@@ -80,32 +80,32 @@ const HeroSection = styled(Section)`
   }
 `;
 
-const HeroTitle = styled.h1`
-  font-size: 56px;
-  line-height: 1.2;
-  color: ${props => props.theme.colors.headerForeground};
-  max-width: 800px;
+const HeroTitle = styled.h1(props => ({
+  ...props.theme.textVariants.header,
+  fontSize: "56px",
+  lineHeight: 1.2,
+  maxWidth: "800px",
 
-  span {
-    color: ${props => props.theme.colors.primary};
-  }
+  span: {
+    color: props.theme.colors.primary,
+  },
 
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 36px;
-  }
-`;
+  "@media (max-width: 768px)": {
+    fontSize: "36px",
+  },
+}));
 
-const HeroSubtitle = styled.p`
-  font-family: ${props => props.theme.textVariants.body.fontFamily};
-  font-size: 20px;
-  line-height: 1.6;
-  color: ${props => props.theme.colors.mutedForeground};
-  max-width: 600px;
+const HeroSubtitle = styled.p(props => ({
+  ...props.theme.textVariants.body,
+  fontSize: "20px",
+  lineHeight: 1.6,
+  color: props.theme.colors.mutedForeground,
+  maxWidth: "600px",
 
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 18px;
-  }
-`;
+  "@media (max-width: 768px)": {
+    fontSize: "18px",
+  },
+}));
 
 const FeaturesSection = styled(Section)`
   background-color: ${props => props.theme.colors.cardBackground};
@@ -113,15 +113,15 @@ const FeaturesSection = styled(Section)`
   border-bottom: 1px solid ${props => props.theme.colors.border};
 `;
 
-const SectionTitle = styled.h2`
-  font-size: 36px;
-  color: ${props => props.theme.colors.headerForeground};
-  margin-bottom: ${props => props.theme.spacing.l}px;
+const SectionTitle = styled.h2(props => ({
+  ...props.theme.textVariants.header,
+  fontSize: "36px",
+  marginBottom: props.theme.spacing.l,
 
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 28px;
-  }
-`;
+  "@media (max-width: 768px)": {
+    fontSize: "28px",
+  },
+}));
 
 const FeaturesGrid = styled.div`
   display: grid;
@@ -143,17 +143,18 @@ const FeatureIcon = styled.div`
   margin-bottom: ${props => props.theme.spacing.m}px;
 `;
 
-const FeatureTitle = styled.h3`
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: ${props => props.theme.spacing.s}px;
-`;
+const FeatureTitle = styled.h3(props => ({
+  ...props.theme.textVariants.subHeader,
+  color: props.theme.colors.headerForeground,
+  fontSize: "20px",
+  marginBottom: props.theme.spacing.s,
+}));
 
-const FeatureDescription = styled.p`
-  font-family: ${props => props.theme.textVariants.body.fontFamily};
-  color: ${props => props.theme.colors.mutedForeground};
-  line-height: 1.6;
-`;
+const FeatureDescription = styled.p(props => ({
+  ...props.theme.textVariants.body,
+  color: props.theme.colors.mutedForeground,
+  lineHeight: 1.6,
+}));
 
 const CTASection = styled(Section)``;
 
@@ -196,14 +197,15 @@ const Footer = styled.footer`
   border-top: 1px solid ${props => props.theme.colors.border};
 `;
 
-const FooterLink = styled(Link)`
-  color: ${props => props.theme.colors.primary};
-  text-decoration: none;
-  font-weight: 600;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+const FooterLink = styled(Link)(props => ({
+  ...props.theme.textVariants.bodyMedium,
+  fontSize: "14px",
+  color: props.theme.colors.primary,
+  textDecoration: "none",
+  "&:hover": {
+    textDecoration: "underline",
+  },
+}));
 
 export default function LandingPage() {
   return (
