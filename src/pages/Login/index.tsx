@@ -1,9 +1,16 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLoginViewModel } from "./useLoginViewModel";
-import { BaseCard, Button, Input, Label, Logo } from "@/shared/components";
+import {
+  BaseCard,
+  Button,
+  Input,
+  Label,
+  Logo,
+  ConfirmationModal,
+} from "@/shared/components";
 import { GlobalLoader } from "@/components/GlobalLoader";
 import { FiMail, FiLock, FiLogIn } from "react-icons/fi";
 import { toast } from "sonner";
@@ -31,13 +38,31 @@ const Header = styled.header`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.l}px;
+  gap: ${props => props.theme.spacing.m}px;
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.s}px;
+`;
+
+const PasswordActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: ${props => props.theme.spacing.xs}px;
+`;
+
+const ForgotPasswordLink = styled(Link)`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${props => props.theme.colors.primary};
+  text-decoration: none;
+  padding: 4px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Actions = styled.div`
@@ -47,39 +72,43 @@ const Actions = styled.div`
   margin-top: ${props => props.theme.spacing.m}px;
 `;
 
-const SeparatorWithText = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${props => props.theme.spacing.s}px;
-  color: ${props => props.theme.colors.mutedForeground};
-  font-size: 13px;
-
-  &::before,
-  &::after {
-    content: "";
-    flex: 1;
-    height: 1.5px;
-    background-color: ${props => props.theme.colors.border};
-  }
-`;
-
 export default function Login() {
-  const { email, setEmail, password, setPassword, loading, handleLogin } =
-    useLoginViewModel();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    loading,
+    needsConfirmation,
+    setNeedsConfirmation,
+    handleLogin,
+    handleResendConfirmation,
+  } = useLoginViewModel();
 
   const { user, loading: authLoading, role } = useAuth();
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setError(null);
-  }, [email, password]);
+    if (needsConfirmation) {
+      setNeedsConfirmation(false);
+    }
+  }, [email, password, needsConfirmation, setNeedsConfirmation]);
 
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null);
     const result = await handleLogin(e);
-    if (result.error) {
+    if (result.error && !result.needsConfirmation) {
       toast.error(result.error);
+    }
+  };
+
+  const handleConfirmResend = async () => {
+    const { error } = await handleResendConfirmation();
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Link enviado!", {
+        description: "Verifique sua caixa de entrada e a pasta de spam.",
+      });
     }
   };
 
@@ -92,61 +121,69 @@ export default function Login() {
   }
 
   return (
-    <PageContainer>
-      <StyledCard>
-        <Header>
-          <Logo />
-        </Header>
-        <Form onSubmit={handleLoginSubmit}>
-          <FormGroup>
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="email@exemplo.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              disabled={loading}
-              icon={<FiMail size={22} />}
-              error={error}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              disabled={loading}
-              icon={<FiLock size={22} />}
-              isPassword
-              error={error}
-            />
-          </FormGroup>
-          <Actions>
-            <Button
-              type="submit"
-              disabled={loading}
-              loading={loading}
-              label="Entrar"
-              icon={<FiLogIn />}
-            />
-            <SeparatorWithText>Primeira vez aqui?</SeparatorWithText>
-            <Button
-              type="button"
-              onClick={() => (window.location.href = "/signup")}
-              label="Criar minha conta"
-              variant="secondary"
-              disabled={loading}
-            />
-          </Actions>
-        </Form>
-      </StyledCard>
-    </PageContainer>
+    <>
+      <PageContainer>
+        <StyledCard>
+          <Header>
+            <Logo />
+          </Header>
+          <Form onSubmit={handleLoginSubmit}>
+            <FormGroup>
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="email@exemplo.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                disabled={loading}
+                icon={<FiMail size={22} />}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                disabled={loading}
+                icon={<FiLock size={22} />}
+                isPassword
+              />
+              <PasswordActions>
+                <ForgotPasswordLink to="/password-recovery">
+                  Esqueci minha senha
+                </ForgotPasswordLink>
+              </PasswordActions>
+            </FormGroup>
+            <Actions>
+              <Button
+                type="submit"
+                disabled={loading}
+                loading={loading}
+                label="Entrar"
+                icon={<FiLogIn />}
+              />
+            </Actions>
+          </Form>
+        </StyledCard>
+      </PageContainer>
+      <ConfirmationModal
+        isOpen={needsConfirmation}
+        onClose={() => setNeedsConfirmation(false)}
+        onConfirm={handleConfirmResend}
+        title="Ative sua conta"
+        message={`Enviamos um link de ativação para seu e-mail, mas parece que ele ainda não foi usado. Quer que a gente envie novamente para ${email}?`}
+        confirmText="Reenviar e-mail"
+        cancelText="Agora não"
+        variant="primary"
+        loading={loading}
+      />
+    </>
   );
 }

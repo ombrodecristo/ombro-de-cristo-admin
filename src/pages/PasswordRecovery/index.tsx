@@ -1,10 +1,17 @@
 import { useEffect, type FormEvent } from "react";
 import styled from "@emotion/styled";
-import { FiLock, FiLogIn, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import { FiLock, FiSend, FiAlertCircle, FiMail } from "react-icons/fi";
 import { usePasswordRecoveryViewModel } from "./usePasswordRecoveryViewModel";
-import { Button, BaseCard, Label, Input } from "@/shared/components";
+import {
+  Button,
+  BaseCard,
+  Label,
+  Input,
+  ConfirmationModal,
+} from "@/shared/components";
 import { useAuth } from "@/hooks/useAuth";
 import { GlobalLoader } from "@/components/GlobalLoader";
+import { Link } from "react-router-dom";
 
 const PageContainer = styled.div`
   display: flex;
@@ -48,8 +55,13 @@ const Title = styled.h1<{ isTokenInvalid: boolean }>`
   color: ${props =>
     props.isTokenInvalid
       ? props.theme.colors.destructiveBackground
-      : props.theme.colors.primary};
+      : props.theme.colors.mainForeground};
   font-size: 24px;
+`;
+
+const Description = styled.p`
+  color: ${props => props.theme.colors.mutedForeground};
+  line-height: 1.6;
 `;
 
 const Form = styled.form`
@@ -64,22 +76,30 @@ const FormGroup = styled.div`
   gap: 8px;
 `;
 
-const StatusText = styled.p`
-  text-align: center;
+const SeparatorWithText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.s}px;
   color: ${props => props.theme.colors.mutedForeground};
-  line-height: 1.6;
-`;
+  font-size: 13px;
+  margin-top: ${props => props.theme.spacing.l}px;
+  margin-bottom: ${props => props.theme.spacing.m}px;
 
-const ErrorMessage = styled.p`
-  font-size: 14px;
-  color: ${props => props.theme.colors.destructiveBackground};
-  text-align: center;
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1.5px;
+    background-color: ${props => props.theme.colors.border};
+  }
 `;
 
 export default function PasswordRecovery() {
   const { loading: authLoading, initialHash } = useAuth();
 
   const {
+    email,
+    setEmail,
     password,
     setPassword,
     confirmPassword,
@@ -88,8 +108,10 @@ export default function PasswordRecovery() {
     pageLoading,
     success,
     isTokenValid,
+    isEmailSent,
     error,
-    handleSubmit,
+    handleEmailSubmit,
+    handlePasswordSubmit,
   } = usePasswordRecoveryViewModel({ authLoading, initialHash });
 
   useEffect(() => {
@@ -102,48 +124,31 @@ export default function PasswordRecovery() {
     return <GlobalLoader />;
   }
 
-  const isTokenInvalid = !isTokenValid && !success;
+  const isTokenInvalid = !isTokenValid && !success && !isEmailSent;
 
-  const onFormSubmit = (e: FormEvent) => {
-    handleSubmit(e);
-  };
+  const onEmailSubmit = (e: FormEvent) => handleEmailSubmit(e);
+  const onPasswordSubmit = (e: FormEvent) => handlePasswordSubmit(e);
 
-  return (
-    <PageContainer>
-      <StyledCard>
-        <Header>
-          <StatusIcon success={success} isTokenInvalid={isTokenInvalid}>
-            {isTokenInvalid ? (
-              <FiAlertCircle />
-            ) : success ? (
-              <FiCheckCircle />
-            ) : (
+  if (isTokenValid) {
+    return (
+      <PageContainer>
+        <ConfirmationModal
+          isOpen={success}
+          onClose={() => {}}
+          onConfirm={() => (window.location.href = "/login")}
+          title="Senha alterada"
+          message="Sua senha foi alterada com sucesso! Você já pode fazer login com sua nova senha."
+          confirmText="Ir para Login"
+        />
+
+        <StyledCard>
+          <Header>
+            <StatusIcon success={false} isTokenInvalid={false}>
               <FiLock />
-            )}
-          </StatusIcon>
-          <Title isTokenInvalid={isTokenInvalid}>
-            {isTokenInvalid
-              ? "Link Inválido"
-              : success
-                ? "Senha Alterada"
-                : "Redefina sua Senha"}
-          </Title>
-        </Header>
-
-        {isTokenInvalid ? (
-          <StatusText>
-            Link de redefinição de senha inválido ou expirado.
-            <br />
-            Por favor, solicite um novo link no aplicativo.
-          </StatusText>
-        ) : success ? (
-          <StatusText>
-            Sua senha foi alterada com sucesso!
-            <br />
-            Você já pode fechar esta página.
-          </StatusText>
-        ) : (
-          <Form onSubmit={onFormSubmit}>
+            </StatusIcon>
+            <Title isTokenInvalid={false}>Redefina sua Senha</Title>
+          </Header>
+          <Form onSubmit={onPasswordSubmit}>
             <FormGroup>
               <Label htmlFor="password">Nova Senha</Label>
               <Input
@@ -156,6 +161,7 @@ export default function PasswordRecovery() {
                 disabled={loading}
                 icon={<FiLock size={20} />}
                 isPassword
+                error={error}
               />
             </FormGroup>
             <FormGroup>
@@ -170,20 +176,74 @@ export default function PasswordRecovery() {
                 disabled={loading}
                 icon={<FiLock size={20} />}
                 isPassword
+                error={error}
               />
             </FormGroup>
-
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-
             <Button
               type="submit"
               disabled={loading}
               loading={loading}
               label="Alterar Senha"
-              icon={<FiLogIn />}
+            />
+          </Form>
+        </StyledCard>
+      </PageContainer>
+    );
+  }
+
+  return (
+    <PageContainer>
+      <ConfirmationModal
+        isOpen={isEmailSent}
+        onClose={() => {}}
+        onConfirm={() => (window.location.href = "/login")}
+        title="Link enviado!"
+        message="Se seu e-mail estiver cadastrado, você receberá um link para redefinir sua senha. Verifique sua caixa de entrada e spam."
+        confirmText="Entendi"
+      />
+
+      <StyledCard>
+        <Header>
+          <StatusIcon success={false} isTokenInvalid={isTokenInvalid}>
+            {isTokenInvalid ? <FiAlertCircle /> : <FiMail />}
+          </StatusIcon>
+          <Title isTokenInvalid={isTokenInvalid}>Recuperar Senha</Title>
+          <Description>
+            {isTokenInvalid
+              ? "Link de redefinição de senha inválido ou expirado. Por favor, solicite um novo link no aplicativo."
+              : "Sem problemas! Informe seu e-mail e enviaremos um link para você criar uma nova senha."}
+          </Description>
+        </Header>
+        {!isTokenInvalid && (
+          <Form onSubmit={onEmailSubmit}>
+            <FormGroup>
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="email@exemplo.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                disabled={loading}
+                icon={<FiMail size={20} />}
+                error={error}
+              />
+            </FormGroup>
+            <Button
+              type="submit"
+              disabled={loading}
+              loading={loading}
+              label="Enviar link de recuperação"
+              icon={<FiSend />}
             />
           </Form>
         )}
+        <SeparatorWithText>Lembrou a senha?</SeparatorWithText>
+        <Link to="/login">
+          <Button label="Fazer Login" variant="secondary" />
+        </Link>
       </StyledCard>
     </PageContainer>
   );

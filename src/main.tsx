@@ -15,6 +15,7 @@ import { theme } from "./core/lib/theme.ts";
 import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
 import { Toaster } from "sonner";
 
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 const LoginPage = lazy(() => import("./pages/Login"));
 const UserManagementPage = lazy(() => import("./pages/UserManagement"));
 const ChurchManagementPage = lazy(() => import("./pages/ChurchManagement"));
@@ -29,18 +30,18 @@ const PasswordRecoveryPage = lazy(
   () => import("./pages/PasswordRecovery/index.tsx")
 );
 
-const SignUpPage = lazy(() => import("./pages/SignUp/index.tsx"));
+const TermsAndPolicyPage = lazy(() => import("./pages/TermsAndPolicy"));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <Navigate to="/login" replace /> },
+      { index: true, element: <LandingPage /> },
       { path: "/login", element: <LoginPage /> },
-      { path: "/signup", element: <SignUpPage /> },
       { path: "/auth-confirmed", element: <AuthConfirmedPage /> },
       { path: "/password-recovery", element: <PasswordRecoveryPage /> },
+      { path: "/terms-and-policy", element: <TermsAndPolicyPage /> },
       {
         path: "/admin",
         element: <ProtectedRoute />,

@@ -24,9 +24,6 @@ export function useUserMenuViewModel({
   const [isSavingName, setIsSavingName] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
   useEffect(() => {
     async function loadProfile() {
       if (user && isOpen) {
@@ -34,7 +31,6 @@ export function useUserMenuViewModel({
           await profileService.getProfileById(user.id);
 
         if (profileError) {
-          setError("Não foi possível carregar os dados da sua conta.");
           logService.logError(profileError, {
             component: "UserMenu.loadProfile",
           });
@@ -50,75 +46,56 @@ export function useUserMenuViewModel({
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
-    setError(null);
-
     const { error: deleteError } = await authService.deleteOwnUser();
+    setIsDeleting(false);
+    setDeleteConfirmOpen(false);
+
     if (deleteError) {
-      setError("Não foi possível excluir sua conta. Tente novamente.");
       await logService.logError(deleteError, {
         component: "UserMenu.handleDeleteAccount",
       });
-      setIsDeleting(false);
+
+      return { error: "Não foi possível excluir sua conta. Tente novamente." };
     } else {
-      setSuccessMessage("Sua conta foi excluída com sucesso.");
       await signOut();
       setIsOpen(false);
+
+      return { error: null };
     }
   };
 
   const handleSaveName = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null);
-
     const nameValidation = validateFullName(fullName);
     if (!nameValidation.isValid) {
-      setError(nameValidation.message);
-
-      return;
+      return { error: nameValidation.message, success: false };
     }
-
-    if (!user || !profile) return;
-
-    if (fullName.trim() === profile.full_name) {
+    if (!user || !profile || fullName.trim() === profile.full_name) {
       setIsEditingName(false);
 
-      return;
+      return { error: null, success: false };
     }
-
     setIsSavingName(true);
 
     const { data, error: updateError } = await profileService.updateProfile(
       user.id,
-      {
-        full_name: fullName.trim(),
-      }
+      { full_name: fullName.trim() }
     );
 
     setIsSavingName(false);
-
     if (updateError) {
-      setError("Não foi possível atualizar seu nome.");
       logService.logError(updateError, {
         component: "UserMenu.handleSaveName",
       });
+
+      return { error: "Não foi possível atualizar seu nome.", success: false };
     } else {
       setProfile(data);
       setFullName(data.full_name);
       setIsEditingName(false);
-      setSuccessMessage("Seu nome foi atualizado!");
-    }
-  };
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (!open) {
-      setIsEditingName(false);
-      if (profile) {
-        setFullName(profile.full_name);
-      }
+      return { error: null, success: true };
     }
-    setError(null);
-    setSuccessMessage(null);
   };
 
   return {
@@ -135,12 +112,7 @@ export function useUserMenuViewModel({
     isSavingName,
     isChangePasswordOpen,
     setIsChangePasswordOpen,
-    error,
-    successMessage,
     handleDeleteAccount,
     handleSaveName,
-    handleOpenChange,
-    setError,
-    setSuccessMessage,
   };
 }

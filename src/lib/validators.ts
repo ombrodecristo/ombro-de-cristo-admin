@@ -3,6 +3,20 @@ export const FULL_NAME_MIN_LENGTH = 3;
 export const CHURCH_NAME_MIN_LENGTH = 2;
 export const DEVOTIONAL_TITLE_MIN_LENGTH = 3;
 export const DEVOTIONAL_CONTENT_MIN_LENGTH = 10;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const validateEmail = (
+  email: string
+): { isValid: true } | { isValid: false; message: string } => {
+  if (!email.trim() || !emailRegex.test(email)) {
+    return {
+      isValid: false,
+      message: "Informe um e-mail válido.",
+    };
+  }
+
+  return { isValid: true };
+};
 
 export const validatePasswordLength = (
   password: string
@@ -10,7 +24,7 @@ export const validatePasswordLength = (
   if (password.length < PASSWORD_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `A senha precisa ter no mínimo ${PASSWORD_MIN_LENGTH} caracteres.`,
+      message: `Sua senha precisa ter no mínimo ${PASSWORD_MIN_LENGTH} caracteres.`,
     };
   }
 
@@ -37,7 +51,7 @@ export const validateFullName = (
   if (name.trim().length < FULL_NAME_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `O nome precisa ter no mínimo ${FULL_NAME_MIN_LENGTH} caracteres.`,
+      message: `Seu nome precisa ter no mínimo ${FULL_NAME_MIN_LENGTH} caracteres.`,
     };
   }
 

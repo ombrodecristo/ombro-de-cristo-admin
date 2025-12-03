@@ -1,11 +1,41 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import { GlobalLoader } from "./components/GlobalLoader";
 
-function App() {
-  const { loading } = useAuth();
+const PUBLIC_ROUTES = [
+  "/",
+  "/login",
+  "/signup",
+  "/auth-confirmed",
+  "/password-recovery",
+  "/terms-and-policy",
+];
 
-  if (loading) {
+function App() {
+  const { loading, user, role } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
+
+    if (user && role === "ADMIN" && isPublicRoute) {
+      if (location.pathname !== "/") {
+        navigate("/admin", { replace: true });
+      }
+    }
+
+    if (!user && !isPublicRoute) {
+      navigate("/login", { replace: true });
+    }
+  }, [loading, user, role, location.pathname, navigate]);
+
+  if (loading && !PUBLIC_ROUTES.includes(location.pathname)) {
     return <GlobalLoader />;
   }
 

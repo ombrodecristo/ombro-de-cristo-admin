@@ -5,6 +5,7 @@ import { useUserMenuViewModel } from "./useUserMenuViewModel";
 import { Modal, Button, Input, ConfirmationModal } from "@/shared/components";
 import ChangePasswordModal from "../ChangePasswordModal";
 import { FiUser, FiLogOut, FiEdit, FiSave, FiKey } from "react-icons/fi";
+import { toast } from "sonner";
 
 const MenuTrigger = styled.button`
   height: 40px;
@@ -114,8 +115,28 @@ export default function UserMenu() {
 
   if (!user) return null;
 
-  const onFormSubmit = (e: FormEvent) => {
-    handleSaveName(e);
+  const onFormSubmit = async (e: FormEvent) => {
+    const { error, success } = await handleSaveName(e);
+    if (error) {
+      toast.error(error);
+    }
+    if (success) {
+      toast.success("Seu nome foi atualizado!");
+    }
+  };
+
+  const onSignOut = async () => {
+    await signOut();
+    toast.success("Sessão encerrada com sucesso.");
+  };
+
+  const onDelete = async () => {
+    const { error } = await handleDeleteAccount();
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Sua conta foi excluída com sucesso.");
+    }
   };
 
   return (
@@ -164,8 +185,8 @@ export default function UserMenu() {
               icon={<FiKey size={16} />}
             />
             <Button
-              onClick={signOut}
-              label="Sair"
+              onClick={onSignOut}
+              label="Encerrar sessão"
               icon={<FiLogOut size={16} />}
             />
           </ActionList>
@@ -184,9 +205,9 @@ export default function UserMenu() {
       <ConfirmationModal
         isOpen={isDeleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
-        onConfirm={handleDeleteAccount}
+        onConfirm={onDelete}
         title="Excluir sua conta?"
-        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados, incluindo seu perfil e acesso, serão excluídos."
+        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados, incluindo as anotações do diário, serão excluídos para sempre. Tem certeza?"
         confirmText="Sim, excluir"
         variant="destructive"
         loading={isDeleting}
