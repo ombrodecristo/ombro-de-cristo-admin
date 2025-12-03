@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { Checkbox } from "@/components/ui/Checkbox";
-import { Modal } from "@/components/ui/Modal";
+import { Checkbox, Modal } from "@/shared/components";
 import { LegalContent } from "@/pages/TermsAndPolicy/LegalContent";
 
 const AgreementContainer = styled.div`

@@ -1,12 +1,11 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { useUserManagementViewModel } from "./useUserManagementViewModel";
-import { Skeleton } from "@/components/ui/Skeleton";
-import { Input } from "@/components/ui/Input";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { Skeleton, Input, PageHeader } from "@/shared/components";
 import UserTable from "@/components/UserTable";
 import EditUserModal from "@/components/EditUserModal";
 import { FiSearch } from "react-icons/fi";
 import styled from "@emotion/styled";
+import { type ChangeEvent } from "react";
 
 const PageContainer = styled.div`
   display: flex;
@@ -45,7 +44,9 @@ export default function UserManagementPage() {
       <Input
         placeholder="Pesquisar por nome..."
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setSearchQuery(e.target.value)
+        }
         icon={<FiSearch size={20} />}
         style={{ maxWidth: "400px" }}
       />

@@ -1,40 +1,40 @@
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { FiMail, FiLock, FiLogIn, FiEye, FiEyeOff } from "react-icons/fi";
-import { useLoginViewModel } from "./useLoginViewModel";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
-import { Button } from "@/components/ui/Button";
-import { GlobalLoader } from "@/components/GlobalLoader";
-import { type FormEvent, useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import { type FormEvent, useEffect, useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useLoginViewModel } from "./useLoginViewModel";
+import { BaseCard, Button, Input, Label, Logo } from "@/shared/components";
+import { GlobalLoader } from "@/components/GlobalLoader";
+import { FiMail, FiLock, FiLogIn } from "react-icons/fi";
 
-const LogoContainer = styled.div`
+const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${props => props.theme.spacing.xs}px;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: ${props => props.theme.spacing.m}px;
 `;
 
-const LogoImage = styled.img`
-  height: 96px;
-  width: 96px;
-  object-fit: contain;
+const StyledCard = styled(BaseCard)`
+  width: 100%;
+  max-width: 448px;
+  padding: ${props => props.theme.spacing.xl}px;
+`;
+
+const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.m}px;
+  text-align: center;
+  margin-bottom: ${props => props.theme.spacing.xl}px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: ${props => props.theme.spacing.m}px;
 `;
 
 const FormGroup = styled.div`
@@ -85,15 +85,11 @@ export default function Login() {
   }
 
   return (
-    <Card style={{ width: "100%", maxWidth: "448px" }}>
-      <CardHeader>
-        <LogoContainer>
-          <LogoImage src="/logo.png" alt="Logo Ombro de Cristo" />
-          <CardTitle>Ombro de Cristo</CardTitle>
-        </LogoContainer>
-        <CardDescription>Painel Administrativo</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <PageContainer>
+      <StyledCard>
+        <Header>
+          <Logo />
+        </Header>
         <Form onSubmit={handleLoginSubmit}>
           <FormGroup>
             <Label htmlFor="email">E-mail</Label>
@@ -109,10 +105,9 @@ export default function Login() {
               icon={<FiMail size={20} />}
             />
           </FormGroup>
-
           <FormGroup>
             <Label htmlFor="password">Senha</Label>
-            <PasswordInput
+            <Input
               id="password"
               placeholder="••••••••"
               value={password}
@@ -121,22 +116,20 @@ export default function Login() {
               autoComplete="current-password"
               disabled={loading}
               icon={<FiLock size={20} />}
-              toggleIconShow={<FiEye size={20} />}
-              toggleIconHide={<FiEyeOff size={20} />}
+              isPassword
             />
           </FormGroup>
-
           {error && <ErrorMessage>{error}</ErrorMessage>}
-
           <Button
             type="submit"
             disabled={loading}
             loading={loading}
             label="Entrar"
             icon={<FiLogIn />}
+            style={{ marginTop: "8px" }}
           />
         </Form>
-      </CardContent>
-    </Card>
+      </StyledCard>
+    </PageContainer>
   );
 }

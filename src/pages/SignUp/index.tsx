@@ -1,26 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
-import {
-  FiMail,
-  FiLock,
-  FiUser,
-  FiUsers,
-  FiArrowRight,
-  FiEye,
-  FiEyeOff,
-} from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiUsers, FiArrowRight } from "react-icons/fi";
 import { FaApple } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
-
 import { useSignUpViewModel } from "./useSignUpViewModel";
 import { type UserGender } from "@/types/database";
-
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
-import { Select, type SelectOption } from "@/components/ui/Select";
+import {
+  Button,
+  BaseCard,
+  Input,
+  Label,
+  Select,
+  type SelectOption,
+} from "@/shared/components";
 import { LegalAgreement } from "./LegalAgreement";
 
 const PageContainer = styled.div`
@@ -110,6 +102,27 @@ const FormPanel = styled.div`
   }
 `;
 
+const StyledCard = styled(BaseCard)`
+  width: 100%;
+  max-width: 448px;
+  padding: ${props => props.theme.spacing.l}px;
+`;
+
+const CardHeader = styled.header`
+  padding-top: ${props => props.theme.spacing.s}px;
+  margin-bottom: ${props => props.theme.spacing.l}px;
+`;
+
+const CardTitle = styled.h1`
+  font-family: ${props => props.theme.textVariants.header.fontFamily};
+  font-weight: ${props => props.theme.textVariants.header.fontWeight};
+  color: ${props => props.theme.colors.primary};
+  text-align: center;
+  font-size: 24px;
+`;
+
+const CardContent = styled.div``;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -127,6 +140,7 @@ const ErrorMessage = styled.p`
   font-size: ${props => props.theme.textVariants.error.fontSize}px;
   font-weight: ${props => props.theme.textVariants.error.fontWeight};
   color: ${props => props.theme.colors.destructiveBackground};
+  padding-top: 8px;
 `;
 
 const Separator = styled.div`
@@ -150,6 +164,7 @@ const SuccessMessage = styled.p`
   text-align: center;
   color: ${props => props.theme.colors.success};
   padding: ${props => props.theme.spacing.l}px 0;
+  font-weight: 500;
 `;
 
 export default function SignUpPage() {
@@ -189,6 +204,10 @@ export default function SignUpPage() {
     { value: "FEMALE", label: "Feminino" },
   ];
 
+  const onFormSubmit = (e: FormEvent) => {
+    handleSubmit(e);
+  };
+
   return (
     <PageContainer>
       <IntroPanel>
@@ -199,17 +218,15 @@ export default function SignUpPage() {
         <Slogan>Sua missão, fortalecida pela mentoria.</Slogan>
       </IntroPanel>
       <FormPanel>
-        <Card style={{ width: "100%", maxWidth: "448px" }}>
+        <StyledCard>
           <CardHeader>
-            <CardTitle style={{ fontSize: "24px", paddingTop: "8px" }}>
-              Junte-se à nossa comunidade
-            </CardTitle>
+            <CardTitle>Junte-se à nossa comunidade</CardTitle>
           </CardHeader>
           <CardContent>
             {successMessage ? (
               <SuccessMessage>{successMessage}</SuccessMessage>
             ) : (
-              <Form onSubmit={handleSubmit}>
+              <Form onSubmit={onFormSubmit}>
                 <FormGroup>
                   <Label htmlFor="fullName">Nome Completo</Label>
                   <Input
@@ -253,7 +270,7 @@ export default function SignUpPage() {
 
                 <FormGroup>
                   <Label htmlFor="password">Senha</Label>
-                  <PasswordInput
+                  <Input
                     id="password"
                     placeholder="••••••••"
                     value={password}
@@ -262,14 +279,13 @@ export default function SignUpPage() {
                     autoComplete="new-password"
                     disabled={loading}
                     icon={<FiLock size={20} />}
-                    toggleIconShow={<FiEye size={20} />}
-                    toggleIconHide={<FiEyeOff size={20} />}
+                    isPassword
                   />
                 </FormGroup>
 
                 <FormGroup>
                   <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-                  <PasswordInput
+                  <Input
                     id="confirmPassword"
                     placeholder="••••••••"
                     value={confirmPassword}
@@ -278,8 +294,7 @@ export default function SignUpPage() {
                     autoComplete="new-password"
                     disabled={loading}
                     icon={<FiLock size={20} />}
-                    toggleIconShow={<FiEye size={20} />}
-                    toggleIconHide={<FiEyeOff size={20} />}
+                    isPassword
                   />
                 </FormGroup>
 
@@ -297,6 +312,7 @@ export default function SignUpPage() {
                   loading={loading}
                   label="Criar conta"
                   icon={<FiArrowRight />}
+                  style={{ marginTop: "8px" }}
                 />
               </Form>
             )}
@@ -330,7 +346,7 @@ export default function SignUpPage() {
               </StoreButtonsContainer>
             </div>
           </CardContent>
-        </Card>
+        </StyledCard>
       </FormPanel>
     </PageContainer>
   );

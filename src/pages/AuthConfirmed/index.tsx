@@ -1,18 +1,56 @@
 import styled from "@emotion/styled";
 import { useLocation } from "react-router-dom";
 import { FiCheckCircle, FiAlertCircle } from "react-icons/fi";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { BaseCard } from "@/shared/components";
 
-const StatusIcon = styled.div`
+const PageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const StyledCard = styled(BaseCard)`
+  width: 100%;
+  max-width: 448px;
+  padding: ${props => props.theme.spacing.xl}px;
+`;
+
+const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${props => props.theme.spacing.m}px;
+  text-align: center;
+  margin-bottom: ${props => props.theme.spacing.l}px;
+`;
+
+const StatusIcon = styled.div<{ success: boolean }>`
+  color: ${props =>
+    props.success
+      ? props.theme.colors.success
+      : props.theme.colors.destructiveBackground};
   svg {
     width: 48px;
     height: 48px;
   }
 `;
 
+const Title = styled.h1<{ success: boolean }>`
+  font-family: ${props => props.theme.textVariants.header.fontFamily};
+  font-weight: ${props => props.theme.textVariants.header.fontWeight};
+  color: ${props =>
+    props.success
+      ? props.theme.colors.primary
+      : props.theme.colors.destructiveBackground};
+  font-size: 24px;
+`;
+
 const ContentText = styled.p`
   color: ${props => props.theme.colors.mutedForeground};
   line-height: 1.6;
+  text-align: center;
 `;
 
 export default function AuthConfirmed() {
@@ -20,48 +58,26 @@ export default function AuthConfirmed() {
   const hashParams = new URLSearchParams(hash.substring(1));
   const errorDescription = hashParams.get("error_description");
 
-  if (errorDescription) {
-    return (
-      <Card style={{ width: "100%", maxWidth: "448px" }}>
-        <CardHeader>
-          <StatusIcon>
-            <FiAlertCircle style={{ color: "var(--color-destructive)" }} />
-          </StatusIcon>
-          <CardTitle style={{ color: "var(--color-destructive)" }}>
-            Link Inválido
-          </CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <ContentText>
-            Este link é inválido ou já expirou.
-            <br />
-            <br />
-            Por favor, solicite um novo link ou entre em contato com o suporte.
-          </ContentText>
-        </CardContent>
-      </Card>
-    );
-  }
+  const hasError = !!errorDescription;
 
   return (
-    <Card style={{ width: "100%", maxWidth: "448px" }}>
-      <CardHeader>
-        <StatusIcon>
-          <FiCheckCircle style={{ color: "var(--color-primary)" }} />
-        </StatusIcon>
-        <CardTitle style={{ color: "var(--color-primary)" }}>
-          Conta Confirmada
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <PageContainer>
+      <StyledCard>
+        <Header>
+          <StatusIcon success={!hasError}>
+            {hasError ? <FiAlertCircle /> : <FiCheckCircle />}
+          </StatusIcon>
+          <Title success={!hasError}>
+            {hasError ? "Link Inválido" : "Conta Confirmada"}
+          </Title>
+        </Header>
+
         <ContentText>
-          Sua conta foi confirmada com sucesso.
-          <br />
-          <br />
-          Você já pode fechar esta página.
+          {hasError
+            ? "Este link é inválido ou já expirou. Por favor, solicite um novo link ou entre em contato com o suporte."
+            : "Sua conta foi confirmada com sucesso. Você já pode fechar esta página."}
         </ContentText>
-      </CardContent>
-    </Card>
+      </StyledCard>
+    </PageContainer>
   );
 }

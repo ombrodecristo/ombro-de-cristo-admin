@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
 import { useChurchFormViewModel } from "./useChurchFormViewModel";
-import { Modal } from "@/components/ui/Modal";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
+import { Modal, Button, Input, Label } from "@/shared/components";
 import { type Church } from "@/types/database";
 
 const Content = styled.form`
@@ -57,9 +54,13 @@ export default function ChurchFormModal({
     if (name) setLocalError(null);
   }, [name]);
 
+  const onFormSubmit = (e: FormEvent) => {
+    handleSubmit(e);
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Content onSubmit={handleSubmit}>
+      <Content onSubmit={onFormSubmit}>
         <Title>{isEditing ? "Editar Igreja" : "Nova Igreja"}</Title>
         <div>
           <Label htmlFor="name">Nome da igreja</Label>

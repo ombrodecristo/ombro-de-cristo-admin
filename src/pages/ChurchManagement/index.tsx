@@ -1,11 +1,14 @@
 import styled from "@emotion/styled";
+import { type ChangeEvent } from "react";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import { useChurchManagementViewModel } from "./useChurchManagementViewModel";
-import { Skeleton } from "@/components/ui/Skeleton";
-import { Input } from "@/components/ui/Input";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Button } from "@/components/ui/Button";
-import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
+import {
+  Skeleton,
+  Input,
+  PageHeader,
+  Button,
+  ConfirmationModal,
+} from "@/shared/components";
 import ChurchTable from "@/components/ChurchTable";
 import ChurchFormModal from "@/components/ChurchFormModal";
 
@@ -59,7 +62,9 @@ export default function ChurchManagementPage() {
       <Input
         placeholder="Pesquisar por nome..."
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setSearchQuery(e.target.value)
+        }
         icon={<FiSearch size={20} />}
         style={{ maxWidth: "400px" }}
       />

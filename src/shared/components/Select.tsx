@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from "react";
-import type { ReactNode } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import styled from "@emotion/styled";
 import { FiChevronDown } from "react-icons/fi";
 
@@ -8,14 +7,18 @@ const SelectWrapper = styled.div`
   width: 100%;
 `;
 
-const SelectTrigger = styled.button<{ hasIcon: boolean }>`
+const SelectTrigger = styled.button<{ hasIcon: boolean; isOpen: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 48px;
+  height: 56px;
   width: 100%;
   border-radius: ${props => props.theme.borderRadii.m}px;
-  border: 1.5px solid ${props => props.theme.colors.inputBorder};
+  border: 1.5px solid
+    ${props =>
+      props.isOpen
+        ? props.theme.colors.primary
+        : props.theme.colors.inputBorder};
   background-color: ${props => props.theme.colors.inputBackground};
   padding: 0 ${props => props.theme.spacing.m}px;
   padding-left: ${props =>
@@ -139,6 +142,7 @@ export function Select({
       <SelectTrigger
         type="button"
         hasIcon={!!icon}
+        isOpen={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
       >
@@ -153,15 +157,21 @@ export function Select({
       </SelectTrigger>
       {isOpen && (
         <Dropdown>
-          {options.map(option => (
-            <DropdownItem
-              key={option.value}
-              isSelected={value === option.value}
-              onClick={() => handleSelect(option.value)}
-            >
-              {option.label}
+          {options.length > 0 ? (
+            options.map(option => (
+              <DropdownItem
+                key={option.value}
+                isSelected={value === option.value}
+                onClick={() => handleSelect(option.value)}
+              >
+                {option.label}
+              </DropdownItem>
+            ))
+          ) : (
+            <DropdownItem isSelected={false} style={{ cursor: "default" }}>
+              Nenhuma opção
             </DropdownItem>
-          ))}
+          )}
         </Dropdown>
       )}
     </SelectWrapper>

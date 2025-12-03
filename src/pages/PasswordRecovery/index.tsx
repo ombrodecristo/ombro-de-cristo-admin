@@ -1,33 +1,61 @@
-import { useEffect } from "react";
+import { useEffect, type FormEvent } from "react";
 import styled from "@emotion/styled";
-import {
-  FiLock,
-  FiLogIn,
-  FiAlertCircle,
-  FiCheckCircle,
-  FiEye,
-  FiEyeOff,
-} from "react-icons/fi";
+import { FiLock, FiLogIn, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import { usePasswordRecoveryViewModel } from "./usePasswordRecoveryViewModel";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
+import { Button, BaseCard, Label, Input } from "@/shared/components";
 import { useAuth } from "@/contexts/AuthContext";
 import { GlobalLoader } from "@/components/GlobalLoader";
 
-const StatusIcon = styled.div`
+const PageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const StyledCard = styled(BaseCard)`
+  width: 100%;
+  max-width: 448px;
+  padding: ${props => props.theme.spacing.xl}px;
+`;
+
+const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${props => props.theme.spacing.m}px;
+  text-align: center;
+  margin-bottom: ${props => props.theme.spacing.l}px;
+`;
+
+const StatusIcon = styled.div<{ success: boolean; isTokenInvalid: boolean }>`
+  color: ${props =>
+    props.isTokenInvalid
+      ? props.theme.colors.destructiveBackground
+      : props.success
+        ? props.theme.colors.success
+        : props.theme.colors.primary};
   svg {
     width: 48px;
     height: 48px;
   }
 `;
 
+const Title = styled.h1<{ isTokenInvalid: boolean }>`
+  font-family: ${props => props.theme.textVariants.header.fontFamily};
+  font-weight: ${props => props.theme.textVariants.header.fontWeight};
+  color: ${props =>
+    props.isTokenInvalid
+      ? props.theme.colors.destructiveBackground
+      : props.theme.colors.primary};
+  font-size: 24px;
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: ${props => props.theme.spacing.m}px;
 `;
 
 const FormGroup = styled.div`
@@ -73,41 +101,35 @@ export default function PasswordRecovery() {
     return <GlobalLoader />;
   }
 
-  return (
-    <Card style={{ width: "100%", maxWidth: "448px" }}>
-      <CardHeader>
-        {!isTokenValid && !success ? (
-          <>
-            <StatusIcon>
-              <FiAlertCircle style={{ color: "var(--color-destructive)" }} />
-            </StatusIcon>
-            <CardTitle style={{ color: "var(--color-destructive)" }}>
-              Link Inválido
-            </CardTitle>
-          </>
-        ) : success ? (
-          <>
-            <StatusIcon>
-              <FiCheckCircle style={{ color: "var(--color-primary)" }} />
-            </StatusIcon>
-            <CardTitle style={{ color: "var(--color-primary)" }}>
-              Senha Alterada
-            </CardTitle>
-          </>
-        ) : (
-          <>
-            <StatusIcon>
-              <FiLock style={{ color: "var(--color-primary)" }} />
-            </StatusIcon>
-            <CardTitle style={{ color: "var(--color-primary)" }}>
-              Redefina sua Senha
-            </CardTitle>
-          </>
-        )}
-      </CardHeader>
+  const isTokenInvalid = !isTokenValid && !success;
 
-      <CardContent>
-        {!isTokenValid && !success ? (
+  const onFormSubmit = (e: FormEvent) => {
+    handleSubmit(e);
+  };
+
+  return (
+    <PageContainer>
+      <StyledCard>
+        <Header>
+          <StatusIcon success={success} isTokenInvalid={isTokenInvalid}>
+            {isTokenInvalid ? (
+              <FiAlertCircle />
+            ) : success ? (
+              <FiCheckCircle />
+            ) : (
+              <FiLock />
+            )}
+          </StatusIcon>
+          <Title isTokenInvalid={isTokenInvalid}>
+            {isTokenInvalid
+              ? "Link Inválido"
+              : success
+                ? "Senha Alterada"
+                : "Redefina sua Senha"}
+          </Title>
+        </Header>
+
+        {isTokenInvalid ? (
           <StatusText>
             Link de redefinição de senha inválido ou expirado.
             <br />
@@ -120,10 +142,10 @@ export default function PasswordRecovery() {
             Você já pode fechar esta página.
           </StatusText>
         ) : (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={onFormSubmit}>
             <FormGroup>
               <Label htmlFor="password">Nova Senha</Label>
-              <PasswordInput
+              <Input
                 id="password"
                 placeholder="••••••••"
                 value={password}
@@ -132,14 +154,12 @@ export default function PasswordRecovery() {
                 autoComplete="new-password"
                 disabled={loading}
                 icon={<FiLock size={20} />}
-                toggleIconShow={<FiEye size={20} />}
-                toggleIconHide={<FiEyeOff size={20} />}
+                isPassword
               />
             </FormGroup>
-
             <FormGroup>
               <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
-              <PasswordInput
+              <Input
                 id="confirmPassword"
                 placeholder="••••••••"
                 value={confirmPassword}
@@ -148,8 +168,7 @@ export default function PasswordRecovery() {
                 autoComplete="new-password"
                 disabled={loading}
                 icon={<FiLock size={20} />}
-                toggleIconShow={<FiEye size={20} />}
-                toggleIconHide={<FiEyeOff size={20} />}
+                isPassword
               />
             </FormGroup>
 
@@ -164,7 +183,7 @@ export default function PasswordRecovery() {
             />
           </Form>
         )}
-      </CardContent>
-    </Card>
+      </StyledCard>
+    </PageContainer>
   );
 }

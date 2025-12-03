@@ -34,11 +34,13 @@ interface ModalProps {
 export function Modal({ isOpen, onClose, children }: ModalProps) {
   if (!isOpen) return null;
 
+  const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <Overlay onClick={onClose}>
-      <ModalContainer onClick={e => e.stopPropagation()}>
-        {children}
-      </ModalContainer>
+      <ModalContainer onClick={handleContainerClick}>{children}</ModalContainer>
     </Overlay>
   );
 }

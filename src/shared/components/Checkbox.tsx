@@ -29,6 +29,7 @@ const CustomCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
   transition: all 0.2s;
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   opacity: ${props => (props.disabled ? 0.5 : 1)};
+  flex-shrink: 0;
 
   svg {
     color: white;

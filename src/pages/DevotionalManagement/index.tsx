@@ -1,14 +1,17 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useDevotionalManagementViewModel } from "./useDevotionalManagementViewModel";
-import { Skeleton } from "@/components/ui/Skeleton";
-import { Input } from "@/components/ui/Input";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Button } from "@/components/ui/Button";
-import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
+import {
+  Skeleton,
+  Input,
+  PageHeader,
+  Button,
+  ConfirmationModal,
+} from "@/shared/components";
 import DevotionalTable from "@/components/DevotionalTable";
 import DevotionalFormModal from "@/components/DevotionalFormModal";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import styled from "@emotion/styled";
+import { type ChangeEvent } from "react";
 
 const PageContainer = styled.div`
   display: flex;
@@ -61,7 +64,9 @@ export default function DevotionalManagementPage() {
       <Input
         placeholder="Pesquisar por título..."
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setSearchQuery(e.target.value)
+        }
         icon={<FiSearch size={20} />}
         style={{ maxWidth: "400px" }}
       />

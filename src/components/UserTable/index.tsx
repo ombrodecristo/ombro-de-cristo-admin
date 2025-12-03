@@ -10,8 +10,8 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@/components/ui/Table";
-import { Button } from "@/components/ui/Button";
+  Button,
+} from "@/shared/components";
 
 export type SortConfig = {
   key: keyof ProfileWithRelations | null;

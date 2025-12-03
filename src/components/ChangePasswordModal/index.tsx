@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
 import { useChangePasswordViewModel } from "./useChangePasswordViewModel";
-import { Modal } from "@/components/ui/Modal";
-import { Button } from "@/components/ui/Button";
-import { PasswordInput } from "@/components/ui/PasswordInput";
-import { Label } from "@/components/ui/Label";
-import { FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { Modal, Button, Input, Label } from "@/shared/components";
+import { FiLock } from "react-icons/fi";
 import { toast } from "sonner";
 
 const Content = styled.form`
@@ -82,14 +79,18 @@ export default function ChangePasswordModal({
     }
   }, [password, confirmPassword]);
 
+  const onFormSubmit = (e: FormEvent) => {
+    handleSubmit(e);
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Content onSubmit={handleSubmit}>
+      <Content onSubmit={onFormSubmit}>
         <Title>Alterar Senha</Title>
 
         <FormGroup>
           <Label htmlFor="new-password">Nova Senha</Label>
-          <PasswordInput
+          <Input
             id="new-password"
             placeholder="••••••••"
             value={password}
@@ -97,14 +98,13 @@ export default function ChangePasswordModal({
             required
             disabled={loading}
             icon={<FiLock size={20} />}
-            toggleIconShow={<FiEye size={20} />}
-            toggleIconHide={<FiEyeOff size={20} />}
+            isPassword
           />
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="confirm-password">Confirmar Nova Senha</Label>
-          <PasswordInput
+          <Input
             id="confirm-password"
             placeholder="••••••••"
             value={confirmPassword}
@@ -112,8 +112,7 @@ export default function ChangePasswordModal({
             required
             disabled={loading}
             icon={<FiLock size={20} />}
-            toggleIconShow={<FiEye size={20} />}
-            toggleIconHide={<FiEyeOff size={20} />}
+            isPassword
           />
         </FormGroup>
 

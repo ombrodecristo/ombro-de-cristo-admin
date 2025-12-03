@@ -14,6 +14,7 @@ const StyledTextarea = styled.textarea`
   color: ${props => props.theme.colors.inputForeground};
   transition: border-color 0.2s;
   resize: vertical;
+  font-family: inherit;
 
   &::placeholder {
     color: ${props => props.theme.colors.mutedForeground};

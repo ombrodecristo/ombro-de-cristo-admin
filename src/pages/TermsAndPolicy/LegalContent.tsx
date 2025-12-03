@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/shared/components";
 
 const Container = styled.div`
   max-width: 800px;

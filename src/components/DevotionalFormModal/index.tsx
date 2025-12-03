@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
 import { useDevotionalFormViewModel } from "./useDevotionalFormViewModel";
-import { Modal } from "@/components/ui/Modal";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { Label } from "@/components/ui/Label";
+import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { DevotionalWithAuthor } from "@/services/devotionalService";
 
 const Content = styled.form`
@@ -73,9 +69,13 @@ export default function DevotionalFormModal({
     if (title || content) setLocalError(null);
   }, [title, content]);
 
+  const onFormSubmit = (e: FormEvent) => {
+    handleSubmit(e);
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Content onSubmit={handleSubmit}>
+      <Content onSubmit={onFormSubmit}>
         <Title>{isEditing ? "Editar Devocional" : "Novo Devocional"}</Title>
         <div>
           <Label htmlFor="title">Título</Label>

@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
+import { type FormEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserMenuViewModel } from "./useUserMenuViewModel";
-import { Modal } from "@/components/ui/Modal";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Modal, Button, Input, ConfirmationModal } from "@/shared/components";
 import ChangePasswordModal from "../ChangePasswordModal";
-import { ConfirmationModal } from "../ui/ConfirmationModal";
 import { FiUser, FiLogOut, FiEdit, FiSave, FiKey } from "react-icons/fi";
 
 const MenuTrigger = styled.button`
@@ -115,6 +113,10 @@ export default function UserMenu() {
 
   if (!user) return null;
 
+  const onFormSubmit = (e: FormEvent) => {
+    handleSaveName(e);
+  };
+
   return (
     <>
       <MenuTrigger onClick={() => setIsOpen(true)}>
@@ -125,7 +127,7 @@ export default function UserMenu() {
         <Content>
           <ProfileSection>
             {isEditingName ? (
-              <NameForm onSubmit={handleSaveName}>
+              <NameForm onSubmit={onFormSubmit}>
                 <Input
                   id="fullNameEdit"
                   value={fullName}
@@ -135,7 +137,7 @@ export default function UserMenu() {
                 />
                 <Button
                   type="submit"
-                  label={isSavingName ? "" : ""}
+                  label=""
                   loading={isSavingName}
                   disabled={isSavingName}
                   style={{ width: "48px", height: "48px", flexShrink: 0 }}

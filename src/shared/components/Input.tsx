@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const InputWrapper = styled.div`
   position: relative;
@@ -10,7 +11,7 @@ const InputWrapper = styled.div`
 `;
 
 const StyledInput = styled.input<{ hasIcon: boolean }>`
-  height: 48px;
+  height: 56px;
   width: 100%;
   border-radius: ${props => props.theme.borderRadii.m}px;
   border: 1.5px solid ${props => props.theme.colors.inputBorder};
@@ -34,7 +35,8 @@ const StyledInput = styled.input<{ hasIcon: boolean }>`
   }
 
   &:focus + .icon-container > svg,
-  &:focus ~ .icon-container > svg {
+  &:focus ~ .icon-container > svg,
+  &:focus ~ button > svg {
     color: ${props => props.theme.colors.primary};
   }
 
@@ -59,18 +61,63 @@ const IconContainer = styled.div`
   }
 `;
 
+const ToggleButton = styled.button`
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 56px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => props.theme.colors.mutedForeground};
+  transition: color 0.2s;
+
+  &:hover:not(:disabled) {
+    color: ${props => props.theme.colors.mainForeground};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactNode;
+  isPassword?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ icon, ...props }, ref) => {
+  ({ icon, isPassword = false, ...props }, ref) => {
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const finalType = isPassword
+      ? isPasswordVisible
+        ? "text"
+        : "password"
+      : props.type;
+
+    const togglePasswordVisibility = () => {
+      setIsPasswordVisible(prev => !prev);
+    };
+
     return (
       <InputWrapper>
         {icon && (
           <IconContainer className="icon-container">{icon}</IconContainer>
         )}
-        <StyledInput ref={ref} hasIcon={!!icon} {...props} />
+        <StyledInput ref={ref} hasIcon={!!icon} type={finalType} {...props} />
+        {isPassword && (
+          <ToggleButton
+            type="button"
+            onClick={togglePasswordVisibility}
+            disabled={props.disabled}
+          >
+            {isPasswordVisible ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+          </ToggleButton>
+        )}
       </InputWrapper>
     );
   }
