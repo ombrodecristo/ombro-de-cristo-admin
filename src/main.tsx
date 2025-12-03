@@ -15,25 +15,36 @@ import { theme } from "./core/lib/theme.ts";
 import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
 import { Toaster } from "sonner";
 
-const LandingPage = lazy(() => import("@/pages/LandingPage.tsx"));
-const LoginPage = lazy(() => import("@/pages/LoginPage.tsx"));
-const UserManagementPage = lazy(() => import("@/pages/UserManagementPage.tsx"));
+const LandingPage = lazy(
+  () => import("@/features/static/view/LandingPage.tsx")
+);
+
+const LoginPage = lazy(() => import("@/features/auth/view/LoginPage.tsx"));
+
+const UserManagementPage = lazy(
+  () => import("@/features/user-management/view/UserManagementPage.tsx")
+);
 
 const ChurchManagementPage = lazy(
-  () => import("@/pages/ChurchManagementPage.tsx")
+  () => import("@/features/church-management/view/ChurchManagementPage.tsx")
 );
 
 const DevotionalManagementPage = lazy(
-  () => import("@/pages/DevotionalManagementPage.tsx")
+  () =>
+    import("@/features/devotional-management/view/DevotionalManagementPage.tsx")
 );
 
-const AuthConfirmedPage = lazy(() => import("@/pages/AuthConfirmedPage.tsx"));
+const AuthConfirmedPage = lazy(
+  () => import("@/features/auth/view/AuthConfirmedPage.tsx")
+);
 
 const PasswordRecoveryPage = lazy(
-  () => import("@/pages/PasswordRecoveryPage.tsx")
+  () => import("@/features/auth/view/PasswordRecoveryPage.tsx")
 );
 
-const TermsAndPolicyPage = lazy(() => import("@/pages/TermsAndPolicyPage.tsx"));
+const TermsAndPolicyPage = lazy(
+  () => import("@/features/static/view/TermsAndPolicyPage.tsx")
+);
 
 const router = createBrowserRouter([
   {

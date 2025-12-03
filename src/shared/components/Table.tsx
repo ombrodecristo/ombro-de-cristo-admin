@@ -34,7 +34,7 @@ export const TableRow = styled.tr`
 export const TableHeaderCell = styled.th`
   padding: ${props => props.theme.spacing.m}px;
   font-weight: ${props => props.theme.textVariants.sectionHeader.fontWeight};
-  font-size: ${props => props.theme.textVariants.sectionHeader.fontSize}px;
+  font-size: ${props => props.theme.textVariants.sectionHeader.fontSize};
   color: ${props => props.theme.colors.mutedForeground};
   text-transform: ${props =>
     props.theme.textVariants.sectionHeader.textTransform};

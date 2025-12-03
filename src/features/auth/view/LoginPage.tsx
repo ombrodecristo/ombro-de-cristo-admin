@@ -153,7 +153,6 @@ export default function LoginPage() {
                 disabled={viewModel.loading}
                 loading={viewModel.loading}
                 label="Entrar"
-                icon={<FiLock />}
               />
             </Actions>
           </Form>

@@ -76,7 +76,7 @@ export default function DevotionalTable({
                 Última Modificação {getSortIcon("updated_at")}
               </HeaderCellContent>
             </TableHeaderCell>
-            <TableHeaderCell style={{ width: "180px" }}>Ações</TableHeaderCell>
+            <TableHeaderCell style={{ width: "220px" }}>Ações</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>

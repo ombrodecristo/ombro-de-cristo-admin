@@ -25,7 +25,7 @@ const SelectTrigger = styled.button<{ hasIcon: boolean; isOpen: boolean }>`
     props.hasIcon
       ? `calc(${props.theme.spacing.m}px + 22px + ${props.theme.spacing.s}px)`
       : `${props.theme.spacing.m}px`};
-  font-size: ${props => props.theme.textVariants.body.fontSize}px;
+  font-size: 16px;
   color: ${props => props.theme.colors.inputForeground};
   text-align: left;
   cursor: pointer;

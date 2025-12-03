@@ -22,7 +22,6 @@ const getVariantStyles = (
       color: ${theme.colors.buttonDisabledForeground};
       border-color: transparent;
       box-shadow: none;
-      elevation: 0;
     `;
   }
   switch (variant) {
@@ -32,14 +31,12 @@ const getVariantStyles = (
         color: ${theme.colors.buttonSecondaryForeground};
         border-color: ${theme.colors.buttonSecondaryBorder};
         box-shadow: none;
-        elevation: 0;
       `;
     case "destructive":
       return `
         background-color: ${theme.colors.destructiveBackground};
         color: ${theme.colors.destructiveForeground};
         border-color: transparent;
-        elevation: 0;
         box-shadow: none;
       `;
     default:
@@ -47,7 +44,6 @@ const getVariantStyles = (
         background-color: ${theme.colors.buttonPrimaryBackground};
         color: ${theme.colors.buttonPrimaryForeground};
         border-color: transparent;
-        elevation: 4;
         box-shadow: 0 4px 8px ${theme.colors.shadowColor}33;
       `;
   }

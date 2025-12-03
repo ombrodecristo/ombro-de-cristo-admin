@@ -33,9 +33,9 @@ export default function DevotionalManagementPage() {
     return (
       <PageContainer>
         <PageHeader title="Devocionais">
-          <Skeleton height="48px" width="200px" />
+          <Skeleton height="56px" width="200px" />
         </PageHeader>
-        <Skeleton height="48px" width="320px" />
+        <Skeleton height="56px" width="400px" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
     );

@@ -10,7 +10,7 @@ const StyledTextarea = styled.textarea`
   background-color: ${props => props.theme.colors.inputBackground};
   padding: ${props => props.theme.spacing.sm}px
     ${props => props.theme.spacing.m}px;
-  font-size: ${props => props.theme.textVariants.body.fontSize}px;
+  font-size: 16px;
   color: ${props => props.theme.colors.inputForeground};
   transition: all 0.2s;
   resize: vertical;

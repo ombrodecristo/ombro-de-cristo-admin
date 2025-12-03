@@ -31,9 +31,9 @@ export default function ChurchManagementPage() {
     return (
       <PageContainer>
         <PageHeader title="Igrejas">
-          <Skeleton height="48px" width="160px" />
+          <Skeleton height="56px" width="160px" />
         </PageHeader>
-        <Skeleton height="48px" width="320px" />
+        <Skeleton height="56px" width="400px" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
     );

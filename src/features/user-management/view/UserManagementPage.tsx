@@ -27,7 +27,7 @@ export default function UserManagementPage() {
     return (
       <PageContainer>
         <PageHeader title="Perfis" />
-        <Skeleton height="48px" width="320px" />
+        <Skeleton height="56px" width="400px" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
     );
