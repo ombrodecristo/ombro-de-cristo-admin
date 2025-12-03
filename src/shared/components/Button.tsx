@@ -47,6 +47,9 @@ const StyledButton = styled.button<{
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   padding: 0 ${props => props.theme.spacing.l}px;
+  text-transform: none;
+  letter-spacing: ${props =>
+    props.theme.textVariants.buttonLabel.letterSpacing}px;
 
   ${props => getVariantStyles(props.theme, props.variant, props.disabled)}
 

@@ -27,7 +27,7 @@ const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
       : `${props.theme.spacing.m}px`};
   font-size: ${props => props.theme.textVariants.body.fontSize}px;
   color: ${props => props.theme.colors.inputForeground};
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 
   &::placeholder {
     color: ${props => props.theme.colors.mutedForeground};
@@ -112,6 +112,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ icon, isPassword = false, error, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     const finalType = isPassword
       ? isPasswordVisible
@@ -128,12 +129,17 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <InputWrapper>
         {icon && (
-          <IconContainer className="icon-container" hasError={hasError}>
+          <IconContainer
+            className="icon-container"
+            hasError={hasError || isFocused}
+          >
             {icon}
           </IconContainer>
         )}
         <StyledInput
           ref={ref}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           hasIcon={!!icon}
           hasError={hasError}
           type={finalType}

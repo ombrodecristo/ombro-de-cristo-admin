@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: "dist",
+  },
   esbuild: {
     drop: mode === "production" ? ["console", "debugger"] : [],
   },

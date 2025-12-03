@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { type FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,6 +6,7 @@ import { useLoginViewModel } from "./useLoginViewModel";
 import { BaseCard, Button, Input, Label, Logo } from "@/shared/components";
 import { GlobalLoader } from "@/components/GlobalLoader";
 import { FiMail, FiLock, FiLogIn } from "react-icons/fi";
+import { toast } from "sonner";
 
 const PageContainer = styled.div`
   display: flex;
@@ -39,13 +40,27 @@ const FormGroup = styled.div`
   gap: ${props => props.theme.spacing.s}px;
 `;
 
-const ErrorMessage = styled.p`
-  font-family: ${props => props.theme.textVariants.error.fontFamily};
-  font-size: ${props => props.theme.textVariants.error.fontSize}px;
-  font-weight: ${props => props.theme.textVariants.error.fontWeight};
-  color: ${props => props.theme.colors.destructiveBackground};
-  text-align: center;
-  margin-top: ${props => props.theme.spacing.s}px;
+const Actions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.m}px;
+  margin-top: ${props => props.theme.spacing.m}px;
+`;
+
+const SeparatorWithText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.s}px;
+  color: ${props => props.theme.colors.mutedForeground};
+  font-size: 13px;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1.5px;
+    background-color: ${props => props.theme.colors.border};
+  }
 `;
 
 export default function Login() {
@@ -53,7 +68,6 @@ export default function Login() {
     useLoginViewModel();
 
   const { user, loading: authLoading, role } = useAuth();
-  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -65,10 +79,7 @@ export default function Login() {
     setError(null);
     const result = await handleLogin(e);
     if (result.error) {
-      setError(result.error);
-    }
-    if (result.success) {
-      navigate("/admin", { replace: true });
+      toast.error(result.error);
     }
   };
 
@@ -117,15 +128,23 @@ export default function Login() {
               error={error}
             />
           </FormGroup>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Button
-            type="submit"
-            disabled={loading}
-            loading={loading}
-            label="Entrar"
-            icon={<FiLogIn />}
-            style={{ marginTop: "8px" }}
-          />
+          <Actions>
+            <Button
+              type="submit"
+              disabled={loading}
+              loading={loading}
+              label="Entrar"
+              icon={<FiLogIn />}
+            />
+            <SeparatorWithText>Primeira vez aqui?</SeparatorWithText>
+            <Button
+              type="button"
+              onClick={() => (window.location.href = "/signup")}
+              label="Criar minha conta"
+              variant="secondary"
+              disabled={loading}
+            />
+          </Actions>
         </Form>
       </StyledCard>
     </PageContainer>

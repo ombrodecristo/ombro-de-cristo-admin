@@ -56,7 +56,6 @@ export default [
           next: ["multiline-const", "multiline-let"],
         },
       ],
-      "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -65,6 +64,7 @@ export default [
           caughtErrorsIgnorePattern: "^_",
         },
       ],
+      "@typescript-eslint/no-empty-object-type": "off",
     },
   },
   prettierConfig,

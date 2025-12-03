@@ -15,8 +15,7 @@ import { theme } from "./core/lib/theme.ts";
 import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
 import { Toaster } from "sonner";
 
-const SignUpPage = lazy(() => import("./pages/SignUp"));
-const Login = lazy(() => import("./pages/Login"));
+const LoginPage = lazy(() => import("./pages/Login"));
 const UserManagementPage = lazy(() => import("./pages/UserManagement"));
 const ChurchManagementPage = lazy(() => import("./pages/ChurchManagement"));
 
@@ -24,24 +23,24 @@ const DevotionalManagementPage = lazy(
   () => import("./pages/DevotionalManagement")
 );
 
-const AuthConfirmed = lazy(() => import("./pages/AuthConfirmed"));
+const AuthConfirmedPage = lazy(() => import("./pages/AuthConfirmed"));
 
-const PasswordRecovery = lazy(
+const PasswordRecoveryPage = lazy(
   () => import("./pages/PasswordRecovery/index.tsx")
 );
 
-const TermsAndPolicyPage = lazy(() => import("./pages/TermsAndPolicy"));
+const SignUpPage = lazy(() => import("./pages/SignUp/index.tsx"));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <SignUpPage /> },
-      { path: "/login", element: <Login /> },
-      { path: "/auth-confirmed", element: <AuthConfirmed /> },
-      { path: "/password-recovery", element: <PasswordRecovery /> },
-      { path: "/terms-and-policy", element: <TermsAndPolicyPage /> },
+      { index: true, element: <Navigate to="/login" replace /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/signup", element: <SignUpPage /> },
+      { path: "/auth-confirmed", element: <AuthConfirmedPage /> },
+      { path: "/password-recovery", element: <PasswordRecoveryPage /> },
       {
         path: "/admin",
         element: <ProtectedRoute />,
@@ -80,7 +79,7 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <Suspense fallback={<GlobalLoader />}>
           <RouterProvider router={router} />
-          <Toaster richColors closeButton />
+          <Toaster richColors closeButton position="bottom-right" />
         </Suspense>
       </AuthProvider>
     </ThemeProvider>

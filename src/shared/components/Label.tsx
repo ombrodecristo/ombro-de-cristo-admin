@@ -4,7 +4,6 @@ export const Label = styled.label`
   font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
   font-weight: ${props => props.theme.textVariants.bodyMedium.fontWeight};
   font-size: ${props => props.theme.textVariants.defaults.fontSize}px;
-  color: ${props => props.theme.colors.mutedForeground};
+  color: ${props => props.theme.colors.mainForeground};
   display: block;
-  margin-bottom: ${props => props.theme.spacing.s}px;
 `;
