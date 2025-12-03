@@ -15,12 +15,12 @@ const MainContent = styled.div`
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  background-color: ${props => props.theme.colors.mainBackground};
 `;
 
 const ContentArea = styled.main`
   flex: 1;
   overflow-y: auto;
-  background-color: ${props => props.theme.colors.mainBackground};
   padding: ${props => props.theme.spacing.l}px;
 `;
 

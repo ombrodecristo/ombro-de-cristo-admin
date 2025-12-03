@@ -144,12 +144,12 @@ export const theme = {
     },
   },
   cardVariants: {
-    elevated: {
-      backgroundColor: "cardBackground",
-      borderRadius: "24px",
-      padding: "24px",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
-    },
+    elevated: `
+      background-color: ${palette.card};
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    `,
   },
   breakpoints: {
     phone: "0px",

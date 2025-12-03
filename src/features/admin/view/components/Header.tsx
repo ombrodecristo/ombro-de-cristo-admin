@@ -31,6 +31,9 @@ const MenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 
   &:hover {
     background-color: ${props => props.theme.colors.mutedBackground};

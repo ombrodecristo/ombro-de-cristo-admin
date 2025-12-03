@@ -17,7 +17,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
   width: 100%;
   background-color: ${props => props.theme.colors.inputBackground};
   border-radius: ${props => props.theme.borderRadii.m}px;
-  border-width: 1.5px;
+  border-width: 2px;
   border-style: solid;
   border-color: ${props =>
     props.hasError
@@ -25,13 +25,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
       : props.isFocused
         ? props.theme.colors.primaryBackground
         : props.theme.colors.inputBorder};
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-  box-shadow: ${props =>
-    props.isFocused
-      ? `0 0 0 1px ${props.theme.colors.primaryBackground}`
-      : "none"};
+  transition: border-color 0.2s;
 `;
 
 const StyledInput = styled.input<{ hasIcon: boolean }>`

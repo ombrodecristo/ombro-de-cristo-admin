@@ -58,8 +58,7 @@ const ForgotPasswordLink = styled(Link)`
 const Separator = styled.div`
   height: 1.5px;
   background-color: ${props => props.theme.colors.border};
-  margin: ${props =>
-    `-${props.theme.spacing.xs}px 0 ${props.theme.spacing.m}px 0`};
+  margin: ${props => props.theme.spacing.m}px 0;
 `;
 
 export default function LoginPage() {
@@ -151,6 +150,7 @@ export default function LoginPage() {
               disabled={viewModel.loading}
               loading={viewModel.loading}
               label="Entrar"
+              icon={<IoLockClosedOutline />}
             />
           </Form>
         </StyledCard>

@@ -14,18 +14,23 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   align-items: center;
   gap: ${props => props.theme.spacing.m}px;
   padding: ${props => props.theme.spacing.sm}px;
+  height: 48px;
   border-radius: ${props => props.theme.borderRadii.s}px;
-  color: ${props => props.theme.colors.primaryForeground};
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   justify-content: ${props => (props.isSidebarOpen ? "flex-start" : "center")};
-  transition: background-color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    color: white;
   }
 
   &.active {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: ${props => props.theme.colors.secondaryBackground};
+    color: ${props => props.theme.colors.secondaryForeground};
     font-weight: 600;
   }
 `;
@@ -34,8 +39,9 @@ const LinkText = styled.span<{ isSidebarOpen: boolean }>`
   opacity: ${props => (props.isSidebarOpen ? 1 : 0)};
   visibility: ${props => (props.isSidebarOpen ? "visible" : "hidden")};
   transition:
-    opacity 0.2s 0.1s,
-    visibility 0.2s 0.1s;
+    opacity 0.2s,
+    visibility 0.2s;
+  transition-delay: ${props => (props.isSidebarOpen ? "0.1s" : "0s")};
   white-space: nowrap;
 `;
 
