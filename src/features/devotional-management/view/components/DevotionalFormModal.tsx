@@ -1,0 +1,99 @@
+import { useState, type FormEvent } from "react";
+import styled from "@emotion/styled";
+import { DevotionalFormViewModel } from "../../view-models/DevotionalFormViewModel";
+import { useViewModel } from "@/shared/hooks/useViewModel";
+import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
+import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
+
+const Content = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.m}px;
+  width: 500px;
+`;
+
+const Title = styled.h2`
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+`;
+
+interface DevotionalFormModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+  authorId: string;
+  devotionalToEdit: DevotionalWithAuthor | null;
+}
+
+export default function DevotionalFormModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  authorId,
+  devotionalToEdit,
+}: DevotionalFormModalProps) {
+  const [viewModel] = useState(
+    () =>
+      new DevotionalFormViewModel({
+        devotionalToEdit,
+        onClose,
+        onSuccess,
+        authorId,
+      })
+  );
+
+  useViewModel(viewModel);
+
+  const onFormSubmit = (e: FormEvent) => {
+    viewModel.handleSubmit(e);
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Content onSubmit={onFormSubmit}>
+        <Title>
+          {viewModel.isEditing ? "Editar Devocional" : "Novo Devocional"}
+        </Title>
+        <div>
+          <Label htmlFor="title">Título</Label>
+          <Input
+            id="title"
+            value={viewModel.title}
+            onChange={e => viewModel.setTitle(e.target.value)}
+            disabled={viewModel.loading}
+            required
+            error={viewModel.error || ""}
+          />
+        </div>
+        <div>
+          <Label htmlFor="content">Conteúdo</Label>
+          <Textarea
+            id="content"
+            value={viewModel.content}
+            onChange={e => viewModel.setContent(e.target.value)}
+            disabled={viewModel.loading}
+            required
+          />
+        </div>
+        <Actions>
+          <Button type="submit" label="Salvar" loading={viewModel.loading} />
+          <Button
+            type="button"
+            label="Cancelar"
+            variant="secondary"
+            onClick={onClose}
+            disabled={viewModel.loading}
+          />
+        </Actions>
+      </Content>
+    </Modal>
+  );
+}

@@ -2,6 +2,7 @@ export * from "./BaseCard";
 export * from "./Button";
 export * from "./Checkbox";
 export * from "./ConfirmationModal";
+export * from "./GlobalLoader";
 export * from "./Input";
 export * from "./Label";
 export * from "./Logo";

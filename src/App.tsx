@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "./hooks/useAuth";
-import { GlobalLoader } from "./components/GlobalLoader";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { GlobalLoader } from "@/shared/components/GlobalLoader";
 import styled from "@emotion/styled";
 
 const PageContainer = styled.div`

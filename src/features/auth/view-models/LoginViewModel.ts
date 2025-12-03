@@ -1,0 +1,142 @@
+import { type FormEvent } from "react";
+import { authRepository } from "@/data/repositories/authRepository";
+import { logService } from "@/shared/services/logService";
+import type { User } from "@/types/database";
+import { validateEmail } from "@/lib/validators";
+import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
+
+type LoginResult = {
+  success: boolean;
+  error?: string;
+  needsConfirmation?: boolean;
+};
+
+export class LoginViewModel extends BaseViewModel {
+  public email = "";
+  public password = "";
+  public loading = false;
+  public needsConfirmation = false;
+  public emailError?: string;
+  public passwordError?: string;
+
+  public setEmail = (value: string) => {
+    this.email = value;
+    this.resetErrors();
+  };
+
+  public setPassword = (value: string) => {
+    this.password = value;
+    this.resetErrors();
+  };
+
+  public setNeedsConfirmation = (value: boolean) => {
+    this.needsConfirmation = value;
+    this.notify();
+  };
+
+  private resetErrors = () => {
+    this.emailError = undefined;
+    this.passwordError = undefined;
+    this.notify();
+  };
+
+  public handleLogin = async (e: FormEvent): Promise<LoginResult> => {
+    e.preventDefault();
+    this.loading = true;
+    this.needsConfirmation = false;
+    this.resetErrors();
+    this.notify();
+
+    const emailValidation = validateEmail(this.email);
+    if (!emailValidation.isValid) {
+      this.emailError = emailValidation.message;
+      this.loading = false;
+      this.notify();
+
+      return { success: false, error: emailValidation.message };
+    }
+
+    if (!this.password.trim()) {
+      this.passwordError = "Informe sua senha.";
+      this.loading = false;
+      this.notify();
+
+      return { success: false, error: "Informe sua senha." };
+    }
+
+    const { data, error } = await authRepository.signIn(
+      this.email,
+      this.password
+    );
+
+    this.loading = false;
+
+    if (error) {
+      const isConfirmationError = error.message.includes(
+        "Sua conta precisa ser ativada"
+      );
+
+      if (isConfirmationError) {
+        this.needsConfirmation = true;
+      } else {
+        this.passwordError = error.message;
+      }
+
+      await logService.logError(error, {
+        component: "LoginViewModel",
+        context: { email: this.email.substring(0, 3) + "..." },
+      });
+
+      this.password = "";
+      this.notify();
+
+      return {
+        success: false,
+        error: error.message,
+        needsConfirmation: isConfirmationError,
+      };
+    }
+
+    if (data.user) {
+      const user = data.user as User;
+      const role = user.app_metadata?.role;
+
+      if (role !== "ADMIN") {
+        const errorMessage = "Acesso restrito à Equipe de Administração.";
+        await authRepository.signOut();
+        this.password = "";
+        this.passwordError = errorMessage;
+        this.notify();
+
+        return { success: false, error: errorMessage };
+      }
+      this.notify();
+
+      return { success: true };
+    }
+
+    const unknownError = "Ocorreu um erro desconhecido.";
+    this.passwordError = unknownError;
+    this.notify();
+
+    return { success: false, error: unknownError };
+  };
+
+  public handleResendConfirmation = async () => {
+    this.loading = true;
+    this.notify();
+    const { error } = await authRepository.resendConfirmation(this.email);
+    this.loading = false;
+    this.needsConfirmation = false;
+    this.notify();
+
+    if (error) {
+      await logService.logError(error, {
+        component: "LoginViewModel.Resend",
+        context: { email: this.email.substring(0, 3) + "..." },
+      });
+    }
+
+    return { error };
+  };
+}

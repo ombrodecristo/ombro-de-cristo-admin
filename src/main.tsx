@@ -6,31 +6,34 @@ import {
   Navigate,
 } from "react-router-dom";
 import App from "./App.tsx";
-import { AuthProvider } from "./contexts/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AdminLayout from "./components/AdminLayout";
-import { GlobalLoader } from "./components/GlobalLoader";
+import { AuthProvider } from "./shared/contexts/AuthContext.tsx";
+import ProtectedRoute from "@/features/admin/view/components/ProtectedRoute.tsx";
+import AdminLayout from "@/features/admin/view/layouts/AdminLayout.tsx";
+import { GlobalLoader } from "./shared/components/GlobalLoader.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./core/lib/theme.ts";
 import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
 import { Toaster } from "sonner";
 
-const LandingPage = lazy(() => import("./pages/LandingPage"));
-const LoginPage = lazy(() => import("./pages/Login"));
-const UserManagementPage = lazy(() => import("./pages/UserManagement"));
-const ChurchManagementPage = lazy(() => import("./pages/ChurchManagement"));
+const LandingPage = lazy(() => import("@/pages/LandingPage.tsx"));
+const LoginPage = lazy(() => import("@/pages/LoginPage.tsx"));
+const UserManagementPage = lazy(() => import("@/pages/UserManagementPage.tsx"));
+
+const ChurchManagementPage = lazy(
+  () => import("@/pages/ChurchManagementPage.tsx")
+);
 
 const DevotionalManagementPage = lazy(
-  () => import("./pages/DevotionalManagement")
+  () => import("@/pages/DevotionalManagementPage.tsx")
 );
 
-const AuthConfirmedPage = lazy(() => import("./pages/AuthConfirmed"));
+const AuthConfirmedPage = lazy(() => import("@/pages/AuthConfirmedPage.tsx"));
 
 const PasswordRecoveryPage = lazy(
-  () => import("./pages/PasswordRecovery/index.tsx")
+  () => import("@/pages/PasswordRecoveryPage.tsx")
 );
 
-const TermsAndPolicyPage = lazy(() => import("./pages/TermsAndPolicy"));
+const TermsAndPolicyPage = lazy(() => import("@/pages/TermsAndPolicyPage.tsx"));
 
 const router = createBrowserRouter([
   {
