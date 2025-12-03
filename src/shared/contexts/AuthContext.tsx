@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactNode, useCallback } from "react";
 import { supabase } from "@/core/lib/supabaseClient";
 import type { User, UserRole } from "@/core/types/database";
-import { authRepository } from "@/data/repositories/authRepository";
 import { profileRepository } from "@/data/repositories/profileRepository";
 import { AuthContext } from "../hooks/useAuth";
 
@@ -12,33 +11,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [initialHash] = useState(() => window.location.hash);
 
   const refreshUserContext = useCallback(async () => {
-    const { data: sessionData } = await authRepository.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    if (sessionData?.session?.user) {
-      const currentUser = sessionData.session.user as User;
-
-      const { data: profileData } = await profileRepository.getProfileById(
-        currentUser.id
-      );
-
-      setUser(currentUser);
-      setRole(profileData?.role ?? null);
-    } else {
+    if (!session?.user) {
       setUser(null);
       setRole(null);
+
+      return;
     }
+
+    const currentUser = session.user as User;
+
+    const { data: profileData } = await profileRepository.getProfileById(
+      currentUser.id
+    );
+
+    setUser(currentUser);
+    setRole(profileData?.role ?? null);
   }, []);
 
   useEffect(() => {
     setLoading(true);
-    refreshUserContext().finally(() => setLoading(false));
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user as User | null;
-      if (currentUser) {
-        await refreshUserContext();
+      if (session?.user) {
+        const currentUser = session.user as User;
+
+        const { data: profileData } = await profileRepository.getProfileById(
+          currentUser.id
+        );
+
+        setUser(currentUser);
+        setRole(profileData?.role ?? null);
       } else {
         setUser(null);
         setRole(null);
@@ -49,10 +57,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [refreshUserContext]);
+  }, []);
 
   const signOut = async () => {
-    await authRepository.signOut();
+    await supabase.auth.signOut();
     setUser(null);
     setRole(null);
   };
