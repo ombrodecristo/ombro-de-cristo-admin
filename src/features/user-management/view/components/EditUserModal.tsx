@@ -8,7 +8,7 @@ import {
   allGenders,
 } from "../../view-models/EditUserViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
-import { formatGender, formatRole } from "@/lib/formatters";
+import { formatGender, formatRole } from "@/core/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
 import { IoInformationCircleOutline } from "react-icons/io5";
 

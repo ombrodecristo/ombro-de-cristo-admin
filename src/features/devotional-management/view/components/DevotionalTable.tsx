@@ -6,7 +6,7 @@ import {
   IoArrowDown,
 } from "react-icons/io5";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
-import { formatDate } from "@/lib/formatters";
+import { formatDate } from "@/core/lib/formatters";
 import {
   Table,
   TableBody,

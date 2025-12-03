@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { IoPencil, IoArrowUp, IoArrowDown } from "react-icons/io5";
 import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
-import { formatGender, formatRole } from "@/lib/formatters";
+import { formatGender, formatRole } from "@/core/lib/formatters";
 import {
   Table,
   TableBody,

@@ -18,7 +18,7 @@ const PUBLIC_ROUTES = [
   "/terms-and-policy",
 ];
 
-function App() {
+function RootLayout() {
   const { loading, user, role } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,4 +52,4 @@ function App() {
   );
 }
 
-export default App;
+export default RootLayout;
