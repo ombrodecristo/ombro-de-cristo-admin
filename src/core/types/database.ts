@@ -1,5 +1,5 @@
 import { type User as SupabaseUser } from "@supabase/supabase-js";
-import { type Database } from "../../types/supabase";
+import { type Database } from "./supabase";
 
 type DbTables = Database["public"]["Tables"];
 type DbEnums = Database["public"]["Enums"];

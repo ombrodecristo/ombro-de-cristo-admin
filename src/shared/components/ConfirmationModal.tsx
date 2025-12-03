@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import type { ReactNode } from "react";
 import { Modal } from "./Modal";
 import { Button } from "./Button";
-import { FiAlertTriangle } from "react-icons/fi";
+import { IoAlertCircleOutline } from "react-icons/io5";
 
 const Content = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ export function ConfirmationModal({
     <Modal isOpen={isOpen} onClose={onClose}>
       <Content>
         <IconWrapper variant={variant}>
-          <FiAlertTriangle />
+          <IoAlertCircleOutline />
         </IconWrapper>
         <Title>{title}</Title>
         <Message>{message}</Message>

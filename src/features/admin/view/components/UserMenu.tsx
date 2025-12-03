@@ -11,7 +11,13 @@ import {
   Label,
 } from "@/shared/components";
 import ChangePasswordModal from "./ChangePasswordModal";
-import { FiUser, FiLogOut, FiEdit, FiSave, FiKey } from "react-icons/fi";
+import {
+  IoPersonOutline,
+  IoLogOutOutline,
+  IoPencil,
+  IoSaveOutline,
+  IoKeyOutline,
+} from "react-icons/io5";
 import { toast } from "sonner";
 
 const MenuTrigger = styled.button`
@@ -145,7 +151,7 @@ export default function UserMenu() {
   return (
     <>
       <MenuTrigger onClick={() => viewModel.setIsOpen(true)}>
-        <FiUser size={20} />
+        <IoPersonOutline size={20} />
       </MenuTrigger>
 
       <Modal
@@ -178,7 +184,7 @@ export default function UserMenu() {
                   loading={viewModel.isSavingName}
                   disabled={viewModel.isSavingName}
                   style={{ width: "56px", height: "56px", flexShrink: 0 }}
-                  icon={<FiSave size={20} />}
+                  icon={<IoSaveOutline size={20} />}
                 />
               </NameForm>
             ) : (
@@ -188,7 +194,7 @@ export default function UserMenu() {
                   onClick={() => viewModel.setIsEditingName(true)}
                   title="Editar nome"
                 >
-                  <FiEdit size={16} />
+                  <IoPencil size={16} />
                 </EditButton>
               </NameWrapper>
             )}
@@ -200,13 +206,13 @@ export default function UserMenu() {
               onClick={() => viewModel.setIsChangePasswordOpen(true)}
               label="Alterar Senha"
               variant="secondary"
-              icon={<FiKey size={16} />}
+              icon={<IoKeyOutline size={16} />}
             />
             <Button
               onClick={onSignOut}
               label="Encerrar sessão"
               variant="secondary"
-              icon={<FiLogOut size={16} />}
+              icon={<IoLogOutOutline size={16} />}
             />
           </ActionList>
 

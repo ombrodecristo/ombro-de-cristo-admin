@@ -12,7 +12,7 @@ import {
 } from "@/shared/components";
 import DevotionalTable from "./components/DevotionalTable";
 import DevotionalFormModal from "./components/DevotionalFormModal";
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { IoAdd, IoSearchOutline } from "react-icons/io5";
 
 const PageContainer = styled.div`
   display: flex;
@@ -47,7 +47,7 @@ export default function DevotionalManagementPage() {
         <Button
           label="Novo Devocional"
           onClick={viewModel.handleOpenCreate}
-          icon={<FiPlus />}
+          icon={<IoAdd size={20} />}
         />
       </PageHeader>
       <Input
@@ -56,7 +56,7 @@ export default function DevotionalManagementPage() {
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           viewModel.setSearchQuery(e.target.value)
         }
-        icon={<FiSearch size={20} />}
+        icon={<IoSearchOutline size={20} />}
         style={{ maxWidth: "400px" }}
       />
       <DevotionalTable

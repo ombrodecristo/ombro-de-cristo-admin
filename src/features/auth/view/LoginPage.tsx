@@ -12,7 +12,7 @@ import {
   ConfirmationModal,
   GlobalLoader,
 } from "@/shared/components";
-import { FiMail, FiLock } from "react-icons/fi";
+import { IoMailOutline, IoLockClosedOutline } from "react-icons/io5";
 import { toast } from "sonner";
 
 const PageContainer = styled.div`
@@ -116,7 +116,7 @@ export default function LoginPage() {
               required
               autoComplete="email"
               disabled={viewModel.loading}
-              icon={<FiMail size={22} />}
+              icon={<IoMailOutline size={22} />}
               error={viewModel.emailError}
             />
             <div>
@@ -128,7 +128,7 @@ export default function LoginPage() {
                 required
                 autoComplete="current-password"
                 disabled={viewModel.loading}
-                icon={<FiLock size={22} />}
+                icon={<IoLockClosedOutline size={22} />}
                 isPassword
                 error={viewModel.passwordError}
               />

@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import { FiEdit, FiTrash2, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import {
+  IoPencil,
+  IoTrashOutline,
+  IoArrowUp,
+  IoArrowDown,
+} from "react-icons/io5";
 import { type Church } from "@/core/types/database";
 import { formatDate } from "@/lib/formatters";
 import {
@@ -50,9 +55,9 @@ export default function ChurchTable({
     if (sortConfig.key !== key) return null;
 
     return sortConfig.direction === "ascending" ? (
-      <FiArrowUp size={16} />
+      <IoArrowUp size={16} />
     ) : (
-      <FiArrowDown size={16} />
+      <IoArrowDown size={16} />
     );
   };
 
@@ -94,14 +99,14 @@ export default function ChurchTable({
                     <Button
                       label="Editar"
                       onClick={() => onEdit(church)}
-                      icon={<FiEdit />}
+                      icon={<IoPencil />}
                       variant="secondary"
                       style={{ height: "40px", width: "auto" }}
                     />
                     <Button
                       label="Excluir"
                       onClick={() => onDelete(church)}
-                      icon={<FiTrash2 />}
+                      icon={<IoTrashOutline />}
                       variant="destructive"
                       style={{ height: "40px", width: "auto" }}
                     />

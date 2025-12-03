@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FiCheck } from "react-icons/fi";
+import { IoCheckboxOutline, IoCheckbox } from "react-icons/io5";
 
 const CheckboxContainer = styled.label`
   display: inline-flex;
@@ -14,18 +14,12 @@ const CheckboxInput = styled.input`
 `;
 
 const CustomCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
-  width: 24px;
-  height: 24px;
-  border-radius: ${props => props.theme.borderRadii.s}px;
-  border: 1.5px solid
-    ${props =>
-      props.checked
-        ? props.theme.colors.primary
-        : props.theme.colors.mutedForeground};
-  background-color: ${props =>
+  width: 26px;
+  height: 26px;
+  color: ${props =>
     props.checked
       ? props.theme.colors.primary
-      : props.theme.colors.transparent};
+      : props.theme.colors.mutedForeground};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,12 +27,6 @@ const CustomCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   opacity: ${props => (props.disabled ? 0.5 : 1)};
   flex-shrink: 0;
-
-  svg {
-    color: white;
-    visibility: ${props => (props.checked ? "visible" : "hidden")};
-    stroke-width: 3px;
-  }
 `;
 
 interface CheckboxProps {
@@ -66,7 +54,7 @@ export function Checkbox({
         disabled={disabled}
       />
       <CustomCheckbox checked={checked} disabled={disabled}>
-        <FiCheck size={18} />
+        {checked ? <IoCheckbox size={26} /> : <IoCheckboxOutline size={26} />}
       </CustomCheckbox>
       {label && <span>{label}</span>}
     </CheckboxContainer>

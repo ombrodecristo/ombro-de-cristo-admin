@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import { FiEdit, FiTrash2, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import {
+  IoPencil,
+  IoTrashOutline,
+  IoArrowUp,
+  IoArrowDown,
+} from "react-icons/io5";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
 import { formatDate } from "@/lib/formatters";
 import {
@@ -50,9 +55,9 @@ export default function DevotionalTable({
     if (sortConfig.key !== key) return null;
 
     return sortConfig.direction === "ascending" ? (
-      <FiArrowUp size={16} />
+      <IoArrowUp size={16} />
     ) : (
-      <FiArrowDown size={16} />
+      <IoArrowDown size={16} />
     );
   };
 
@@ -102,14 +107,14 @@ export default function DevotionalTable({
                     <Button
                       label="Editar"
                       onClick={() => onEdit(devotional)}
-                      icon={<FiEdit />}
+                      icon={<IoPencil />}
                       variant="secondary"
                       style={{ height: "40px", width: "auto" }}
                     />
                     <Button
                       label="Excluir"
                       onClick={() => onDelete(devotional)}
-                      icon={<FiTrash2 />}
+                      icon={<IoTrashOutline />}
                       variant="destructive"
                       style={{ height: "40px", width: "auto" }}
                     />

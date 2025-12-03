@@ -1,8 +1,12 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { Button, Logo } from "@/shared/components";
-import { FaGooglePlay, FaApple } from "react-icons/fa";
-import { FiBookOpen, FiHeart, FiShield } from "react-icons/fi";
+import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
+import {
+  IoBookOutline,
+  IoHeartOutline,
+  IoShieldOutline,
+} from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 const fadeInUp = keyframes`
@@ -233,7 +237,7 @@ export default function LandingPage() {
           <FeaturesGrid>
             <FeatureCard>
               <FeatureIcon>
-                <FiBookOpen size={32} />
+                <IoBookOutline size={32} />
               </FeatureIcon>
               <FeatureTitle>Devocionais Inspiradores</FeatureTitle>
               <FeatureDescription>
@@ -243,7 +247,7 @@ export default function LandingPage() {
             </FeatureCard>
             <FeatureCard>
               <FeatureIcon>
-                <FiHeart size={32} />
+                <IoHeartOutline size={32} />
               </FeatureIcon>
               <FeatureTitle>Diário Pessoal</FeatureTitle>
               <FeatureDescription>
@@ -253,7 +257,7 @@ export default function LandingPage() {
             </FeatureCard>
             <FeatureCard>
               <FeatureIcon>
-                <FiShield size={32} />
+                <IoShieldOutline size={32} />
               </FeatureIcon>
               <FeatureTitle>Mentoria Segura</FeatureTitle>
               <FeatureDescription>
@@ -275,7 +279,7 @@ export default function LandingPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaGooglePlay size={24} />
+              <IoLogoGooglePlaystore size={24} />
               <div>
                 <div>Disponível no</div>
                 <div style={{ fontSize: "18px", fontWeight: "600" }}>
@@ -288,7 +292,7 @@ export default function LandingPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaApple size={30} />
+              <IoLogoApple size={30} />
               <div>
                 <div>Baixar na</div>
                 <div style={{ fontSize: "18px", fontWeight: "600" }}>

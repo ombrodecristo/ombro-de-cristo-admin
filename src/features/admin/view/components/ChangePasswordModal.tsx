@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { ChangePasswordViewModel } from "../../view-models/ChangePasswordViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Label } from "@/shared/components";
-import { FiLock } from "react-icons/fi";
+import { IoLockClosedOutline } from "react-icons/io5";
 import { toast } from "sonner";
 
 const Content = styled.form`
@@ -63,7 +63,7 @@ export default function ChangePasswordModal({
             onChange={e => viewModel.setPassword(e.target.value)}
             required
             disabled={viewModel.loading}
-            icon={<FiLock size={20} />}
+            icon={<IoLockClosedOutline size={20} />}
             isPassword
             error={viewModel.error || ""}
           />
@@ -78,7 +78,7 @@ export default function ChangePasswordModal({
             onChange={e => viewModel.setConfirmPassword(e.target.value)}
             required
             disabled={viewModel.loading}
-            icon={<FiLock size={20} />}
+            icon={<IoLockClosedOutline size={20} />}
             isPassword
             error={viewModel.error || ""}
           />

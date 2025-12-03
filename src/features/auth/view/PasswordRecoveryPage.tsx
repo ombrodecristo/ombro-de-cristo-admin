@@ -1,7 +1,12 @@
 import { useState, type FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
-import { FiLock, FiSend, FiAlertCircle, FiMail } from "react-icons/fi";
+import {
+  IoLockClosedOutline,
+  IoSendOutline,
+  IoAlertCircleOutline,
+  IoMailOutline,
+} from "react-icons/io5";
 import { PasswordRecoveryViewModel } from "../view-models/PasswordRecoveryViewModel";
 import {
   Button,
@@ -138,7 +143,7 @@ export default function PasswordRecoveryPage() {
         <StyledCard>
           <Header>
             <StatusIcon isTokenInvalid={false}>
-              <FiLock />
+              <IoLockClosedOutline />
             </StatusIcon>
             <Title>Redefina sua Senha</Title>
           </Header>
@@ -153,7 +158,7 @@ export default function PasswordRecoveryPage() {
                 required
                 autoComplete="new-password"
                 disabled={viewModel.loading}
-                icon={<FiLock size={20} />}
+                icon={<IoLockClosedOutline size={20} />}
                 isPassword
                 error={viewModel.error || ""}
               />
@@ -168,7 +173,7 @@ export default function PasswordRecoveryPage() {
                 required
                 autoComplete="new-password"
                 disabled={viewModel.loading}
-                icon={<FiLock size={20} />}
+                icon={<IoLockClosedOutline size={20} />}
                 isPassword
                 error={viewModel.error || ""}
               />
@@ -190,7 +195,11 @@ export default function PasswordRecoveryPage() {
       <StyledCard>
         <Header>
           <StatusIcon isTokenInvalid={viewModel.isTokenInvalid}>
-            {viewModel.isTokenInvalid ? <FiAlertCircle /> : <FiMail />}
+            {viewModel.isTokenInvalid ? (
+              <IoAlertCircleOutline />
+            ) : (
+              <IoMailOutline />
+            )}
           </StatusIcon>
           <Title>
             {viewModel.isTokenInvalid ? "Link Inválido" : "Recuperar Senha"}
@@ -214,7 +223,7 @@ export default function PasswordRecoveryPage() {
                 required
                 autoComplete="email"
                 disabled={viewModel.loading}
-                icon={<FiMail size={20} />}
+                icon={<IoMailOutline size={20} />}
                 error={viewModel.error || ""}
               />
             </div>
@@ -223,7 +232,7 @@ export default function PasswordRecoveryPage() {
               disabled={viewModel.loading}
               loading={viewModel.loading}
               label="Enviar link de recuperação"
-              icon={<FiSend />}
+              icon={<IoSendOutline />}
             />
           </Form>
         )}

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
-import { FiUsers, FiHome, FiBookOpen } from "react-icons/fi";
+import { IoPeopleOutline, IoHomeOutline, IoBookOutline } from "react-icons/io5";
 
 const Nav = styled.nav`
   display: flex;
@@ -44,11 +44,15 @@ type SidebarNavProps = {
 };
 
 const navItems = [
-  { to: "/admin/users", icon: <FiUsers size={20} />, label: "Perfis" },
-  { to: "/admin/churches", icon: <FiHome size={20} />, label: "Igrejas" },
+  { to: "/admin/users", icon: <IoPeopleOutline size={22} />, label: "Perfis" },
+  {
+    to: "/admin/churches",
+    icon: <IoHomeOutline size={22} />,
+    label: "Igrejas",
+  },
   {
     to: "/admin/devotionals",
-    icon: <FiBookOpen size={20} />,
+    icon: <IoBookOutline size={22} />,
     label: "Devocionais",
   },
 ];

@@ -11,7 +11,7 @@ import {
 } from "@/shared/components";
 import ChurchTable from "./components/ChurchTable";
 import ChurchFormModal from "./components/ChurchFormModal";
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { IoAdd, IoSearchOutline } from "react-icons/io5";
 
 const PageContainer = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ export default function ChurchManagementPage() {
         <Button
           label="Nova Igreja"
           onClick={viewModel.handleOpenCreate}
-          icon={<FiPlus />}
+          icon={<IoAdd size={20} />}
         />
       </PageHeader>
       <Input
@@ -54,7 +54,7 @@ export default function ChurchManagementPage() {
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           viewModel.setSearchQuery(e.target.value)
         }
-        icon={<FiSearch size={20} />}
+        icon={<IoSearchOutline size={20} />}
         style={{ maxWidth: "400px" }}
       />
       <ChurchTable

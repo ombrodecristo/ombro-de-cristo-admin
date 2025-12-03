@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import styled from "@emotion/styled";
-import { FiChevronDown } from "react-icons/fi";
+import { IoChevronDown } from "react-icons/io5";
 
 const SelectWrapper = styled.div`
   position: relative;
@@ -34,7 +34,6 @@ const SelectTrigger = styled.button<{ hasIcon: boolean; isOpen: boolean }>`
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}33;
   }
 
   &:disabled {
@@ -156,7 +155,7 @@ export function Select({
             <Placeholder>{placeholder}</Placeholder>
           )}
         </span>
-        <FiChevronDown />
+        <IoChevronDown />
       </SelectTrigger>
       {isOpen && !disabled && (
         <Dropdown>

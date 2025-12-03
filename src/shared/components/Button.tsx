@@ -31,20 +31,32 @@ const getVariantStyles = (
         color: ${theme.colors.buttonSecondaryForeground};
         border-color: ${theme.colors.buttonSecondaryBorder};
         box-shadow: none;
+        
+        &:hover {
+            background-color: ${theme.colors.mutedBackground};
+        }
       `;
     case "destructive":
       return `
         background-color: ${theme.colors.destructiveBackground};
         color: ${theme.colors.destructiveForeground};
         border-color: transparent;
-        box-shadow: none;
+        box-shadow: 0 4px 8px ${theme.colors.destructiveBackground}33;
+
+        &:hover {
+            opacity: 0.9;
+        }
       `;
     default:
       return `
         background-color: ${theme.colors.buttonPrimaryBackground};
         color: ${theme.colors.buttonPrimaryForeground};
         border-color: transparent;
-        box-shadow: 0 4px 8px ${theme.colors.shadowColor}33;
+        box-shadow: 0 4px 8px ${theme.colors.primary}33;
+
+        &:hover {
+            opacity: 0.9;
+        }
       `;
   }
 };
@@ -71,10 +83,6 @@ const StyledButton = styled.button<{
     props.theme.textVariants.buttonLabel.letterSpacing};
 
   ${props => getVariantStyles(props.theme, props.variant, props.disabled)}
-
-  &:hover:not(:disabled) {
-    opacity: 0.8;
-  }
 
   &:disabled {
     cursor: not-allowed;

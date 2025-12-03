@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useLocation } from "react-router-dom";
-import { FiCheckCircle, FiAlertCircle } from "react-icons/fi";
+import { IoCheckmarkCircle, IoAlertCircle } from "react-icons/io5";
 import { BaseCard } from "@/shared/components";
 
 const PageContainer = styled.div`
@@ -66,7 +66,7 @@ export default function AuthConfirmedPage() {
       <StyledCard>
         <Header>
           <StatusIcon success={!hasError}>
-            {hasError ? <FiAlertCircle /> : <FiCheckCircle />}
+            {hasError ? <IoAlertCircle /> : <IoCheckmarkCircle />}
           </StatusIcon>
           <Title success={!hasError}>
             {hasError ? "Link Inválido ou Expirado" : "Conta Confirmada"}

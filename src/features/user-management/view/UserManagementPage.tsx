@@ -6,7 +6,7 @@ import { UserManagementViewModel } from "../view-models/UserManagementViewModel"
 import { Skeleton, Input, PageHeader } from "@/shared/components";
 import UserTable from "./components/UserTable";
 import EditUserModal from "./components/EditUserModal";
-import { FiSearch } from "react-icons/fi";
+import { IoSearchOutline } from "react-icons/io5";
 
 const PageContainer = styled.div`
   display: flex;
@@ -42,7 +42,7 @@ export default function UserManagementPage() {
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           viewModel.setSearchQuery(e.target.value)
         }
-        icon={<FiSearch size={20} />}
+        icon={<IoSearchOutline size={20} />}
         style={{ maxWidth: "400px" }}
       />
       <UserTable

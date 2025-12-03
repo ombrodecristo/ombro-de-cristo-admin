@@ -10,7 +10,7 @@ import {
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { formatGender, formatRole } from "@/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
-import { FiInfo } from "react-icons/fi";
+import { IoInformationCircleOutline } from "react-icons/io5";
 
 const Content = styled.form`
   display: flex;
@@ -134,7 +134,10 @@ export default function EditUserModal({
           />
         </FormGroup>
         <Alert>
-          <FiInfo size={24} style={{ flexShrink: 0, marginTop: "2px" }} />
+          <IoInformationCircleOutline
+            size={24}
+            style={{ flexShrink: 0, marginTop: "2px" }}
+          />
           <div>
             <p>
               As alterações de permissão e gênero serão aplicadas no próximo

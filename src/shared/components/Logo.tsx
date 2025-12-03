@@ -12,6 +12,8 @@ const LogoContainer = styled.div<{ variant: "light" | "dark" }>`
       props.variant === "light"
         ? props.theme.colors.white
         : props.theme.colors.primary};
+    font-family: ${props => props.theme.textVariants.header.fontFamily};
+    font-weight: ${props => props.theme.textVariants.header.fontWeight};
     font-size: 32px;
     line-height: 36px;
     margin-top: -${props => props.theme.spacing.s}px;

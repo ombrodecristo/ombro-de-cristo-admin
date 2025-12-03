@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FiEdit, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import { IoPencil, IoArrowUp, IoArrowDown } from "react-icons/io5";
 import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
 import { formatGender, formatRole } from "@/lib/formatters";
 import {
@@ -43,9 +43,9 @@ export default function UserTable({
     if (sortConfig.key !== key) return null;
 
     return sortConfig.direction === "ascending" ? (
-      <FiArrowUp size={16} />
+      <IoArrowUp size={16} />
     ) : (
-      <FiArrowDown size={16} />
+      <IoArrowDown size={16} />
     );
   };
 
@@ -108,7 +108,7 @@ export default function UserTable({
                   <Button
                     label="Editar"
                     onClick={() => onEdit(profile)}
-                    icon={<FiEdit />}
+                    icon={<IoPencil />}
                     style={{ height: "40px", width: "auto" }}
                   />
                 </TableCell>

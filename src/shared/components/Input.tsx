@@ -1,7 +1,7 @@
 import { forwardRef, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import styled from "@emotion/styled";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,10 +27,6 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
-  box-shadow: ${props =>
-    props.isFocused && !props.hasError
-      ? `0 0 0 2px ${props.theme.colors.primaryBackground}33`
-      : "none"};
 `;
 
 const StyledInput = styled.input<{ hasIcon: boolean }>`
@@ -137,7 +133,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               type="button"
               onClick={() => setIsPasswordVisible(prev => !prev)}
             >
-              {isPasswordVisible ? <FiEyeOff size={22} /> : <FiEye size={22} />}
+              {isPasswordVisible ? (
+                <IoEyeOffOutline size={22} />
+              ) : (
+                <IoEyeOutline size={22} />
+              )}
             </ToggleButton>
           )}
         </InputContainer>

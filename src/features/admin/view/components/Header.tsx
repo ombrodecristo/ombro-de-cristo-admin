@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FiMenu } from "react-icons/fi";
+import { IoMenu } from "react-icons/io5";
 import UserMenu from "./UserMenu";
 
 const HeaderContainer = styled.header`
@@ -54,7 +54,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
     <HeaderContainer>
       <LeftSection>
         <MenuButton onClick={onToggleSidebar}>
-          <FiMenu size={22} />
+          <IoMenu size={24} />
         </MenuButton>
         <AppTitle>Painel Administrativo</AppTitle>
       </LeftSection>
