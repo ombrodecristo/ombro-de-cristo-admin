@@ -51,6 +51,11 @@ export function GlobalStyles() {
         textarea {
           font-family: inherit;
         }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
       `}
     />
   );

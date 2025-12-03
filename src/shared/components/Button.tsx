@@ -22,6 +22,7 @@ const getVariantStyles = (
       color: ${theme.colors.buttonDisabledForeground};
       border-color: transparent;
       box-shadow: none;
+      cursor: not-allowed;
     `;
   }
   switch (variant) {
@@ -85,7 +86,7 @@ const StyledButton = styled.button<{
   ${props => getVariantStyles(props.theme, props.variant, props.disabled)}
 
   &:disabled {
-    cursor: not-allowed;
+    ${props => getVariantStyles(props.theme, props.variant, true)}
   }
 `;
 

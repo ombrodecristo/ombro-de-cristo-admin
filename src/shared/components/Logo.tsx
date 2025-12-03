@@ -41,7 +41,6 @@ const LogoImageContainer = styled.div`
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  margin-bottom: ${props => props.theme.spacing.none}px;
 `;
 
 const LogoImage = styled.img`

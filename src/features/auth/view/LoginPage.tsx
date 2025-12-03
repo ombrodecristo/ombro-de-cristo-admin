@@ -33,34 +33,33 @@ const StyledCard = styled(BaseCard)`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+  gap: ${props => props.theme.spacing.l}px;
+`;
+
+const FormFields = styled.div`
+  display: flex;
+  flex-direction: column;
   gap: ${props => props.theme.spacing.m}px;
 `;
 
 const ForgotPasswordLink = styled(Link)`
-  font-size: 14px;
   font-family: ${props => props.theme.textVariants.caption.fontFamily};
   font-weight: 700;
   color: ${props => props.theme.colors.primaryBackground};
-  text-decoration: none;
+  font-size: 14px;
   padding: ${props => props.theme.spacing.xs}px;
+  text-decoration: none;
 
   &:hover {
     text-decoration: underline;
   }
 `;
 
-const Actions = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.l}px;
-  margin-top: ${props => props.theme.spacing.s}px;
-`;
-
 const Separator = styled.div`
   height: 1.5px;
   background-color: ${props => props.theme.colors.border};
-  margin: ${props => props.theme.spacing.m}px 0
-    ${props => props.theme.spacing.xl}px 0;
+  margin: ${props =>
+    `-${props.theme.spacing.xs}px 0 ${props.theme.spacing.m}px 0`};
 `;
 
 export default function LoginPage() {
@@ -107,52 +106,52 @@ export default function LoginPage() {
           <Logo />
           <Separator />
           <Form onSubmit={handleLoginSubmit}>
-            <Input
-              id="email"
-              type="email"
-              placeholder="E-mail"
-              value={viewModel.email}
-              onChange={e => viewModel.setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              disabled={viewModel.loading}
-              icon={<IoMailOutline size={22} />}
-              error={viewModel.emailError}
-            />
-            <div>
+            <FormFields>
               <Input
-                id="password"
-                placeholder="Senha"
-                value={viewModel.password}
-                onChange={e => viewModel.setPassword(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="E-mail"
+                value={viewModel.email}
+                onChange={e => viewModel.setEmail(e.target.value)}
                 required
-                autoComplete="current-password"
+                autoComplete="email"
                 disabled={viewModel.loading}
-                icon={<IoLockClosedOutline size={22} />}
-                isPassword
-                error={viewModel.passwordError}
+                icon={<IoMailOutline size={22} />}
+                error={viewModel.emailError}
               />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "8px",
-                }}
-              >
-                <ForgotPasswordLink to="/password-recovery">
-                  Esqueci minha senha
-                </ForgotPasswordLink>
+              <div>
+                <Input
+                  id="password"
+                  placeholder="Senha"
+                  value={viewModel.password}
+                  onChange={e => viewModel.setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  disabled={viewModel.loading}
+                  icon={<IoLockClosedOutline size={22} />}
+                  isPassword
+                  error={viewModel.passwordError}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "8px",
+                  }}
+                >
+                  <ForgotPasswordLink to="/password-recovery">
+                    Esqueci minha senha
+                  </ForgotPasswordLink>
+                </div>
               </div>
-            </div>
+            </FormFields>
 
-            <Actions>
-              <Button
-                type="submit"
-                disabled={viewModel.loading}
-                loading={viewModel.loading}
-                label="Entrar"
-              />
-            </Actions>
+            <Button
+              type="submit"
+              disabled={viewModel.loading}
+              loading={viewModel.loading}
+              label="Entrar"
+            />
           </Form>
         </StyledCard>
       </PageContainer>
