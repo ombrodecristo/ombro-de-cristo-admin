@@ -61,7 +61,7 @@ const LI = styled.li`
 const Divider = styled.div`
   height: 1px;
   background-color: ${props => props.theme.colors.border};
-  margin: ${props => props.theme.spacing.l}px 0;
+  margin: ${props => props.theme.spacing.xl}px 0;
 `;
 
 export function LegalContent() {
@@ -143,6 +143,75 @@ export function LegalContent() {
         </LI>
       </UL>
 
+      <H2>6. Propriedade Intelectual</H2>
+      <UL>
+        <LI>
+          O conteúdo fornecido pela Plataforma, incluindo devocionais, textos,
+          gráficos e logotipos, é de nossa propriedade ou de nossos
+          licenciadores e protegido por leis de direitos autorais.
+        </LI>
+        <LI>
+          O conteúdo que você cria (como entradas de diário) permanece sua
+          propriedade.
+        </LI>
+      </UL>
+
+      <H2>7. Isenção de Responsabilidade de Mentoria</H2>
+      <UL>
+        <LI>
+          O relacionamento entre Mentor(a) e Missionário(a) é baseado em
+          voluntariado e apoio espiritual.
+        </LI>
+        <LI>
+          Usuários(as) com o papel de Mentor(a) não são conselheiros(as)
+          profissionais, terapeutas ou profissionais de saúde mental
+          licenciados(as), a menos que se especifique o contrário. A orientação
+          fornecida é de natureza espiritual e não substitui o aconselhamento
+          profissional.
+        </LI>
+        <LI>
+          O Ombro de Cristo não se responsabiliza pela conduta ou conselhos
+          dados por usuários(as) no papel de Mentor(a). Encorajamos que cada
+          usuário(a) exerça seu próprio discernimento.
+        </LI>
+      </UL>
+
+      <H2>8. Rescisão</H2>
+      <UL>
+        <LI>
+          Podemos suspender ou encerrar sua conta a qualquer momento, por
+          qualquer motivo, incluindo a violação destes Termos.
+        </LI>
+        <LI>
+          Você pode excluir sua conta a qualquer momento nas configurações do
+          seu perfil. A exclusão da conta é permanente e resultará na remoção de
+          todos os seus dados, incluindo as entradas do diário.
+        </LI>
+      </UL>
+
+      <H2>9. Limitação de Responsabilidade</H2>
+      <P>
+        A Plataforma é fornecida "como está". Não garantimos que a Plataforma
+        será ininterrupta ou livre de erros. Em nenhuma circunstância seremos
+        responsáveis por quaisquer danos diretos, indiretos, incidentais ou
+        consequenciais resultantes do uso ou da incapacidade de usar a
+        Plataforma.
+      </P>
+
+      <H2>10. Alterações nos Termos</H2>
+      <P>
+        Reservamo-nos o direito de modificar estes Termos a qualquer momento.
+        Notificaremos sobre quaisquer alterações significativas. O uso contínuo
+        da Plataforma após tais alterações constitui sua aceitação dos novos
+        Termos.
+      </P>
+
+      <H2>11. Contato</H2>
+      <P>
+        Se você tiver alguma dúvida sobre estes Termos, entre em contato
+        conosco.
+      </P>
+
       <Divider />
 
       <H1>Política de Privacidade</H1>
@@ -186,6 +255,112 @@ export function LegalContent() {
           identificadores únicos, para fins de solução de problemas e análise.
         </LI>
       </UL>
+
+      <H2>2. Como Usamos Suas Informações</H2>
+      <UL>
+        <LI>
+          <Bold>Para Fornecer e Manter o Serviço:</Bold> Usamos suas informações
+          para operar a Plataforma, autenticar o acesso, fornecer devocionais e
+          facilitar a funcionalidade de diário e mentoria.
+        </LI>
+        <LI>
+          <Bold>Comunicação:</Bold> Podemos usar seu e-mail para enviar
+          notificações importantes sobre sua conta, atualizações do serviço ou
+          alterações em nossas políticas.
+        </LI>
+        <LI>
+          <Bold>Personalização:</Bold> Usamos informações como seu nome e gênero
+          para personalizar sua experiência (por exemplo, saudações e designação
+          de mentoria).
+        </LI>
+        <LI>
+          <Bold>Segurança e Proteção:</Bold> Usamos as informações para proteger
+          a segurança e a integridade de nosso serviço e de seus usuários(as).
+        </LI>
+      </UL>
+
+      <H2>3. Compartilhamento e Divulgação de Informações</H2>
+      <P>
+        Sua privacidade é nossa prioridade. Não vendemos, alugamos ou
+        compartilhamos suas informações pessoais com terceiros para fins de
+        marketing.
+      </P>
+      <UL>
+        <LI>
+          <Bold>Mentoria:</Bold> Se você é um(a) Missionário(a) e opta por
+          compartilhar uma entrada de diário, essa entrada específica será
+          visível para seu/sua Mentor(a) designado(a). Nenhuma outra informação
+          ou entrada é compartilhada sem sua ação explícita.
+        </LI>
+        <LI>
+          <Bold>Obrigações Legais:</Bold> Podemos divulgar suas informações se
+          formos obrigados por lei ou se acreditarmos de boa fé que tal ação é
+          necessária para cumprir um processo legal.
+        </LI>
+        <LI>
+          <Bold>Provedores de Serviço:</Bold> Usamos provedores de serviços de
+          terceiros (como Supabase para backend e armazenamento) que processam
+          dados em nosso nome. Tais provedores são obrigados contratualmente a
+          proteger suas informações e só podem usá-las para os fins que
+          especificamos.
+        </LI>
+      </UL>
+
+      <H2>4. Segurança de Dados</H2>
+      <P>
+        Implementamos medidas de segurança técnicas e organizacionais para
+        proteger suas informações pessoais.
+      </P>
+      <UL>
+        <LI>
+          <Bold>Criptografia:</Bold> O conteúdo do seu diário é criptografado em
+          nosso banco de dados.
+        </LI>
+        <LI>
+          <Bold>Acesso Restrito:</Bold> O acesso direto ao banco de dados é
+          estritamente limitado a pessoal autorizado. Nossa equipe de
+          administração não pode visualizar o conteúdo das entradas do seu
+          diário.
+        </LI>
+        <LI>
+          <Bold>Autenticação Segura:</Bold> Usamos métodos de autenticação
+          seguros para proteger o acesso à sua conta.
+        </LI>
+      </UL>
+
+      <H2>5. Seus Direitos e Escolhas</H2>
+      <UL>
+        <LI>
+          <Bold>Acesso e Atualização:</Bold> Você pode revisar e atualizar as
+          informações do seu perfil a qualquer momento na Plataforma.
+        </LI>
+        <LI>
+          <Bold>Exclusão de Conta:</Bold> Você pode excluir sua conta
+          permanentemente na seção de configurações do perfil. A exclusão
+          resultará na remoção completa e irreversível de todos os seus dados,
+          incluindo nome, e-mail e todas as entradas do diário.
+        </LI>
+        <LI>
+          <Bold>Compartilhamento do Diário:</Bold> Você tem controle total sobre
+          quais entradas do diário, se houver, são compartilhadas com seu/sua
+          Mentor(a).
+        </LI>
+      </UL>
+
+      <H2>6. Privacidade de Crianças</H2>
+      <P>
+        Nosso serviço não se destina a indivíduos menores de 18 anos. Não
+        coletamos intencionalmente informações pessoais de crianças.
+      </P>
+
+      <H2>7. Alterações a esta Política</H2>
+      <P>Podemos atualizar nossa Política de Privacidade periodicamente.</P>
+
+      <H2>8. Contato</H2>
+      <P>
+        Se você tiver alguma dúvida ou preocupação sobre nossa Política de
+        Privacidade, entre em contato conosco.
+      </P>
     </Container>
   );
 }

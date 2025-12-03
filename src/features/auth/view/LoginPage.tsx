@@ -150,7 +150,6 @@ export default function LoginPage() {
               disabled={viewModel.loading}
               loading={viewModel.loading}
               label="Entrar"
-              icon={<IoLockClosedOutline />}
             />
           </Form>
         </StyledCard>

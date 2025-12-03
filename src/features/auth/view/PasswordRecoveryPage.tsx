@@ -1,6 +1,6 @@
 import { useState, type FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   IoLockClosedOutline,
   IoSendOutline,
@@ -69,24 +69,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
-`;
-
-const SeparatorWithText = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${props => props.theme.spacing.s}px;
-  color: ${props => props.theme.colors.mutedForeground};
-  font-size: 13px;
-  margin-top: ${props => props.theme.spacing.l}px;
-  margin-bottom: ${props => props.theme.spacing.m}px;
-
-  &::before,
-  &::after {
-    content: "";
-    flex: 1;
-    height: 1.5px;
-    background-color: ${props => props.theme.colors.border};
-  }
 `;
 
 export default function PasswordRecoveryPage() {
@@ -236,10 +218,6 @@ export default function PasswordRecoveryPage() {
             />
           </Form>
         )}
-        <SeparatorWithText>Lembrou a senha?</SeparatorWithText>
-        <Link to="/login" style={{ textDecoration: "none" }}>
-          <Button label="Fazer Login" variant="secondary" />
-        </Link>
       </StyledCard>
     </PageContainer>
   );
