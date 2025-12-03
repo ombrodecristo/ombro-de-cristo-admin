@@ -32,8 +32,9 @@ const MenuButton = styled.button`
 `;
 
 const AppTitle = styled.h1`
+  font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
+  font-weight: ${props => props.theme.textVariants.bodyMedium.fontWeight};
   font-size: 18px;
-  font-weight: bold;
 `;
 
 type HeaderProps = {

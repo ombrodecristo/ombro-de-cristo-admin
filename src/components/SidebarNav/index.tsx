@@ -21,11 +21,12 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   &.active {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
   }
 `;
 
@@ -60,7 +61,7 @@ export default function SidebarNav({ isSidebarOpen }: SidebarNavProps) {
           key={item.to}
           to={item.to}
           isSidebarOpen={isSidebarOpen}
-          title={item.label}
+          title={!isSidebarOpen ? item.label : ""}
         >
           {item.icon}
           <LinkText isSidebarOpen={isSidebarOpen}>{item.label}</LinkText>

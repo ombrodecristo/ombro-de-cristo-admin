@@ -12,7 +12,7 @@ const StyledTextarea = styled.textarea`
     ${props => props.theme.spacing.m}px;
   font-size: ${props => props.theme.textVariants.body.fontSize}px;
   color: ${props => props.theme.colors.inputForeground};
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   resize: vertical;
   font-family: inherit;
 
@@ -23,11 +23,11 @@ const StyledTextarea = styled.textarea`
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
+    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}33;
   }
 
   &:disabled {
-    background-color: ${props => props.theme.colors.mutedBackground};
-    opacity: 0.7;
+    background-color: ${props => props.theme.colors.buttonDisabledBackground};
     cursor: not-allowed;
   }
 `;

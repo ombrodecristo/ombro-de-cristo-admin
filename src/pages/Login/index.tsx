@@ -12,7 +12,7 @@ import {
   ConfirmationModal,
 } from "@/shared/components";
 import { GlobalLoader } from "@/components/GlobalLoader";
-import { FiMail, FiLock, FiLogIn } from "react-icons/fi";
+import { FiMail, FiLock } from "react-icons/fi";
 import { toast } from "sonner";
 
 const PageContainer = styled.div`
@@ -38,7 +38,7 @@ const Header = styled.header`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.m}px;
+  gap: ${props => props.theme.spacing.l}px;
 `;
 
 const FormGroup = styled.div`
@@ -69,7 +69,7 @@ const Actions = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.m}px;
-  margin-top: ${props => props.theme.spacing.m}px;
+  margin-top: ${props => props.theme.spacing.l}px;
 `;
 
 export default function Login() {
@@ -167,7 +167,6 @@ export default function Login() {
                 disabled={loading}
                 loading={loading}
                 label="Entrar"
-                icon={<FiLogIn />}
               />
             </Actions>
           </Form>

@@ -17,6 +17,7 @@ const Header = styled.div`
   align-items: center;
   padding: 0 ${props => props.theme.spacing.l}px;
   gap: ${props => props.theme.spacing.m}px;
+  white-space: nowrap;
 `;
 
 const Logo = styled.img`

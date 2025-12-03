@@ -7,30 +7,6 @@ export function GlobalStyles() {
   return (
     <Global
       styles={css`
-        @font-face {
-          font-family: "Inter";
-          font-style: normal;
-          font-weight: 400;
-          font-display: swap;
-          src: url("/fonts/inter-v20-latin-regular.woff2") format("woff2");
-        }
-
-        @font-face {
-          font-family: "Inter";
-          font-style: normal;
-          font-weight: 500;
-          font-display: swap;
-          src: url("/fonts/inter-v20-latin-500.woff2") format("woff2");
-        }
-
-        @font-face {
-          font-family: "Inter";
-          font-style: normal;
-          font-weight: 700;
-          font-display: swap;
-          src: url("/fonts/inter-v20-latin-700.woff2") format("woff2");
-        }
-
         *,
         *::before,
         *::after {
@@ -48,7 +24,7 @@ export function GlobalStyles() {
         body {
           font-family: ${theme.textVariants.defaults.fontFamily};
           font-size: ${theme.textVariants.defaults.fontSize}px;
-          line-height: ${theme.textVariants.defaults.lineHeight}px;
+          line-height: ${theme.textVariants.defaults.lineHeight};
           color: ${theme.colors.mainForeground};
           background-color: ${theme.colors.mainBackground};
           -webkit-font-smoothing: antialiased;
@@ -61,6 +37,18 @@ export function GlobalStyles() {
         textarea {
           font-family: inherit;
           font-size: inherit;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-family: ${theme.textVariants.header.fontFamily};
+          font-weight: ${theme.textVariants.header.fontWeight};
+          color: ${theme.colors.headerForeground};
+          letter-spacing: ${theme.textVariants.header.letterSpacing};
         }
       `}
     />

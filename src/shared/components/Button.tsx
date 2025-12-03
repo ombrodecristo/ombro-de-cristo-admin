@@ -16,19 +16,37 @@ const getVariantStyles = (
   variant: ButtonVariant,
   disabled?: boolean
 ) => {
-  const styles = disabled
-    ? theme.buttonVariants.disabled
-    : theme.buttonVariants[variant];
+  if (disabled) {
+    return `
+      background-color: ${theme.colors.buttonDisabledBackground};
+      color: ${theme.colors.buttonDisabledForeground};
+      border-color: transparent;
+      box-shadow: none;
+    `;
+  }
 
-  return `
-    background-color: ${theme.colors[styles.backgroundColor as keyof Theme["colors"]]};
-    color: ${theme.colors[styles.color as keyof Theme["colors"]]};
-    border: 1.5px solid ${theme.colors[styles.borderColor as keyof Theme["colors"]]};
-
-    &:hover:not(:disabled) {
-      opacity: 0.9;
-    }
-  `;
+  switch (variant) {
+    case "secondary":
+      return `
+        background-color: ${theme.colors.buttonSecondaryBackground};
+        color: ${theme.colors.buttonSecondaryForeground};
+        border-color: ${theme.colors.buttonSecondaryBorder};
+        box-shadow: none;
+      `;
+    case "destructive":
+      return `
+        background-color: ${theme.colors.destructiveBackground};
+        color: ${theme.colors.destructiveForeground};
+        border-color: transparent;
+      `;
+    case "primary":
+    default:
+      return `
+        background-color: ${theme.colors.buttonPrimaryBackground};
+        color: ${theme.colors.buttonPrimaryForeground};
+        border-color: transparent;
+      `;
+  }
 };
 
 const StyledButton = styled.button<{
@@ -47,11 +65,17 @@ const StyledButton = styled.button<{
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   padding: 0 ${props => props.theme.spacing.l}px;
-  text-transform: none;
+  border-width: 1.5px;
+  border-style: solid;
   letter-spacing: ${props =>
-    props.theme.textVariants.buttonLabel.letterSpacing}px;
+    props.theme.textVariants.buttonLabel.letterSpacing};
+  box-shadow: 0 4px 8px ${props => props.theme.colors.shadowColor}26;
 
   ${props => getVariantStyles(props.theme, props.variant, props.disabled)}
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+  }
 
   &:disabled {
     cursor: not-allowed;

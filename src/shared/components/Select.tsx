@@ -23,22 +23,22 @@ const SelectTrigger = styled.button<{ hasIcon: boolean; isOpen: boolean }>`
   padding: 0 ${props => props.theme.spacing.m}px;
   padding-left: ${props =>
     props.hasIcon
-      ? `${props.theme.spacing.xl + props.theme.spacing.s}px`
+      ? `calc(${props.theme.spacing.m}px + 22px + ${props.theme.spacing.s}px)`
       : `${props.theme.spacing.m}px`};
   font-size: ${props => props.theme.textVariants.body.fontSize}px;
   color: ${props => props.theme.colors.inputForeground};
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
+    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary}33;
   }
 
   &:disabled {
-    background-color: ${props => props.theme.colors.mutedBackground};
-    opacity: 0.7;
+    background-color: ${props => props.theme.colors.buttonDisabledBackground};
     cursor: not-allowed;
   }
 `;
@@ -71,6 +71,7 @@ const DropdownItem = styled.div<{ isSelected: boolean }>`
       : props.theme.colors.mainForeground};
   background-color: ${props =>
     props.isSelected ? props.theme.colors.mutedBackground : "transparent"};
+  font-weight: ${props => (props.isSelected ? "600" : "400")};
 
   &:hover {
     background-color: ${props => props.theme.colors.mutedBackground};
@@ -145,7 +146,7 @@ export function Select({
         type="button"
         hasIcon={!!icon}
         isOpen={isOpen}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
       >
         <span>
@@ -157,7 +158,7 @@ export function Select({
         </span>
         <FiChevronDown />
       </SelectTrigger>
-      {isOpen && (
+      {isOpen && !disabled && (
         <Dropdown>
           {options.length > 0 ? (
             options.map(option => (

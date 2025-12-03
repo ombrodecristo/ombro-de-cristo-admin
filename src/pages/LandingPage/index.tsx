@@ -37,8 +37,13 @@ const Nav = styled.nav`
 `;
 
 const StyledLogo = styled(Logo)`
-  transform: scale(0.8);
+  transform: scale(0.6);
   align-items: flex-start;
+  gap: 0;
+  h1,
+  p {
+    text-align: left;
+  }
 `;
 
 const Main = styled.main`
@@ -73,7 +78,6 @@ const HeroSection = styled(Section)`
 
 const HeroTitle = styled.h1`
   font-size: 56px;
-  font-weight: 700;
   line-height: 1.2;
   color: ${props => props.theme.colors.headerForeground};
   max-width: 800px;
@@ -88,6 +92,7 @@ const HeroTitle = styled.h1`
 `;
 
 const HeroSubtitle = styled.p`
+  font-family: ${props => props.theme.textVariants.body.fontFamily};
   font-size: 20px;
   line-height: 1.6;
   color: ${props => props.theme.colors.mutedForeground};
@@ -95,18 +100,6 @@ const HeroSubtitle = styled.p`
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     font-size: 18px;
-  }
-`;
-
-const AppMockup = styled.img`
-  width: 100%;
-  max-width: 800px;
-  margin-top: ${props => props.theme.spacing.l}px;
-  border-radius: ${props => props.theme.borderRadii.l}px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    max-width: 400px;
   }
 `;
 
@@ -118,7 +111,6 @@ const FeaturesSection = styled(Section)`
 
 const SectionTitle = styled.h2`
   font-size: 36px;
-  font-weight: 700;
   color: ${props => props.theme.colors.headerForeground};
   margin-bottom: ${props => props.theme.spacing.l}px;
 
@@ -154,6 +146,7 @@ const FeatureTitle = styled.h3`
 `;
 
 const FeatureDescription = styled.p`
+  font-family: ${props => props.theme.textVariants.body.fontFamily};
   color: ${props => props.theme.colors.mutedForeground};
   line-height: 1.6;
 `;
@@ -183,6 +176,7 @@ const StoreButton = styled.a`
   border-radius: ${props => props.theme.borderRadii.m}px;
   text-decoration: none;
   transition: transform 0.2s;
+  min-width: 220px;
 
   &:hover {
     transform: scale(1.05);
@@ -213,12 +207,13 @@ export default function LandingPage() {
       <Header>
         <Nav>
           <StyledLogo />
-          <Button
-            onClick={() => (window.location.href = "/login")}
-            label="Acesso Administrativo"
-            variant="secondary"
-            style={{ width: "auto" }}
-          />
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            <Button
+              label="Acesso Administrativo"
+              variant="secondary"
+              style={{ width: "auto", height: "44px" }}
+            />
+          </Link>
         </Nav>
       </Header>
       <Main>
@@ -231,7 +226,6 @@ export default function LandingPage() {
             mentores, oferecendo ferramentas para uma jornada espiritual mais
             profunda e acompanhada.
           </HeroSubtitle>
-          <AppMockup src="/app-mockup.png" alt="Aplicativo Ombro de Cristo" />
         </HeroSection>
 
         <FeaturesSection>
@@ -277,7 +271,7 @@ export default function LandingPage() {
           </HeroSubtitle>
           <StoreButtons>
             <StoreButton
-              href="https://play.google.com"
+              href="https://play.google.com/store/apps/details?id=com.br.ombrodecristo"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -290,7 +284,7 @@ export default function LandingPage() {
               </div>
             </StoreButton>
             <StoreButton
-              href="https://www.apple.com/app-store/"
+              href="https://apps.apple.com"
               target="_blank"
               rel="noopener noreferrer"
             >

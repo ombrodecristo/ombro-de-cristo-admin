@@ -5,13 +5,13 @@ const LogoContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: ${props => props.theme.spacing.xs}px;
+  text-decoration: none;
 `;
 
 const LogoImage = styled.img`
   height: 120px;
   width: 120px;
   object-fit: contain;
-  margin-bottom: ${props => props.theme.spacing.s}px;
 `;
 
 const AppTitle = styled.h1`
@@ -21,6 +21,7 @@ const AppTitle = styled.h1`
   font-size: 32px;
   text-align: center;
   line-height: 36px;
+  margin-top: -${props => props.theme.spacing.s}px;
 `;
 
 const AppSlogan = styled.p`
@@ -30,11 +31,16 @@ const AppSlogan = styled.p`
   color: ${props => props.theme.colors.mutedForeground};
   opacity: 0.95;
   margin-top: ${props => props.theme.spacing.xs}px;
+  text-align: center;
 `;
 
-export function Logo() {
+interface LogoProps {
+  className?: string;
+}
+
+export function Logo({ className }: LogoProps) {
   return (
-    <LogoContainer>
+    <LogoContainer className={className}>
       <LogoImage src="/logo.png" alt="Logo Ombro de Cristo" />
       <AppTitle>Ombro de Cristo</AppTitle>
       <AppSlogan>Sua missão, fortalecida pela mentoria.</AppSlogan>

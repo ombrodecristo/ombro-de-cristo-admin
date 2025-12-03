@@ -23,7 +23,7 @@ const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
   padding: 0 ${props => props.theme.spacing.m}px;
   padding-left: ${props =>
     props.hasIcon
-      ? `${props.theme.spacing.xl + props.theme.spacing.s}px`
+      ? `calc(${props.theme.spacing.m}px + 22px + ${props.theme.spacing.s}px)`
       : `${props.theme.spacing.m}px`};
   font-size: ${props => props.theme.textVariants.body.fontSize}px;
   color: ${props => props.theme.colors.inputForeground};
@@ -39,11 +39,11 @@ const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
       props.hasError
         ? props.theme.colors.destructiveBackground
         : props.theme.colors.primary};
-    border-width: 2px;
-    padding-left: ${props =>
-      props.hasIcon
-        ? `${props.theme.spacing.xl + props.theme.spacing.s - 0.5}px`
-        : `${props.theme.spacing.m - 0.5}px`};
+    box-shadow: 0 0 0 2px
+      ${props =>
+        props.hasError
+          ? props.theme.colors.destructiveTransparentBackground
+          : props.theme.colors.primary}33;
   }
 
   &:focus + .icon-container > svg,
@@ -56,8 +56,7 @@ const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
   }
 
   &:disabled {
-    background-color: ${props => props.theme.colors.mutedBackground};
-    opacity: 0.7;
+    background-color: ${props => props.theme.colors.buttonDisabledBackground};
     cursor: not-allowed;
   }
 `;
@@ -97,10 +96,6 @@ const ToggleButton = styled.button`
   &:hover:not(:disabled) {
     color: ${props => props.theme.colors.mainForeground};
   }
-
-  &:disabled {
-    cursor: not-allowed;
-  }
 `;
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -112,7 +107,6 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ icon, isPassword = false, error, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
 
     const finalType = isPassword
       ? isPasswordVisible
@@ -127,34 +121,42 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const hasError = !!error;
 
     return (
-      <InputWrapper>
-        {icon && (
-          <IconContainer
-            className="icon-container"
-            hasError={hasError || isFocused}
+      <div>
+        <InputWrapper>
+          {icon && (
+            <IconContainer className="icon-container" hasError={hasError}>
+              {icon}
+            </IconContainer>
+          )}
+          <StyledInput
+            ref={ref}
+            hasIcon={!!icon}
+            hasError={hasError}
+            type={finalType}
+            {...props}
+          />
+          {isPassword && (
+            <ToggleButton
+              type="button"
+              onClick={togglePasswordVisibility}
+              disabled={props.disabled}
+            >
+              {isPasswordVisible ? <FiEyeOff size={22} /> : <FiEye size={22} />}
+            </ToggleButton>
+          )}
+        </InputWrapper>
+        {error && (
+          <p
+            style={{
+              marginTop: "8px",
+              fontSize: "14px",
+              color: "var(--color-destructive)",
+            }}
           >
-            {icon}
-          </IconContainer>
+            {error}
+          </p>
         )}
-        <StyledInput
-          ref={ref}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          hasIcon={!!icon}
-          hasError={hasError}
-          type={finalType}
-          {...props}
-        />
-        {isPassword && (
-          <ToggleButton
-            type="button"
-            onClick={togglePasswordVisibility}
-            disabled={props.disabled}
-          >
-            {isPasswordVisible ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-          </ToggleButton>
-        )}
-      </InputWrapper>
+      </div>
     );
   }
 );

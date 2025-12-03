@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
 import { FiCheck } from "react-icons/fi";
 
-const CheckboxContainer = styled.div`
+const CheckboxContainer = styled.label`
   display: inline-flex;
   align-items: center;
   cursor: pointer;
   gap: ${props => props.theme.spacing.s}px;
+  user-select: none;
 `;
 
 const CheckboxInput = styled.input`
@@ -13,16 +14,18 @@ const CheckboxInput = styled.input`
 `;
 
 const CustomCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: ${props => props.theme.borderRadii.s}px;
   border: 1.5px solid
     ${props =>
-      props.checked ? props.theme.colors.primary : props.theme.colors.border};
+      props.checked
+        ? props.theme.colors.primary
+        : props.theme.colors.mutedForeground};
   background-color: ${props =>
     props.checked
       ? props.theme.colors.primary
-      : props.theme.colors.inputBackground};
+      : props.theme.colors.transparent};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,6 +37,7 @@ const CustomCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
   svg {
     color: white;
     visibility: ${props => (props.checked ? "visible" : "hidden")};
+    stroke-width: 3px;
   }
 `;
 
@@ -52,25 +56,19 @@ export function Checkbox({
   disabled,
   label,
 }: CheckboxProps) {
-  const handleClick = () => {
-    if (!disabled) {
-      onChange(!checked);
-    }
-  };
-
   return (
-    <CheckboxContainer onClick={handleClick}>
+    <CheckboxContainer htmlFor={id}>
       <CheckboxInput
         type="checkbox"
         id={id}
         checked={checked}
-        onChange={() => {}}
+        onChange={e => onChange(e.target.checked)}
         disabled={disabled}
       />
       <CustomCheckbox checked={checked} disabled={disabled}>
         <FiCheck size={18} />
       </CustomCheckbox>
-      {label && <label htmlFor={id}>{label}</label>}
+      {label && <span>{label}</span>}
     </CheckboxContainer>
   );
 }

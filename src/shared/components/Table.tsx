@@ -25,16 +25,21 @@ export const TableRow = styled.tr`
   &:last-of-type {
     border-bottom: none;
   }
+
+  ${TableBody} &:hover {
+    background-color: ${props => props.theme.colors.mutedBackground}80;
+  }
 `;
 
 export const TableHeaderCell = styled.th`
-  padding: ${props => props.theme.spacing.sm}px
-    ${props => props.theme.spacing.m}px;
-  font-weight: 600;
-  font-size: 13px;
+  padding: ${props => props.theme.spacing.m}px;
+  font-weight: ${props => props.theme.textVariants.sectionHeader.fontWeight};
+  font-size: ${props => props.theme.textVariants.sectionHeader.fontSize}px;
   color: ${props => props.theme.colors.mutedForeground};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  text-transform: ${props =>
+    props.theme.textVariants.sectionHeader.textTransform};
+  letter-spacing: ${props =>
+    props.theme.textVariants.sectionHeader.letterSpacing};
 `;
 
 export const TableCell = styled.td`

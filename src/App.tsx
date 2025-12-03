@@ -6,7 +6,6 @@ import { GlobalLoader } from "./components/GlobalLoader";
 const PUBLIC_ROUTES = [
   "/",
   "/login",
-  "/signup",
   "/auth-confirmed",
   "/password-recovery",
   "/terms-and-policy",
@@ -24,13 +23,11 @@ function App() {
 
     const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
 
-    if (user && role === "ADMIN" && isPublicRoute) {
-      if (location.pathname !== "/") {
+    if (user && role === "ADMIN") {
+      if (isPublicRoute && location.pathname !== "/") {
         navigate("/admin", { replace: true });
       }
-    }
-
-    if (!user && !isPublicRoute) {
+    } else if (!user && !isPublicRoute) {
       navigate("/login", { replace: true });
     }
   }, [loading, user, role, location.pathname, navigate]);

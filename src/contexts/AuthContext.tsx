@@ -38,6 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           event === "SIGNED_OUT" ||
           (event === "INITIAL_SESSION" && !session)
         ) {
+          void 0;
         }
       } else {
         if (

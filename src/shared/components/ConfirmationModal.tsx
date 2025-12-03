@@ -18,8 +18,8 @@ const IconWrapper = styled.div<{ variant: "primary" | "destructive" }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: ${props =>
     props.variant === "destructive"
@@ -29,16 +29,23 @@ const IconWrapper = styled.div<{ variant: "primary" | "destructive" }>`
     props.variant === "destructive"
       ? props.theme.colors.destructiveBackground
       : props.theme.colors.mutedForeground};
+  margin-bottom: ${props => props.theme.spacing.xs}px;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
 `;
 
 const Title = styled.h2`
-  font-size: 22px;
-  font-weight: 700;
+  font-family: ${props => props.theme.textVariants.subHeader.fontFamily};
+  font-weight: ${props => props.theme.textVariants.subHeader.fontWeight};
+  font-size: 20px;
   color: ${props => props.theme.colors.mainForeground};
 `;
 
 const Message = styled.p`
-  font-size: 16px;
+  font-family: ${props => props.theme.textVariants.body.fontFamily};
   color: ${props => props.theme.colors.mutedForeground};
   line-height: 1.6;
 `;
@@ -78,7 +85,7 @@ export function ConfirmationModal({
     <Modal isOpen={isOpen} onClose={onClose}>
       <Content>
         <IconWrapper variant={variant}>
-          <FiAlertTriangle size={28} />
+          <FiAlertTriangle />
         </IconWrapper>
         <Title>{title}</Title>
         <Message>{message}</Message>
