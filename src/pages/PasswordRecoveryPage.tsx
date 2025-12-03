@@ -1,3 +1,3 @@
-import TermsAndPolicyPage from "@/features/static/view/TermsAndPolicyPage";
+import PasswordRecoveryPage from "@/features/auth/view/PasswordRecoveryPage";
 
-export default TermsAndPolicyPage;
+export default PasswordRecoveryPage;
