@@ -80,7 +80,11 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <StyledButton variant={variant} {...props}>
+    <StyledButton
+      variant={variant}
+      disabled={loading || props.disabled}
+      {...props}
+    >
       {loading ? (
         <Spinner />
       ) : (

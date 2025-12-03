@@ -10,11 +10,15 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
-const StyledInput = styled.input<{ hasIcon: boolean }>`
+const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
   height: 56px;
   width: 100%;
   border-radius: ${props => props.theme.borderRadii.m}px;
-  border: 1.5px solid ${props => props.theme.colors.inputBorder};
+  border: 1.5px solid
+    ${props =>
+      props.hasError
+        ? props.theme.colors.destructiveBackground
+        : props.theme.colors.inputBorder};
   background-color: ${props => props.theme.colors.inputBackground};
   padding: 0 ${props => props.theme.spacing.m}px;
   padding-left: ${props =>
@@ -31,13 +35,24 @@ const StyledInput = styled.input<{ hasIcon: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${props => props.theme.colors.primary};
+    border-color: ${props =>
+      props.hasError
+        ? props.theme.colors.destructiveBackground
+        : props.theme.colors.primary};
+    border-width: 2px;
+    padding-left: ${props =>
+      props.hasIcon
+        ? `${props.theme.spacing.xl + props.theme.spacing.s - 0.5}px`
+        : `${props.theme.spacing.m - 0.5}px`};
   }
 
   &:focus + .icon-container > svg,
   &:focus ~ .icon-container > svg,
   &:focus ~ button > svg {
-    color: ${props => props.theme.colors.primary};
+    color: ${props =>
+      props.hasError
+        ? props.theme.colors.destructiveBackground
+        : props.theme.colors.primary};
   }
 
   &:disabled {
@@ -47,7 +62,7 @@ const StyledInput = styled.input<{ hasIcon: boolean }>`
   }
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled.div<{ hasError: boolean }>`
   position: absolute;
   left: ${props => props.theme.spacing.m}px;
   height: 100%;
@@ -56,7 +71,10 @@ const IconContainer = styled.div`
   justify-content: center;
   pointer-events: none;
   & > svg {
-    color: ${props => props.theme.colors.mutedForeground};
+    color: ${props =>
+      props.hasError
+        ? props.theme.colors.destructiveBackground
+        : props.theme.colors.mutedForeground};
     transition: color 0.2s;
   }
 `;
@@ -88,10 +106,11 @@ const ToggleButton = styled.button`
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactNode;
   isPassword?: boolean;
+  error?: string | null;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ icon, isPassword = false, ...props }, ref) => {
+  ({ icon, isPassword = false, error, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const finalType = isPassword
@@ -104,12 +123,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       setIsPasswordVisible(prev => !prev);
     };
 
+    const hasError = !!error;
+
     return (
       <InputWrapper>
         {icon && (
-          <IconContainer className="icon-container">{icon}</IconContainer>
+          <IconContainer className="icon-container" hasError={hasError}>
+            {icon}
+          </IconContainer>
         )}
-        <StyledInput ref={ref} hasIcon={!!icon} type={finalType} {...props} />
+        <StyledInput
+          ref={ref}
+          hasIcon={!!icon}
+          hasError={hasError}
+          type={finalType}
+          {...props}
+        />
         {isPassword && (
           <ToggleButton
             type="button"

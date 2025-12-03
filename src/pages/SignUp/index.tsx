@@ -1,138 +1,67 @@
 import { useEffect, useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
-import { FiMail, FiLock, FiUser, FiUsers, FiArrowRight } from "react-icons/fi";
-import { FaApple } from "react-icons/fa";
-import { IoLogoGooglePlaystore } from "react-icons/io5";
+import { FiMail, FiLock, FiUser, FiArrowRight } from "react-icons/fi";
 import { useSignUpViewModel } from "./useSignUpViewModel";
-import { type UserGender } from "@/types/database";
-import {
-  Button,
-  BaseCard,
-  Input,
-  Label,
-  Select,
-  type SelectOption,
-} from "@/shared/components";
+import { Button, BaseCard, Input, Label, Logo } from "@/shared/components";
 import { LegalAgreement } from "./LegalAgreement";
+import { toast } from "sonner";
 
 const PageContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 100vh;
-  flex-direction: column;
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    flex-direction: row;
-    height: 100vh;
-    overflow: hidden;
-  }
-`;
-
-const IntroPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: ${props => props.theme.spacing.s}px;
-  background-color: ${props => props.theme.colors.primary};
-  padding: ${props => props.theme.spacing.l}px;
-  text-align: center;
-  color: ${props => props.theme.colors.primaryForeground};
-
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    width: 33.333%;
-    height: 100%;
-    gap: ${props => props.theme.spacing.m}px;
-    padding: ${props => props.theme.spacing.xl}px;
-  }
-`;
-
-const IntroHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: ${props => props.theme.spacing.m}px;
-
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    flex-direction: column;
-    gap: ${props => props.theme.spacing.l}px;
-  }
-`;
-
-const LogoImage = styled.img`
-  height: 48px;
-  width: 48px;
-  object-fit: contain;
-
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    height: 128px;
-    width: 128px;
-  }
-`;
-
-const AppTitle = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 36px;
-  }
-`;
-
-const Slogan = styled.p`
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 18px;
-  }
-`;
-
-const FormPanel = styled.div`
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  background-color: ${props => props.theme.colors.mainBackground};
   padding: ${props => props.theme.spacing.m}px;
-
-  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    width: 66.666%;
-    overflow-y: auto;
-  }
 `;
 
 const StyledCard = styled(BaseCard)`
   width: 100%;
   max-width: 448px;
-  padding: ${props => props.theme.spacing.l}px;
+  padding: ${props => props.theme.spacing.xl}px;
 `;
 
-const CardHeader = styled.header`
-  padding-top: ${props => props.theme.spacing.s}px;
-  margin-bottom: ${props => props.theme.spacing.l}px;
+const Header = styled.header`
+  margin-bottom: ${props => props.theme.spacing.xl}px;
 `;
-
-const CardTitle = styled.h1`
-  font-family: ${props => props.theme.textVariants.header.fontFamily};
-  font-weight: ${props => props.theme.textVariants.header.fontWeight};
-  color: ${props => props.theme.colors.primary};
-  text-align: center;
-  font-size: 24px;
-`;
-
-const CardContent = styled.div``;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: ${props => props.theme.spacing.l}px;
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${props => props.theme.spacing.s}px;
+`;
+
+const GenderSelector = styled.div`
+  display: flex;
+  gap: ${props => props.theme.spacing.s}px;
+`;
+
+const GenderButton = styled.button<{ isActive: boolean }>`
+  flex: 1;
+  height: 56px;
+  border-radius: ${props => props.theme.borderRadii.m}px;
+  border: ${props =>
+    props.isActive ? "0" : `1.5px solid ${props.theme.colors.inputBorder}`};
+  background-color: ${props =>
+    props.isActive
+      ? props.theme.colors.primaryBackground
+      : props.theme.colors.inputBackground};
+  color: ${props =>
+    props.isActive
+      ? props.theme.colors.primaryForeground
+      : props.theme.colors.mainForeground};
+  font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
+  font-weight: ${props => (props.isActive ? "700" : "500")};
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 `;
 
 const ErrorMessage = styled.p`
@@ -140,31 +69,8 @@ const ErrorMessage = styled.p`
   font-size: ${props => props.theme.textVariants.error.fontSize}px;
   font-weight: ${props => props.theme.textVariants.error.fontWeight};
   color: ${props => props.theme.colors.destructiveBackground};
-  padding-top: 8px;
-`;
-
-const Separator = styled.div`
-  border-top: 1px solid ${props => props.theme.colors.border};
-  margin: ${props => props.theme.spacing.m}px 0;
-`;
-
-const FooterText = styled.p`
   text-align: center;
-  font-size: ${props => props.theme.textVariants.caption.fontSize}px;
-  font-weight: ${props => props.theme.textVariants.caption.fontWeight};
-  color: ${props => props.theme.colors.mutedForeground};
-`;
-
-const StoreButtonsContainer = styled.div`
-  display: flex;
-  gap: ${props => props.theme.spacing.m}px;
-`;
-
-const SuccessMessage = styled.p`
-  text-align: center;
-  color: ${props => props.theme.colors.success};
-  padding: ${props => props.theme.spacing.l}px 0;
-  font-weight: 500;
+  margin-top: ${props => props.theme.spacing.s}px;
 `;
 
 export default function SignUpPage() {
@@ -194,160 +100,148 @@ export default function SignUpPage() {
   }, [error]);
 
   useEffect(() => {
-    if (fullName || gender || email || password || confirmPassword) {
+    if (successMessage) {
+      toast.success(successMessage, {
+        description: "Verifique sua caixa de entrada e a pasta de spam.",
+      });
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (
+      fullName ||
+      gender ||
+      email ||
+      password ||
+      confirmPassword ||
+      acceptedTerms
+    ) {
       setLocalError(null);
     }
-  }, [fullName, gender, email, password, confirmPassword]);
-
-  const genderOptions: SelectOption[] = [
-    { value: "MALE", label: "Masculino" },
-    { value: "FEMALE", label: "Feminino" },
-  ];
+  }, [fullName, gender, email, password, confirmPassword, acceptedTerms]);
 
   const onFormSubmit = (e: FormEvent) => {
     handleSubmit(e);
   };
 
+  if (successMessage) {
+    return (
+      <PageContainer>
+        <StyledCard>
+          <Header>
+            <Logo />
+          </Header>
+        </StyledCard>
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer>
-      <IntroPanel>
-        <IntroHeader>
-          <LogoImage src="/logo.png" alt="Logo Ombro de Cristo" />
-          <AppTitle>Ombro de Cristo</AppTitle>
-        </IntroHeader>
-        <Slogan>Sua missão, fortalecida pela mentoria.</Slogan>
-      </IntroPanel>
-      <FormPanel>
-        <StyledCard>
-          <CardHeader>
-            <CardTitle>Junte-se à nossa comunidade</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {successMessage ? (
-              <SuccessMessage>{successMessage}</SuccessMessage>
-            ) : (
-              <Form onSubmit={onFormSubmit}>
-                <FormGroup>
-                  <Label htmlFor="fullName">Nome Completo</Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    placeholder="Seu nome"
-                    value={fullName}
-                    onChange={e => setFullName(e.target.value)}
-                    required
-                    disabled={loading}
-                    icon={<FiUser size={20} />}
-                  />
-                </FormGroup>
+      <StyledCard>
+        <Header>
+          <Logo />
+        </Header>
+        <Form onSubmit={onFormSubmit}>
+          <FormGroup>
+            <Label htmlFor="fullName">Nome Completo</Label>
+            <Input
+              id="fullName"
+              type="text"
+              placeholder="Seu nome"
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              required
+              disabled={loading}
+              icon={<FiUser size={22} />}
+            />
+          </FormGroup>
 
-                <FormGroup>
-                  <Label htmlFor="gender">Gênero</Label>
-                  <Select
-                    options={genderOptions}
-                    value={gender}
-                    onChange={(value: string) => setGender(value as UserGender)}
-                    disabled={loading}
-                    placeholder="Seu gênero"
-                    icon={<FiUsers size={20} />}
-                  />
-                </FormGroup>
+          <FormGroup>
+            <Label>Gênero</Label>
+            <GenderSelector>
+              <GenderButton
+                type="button"
+                isActive={gender === "MALE"}
+                onClick={() => setGender("MALE")}
+                disabled={loading}
+              >
+                Masculino
+              </GenderButton>
+              <GenderButton
+                type="button"
+                isActive={gender === "FEMALE"}
+                onClick={() => setGender("FEMALE")}
+                disabled={loading}
+              >
+                Feminino
+              </GenderButton>
+            </GenderSelector>
+          </FormGroup>
 
-                <FormGroup>
-                  <Label htmlFor="email">E-mail</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="email@exemplo.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                    autoComplete="email"
-                    disabled={loading}
-                    icon={<FiMail size={20} />}
-                  />
-                </FormGroup>
+          <FormGroup>
+            <Label htmlFor="email">E-mail</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@exemplo.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              disabled={loading}
+              icon={<FiMail size={22} />}
+            />
+          </FormGroup>
 
-                <FormGroup>
-                  <Label htmlFor="password">Senha</Label>
-                  <Input
-                    id="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                    autoComplete="new-password"
-                    disabled={loading}
-                    icon={<FiLock size={20} />}
-                    isPassword
-                  />
-                </FormGroup>
+          <FormGroup>
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+              disabled={loading}
+              icon={<FiLock size={22} />}
+              isPassword
+            />
+          </FormGroup>
 
-                <FormGroup>
-                  <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-                  <Input
-                    id="confirmPassword"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={e => setConfirmPassword(e.target.value)}
-                    required
-                    autoComplete="new-password"
-                    disabled={loading}
-                    icon={<FiLock size={20} />}
-                    isPassword
-                  />
-                </FormGroup>
+          <FormGroup>
+            <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+            <Input
+              id="confirmPassword"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+              disabled={loading}
+              icon={<FiLock size={22} />}
+              isPassword
+            />
+          </FormGroup>
 
-                <LegalAgreement
-                  accepted={acceptedTerms}
-                  onToggle={setAcceptedTerms}
-                  isDisabled={loading}
-                />
+          <LegalAgreement
+            accepted={acceptedTerms}
+            onToggle={setAcceptedTerms}
+            isDisabled={loading}
+          />
 
-                {localError && <ErrorMessage>{localError}</ErrorMessage>}
+          {localError && <ErrorMessage>{localError}</ErrorMessage>}
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  loading={loading}
-                  label="Criar conta"
-                  icon={<FiArrowRight />}
-                  style={{ marginTop: "8px" }}
-                />
-              </Form>
-            )}
-
-            <Separator />
-
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-                textAlign: "center",
-              }}
-            >
-              <FooterText>
-                Em breve nas principais lojas de aplicativos!
-              </FooterText>
-              <StoreButtonsContainer>
-                <Button
-                  variant="secondary"
-                  disabled
-                  label="Google Play"
-                  icon={<IoLogoGooglePlaystore size={16} />}
-                />
-                <Button
-                  variant="secondary"
-                  disabled
-                  label="App Store"
-                  icon={<FaApple size={16} />}
-                />
-              </StoreButtonsContainer>
-            </div>
-          </CardContent>
-        </StyledCard>
-      </FormPanel>
+          <Button
+            type="submit"
+            disabled={loading}
+            loading={loading}
+            label="Criar conta"
+            icon={<FiArrowRight />}
+            style={{ marginTop: "8px" }}
+          />
+        </Form>
+      </StyledCard>
     </PageContainer>
   );
 }

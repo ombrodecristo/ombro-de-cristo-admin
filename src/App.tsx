@@ -2,6 +2,20 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import { GlobalLoader } from "./components/GlobalLoader";
 import { useEffect } from "react";
+import styled from "@emotion/styled";
+
+const AppContainer = styled.div`
+  display: flex;
+  height: 100vh;
+  width: 100%;
+`;
+
+const AuthPageContainer = styled(AppContainer)`
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+`;
 
 function App() {
   const { loading, user, role, signOut } = useAuth();
@@ -46,24 +60,12 @@ function App() {
     return <GlobalLoader />;
   }
 
-  const appStyles = {
-    display: "flex",
-    height: "100vh",
-    width: "100%",
-  };
-
-  const authPageStyles = {
-    minHeight: "100vh",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "1rem",
-  };
+  const Container = isAuthPage ? AuthPageContainer : AppContainer;
 
   return (
-    <div style={isAuthPage ? { ...appStyles, ...authPageStyles } : appStyles}>
+    <Container>
       <Outlet />
-    </div>
+    </Container>
   );
 }
 

@@ -24,23 +24,19 @@ const StyledCard = styled(BaseCard)`
 `;
 
 const Header = styled.header`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.m}px;
-  text-align: center;
   margin-bottom: ${props => props.theme.spacing.xl}px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: ${props => props.theme.spacing.l}px;
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${props => props.theme.spacing.s}px;
 `;
 
 const ErrorMessage = styled.p`
@@ -49,6 +45,7 @@ const ErrorMessage = styled.p`
   font-weight: ${props => props.theme.textVariants.error.fontWeight};
   color: ${props => props.theme.colors.destructiveBackground};
   text-align: center;
+  margin-top: ${props => props.theme.spacing.s}px;
 `;
 
 export default function Login() {
@@ -101,7 +98,8 @@ export default function Login() {
               required
               autoComplete="email"
               disabled={loading}
-              icon={<FiMail size={20} />}
+              icon={<FiMail size={22} />}
+              error={error}
             />
           </FormGroup>
           <FormGroup>
@@ -114,8 +112,9 @@ export default function Login() {
               required
               autoComplete="current-password"
               disabled={loading}
-              icon={<FiLock size={20} />}
+              icon={<FiLock size={22} />}
               isPassword
+              error={error}
             />
           </FormGroup>
           {error && <ErrorMessage>{error}</ErrorMessage>}

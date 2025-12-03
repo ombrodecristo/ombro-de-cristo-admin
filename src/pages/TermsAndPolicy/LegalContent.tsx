@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "@/shared/components";
+import { FiCheckCircle } from "react-icons/fi";
 
 const Container = styled.div`
   max-width: 800px;
@@ -10,49 +11,59 @@ const Container = styled.div`
 const H1 = styled.h1`
   font-family: ${props => props.theme.textVariants.header.fontFamily};
   font-weight: ${props => props.theme.textVariants.header.fontWeight};
-  font-size: 30px;
+  font-size: 24px;
+  line-height: 32px;
   margin-bottom: ${props => props.theme.spacing.m}px;
 `;
 
 const H2 = styled.h2`
   font-family: ${props => props.theme.textVariants.subHeader.fontFamily};
   font-weight: ${props => props.theme.textVariants.subHeader.fontWeight};
-  font-size: 20px;
-  color: ${props => props.theme.colors.primary};
+  font-size: 18px;
+  color: ${props => props.theme.colors.mainForeground};
   margin-top: ${props => props.theme.spacing.l}px;
   margin-bottom: ${props => props.theme.spacing.s}px;
 `;
 
 const P = styled.p`
   font-family: ${props => props.theme.textVariants.body.fontFamily};
-  font-size: 15px;
-  line-height: 1.7;
-  color: ${props => props.theme.colors.mutedForeground};
+  font-size: 16px;
+  line-height: 26px;
   margin-bottom: ${props => props.theme.spacing.m}px;
+  color: ${props => props.theme.colors.mutedForeground};
 `;
 
 const Bold = styled.strong`
-  font-weight: 600;
+  font-weight: 500;
   color: ${props => props.theme.colors.mainForeground};
+`;
+
+const UL = styled.ul`
+  padding-left: ${props => props.theme.spacing.m}px;
+  list-style: none;
 `;
 
 const LI = styled.li`
   font-family: ${props => props.theme.textVariants.body.fontFamily};
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 26px;
   color: ${props => props.theme.colors.mutedForeground};
-  margin-bottom: ${props => props.theme.spacing.s}px;
-  margin-left: ${props => props.theme.spacing.m}px;
-`;
+  margin-bottom: ${props => props.theme.spacing.m}px;
+  padding-left: ${props => props.theme.spacing.m}px;
+  position: relative;
 
-const UL = styled.ul`
-  list-style-type: disc;
+  &::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: ${props => props.theme.colors.primary};
+  }
 `;
 
 const Divider = styled.div`
   height: 1px;
   background-color: ${props => props.theme.colors.border};
-  margin: ${props => props.theme.spacing.xl}px 0;
+  margin: ${props => props.theme.spacing.l}px 0;
 `;
 
 const Footer = styled.div`
@@ -199,7 +210,11 @@ export function LegalContent({
 
       {showAcceptButton && onAccept && (
         <Footer>
-          <Button label="Li e concordo" onClick={onAccept} />
+          <Button
+            label="Li e concordo"
+            onClick={onAccept}
+            icon={<FiCheckCircle />}
+          />
         </Footer>
       )}
     </Container>

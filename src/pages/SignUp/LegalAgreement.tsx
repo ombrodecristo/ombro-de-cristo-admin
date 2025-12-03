@@ -34,9 +34,13 @@ const LinkButton = styled.button`
 
 const ModalContentWrapper = styled.div`
   max-width: 800px;
-  width: 100%;
+  width: 90vw;
   height: 80vh;
   overflow-y: auto;
+  position: relative;
+  background: ${props => props.theme.colors.cardBackground};
+  padding: ${props => props.theme.spacing.l}px;
+  border-radius: ${props => props.theme.borderRadii.l}px;
 `;
 
 type LegalAgreementProps = {
