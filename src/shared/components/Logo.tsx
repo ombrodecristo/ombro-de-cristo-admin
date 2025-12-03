@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import type { HTMLAttributes } from "react";
 
 const LogoContainer = styled.div<{ variant: "light" | "dark" }>`
   display: flex;
@@ -49,14 +50,13 @@ const LogoImage = styled.img`
   object-fit: contain;
 `;
 
-interface LogoProps {
+interface LogoProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "light" | "dark";
-  className?: string;
 }
 
-export function Logo({ variant = "dark", className }: LogoProps) {
+export function Logo({ variant = "dark", ...rest }: LogoProps) {
   return (
-    <LogoContainer variant={variant} className={className}>
+    <LogoContainer variant={variant} {...rest}>
       <LogoImageContainer>
         <LogoImage src="/logo.png" alt="Ombro de Cristo Logo" />
       </LogoImageContainer>

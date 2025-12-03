@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
-import styled from "@emotion/styled";
 import { useState, type FormEvent } from "react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { LoginViewModel } from "../view-models/LoginViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import {
+  Box,
   BaseCard,
   Button,
   Input,
@@ -14,39 +14,6 @@ import {
 } from "@/shared/components";
 import { IoMailOutline, IoLockClosedOutline } from "react-icons/io5";
 import { toast } from "sonner";
-
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 100vh;
-  padding: ${props => props.theme.spacing.m}px;
-`;
-
-const StyledCard = styled(BaseCard)`
-  width: 100%;
-  max-width: 448px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.l}px;
-`;
-
-const FormFields = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.m}px;
-`;
-
-const Separator = styled.div`
-  height: 1.5px;
-  background-color: ${props => props.theme.colors.border};
-  margin: ${props => props.theme.spacing.m}px 0;
-`;
 
 export default function LoginPage() {
   const [viewModel] = useState(() => new LoginViewModel());
@@ -87,12 +54,32 @@ export default function LoginPage() {
 
   return (
     <>
-      <PageContainer>
-        <StyledCard>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+        minHeight="100vh"
+        p="m"
+      >
+        <BaseCard width="100%" maxWidth="448px">
           <Logo />
-          <Separator />
-          <Form onSubmit={handleLoginSubmit}>
-            <FormFields>
+          <Box
+            as="hr"
+            height="1.5px"
+            backgroundColor="border"
+            borderWidth={0}
+            my="m"
+          />
+          <Box
+            as="form"
+            display="flex"
+            flexDirection="column"
+            gap="24px"
+            onSubmit={handleLoginSubmit}
+          >
+            <Box display="flex" flexDirection="column" gap="16px">
               <Input
                 id="email"
                 type="email"
@@ -105,21 +92,19 @@ export default function LoginPage() {
                 icon={<IoMailOutline size={22} />}
                 error={viewModel.emailError}
               />
-              <div>
-                <Input
-                  id="password"
-                  placeholder="Senha"
-                  value={viewModel.password}
-                  onChange={e => viewModel.setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  disabled={viewModel.loading}
-                  icon={<IoLockClosedOutline size={22} />}
-                  isPassword
-                  error={viewModel.passwordError}
-                />
-              </div>
-            </FormFields>
+              <Input
+                id="password"
+                placeholder="Senha"
+                value={viewModel.password}
+                onChange={e => viewModel.setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                disabled={viewModel.loading}
+                icon={<IoLockClosedOutline size={22} />}
+                isPassword
+                error={viewModel.passwordError}
+              />
+            </Box>
 
             <Button
               type="submit"
@@ -127,9 +112,9 @@ export default function LoginPage() {
               loading={viewModel.loading}
               label="Entrar"
             />
-          </Form>
-        </StyledCard>
-      </PageContainer>
+          </Box>
+        </BaseCard>
+      </Box>
       <ConfirmationModal
         isOpen={viewModel.needsConfirmation}
         onClose={() => viewModel.setNeedsConfirmation(false)}

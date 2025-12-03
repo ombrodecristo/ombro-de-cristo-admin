@@ -1,3 +1,5 @@
+export * from "./base/Box";
+export * from "./base/Text";
 export * from "./BaseCard";
 export * from "./Button";
 export * from "./Checkbox";
