@@ -1,30 +1,75 @@
-"use client";
+import styled from "@emotion/styled";
+import { FiCheck } from "react-icons/fi";
 
-import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check } from "lucide-react";
+const CheckboxContainer = styled.div`
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: ${props => props.theme.spacing.s}px;
+`;
 
-import { cn } from "@/lib/utils";
+const CheckboxInput = styled.input`
+  display: none;
+`;
 
-const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <CheckboxPrimitive.Root
-    ref={ref}
-    className={cn(
-      "peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
-      className
-    )}
-    {...props}
-  >
-    <CheckboxPrimitive.Indicator
-      className={cn("flex items-center justify-center text-current")}
-    >
-      <Check className="h-4 w-4" />
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
-));
-Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+const CustomCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
+  width: 22px;
+  height: 22px;
+  border-radius: ${props => props.theme.borderRadii.s}px;
+  border: 1.5px solid
+    ${props =>
+      props.checked ? props.theme.colors.primary : props.theme.colors.border};
+  background-color: ${props =>
+    props.checked
+      ? props.theme.colors.primary
+      : props.theme.colors.inputBackground};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.5 : 1)};
 
-export { Checkbox };
+  svg {
+    color: white;
+    visibility: ${props => (props.checked ? "visible" : "hidden")};
+  }
+`;
+
+interface CheckboxProps {
+  id?: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  disabled?: boolean;
+  label?: string;
+}
+
+export function Checkbox({
+  id,
+  checked,
+  onChange,
+  disabled,
+  label,
+}: CheckboxProps) {
+  const handleClick = () => {
+    if (!disabled) {
+      onChange(!checked);
+    }
+  };
+
+  return (
+    <CheckboxContainer onClick={handleClick}>
+      <CheckboxInput
+        type="checkbox"
+        id={id}
+        checked={checked}
+        onChange={() => {}}
+        disabled={disabled}
+      />
+      <CustomCheckbox checked={checked} disabled={disabled}>
+        <FiCheck size={18} />
+      </CustomCheckbox>
+      {label && <label htmlFor={id}>{label}</label>}
+    </CheckboxContainer>
+  );
+}

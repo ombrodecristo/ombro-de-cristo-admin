@@ -1,6 +1,8 @@
 import { useState, useEffect, type FormEvent } from "react";
-import { type Devotional } from "@/types/database";
-import { devotionalService } from "@/services/devotionalService";
+import {
+  devotionalService,
+  type DevotionalWithAuthor,
+} from "@/services/devotionalService";
 import { logService } from "@/services/logService";
 import {
   validateDevotionalTitle,
@@ -9,7 +11,7 @@ import {
 
 type UseDevotionalFormViewModelProps = {
   authorId: string;
-  devotionalToEdit: Devotional | null;
+  devotionalToEdit: DevotionalWithAuthor | null;
   onClose: () => void;
   onSuccess: () => void;
 };

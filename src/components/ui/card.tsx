@@ -1,83 +1,61 @@
-import * as React from "react";
+import styled from "@emotion/styled";
+import type { HTMLAttributes } from "react";
 
-import { cn } from "@/lib/utils";
+const CardStyled = styled.div`
+  background-color: ${props => props.theme.colors.cardBackground};
+  color: ${props => props.theme.colors.cardForeground};
+  border-radius: ${props => props.theme.borderRadii.l}px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid ${props => props.theme.colors.border};
+`;
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-xl border bg-card text-card-foreground shadow",
-      className
-    )}
-    {...props}
-  />
-));
-Card.displayName = "Card";
+const CardHeaderStyled = styled.div`
+  padding: ${props => props.theme.spacing.l}px;
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.s}px;
+  align-items: center;
+`;
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-));
-CardHeader.displayName = "CardHeader";
+const CardTitleStyled = styled.h1`
+  font-family: ${props => props.theme.textVariants.header.fontFamily};
+  font-weight: ${props => props.theme.textVariants.header.fontWeight};
+  line-height: ${props => props.theme.textVariants.header.lineHeight}px;
+  color: ${props => props.theme.colors.primary};
+  text-align: center;
+  font-size: 28px;
+`;
 
-const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("font-semibold leading-none tracking-tight", className)}
-    {...props}
-  />
-));
-CardTitle.displayName = "CardTitle";
+const CardDescriptionStyled = styled.p`
+  font-family: ${props => props.theme.textVariants.caption.fontFamily};
+  font-weight: ${props => props.theme.textVariants.caption.fontWeight};
+  font-size: 16px;
+  line-height: ${props => props.theme.textVariants.caption.lineHeight}px;
+  color: ${props => props.theme.colors.mutedForeground};
+  text-align: center;
+`;
 
-const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-));
-CardDescription.displayName = "CardDescription";
+const CardContentStyled = styled.div`
+  padding: ${props => props.theme.spacing.l}px;
+  padding-top: 0;
+`;
 
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-));
-CardContent.displayName = "CardContent";
+export function Card(props: HTMLAttributes<HTMLDivElement>) {
+  return <CardStyled {...props} />;
+}
 
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-));
-CardFooter.displayName = "CardFooter";
+export function CardHeader(props: HTMLAttributes<HTMLDivElement>) {
+  return <CardHeaderStyled {...props} />;
+}
 
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-  CardContent,
-};
+export function CardTitle(props: HTMLAttributes<HTMLHeadingElement>) {
+  return <CardTitleStyled {...props} />;
+}
+
+export function CardDescription(props: HTMLAttributes<HTMLParagraphElement>) {
+  return <CardDescriptionStyled {...props} />;
+}
+
+export function CardContent(props: HTMLAttributes<HTMLDivElement>) {
+  return <CardContentStyled {...props} />;
+}

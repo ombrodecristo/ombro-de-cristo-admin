@@ -5,12 +5,14 @@ import {
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import "./index.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/AdminLayout";
 import { GlobalLoader } from "./components/GlobalLoader";
+import { ThemeProvider } from "@emotion/react";
+import { theme } from "./core/lib/theme.ts";
+import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
 import { Toaster } from "sonner";
 
 const SignUpPage = lazy(() => import("./pages/SignUp"));
@@ -69,11 +71,14 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <Suspense fallback={<GlobalLoader />}>
-        <RouterProvider router={router} />
-        <Toaster richColors closeButton />
-      </Suspense>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <AuthProvider>
+        <Suspense fallback={<GlobalLoader />}>
+          <RouterProvider router={router} />
+          <Toaster richColors closeButton />
+        </Suspense>
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>
 );

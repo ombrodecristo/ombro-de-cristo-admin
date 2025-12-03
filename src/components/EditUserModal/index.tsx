@@ -1,48 +1,71 @@
+import styled from "@emotion/styled";
 import {
   type Profile,
   type UserRole,
   type UserGender,
 } from "../../types/database";
 import { type ProfileWithRelations } from "../../services/profileService";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   useEditUserModalViewModel,
   allRoles,
   allGenders,
 } from "./useEditUserModalViewModel";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { Spinner } from "../ui/spinner";
 import { formatGender, formatRole } from "@/lib/formatters";
-import { Info } from "lucide-react";
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Select } from "@/components/ui/Select";
+import { FiInfo } from "react-icons/fi";
 
-type EditUserModalProps = {
-  profile: ProfileWithRelations;
+const Content = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.m}px;
+  width: 400px;
+`;
+
+const Title = styled.h2`
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+`;
+
+const Alert = styled.div`
+  background-color: ${props => props.theme.colors.mutedBackground};
+  border-radius: ${props => props.theme.borderRadii.s}px;
+  padding: ${props => props.theme.spacing.sm}px;
+  display: flex;
+  gap: ${props => props.theme.spacing.s}px;
+  align-items: flex-start;
+  color: ${props => props.theme.colors.mutedForeground};
+  font-size: 13px;
+`;
+
+interface EditUserModalProps {
+  isOpen: boolean;
   onClose: () => void;
+  profile: ProfileWithRelations;
   onSuccess: (updatedProfile: Profile) => void;
-};
+}
 
 export default function EditUserModal({
-  profile,
+  isOpen,
   onClose,
+  profile,
   onSuccess,
 }: EditUserModalProps) {
   const {
@@ -55,149 +78,94 @@ export default function EditUserModal({
     churches,
     loadingChurches,
     loading,
-    error,
-    success,
     handleSubmit,
-  } = useEditUserModalViewModel({
-    profile,
-    onClose,
-    onSuccess,
-  });
+  } = useEditUserModalViewModel({ profile, onClose, onSuccess });
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (success) {
-      toast.success("Perfil atualizado com sucesso!");
-    }
-  }, [success]);
+  const churchOptions = [
+    { value: "none", label: "Nenhuma" },
+    ...churches.map(c => ({ value: c.id, label: c.name })),
+  ];
 
   return (
-    <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Editar Perfil</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="user-name">Nome Completo</Label>
-              <Input
-                id="user-name"
-                value={profile.full_name}
-                disabled
-                className="opacity-100 bg-muted text-muted-foreground"
-              />
-            </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="mentor-name">Mentoria</Label>
-              <Input
-                id="mentor-name"
-                value={profile.mentor?.full_name ?? "Nenhuma"}
-                disabled
-                className="opacity-100 bg-muted text-muted-foreground"
-              />
-            </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="role-select">Permissão</Label>
-              <Select
-                value={newRole}
-                onValueChange={value => setNewRole(value as UserRole)}
-                disabled={loading}
-              >
-                <SelectTrigger id="role-select">
-                  <SelectValue placeholder="Selecione uma permissão" />
-                </SelectTrigger>
-                <SelectContent>
-                  {allRoles.map(role => (
-                    <SelectItem key={role} value={role}>
-                      {formatRole(role, newGender || profile.gender)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="gender-select">Gênero</Label>
-              <Select
-                value={newGender}
-                onValueChange={value => setNewGender(value as UserGender)}
-                disabled={loading}
-              >
-                <SelectTrigger id="gender-select">
-                  <SelectValue placeholder="Selecione um gênero" />
-                </SelectTrigger>
-                <SelectContent>
-                  {allGenders.map(gender => (
-                    <SelectItem key={gender} value={gender}>
-                      {formatGender(gender)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="church-select">Igreja</Label>
-              <Select
-                value={newChurchId || "none"}
-                onValueChange={value =>
-                  setNewChurchId(value === "none" ? null : value)
-                }
-                disabled={loading || loadingChurches}
-              >
-                <SelectTrigger id="church-select">
-                  <SelectValue
-                    placeholder={
-                      loadingChurches
-                        ? "Carregando igrejas..."
-                        : "Selecione uma igreja"
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Nenhuma</SelectItem>
-                  {churches.map(church => (
-                    <SelectItem key={church.id} value={church.id}>
-                      {church.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Alert
-              variant="default"
-              className="mt-2 flex items-start justify-start gap-2 [&>svg]:static [&>svg~*]:pl-0"
-            >
-              <Info className="h-5 w-5 mt-0.5" />
-              <div className="flex flex-col">
-                <AlertDescription className="text-xs">
-                  As alterações de permissão e gênero serão aplicadas no próximo
-                  login do perfil no aplicativo.
-                </AlertDescription>
-                <AlertDescription className="text-xs mt-1">
-                  O nome e a mentoria são gerenciados pelo próprio perfil no
-                  aplicativo.
-                </AlertDescription>
-              </div>
-            </Alert>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Content onSubmit={handleSubmit}>
+        <Title>Editar Perfil</Title>
+        <FormGroup>
+          <Label htmlFor="user-name">Nome Completo</Label>
+          <Input id="user-name" value={profile.full_name} disabled />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="mentor-name">Mentoria</Label>
+          <Input
+            id="mentor-name"
+            value={profile.mentor?.full_name ?? "Nenhuma"}
+            disabled
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Permissão</Label>
+          <Select
+            value={newRole}
+            onChange={(value: string) => setNewRole(value as UserRole)}
+            disabled={loading}
+            options={allRoles.map(role => ({
+              value: role,
+              label: formatRole(role, newGender || profile.gender),
+            }))}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Gênero</Label>
+          <Select
+            value={newGender}
+            onChange={(value: string) => setNewGender(value as UserGender)}
+            disabled={loading}
+            options={allGenders.map(gender => ({
+              value: gender,
+              label: formatGender(gender),
+            }))}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Igreja</Label>
+          <Select
+            value={newChurchId || "none"}
+            onChange={(value: string) =>
+              setNewChurchId(value === "none" ? null : value)
+            }
+            disabled={loading || loadingChurches}
+            options={churchOptions}
+            placeholder={
+              loadingChurches ? "Carregando..." : "Selecione uma igreja"
+            }
+          />
+        </FormGroup>
+
+        <Alert>
+          <FiInfo size={24} style={{ flexShrink: 0, marginTop: "2px" }} />
+          <div>
+            <p>
+              As alterações de permissão e gênero serão aplicadas no próximo
+              login do perfil no aplicativo.
+            </p>
+            <p style={{ marginTop: "4px" }}>
+              O nome e a mentoria são gerenciados pelo próprio perfil no
+              aplicativo.
+            </p>
           </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="ghost" disabled={loading}>
-                Cancelar
-              </Button>
-            </DialogClose>
-            <Button type="submit" variant="default" disabled={loading}>
-              {loading && <Spinner className="mr-2 h-4 w-4" />}
-              Salvar
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+        </Alert>
+
+        <Actions>
+          <Button type="submit" label="Salvar" loading={loading} />
+          <Button
+            type="button"
+            label="Cancelar"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+          />
+        </Actions>
+      </Content>
+    </Modal>
   );
 }

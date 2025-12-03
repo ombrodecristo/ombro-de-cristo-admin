@@ -1,13 +1,44 @@
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import styled from "@emotion/styled";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Modal } from "@/components/ui/Modal";
 import { LegalContent } from "@/pages/TermsAndPolicy/LegalContent";
+
+const AgreementContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.s}px;
+`;
+
+const AgreementLabel = styled.label`
+  font-size: ${props => props.theme.textVariants.caption.fontSize}px;
+  color: ${props => props.theme.colors.mutedForeground};
+  line-height: 1.4;
+`;
+
+const LinkButton = styled.button`
+  color: ${props => props.theme.colors.primary};
+  font-weight: 600;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+
+  &:disabled {
+    text-decoration: none;
+    cursor: not-allowed;
+    color: ${props => props.theme.colors.mutedForeground};
+  }
+`;
+
+const ModalContentWrapper = styled.div`
+  max-width: 800px;
+  width: 100%;
+  height: 80vh;
+  overflow-y: auto;
+`;
 
 type LegalAgreementProps = {
   accepted: boolean;
@@ -22,47 +53,38 @@ export function LegalAgreement({
 }: LegalAgreementProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleAccept = () => {
+  const handleAcceptAndClose = () => {
     onToggle(true);
     setIsModalOpen(false);
   };
 
   return (
     <>
-      <div className="flex items-center space-x-2">
+      <AgreementContainer>
         <Checkbox
           id="terms"
           checked={accepted}
-          onCheckedChange={onToggle}
+          onChange={onToggle}
           disabled={isDisabled}
         />
-        <Label
-          htmlFor="terms"
-          className="text-sm font-normal text-muted-foreground"
-        >
+        <AgreementLabel htmlFor="terms">
           Eu li e concordo com os{" "}
-          <button
+          <LinkButton
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="text-primary hover:underline font-semibold disabled:text-muted-foreground disabled:no-underline"
             disabled={isDisabled}
           >
             Termos de Uso e Política de Privacidade
-          </button>
+          </LinkButton>
           .
-        </Label>
-      </div>
+        </AgreementLabel>
+      </AgreementContainer>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle>Termos de Uso e Política de Privacidade</DialogTitle>
-          </DialogHeader>
-          <div className="flex-1 overflow-y-auto pr-6 -mr-6">
-            <LegalContent showAcceptButton onAccept={handleAccept} />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalContentWrapper>
+          <LegalContent showAcceptButton onAccept={handleAcceptAndClose} />
+        </ModalContentWrapper>
+      </Modal>
     </>
   );
 }

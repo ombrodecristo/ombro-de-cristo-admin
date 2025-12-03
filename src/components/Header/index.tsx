@@ -1,38 +1,55 @@
-import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import styled from "@emotion/styled";
+import { FiMenu } from "react-icons/fi";
 import UserMenu from "../UserMenu";
 
+const HeaderContainer = styled.header`
+  display: flex;
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${props => props.theme.spacing.m}px;
+  border-bottom: 1px solid ${props => props.theme.colors.border};
+  background-color: ${props => props.theme.colors.cardBackground};
+  padding: 0 ${props => props.theme.spacing.l}px;
+  color: ${props => props.theme.colors.cardForeground};
+  flex-shrink: 0;
+`;
+
+const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.m}px;
+`;
+
+const MenuButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${props => props.theme.colors.mutedForeground};
+  &:hover {
+    color: ${props => props.theme.colors.mainForeground};
+  }
+`;
+
+const AppTitle = styled.h1`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
 type HeaderProps = {
-  onToggleMobile: () => void;
+  onToggleSidebar: () => void;
 };
 
-export default function Header({ onToggleMobile }: HeaderProps) {
+export default function Header({ onToggleSidebar }: HeaderProps) {
   return (
-    <header className="flex h-14 items-center justify-between gap-4 border-b bg-primary px-4 text-primary-foreground md:h-16 md:px-6">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="shrink-0 text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground md:hidden"
-          onClick={onToggleMobile}
-        >
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Abrir menu</span>
-        </Button>
-        <div className="flex items-center gap-2">
-          <img
-            src="/logo.png"
-            alt="Logo Ombro de Cristo"
-            className="h-10 w-10 object-contain"
-          />
-          <h1 className="text-md font-bold md:text-lg">
-            Painel Administrativo
-          </h1>
-        </div>
-      </div>
-      <div className="flex items-center justify-end gap-4">
-        <UserMenu />
-      </div>
-    </header>
+    <HeaderContainer>
+      <LeftSection>
+        <MenuButton onClick={onToggleSidebar}>
+          <FiMenu size={22} />
+        </MenuButton>
+        <AppTitle>Painel Administrativo</AppTitle>
+      </LeftSection>
+      <UserMenu />
+    </HeaderContainer>
   );
 }

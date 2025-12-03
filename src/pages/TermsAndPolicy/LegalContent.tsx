@@ -1,50 +1,70 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import React from "react";
+import styled from "@emotion/styled";
+import { Button } from "@/components/ui/Button";
 
-const H1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h1
-    {...props}
-    className={cn("text-2xl font-bold mb-4 md:text-3xl", props.className)}
-  />
-);
+const Container = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: ${props => props.theme.spacing.xl}px;
+`;
 
-const H2 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h2
-    {...props}
-    className={cn(
-      "text-lg font-bold mt-6 mb-2 text-primary md:text-xl",
-      props.className
-    )}
-  />
-);
+const H1 = styled.h1`
+  font-family: ${props => props.theme.textVariants.header.fontFamily};
+  font-weight: ${props => props.theme.textVariants.header.fontWeight};
+  font-size: 30px;
+  margin-bottom: ${props => props.theme.spacing.m}px;
+`;
 
-const P = (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p
-    {...props}
-    className={cn(
-      "text-sm leading-relaxed mb-4 text-muted-foreground",
-      props.className
-    )}
-  />
-);
+const H2 = styled.h2`
+  font-family: ${props => props.theme.textVariants.subHeader.fontFamily};
+  font-weight: ${props => props.theme.textVariants.subHeader.fontWeight};
+  font-size: 20px;
+  color: ${props => props.theme.colors.primary};
+  margin-top: ${props => props.theme.spacing.l}px;
+  margin-bottom: ${props => props.theme.spacing.s}px;
+`;
 
-const Bold = (props: React.HTMLAttributes<HTMLElement>) => (
-  <strong
-    {...props}
-    className={cn("font-semibold text-foreground", props.className)}
-  />
-);
+const P = styled.p`
+  font-family: ${props => props.theme.textVariants.body.fontFamily};
+  font-size: 15px;
+  line-height: 1.7;
+  color: ${props => props.theme.colors.mutedForeground};
+  margin-bottom: ${props => props.theme.spacing.m}px;
+`;
 
-const LI = (props: React.LiHTMLAttributes<HTMLLIElement>) => (
-  <li
-    {...props}
-    className={cn(
-      "mb-2 ml-6 text-sm leading-relaxed text-muted-foreground",
-      props.className
-    )}
-  />
-);
+const Bold = styled.strong`
+  font-weight: 600;
+  color: ${props => props.theme.colors.mainForeground};
+`;
+
+const LI = styled.li`
+  font-family: ${props => props.theme.textVariants.body.fontFamily};
+  font-size: 15px;
+  line-height: 1.7;
+  color: ${props => props.theme.colors.mutedForeground};
+  margin-bottom: ${props => props.theme.spacing.s}px;
+  margin-left: ${props => props.theme.spacing.m}px;
+`;
+
+const UL = styled.ul`
+  list-style-type: disc;
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background-color: ${props => props.theme.colors.border};
+  margin: ${props => props.theme.spacing.xl}px 0;
+`;
+
+const Footer = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: ${props => props.theme.colors.mainBackground}E6;
+  backdrop-filter: blur(5px);
+  padding: ${props => props.theme.spacing.m}px;
+  margin: ${props => props.theme.spacing.xl}px -${props =>
+      props.theme.spacing.xl}px -${props => props.theme.spacing.xl}px;
+  text-align: center;
+`;
 
 type LegalContentProps = {
   showAcceptButton?: boolean;
@@ -56,7 +76,7 @@ export function LegalContent({
   onAccept,
 }: LegalContentProps) {
   return (
-    <div className="container mx-auto max-w-4xl py-8 px-4 sm:px-6 lg:px-8">
+    <Container>
       <H1>Termos de Uso</H1>
       <P>
         Bem-vindo(a) ao Ombro de Cristo. Estes Termos de Uso ("Termos") regem
@@ -82,7 +102,7 @@ export function LegalContent({
       </P>
 
       <H2>3. Elegibilidade e Contas</H2>
-      <ul className="list-disc">
+      <UL>
         <LI>Você deve ter pelo menos 18 anos para criar uma conta.</LI>
         <LI>
           Você é responsável por manter a confidencialidade de sua senha e
@@ -96,11 +116,11 @@ export function LegalContent({
           Você é a única pessoa responsável por todas as atividades que ocorrem
           em sua conta.
         </LI>
-      </ul>
+      </UL>
 
       <H2>4. Conduta na Plataforma</H2>
       <P>Você concorda em não usar a Plataforma para:</P>
-      <ul className="list-disc">
+      <UL>
         <LI>
           Publicar conteúdo ilegal, ofensivo, difamatório, odioso ou que viole
           direitos de terceiros.
@@ -111,10 +131,10 @@ export function LegalContent({
           Usar a Plataforma para qualquer finalidade comercial sem nosso
           consentimento prévio por escrito.
         </LI>
-      </ul>
+      </UL>
 
       <H2>5. Conteúdo do Diário e Compartilhamento</H2>
-      <ul className="list-disc">
+      <UL>
         <LI>
           Usuários(as) com o papel de Missionário(a) podem manter um diário
           pessoal.
@@ -131,78 +151,9 @@ export function LegalContent({
           Nem o Ombro de Cristo nem sua Equipe de Administração têm acesso ao
           conteúdo do seu diário, seja ele compartilhado ou não.
         </LI>
-      </ul>
+      </UL>
 
-      <H2>6. Propriedade Intelectual</H2>
-      <ul className="list-disc">
-        <LI>
-          O conteúdo fornecido pela Plataforma, incluindo devocionais, textos,
-          gráficos e logotipos, é de nossa propriedade ou de nossos
-          licenciadores e protegido por leis de direitos autorais.
-        </LI>
-        <LI>
-          O conteúdo que você cria (como entradas de diário) permanece sua
-          propriedade.
-        </LI>
-      </ul>
-
-      <H2>7. Isenção de Responsabilidade de Mentoria</H2>
-      <ul className="list-disc">
-        <LI>
-          O relacionamento entre Mentor(a) e Missionário(a) é baseado em
-          voluntariado e apoio espiritual.
-        </LI>
-        <LI>
-          Usuários(as) com o papel de Mentor(a) não são conselheiros(as)
-          profissionais, terapeutas ou profissionais de saúde mental
-          licenciados(as), a menos que se especifique o contrário. A orientação
-          fornecida é de natureza espiritual e não substitui o aconselhamento
-          profissional.
-        </LI>
-        <LI>
-          O Ombro de Cristo não se responsabiliza pela conduta ou conselhos
-          dados por usuários(as) no papel de Mentor(a). Encorajamos que cada
-          usuário(a) exerça seu próprio discernimento.
-        </LI>
-      </ul>
-
-      <H2>8. Rescisão</H2>
-      <ul className="list-disc">
-        <LI>
-          Podemos suspender ou encerrar sua conta a qualquer momento, por
-          qualquer motivo, incluindo a violação destes Termos.
-        </LI>
-        <LI>
-          Você pode excluir sua conta a qualquer momento nas configurações do
-          seu perfil. A exclusão da conta é permanente e resultará na remoção de
-          todos os seus dados, incluindo as entradas do diário.
-        </LI>
-      </ul>
-
-      <H2>9. Limitação de Responsabilidade</H2>
-      <P>
-        A Plataforma é fornecida "como está". Não garantimos que a Plataforma
-        será ininterrupta ou livre de erros. Em nenhuma circunstância seremos
-        responsáveis por quaisquer danos diretos, indiretos, incidentais ou
-        consequenciais resultantes do uso ou da incapacidade de usar a
-        Plataforma.
-      </P>
-
-      <H2>10. Alterações nos Termos</H2>
-      <P>
-        Reservamo-nos o direito de modificar estes Termos a qualquer momento.
-        Notificaremos sobre quaisquer alterações significativas. O uso contínuo
-        da Plataforma após tais alterações constitui sua aceitação dos novos
-        Termos.
-      </P>
-
-      <H2>11. Contato</H2>
-      <P>
-        Se você tiver alguma dúvida sobre estes Termos, entre em contato
-        conosco.
-      </P>
-
-      <div className="border-t my-8"></div>
+      <Divider />
 
       <H1>Política de Privacidade</H1>
       <P>
@@ -215,7 +166,7 @@ export function LegalContent({
       <P>
         <Bold>a) Informações que você nos fornece:</Bold>
       </P>
-      <ul className="list-disc">
+      <UL>
         <LI>
           <Bold>Cadastro de Conta:</Bold> Coletamos seu nome completo, endereço
           de e-mail, gênero e igreja. Estas informações são usadas para criar e
@@ -228,12 +179,12 @@ export function LegalContent({
           privado. Você tem controle total sobre ele e pode optar por
           compartilhá-lo com seu/sua Mentor(a).
         </LI>
-      </ul>
+      </UL>
 
-      <P className="mt-4">
+      <P style={{ marginTop: "16px" }}>
         <Bold>b) Informações coletadas automaticamente:</Bold>
       </P>
-      <ul className="list-disc">
+      <UL>
         <LI>
           <Bold>Dados de Uso:</Bold> Podemos coletar informações sobre como você
           interage com a Plataforma, como os recursos que utiliza e o tempo
@@ -244,120 +195,13 @@ export function LegalContent({
           sobre o seu dispositivo, como modelo, sistema operacional e
           identificadores únicos, para fins de solução de problemas e análise.
         </LI>
-      </ul>
+      </UL>
 
-      <H2>2. Como Usamos Suas Informações</H2>
-      <ul className="list-disc">
-        <LI>
-          <Bold>Para Fornecer e Manter o Serviço:</Bold> Usamos suas informações
-          para operar a Plataforma, autenticar o acesso, fornecer devocionais e
-          facilitar a funcionalidade de diário e mentoria.
-        </LI>
-        <LI>
-          <Bold>Comunicação:</Bold> Podemos usar seu e-mail para enviar
-          notificações importantes sobre sua conta, atualizações do serviço ou
-          alterações em nossas políticas.
-        </LI>
-        <LI>
-          <Bold>Personalização:</Bold> Usamos informações como seu nome e gênero
-          para personalizar sua experiência (por exemplo, saudações e designação
-          de mentoria).
-        </LI>
-        <LI>
-          <Bold>Segurança e Proteção:</Bold> Usamos as informações para proteger
-          a segurança e a integridade de nosso serviço e de seus usuários(as).
-        </LI>
-      </ul>
-
-      <H2>3. Compartilhamento e Divulgação de Informações</H2>
-      <P>
-        Sua privacidade é nossa prioridade. Não vendemos, alugamos ou
-        compartilhamos suas informações pessoais com terceiros para fins de
-        marketing.
-      </P>
-      <ul className="list-disc">
-        <LI>
-          <Bold>Mentoria:</Bold> Se você é um(a) Missionário(a) e opta por
-          compartilhar uma entrada de diário, essa entrada específica será
-          visível para seu/sua Mentor(a) designado(a). Nenhuma outra informação
-          ou entrada é compartilhada sem sua ação explícita.
-        </LI>
-        <LI>
-          <Bold>Obrigações Legais:</Bold> Podemos divulgar suas informações se
-          formos obrigados por lei ou se acreditarmos de boa fé que tal ação é
-          necessária para cumprir um processo legal.
-        </LI>
-        <LI>
-          <Bold>Provedores de Serviço:</Bold> Usamos provedores de serviços de
-          terceiros (como Supabase para backend e armazenamento) que processam
-          dados em nosso nome. Tais provedores são obrigados contratualmente a
-          proteger suas informações e só podem usá-las para os fins que
-          especificamos.
-        </LI>
-      </ul>
-
-      <H2>4. Segurança de Dados</H2>
-      <P>
-        Implementamos medidas de segurança técnicas e organizacionais para
-        proteger suas informações pessoais.
-      </P>
-      <ul className="list-disc">
-        <LI>
-          <Bold>Criptografia:</Bold> O conteúdo do seu diário é criptografado em
-          nosso banco de dados.
-        </LI>
-        <LI>
-          <Bold>Acesso Restrito:</Bold> O acesso direto ao banco de dados é
-          estritamente limitado a pessoal autorizado. Nossa equipe de
-          administração não pode visualizar o conteúdo das entradas do seu
-          diário.
-        </LI>
-        <LI>
-          <Bold>Autenticação Segura:</Bold> Usamos métodos de autenticação
-          seguros para proteger o acesso à sua conta.
-        </LI>
-      </ul>
-
-      <H2>5. Seus Direitos e Escolhas</H2>
-      <ul className="list-disc">
-        <LI>
-          <Bold>Acesso e Atualização:</Bold> Você pode revisar e atualizar as
-          informações do seu perfil a qualquer momento na Plataforma.
-        </LI>
-        <LI>
-          <Bold>Exclusão de Conta:</Bold> Você pode excluir sua conta
-          permanentemente na seção de configurações do perfil. A exclusão
-          resultará na remoção completa e irreversível de todos os seus dados,
-          incluindo nome, e-mail e todas as entradas do diário.
-        </LI>
-        <LI>
-          <Bold>Compartilhamento do Diário:</Bold> Você tem controle total sobre
-          quais entradas do diário, se houver, são compartilhadas com seu/sua
-          Mentor(a).
-        </LI>
-      </ul>
-
-      <H2>6. Privacidade de Crianças</H2>
-      <P>
-        Nosso serviço não se destina a indivíduos menores de 18 anos. Não
-        coletamos intencionalmente informações pessoais de crianças.
-      </P>
-
-      <H2>7. Alterações a esta Política</H2>
-      <P>Podemos atualizar nossa Política de Privacidade periodicamente.</P>
-
-      <H2>8. Contato</H2>
-      <P>
-        Se você tiver alguma dúvida ou preocupação sobre nossa Política de
-        Privacidade, entre em contato conosco.
-      </P>
       {showAcceptButton && onAccept && (
-        <div className="sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 mt-8 -mx-4 -mb-8 text-center">
-          <Button size="lg" onClick={onAccept}>
-            Li e concordo
-          </Button>
-        </div>
+        <Footer>
+          <Button label="Li e concordo" onClick={onAccept} />
+        </Footer>
       )}
-    </div>
+    </Container>
   );
 }

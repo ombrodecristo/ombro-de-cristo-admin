@@ -1,7 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 import { GlobalLoader } from "./components/GlobalLoader";
-import { cn } from "./lib/utils";
 import { useEffect } from "react";
 
 function App() {
@@ -45,15 +44,22 @@ function App() {
     return <GlobalLoader />;
   }
 
+  const appStyles = {
+    display: "flex",
+    height: "100vh",
+    width: "100%",
+  };
+
+  const authPageStyles = {
+    minHeight: "100vh",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "1rem",
+  };
+
   return (
-    <div
-      className={cn(
-        "flex h-screen w-full",
-        isAuthPage
-          ? "min-h-screen flex-col items-center justify-center bg-background p-4"
-          : ""
-      )}
-    >
+    <div style={isAuthPage ? { ...appStyles, ...authPageStyles } : appStyles}>
       <Outlet />
     </div>
   );

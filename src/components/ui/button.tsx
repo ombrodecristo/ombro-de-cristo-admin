@@ -1,56 +1,105 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import styled from "@emotion/styled";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-import { cn } from "@/lib/utils";
-
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-);
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+interface ButtonStyleProps {
+  variant?: "primary" | "secondary" | "destructive";
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Button.displayName = "Button";
+const StyledButton = styled.button<ButtonStyleProps>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${props => props.theme.spacing.s}px;
+  height: 56px;
+  width: 100%;
+  border-radius: ${props => props.theme.borderRadii.l}px;
+  font-family: ${props => props.theme.textVariants.buttonLabel.fontFamily};
+  font-weight: ${props => props.theme.textVariants.buttonLabel.fontWeight};
+  font-size: ${props => props.theme.textVariants.buttonLabel.fontSize}px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1.5px solid transparent;
+  padding: 0 ${props => props.theme.spacing.l}px;
 
-export { Button, buttonVariants };
+  ${props => {
+    switch (props.variant) {
+      case "secondary":
+        return `
+          background-color: ${props.theme.colors.buttonSecondaryBackground};
+          color: ${props.theme.colors.buttonSecondaryForeground};
+          border-color: ${props.theme.colors.buttonSecondaryBorder};
+          &:hover:not(:disabled) {
+            background-color: ${props.theme.colors.mutedBackground};
+          }
+        `;
+      case "destructive":
+        return `
+          background-color: ${props.theme.colors.destructiveBackground};
+          color: ${props.theme.colors.destructiveForeground};
+          &:hover:not(:disabled) {
+            opacity: 0.9;
+          }
+        `;
+      default:
+        return `
+          background-color: ${props.theme.colors.buttonPrimaryBackground};
+          color: ${props.theme.colors.buttonPrimaryForeground};
+          &:hover:not(:disabled) {
+            opacity: 0.9;
+          }
+        `;
+    }
+  }}
+
+  &:disabled {
+    background-color: ${props => props.theme.colors.buttonDisabledBackground};
+    color: ${props => props.theme.colors.buttonDisabledForeground};
+    border-color: transparent;
+    cursor: not-allowed;
+  }
+`;
+
+const SpinnerContainer = styled.div`
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+`;
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "destructive";
+  loading?: boolean;
+  label: string;
+  icon?: ReactNode;
+}
+
+export const Button = ({
+  label,
+  loading = false,
+  disabled = false,
+  icon,
+  ...props
+}: ButtonProps) => {
+  return (
+    <StyledButton disabled={loading || disabled} {...props}>
+      {loading ? (
+        <SpinnerContainer />
+      ) : (
+        <>
+          {icon}
+          <span>{label}</span>
+        </>
+      )}
+    </StyledButton>
+  );
+};

@@ -1,21 +1,41 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import styled from "@emotion/styled";
+import { forwardRef } from "react";
+import type { TextareaHTMLAttributes } from "react";
 
-const Textarea = React.forwardRef<
+const StyledTextarea = styled.textarea`
+  min-height: 120px;
+  width: 100%;
+  border-radius: ${props => props.theme.borderRadii.m}px;
+  border: 1.5px solid ${props => props.theme.colors.inputBorder};
+  background-color: ${props => props.theme.colors.inputBackground};
+  padding: ${props => props.theme.spacing.sm}px
+    ${props => props.theme.spacing.m}px;
+  font-size: ${props => props.theme.textVariants.body.fontSize}px;
+  color: ${props => props.theme.colors.inputForeground};
+  transition: border-color 0.2s;
+  resize: vertical;
+
+  &::placeholder {
+    color: ${props => props.theme.colors.mutedForeground};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${props => props.theme.colors.primary};
+  }
+
+  &:disabled {
+    background-color: ${props => props.theme.colors.mutedBackground};
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
+export const Textarea = forwardRef<
   HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
->(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      className={cn(
-        "flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
+  TextareaHTMLAttributes<HTMLTextAreaElement>
+>((props, ref) => {
+  return <StyledTextarea ref={ref} {...props} />;
 });
-Textarea.displayName = "Textarea";
 
-export { Textarea };
+Textarea.displayName = "Textarea";

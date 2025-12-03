@@ -3,11 +3,6 @@ import { type Church } from "../../types/database";
 import { churchService } from "../../services/churchService";
 import { logService } from "../../services/logService";
 
-export type SortConfig = {
-  key: keyof Church | null;
-  direction: "ascending" | "descending";
-};
-
 export function useChurchManagementViewModel() {
   const [churches, setChurches] = useState<Church[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +12,10 @@ export function useChurchManagementViewModel() {
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const [sortConfig, setSortConfig] = useState<SortConfig>({
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Church | null;
+    direction: "ascending" | "descending";
+  }>({
     key: "name",
     direction: "ascending",
   });

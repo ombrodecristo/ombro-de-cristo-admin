@@ -4,11 +4,7 @@ import {
   type DevotionalWithAuthor,
 } from "../../services/devotionalService";
 import { logService } from "../../services/logService";
-
-export type SortConfig = {
-  key: keyof DevotionalWithAuthor | "author" | null;
-  direction: "ascending" | "descending";
-};
+import type { SortConfig } from "@/components/DevotionalTable/index";
 
 export function useDevotionalManagementViewModel() {
   const [devotionals, setDevotionals] = useState<DevotionalWithAuthor[]>([]);
@@ -55,38 +51,23 @@ export function useDevotionalManagementViewModel() {
     const sortableDevotionals = [...filteredDevotionals];
     if (sortConfig.key !== null) {
       sortableDevotionals.sort((a, b) => {
-        let aValue: string | number | null | undefined;
-        let bValue: string | number | null | undefined;
+        let aValue: any;
+        let bValue: any;
 
         if (sortConfig.key === "author") {
           aValue = a.author?.full_name ?? "";
           bValue = b.author?.full_name ?? "";
         } else {
-          aValue = a[sortConfig.key as keyof DevotionalWithAuthor] as
-            | string
-            | number
-            | null
-            | undefined;
-          bValue = b[sortConfig.key as keyof DevotionalWithAuthor] as
-            | string
-            | number
-            | null
-            | undefined;
+          aValue = a[sortConfig.key as keyof DevotionalWithAuthor];
+          bValue = b[sortConfig.key as keyof DevotionalWithAuthor];
         }
 
-        if (
-          aValue !== null &&
-          aValue !== undefined &&
-          bValue !== null &&
-          bValue !== undefined
-        ) {
-          if (aValue < bValue) {
-            return sortConfig.direction === "ascending" ? -1 : 1;
-          }
+        if (aValue < bValue) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
 
-          if (aValue > bValue) {
-            return sortConfig.direction === "ascending" ? 1 : -1;
-          }
+        if (aValue > bValue) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
         }
 
         return 0;

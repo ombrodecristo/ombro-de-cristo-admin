@@ -17,6 +17,7 @@ export function useUserMenuViewModel({
 }: UseUserMenuViewModelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -75,6 +76,11 @@ export function useUserMenuViewModel({
 
     if (!user || !profile) return;
 
+    if (fullName.trim() === profile.full_name) {
+      setIsEditingName(false);
+      return;
+    }
+
     setIsSavingName(true);
     const { data, error: updateError } = await profileService.updateProfile(
       user.id,
@@ -97,11 +103,6 @@ export function useUserMenuViewModel({
     }
   };
 
-  const handleCloseModals = () => {
-    setIsChangePasswordOpen(false);
-    setIsOpen(false);
-  };
-
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
@@ -114,14 +115,12 @@ export function useUserMenuViewModel({
     setSuccessMessage(null);
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    setIsOpen(false);
-  };
-
   return {
     isOpen,
+    setIsOpen,
     isDeleting,
+    isDeleteConfirmOpen,
+    setDeleteConfirmOpen,
     profile,
     isEditingName,
     setIsEditingName,
@@ -134,9 +133,7 @@ export function useUserMenuViewModel({
     successMessage,
     handleDeleteAccount,
     handleSaveName,
-    handleCloseModals,
     handleOpenChange,
-    handleSignOut,
     setError,
     setSuccessMessage,
   };

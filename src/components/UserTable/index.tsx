@@ -1,17 +1,30 @@
-import { Edit, ArrowUp, ArrowDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import styled from "@emotion/styled";
+import { FiEdit, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import { type ProfileWithRelations } from "@/services/profileService";
+import { formatGender, formatRole } from "@/lib/formatters";
 import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
-  TableHeader,
+  TableHeaderCell,
   TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
-import { type SortConfig } from "@/pages/UserManagement/useUserManagementViewModel";
-import { type ProfileWithRelations } from "@/services/profileService";
-import { formatGender, formatRole } from "@/lib/formatters";
+} from "@/components/ui/Table";
+import { Button } from "@/components/ui/Button";
+
+export type SortConfig = {
+  key: keyof ProfileWithRelations | null;
+  direction: "ascending" | "descending";
+};
+
+const HeaderCellContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+`;
 
 type UserTableProps = {
   profiles: ProfileWithRelations[];
@@ -27,100 +40,82 @@ export default function UserTable({
   requestSort,
 }: UserTableProps) {
   const getSortIcon = (key: keyof ProfileWithRelations) => {
-    if (sortConfig.key !== key) {
-      return null;
-    }
+    if (sortConfig.key !== key) return null;
     return sortConfig.direction === "ascending" ? (
-      <ArrowUp className="ml-2 h-4 w-4" />
+      <FiArrowUp size={16} />
     ) : (
-      <ArrowDown className="ml-2 h-4 w-4" />
+      <FiArrowDown size={16} />
     );
   };
 
   return (
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell onClick={() => requestSort("full_name")}>
+              <HeaderCellContent>
+                Nome {getSortIcon("full_name")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("role")}>
+              <HeaderCellContent>
+                Permissão {getSortIcon("role")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("gender")}>
+              <HeaderCellContent>
+                Gênero {getSortIcon("gender")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("churches")}>
+              <HeaderCellContent>
+                Igreja {getSortIcon("churches")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("mentor")}>
+              <HeaderCellContent>
+                Mentoria {getSortIcon("mentor")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell style={{ width: "120px" }}>Ações</TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {profiles.length === 0 ? (
             <TableRow>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("full_name")}
+              <TableCell
+                colSpan={6}
+                style={{ textAlign: "center", height: "100px" }}
               >
-                <div className="flex items-center">
-                  Nome {getSortIcon("full_name")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("role")}
-              >
-                <div className="flex items-center">
-                  Permissão {getSortIcon("role")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("gender")}
-              >
-                <div className="flex items-center">
-                  Gênero {getSortIcon("gender")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("churches")}
-              >
-                <div className="flex items-center">
-                  Igreja {getSortIcon("churches")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("mentor")}
-              >
-                <div className="flex items-center">
-                  Mentoria {getSortIcon("mentor")}
-                </div>
-              </TableHead>
-              <TableHead>Ações</TableHead>
+                Nenhum perfil encontrado.
+              </TableCell>
             </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {profiles.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  Nenhum perfil encontrado.
+          ) : (
+            profiles.map(profile => (
+              <TableRow key={profile.id}>
+                <TableCell style={{ fontWeight: "500" }}>
+                  {profile.full_name}
+                </TableCell>
+                <TableCell>
+                  {formatRole(profile.role, profile.gender)}
+                </TableCell>
+                <TableCell>{formatGender(profile.gender)}</TableCell>
+                <TableCell>{profile.churches?.name ?? "N/A"}</TableCell>
+                <TableCell>{profile.mentor?.full_name ?? "N/A"}</TableCell>
+                <TableCell>
+                  <Button
+                    label="Editar"
+                    onClick={() => onEdit(profile)}
+                    icon={<FiEdit />}
+                    style={{ height: "40px", width: "auto" }}
+                  />
                 </TableCell>
               </TableRow>
-            ) : (
-              profiles.map(profile => (
-                <TableRow key={profile.id}>
-                  <TableCell className="font-medium">
-                    {profile.full_name}
-                  </TableCell>
-                  <TableCell>
-                    {formatRole(profile.role, profile.gender)}
-                  </TableCell>
-                  <TableCell>{formatGender(profile.gender)}</TableCell>
-                  <TableCell>{profile.churches?.name ?? "N/A"}</TableCell>
-                  <TableCell>{profile.mentor?.full_name ?? "N/A"}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => onEdit(profile)}
-                    >
-                      <Edit className="mr-2 h-4 w-4" /> Editar
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

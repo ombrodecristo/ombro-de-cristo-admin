@@ -1,15 +1,52 @@
-import { Lock, LogIn, AlertCircle, CheckCircle, LockIcon } from "lucide-react";
+import { useEffect } from "react";
+import styled from "@emotion/styled";
+import {
+  FiLock,
+  FiLogIn,
+  FiAlertCircle,
+  FiCheckCircle,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 import { usePasswordRecoveryViewModel } from "./usePasswordRecoveryViewModel";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { AlertDescription } from "@/components/ui/alert";
-import { PasswordInput } from "@/components/ui/password-input";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Label } from "@/components/ui/Label";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { useAuth } from "@/contexts/AuthContext";
 import { GlobalLoader } from "@/components/GlobalLoader";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
+
+const StatusIcon = styled.div`
+  svg {
+    width: 48px;
+    height: 48px;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: ${props => props.theme.spacing.m}px;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const StatusText = styled.p`
+  text-align: center;
+  color: ${props => props.theme.colors.mutedForeground};
+  line-height: 1.6;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 14px;
+  color: ${props => props.theme.colors.destructiveBackground};
+  text-align: center;
+`;
 
 export default function PasswordRecovery() {
   const { loading: authLoading, initialHash } = useAuth();
@@ -27,12 +64,6 @@ export default function PasswordRecovery() {
   } = usePasswordRecoveryViewModel({ authLoading, initialHash });
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (success) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
@@ -43,26 +74,32 @@ export default function PasswordRecovery() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="items-center text-center">
+    <Card style={{ width: "100%", maxWidth: "448px" }}>
+      <CardHeader>
         {!isTokenValid && !success ? (
           <>
-            <AlertCircle className="h-12 w-12 text-destructive" />
-            <CardTitle className="text-2xl text-destructive">
+            <StatusIcon>
+              <FiAlertCircle style={{ color: "var(--color-destructive)" }} />
+            </StatusIcon>
+            <CardTitle style={{ color: "var(--color-destructive)" }}>
               Link Inválido
             </CardTitle>
           </>
         ) : success ? (
           <>
-            <CheckCircle className="h-12 w-12 text-primary" />
-            <CardTitle className="text-2xl text-primary">
+            <StatusIcon>
+              <FiCheckCircle style={{ color: "var(--color-primary)" }} />
+            </StatusIcon>
+            <CardTitle style={{ color: "var(--color-primary)" }}>
               Senha Alterada
             </CardTitle>
           </>
         ) : (
           <>
-            <LockIcon className="h-12 w-12 text-primary" />
-            <CardTitle className="text-2xl text-primary">
+            <StatusIcon>
+              <FiLock style={{ color: "var(--color-primary)" }} />
+            </StatusIcon>
+            <CardTitle style={{ color: "var(--color-primary)" }}>
               Redefina sua Senha
             </CardTitle>
           </>
@@ -71,67 +108,61 @@ export default function PasswordRecovery() {
 
       <CardContent>
         {!isTokenValid && !success ? (
-          <AlertDescription className="text-center text-muted-foreground">
+          <StatusText>
             Link de redefinição de senha inválido ou expirado.
             <br />
             Por favor, solicite um novo link no aplicativo.
-          </AlertDescription>
+          </StatusText>
         ) : success ? (
-          <p className="text-center text-muted-foreground">
+          <StatusText>
             Sua senha foi alterada com sucesso!
             <br />
             Você já pode fechar esta página.
-          </p>
+          </StatusText>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-3">
+          <Form onSubmit={handleSubmit}>
+            <FormGroup>
               <Label htmlFor="password">Nova Senha</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <PasswordInput
-                  id="password"
-                  placeholder="••••••••"
-                  className="pl-9"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  autoComplete="new-password"
-                  disabled={loading}
-                />
-              </div>
-            </div>
+              <PasswordInput
+                id="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                disabled={loading}
+                icon={<FiLock size={20} />}
+                toggleIconShow={<FiEye size={20} />}
+                toggleIconHide={<FiEyeOff size={20} />}
+              />
+            </FormGroup>
 
-            <div className="space-y-3">
+            <FormGroup>
               <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <PasswordInput
-                  id="confirmPassword"
-                  placeholder="••••••••"
-                  className="pl-9"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  required
-                  autoComplete="new-password"
-                  disabled={loading}
-                />
-              </div>
-            </div>
+              <PasswordInput
+                id="confirmPassword"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                disabled={loading}
+                icon={<FiLock size={20} />}
+                toggleIconShow={<FiEye size={20} />}
+                toggleIconHide={<FiEyeOff size={20} />}
+              />
+            </FormGroup>
+
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
             <Button
               type="submit"
-              variant="default"
               disabled={loading}
-              className="w-full"
-            >
-              {loading ? (
-                <Spinner className="h-4 w-4" />
-              ) : (
-                <LogIn className="h-4 w-4" />
-              )}
-              Alterar Senha
-            </Button>
-          </form>
+              loading={loading}
+              label="Alterar Senha"
+              icon={<FiLogIn />}
+            />
+          </Form>
         )}
       </CardContent>
     </Card>

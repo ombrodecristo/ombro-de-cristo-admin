@@ -1,17 +1,35 @@
-import { Edit, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import styled from "@emotion/styled";
+import { FiEdit, FiTrash2, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import { type DevotionalWithAuthor } from "@/services/devotionalService";
+import { formatDate } from "@/lib/formatters";
 import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
-  TableHeader,
+  TableHeaderCell,
   TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
-import { type DevotionalWithAuthor } from "@/services/devotionalService";
-import { type SortConfig } from "@/pages/DevotionalManagement/useDevotionalManagementViewModel";
-import { formatDate } from "@/lib/formatters";
+} from "@/components/ui/Table";
+import { Button } from "@/components/ui/Button";
+
+export type SortConfig = {
+  key: keyof DevotionalWithAuthor | "author" | null;
+  direction: "ascending" | "descending";
+};
+
+const HeaderCellContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+`;
+
+const ActionsCell = styled.div`
+  display: flex;
+  gap: 8px;
+`;
 
 type DevotionalTableProps = {
   devotionals: DevotionalWithAuthor[];
@@ -29,89 +47,78 @@ export default function DevotionalTable({
   requestSort,
 }: DevotionalTableProps) {
   const getSortIcon = (key: keyof DevotionalWithAuthor | "author") => {
-    if (sortConfig.key !== key) {
-      return null;
-    }
+    if (sortConfig.key !== key) return null;
     return sortConfig.direction === "ascending" ? (
-      <ArrowUp className="ml-2 h-4 w-4" />
+      <FiArrowUp size={16} />
     ) : (
-      <ArrowDown className="ml-2 h-4 w-4" />
+      <FiArrowDown size={16} />
     );
   };
 
   return (
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell onClick={() => requestSort("title")}>
+              <HeaderCellContent>
+                Título {getSortIcon("title")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("author")}>
+              <HeaderCellContent>
+                Autoria {getSortIcon("author")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("updated_at")}>
+              <HeaderCellContent>
+                Última Modificação {getSortIcon("updated_at")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell style={{ width: "180px" }}>Ações</TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {devotionals.length === 0 ? (
             <TableRow>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("title")}
+              <TableCell
+                colSpan={4}
+                style={{ textAlign: "center", height: "100px" }}
               >
-                <div className="flex items-center">
-                  Título {getSortIcon("title")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("author")}
-              >
-                <div className="flex items-center">
-                  Autoria {getSortIcon("author")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("updated_at")}
-              >
-                <div className="flex items-center">
-                  Última Modificação {getSortIcon("updated_at")}
-                </div>
-              </TableHead>
-              <TableHead className="w-[180px]">Ações</TableHead>
+                Nenhum devocional encontrado.
+              </TableCell>
             </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {devotionals.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center">
-                  Nenhum devocional encontrado.
+          ) : (
+            devotionals.map(devotional => (
+              <TableRow key={devotional.id}>
+                <TableCell style={{ fontWeight: "500" }}>
+                  {devotional.title}
+                </TableCell>
+                <TableCell>{devotional.author?.full_name ?? "N/A"}</TableCell>
+                <TableCell>{formatDate(devotional.updated_at)}</TableCell>
+                <TableCell>
+                  <ActionsCell>
+                    <Button
+                      label="Editar"
+                      onClick={() => onEdit(devotional)}
+                      icon={<FiEdit />}
+                      variant="secondary"
+                      style={{ height: "40px", width: "auto" }}
+                    />
+                    <Button
+                      label="Excluir"
+                      onClick={() => onDelete(devotional)}
+                      icon={<FiTrash2 />}
+                      variant="destructive"
+                      style={{ height: "40px", width: "auto" }}
+                    />
+                  </ActionsCell>
                 </TableCell>
               </TableRow>
-            ) : (
-              devotionals.map(devotional => (
-                <TableRow key={devotional.id}>
-                  <TableCell className="font-medium">
-                    {devotional.title}
-                  </TableCell>
-                  <TableCell>{devotional.author?.full_name ?? "N/A"}</TableCell>
-                  <TableCell>{formatDate(devotional.updated_at)}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEdit(devotional)}
-                      >
-                        <Edit className="mr-2 h-4 w-4" /> Editar
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => onDelete(devotional)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" /> Excluir
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

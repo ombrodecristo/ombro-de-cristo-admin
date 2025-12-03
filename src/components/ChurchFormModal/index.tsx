@@ -1,79 +1,88 @@
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { type Church } from "@/types/database";
+import { useEffect, useState } from "react";
+import styled from "@emotion/styled";
 import { useChurchFormViewModel } from "./useChurchFormViewModel";
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { type Church } from "@/types/database";
 
-type ChurchFormModalProps = {
-  open: boolean;
-  churchToEdit: Church | null;
+const Content = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.m}px;
+  width: 380px;
+`;
+
+const Title = styled.h2`
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 14px;
+  color: ${props => props.theme.colors.destructiveBackground};
+`;
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+`;
+
+interface ChurchFormModalProps {
+  isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-};
+  churchToEdit: Church | null;
+}
 
 export default function ChurchFormModal({
-  open,
-  churchToEdit,
+  isOpen,
   onClose,
   onSuccess,
+  churchToEdit,
 }: ChurchFormModalProps) {
+  const [localError, setLocalError] = useState<string | null>(null);
   const { name, setName, loading, error, isEditing, handleSubmit } =
     useChurchFormViewModel({ churchToEdit, onClose, onSuccess });
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
+    setLocalError(error);
   }, [error]);
 
+  useEffect(() => {
+    if (name) setLocalError(null);
+  }, [name]);
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Editar Igreja" : "Nova Igreja"}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="grid gap-4 py-4">
-            <div className="space-y-3">
-              <Label htmlFor="name">Nome da igreja</Label>
-              <Input
-                id="name"
-                placeholder="Ex: Igreja Central"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                disabled={loading}
-                required
-              />
-            </div>
-          </div>
-
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="ghost" disabled={loading}>
-                Cancelar
-              </Button>
-            </DialogClose>
-            <Button type="submit" variant="default" disabled={loading}>
-              {loading && <Spinner className="mr-2 h-4 w-4" />}
-              Salvar
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Content onSubmit={handleSubmit}>
+        <Title>{isEditing ? "Editar Igreja" : "Nova Igreja"}</Title>
+        <div>
+          <Label htmlFor="name">Nome da igreja</Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            disabled={loading}
+            required
+          />
+        </div>
+        {localError && <ErrorMessage>{localError}</ErrorMessage>}
+        <Actions>
+          <Button type="submit" label="Salvar" loading={loading} />
+          <Button
+            type="button"
+            label="Cancelar"
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+          />
+        </Actions>
+      </Content>
+    </Modal>
   );
 }

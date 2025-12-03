@@ -1,60 +1,59 @@
-import { Menu } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { SidebarNav } from "../SidebarNav";
-import { useRef } from "react";
+import styled from "@emotion/styled";
+import SidebarNav from "../SidebarNav";
+
+const SidebarContainer = styled.aside<{ isOpen: boolean }>`
+  display: flex;
+  flex-direction: column;
+  background-color: ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.primaryForeground};
+  width: ${props => (props.isOpen ? "256px" : "80px")};
+  transition: width 0.3s ease-in-out;
+  flex-shrink: 0;
+`;
+
+const Header = styled.div`
+  display: flex;
+  height: 64px;
+  align-items: center;
+  padding: 0 ${props => props.theme.spacing.l}px;
+  gap: ${props => props.theme.spacing.m}px;
+`;
+
+const Logo = styled.img`
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+`;
+
+const Title = styled.span<{ isOpen: boolean }>`
+  font-weight: bold;
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  visibility: ${props => (props.isOpen ? "visible" : "hidden")};
+  transition:
+    opacity 0.2s,
+    visibility 0.2s;
+`;
+
+const NavContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding-top: ${props => props.theme.spacing.s}px;
+`;
 
 type SidebarProps = {
-  isDesktopClosed: boolean;
-  onToggleDesktop: () => void;
+  isOpen: boolean;
 };
 
-export default function Sidebar({
-  isDesktopClosed,
-  onToggleDesktop,
-}: SidebarProps) {
-  const sidebarRef = useRef<HTMLElement>(null);
-
-  const handleMouseEnter = () => {
-    if (isDesktopClosed) {
-      onToggleDesktop();
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!isDesktopClosed) {
-      onToggleDesktop();
-    }
-  };
-
+export default function Sidebar({ isOpen }: SidebarProps) {
   return (
-    <aside
-      ref={sidebarRef}
-      className={cn(
-        "hidden md:flex md:flex-col md:border-r md:bg-primary md:text-primary-foreground md:transition-all",
-        isDesktopClosed ? "w-16" : "w-64"
-      )}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="flex h-14 items-center p-4 md:h-16">
-        <div
-          className={cn(
-            "flex items-center gap-2 w-full",
-            isDesktopClosed && "justify-center"
-          )}
-        >
-          <Menu className="h-6 w-6" />
-          <span
-            className={cn("text-md font-semibold", isDesktopClosed && "hidden")}
-          >
-            Navegação
-          </span>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-auto py-2">
-        <SidebarNav isDesktopClosed={isDesktopClosed} />
-      </div>
-    </aside>
+    <SidebarContainer isOpen={isOpen}>
+      <Header>
+        <Logo src="/logo.png" alt="Logo Ombro de Cristo" />
+        <Title isOpen={isOpen}>Administração</Title>
+      </Header>
+      <NavContainer>
+        <SidebarNav isSidebarOpen={isOpen} />
+      </NavContainer>
+    </SidebarContainer>
   );
 }

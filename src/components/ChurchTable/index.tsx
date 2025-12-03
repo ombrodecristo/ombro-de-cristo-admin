@@ -1,17 +1,35 @@
-import { Edit, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import styled from "@emotion/styled";
+import { FiEdit, FiTrash2, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import { type Church } from "@/types/database";
+import { formatDate } from "@/lib/formatters";
 import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
-  TableHeader,
+  TableHeaderCell,
   TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
-import { type Church } from "@/types/database";
-import { type SortConfig } from "@/pages/ChurchManagement/useChurchManagementViewModel";
-import { formatDate } from "@/lib/formatters";
+} from "@/components/ui/Table";
+import { Button } from "@/components/ui/Button";
+
+export type SortConfig = {
+  key: keyof Church | null;
+  direction: "ascending" | "descending";
+};
+
+const HeaderCellContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+`;
+
+const ActionsCell = styled.div`
+  display: flex;
+  gap: 8px;
+`;
 
 type ChurchTableProps = {
   churches: Church[];
@@ -29,78 +47,70 @@ export default function ChurchTable({
   requestSort,
 }: ChurchTableProps) {
   const getSortIcon = (key: keyof Church) => {
-    if (sortConfig.key !== key) {
-      return null;
-    }
+    if (sortConfig.key !== key) return null;
     return sortConfig.direction === "ascending" ? (
-      <ArrowUp className="ml-2 h-4 w-4" />
+      <FiArrowUp size={16} />
     ) : (
-      <ArrowDown className="ml-2 h-4 w-4" />
+      <FiArrowDown size={16} />
     );
   };
 
   return (
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell onClick={() => requestSort("name")}>
+              <HeaderCellContent>Nome {getSortIcon("name")}</HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell onClick={() => requestSort("updated_at")}>
+              <HeaderCellContent>
+                Última Modificação {getSortIcon("updated_at")}
+              </HeaderCellContent>
+            </TableHeaderCell>
+            <TableHeaderCell style={{ width: "180px" }}>Ações</TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {churches.length === 0 ? (
             <TableRow>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("name")}
+              <TableCell
+                colSpan={3}
+                style={{ textAlign: "center", height: "100px" }}
               >
-                <div className="flex items-center">
-                  Nome {getSortIcon("name")}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => requestSort("updated_at")}
-              >
-                <div className="flex items-center">
-                  Última Modificação {getSortIcon("updated_at")}
-                </div>
-              </TableHead>
-              <TableHead className="w-[180px]">Ações</TableHead>
+                Nenhuma igreja encontrada.
+              </TableCell>
             </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {churches.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={3} className="h-24 text-center">
-                  Nenhuma igreja encontrada.
+          ) : (
+            churches.map(church => (
+              <TableRow key={church.id}>
+                <TableCell style={{ fontWeight: "500" }}>
+                  {church.name}
+                </TableCell>
+                <TableCell>{formatDate(church.updated_at)}</TableCell>
+                <TableCell>
+                  <ActionsCell>
+                    <Button
+                      label="Editar"
+                      onClick={() => onEdit(church)}
+                      icon={<FiEdit />}
+                      variant="secondary"
+                      style={{ height: "40px", width: "auto" }}
+                    />
+                    <Button
+                      label="Excluir"
+                      onClick={() => onDelete(church)}
+                      icon={<FiTrash2 />}
+                      variant="destructive"
+                      style={{ height: "40px", width: "auto" }}
+                    />
+                  </ActionsCell>
                 </TableCell>
               </TableRow>
-            ) : (
-              churches.map(church => (
-                <TableRow key={church.id}>
-                  <TableCell className="font-medium">{church.name}</TableCell>
-                  <TableCell>{formatDate(church.updated_at)}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEdit(church)}
-                      >
-                        <Edit className="mr-2 h-4 w-4" /> Editar
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => onDelete(church)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" /> Excluir
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

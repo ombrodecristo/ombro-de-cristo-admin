@@ -1,46 +1,106 @@
-import { useEffect } from "react";
+import styled from "@emotion/styled";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  User,
-  LogOut,
-  Trash2,
-  AlertCircle,
-  Edit,
-  Save,
-  KeyRound,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { Input } from "../ui/input";
-import ChangePasswordModal from "../ChangePasswordModal";
-import { Label } from "../ui/label";
 import { useUserMenuViewModel } from "./useUserMenuViewModel";
-import { Spinner } from "../ui/spinner";
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import ChangePasswordModal from "../ChangePasswordModal";
+import { ConfirmationModal } from "../ui/ConfirmationModal";
+import { FiUser, FiLogOut, FiEdit, FiSave, FiKey } from "react-icons/fi";
+
+const MenuTrigger = styled.button`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  padding: 0;
+  background-color: ${props => props.theme.colors.mutedBackground};
+  color: ${props => props.theme.colors.mutedForeground};
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${props => props.theme.colors.border};
+  }
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.l}px;
+  width: 320px;
+`;
+
+const ProfileSection = styled.div`
+  text-align: center;
+`;
+
+const NameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${props => props.theme.spacing.s}px;
+`;
+
+const Name = styled.p`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${props => props.theme.colors.mainForeground};
+`;
+
+const EditButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${props => props.theme.colors.mutedForeground};
+  &:hover {
+    color: ${props => props.theme.colors.primary};
+  }
+`;
+
+const Email = styled.p`
+  font-size: 14px;
+  color: ${props => props.theme.colors.mutedForeground};
+  margin-top: 4px;
+`;
+
+const ActionList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.s}px;
+`;
+
+const DeleteLink = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${props => props.theme.colors.destructiveBackground};
+  text-align: center;
+  font-size: 14px;
+  margin-top: ${props => props.theme.spacing.m}px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const NameForm = styled.form`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
 
 export default function UserMenu() {
   const { user, signOut } = useAuth();
   const {
     isOpen,
+    setIsOpen,
     isDeleting,
+    isDeleteConfirmOpen,
+    setDeleteConfirmOpen,
     profile,
     isEditingName,
     setIsEditingName,
@@ -49,203 +109,84 @@ export default function UserMenu() {
     isSavingName,
     isChangePasswordOpen,
     setIsChangePasswordOpen,
-    error,
-    successMessage,
     handleDeleteAccount,
     handleSaveName,
-    handleCloseModals,
-    handleOpenChange,
-    handleSignOut,
-    setError,
-    setSuccessMessage,
   } = useUserMenuViewModel({ user, signOut });
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      setError(null);
-    }
-  }, [error, setError]);
-
-  useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage);
-      setSuccessMessage(null);
-    }
-  }, [successMessage, setSuccessMessage]);
-
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-        <Button
-          className={cn(
-            "h-8 w-8 rounded-full p-0",
-            "bg-black/10 text-primary-foreground",
-            "hover:bg-black/20"
-          )}
-          onClick={() => handleOpenChange(true)}
-          aria-label="Menu do perfil"
-        >
-          <User className="h-6 w-6" />
-        </Button>
+      <MenuTrigger onClick={() => setIsOpen(true)}>
+        <FiUser size={20} />
+      </MenuTrigger>
 
-        <DialogContent className="max-w-xs">
-          <DialogHeader>
-            <DialogTitle className="text-center">Minha Conta</DialogTitle>
-          </DialogHeader>
-
-          {isEditingName ? (
-            <form
-              onSubmit={e => {
-                handleSaveName(e);
-              }}
-              className="space-y-2 pt-2"
-            >
-              <Label htmlFor="fullNameEdit" className="sr-only">
-                Nome Completo
-              </Label>
-              <div className="relative">
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Content>
+          <ProfileSection>
+            {isEditingName ? (
+              <NameForm onSubmit={handleSaveName}>
                 <Input
                   id="fullNameEdit"
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
                   disabled={isSavingName}
-                  className="pr-10"
+                  autoFocus
                 />
                 <Button
                   type="submit"
-                  size="icon"
-                  variant="ghost"
-                  className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 transform text-muted-foreground hover:bg-transparent hover:text-foreground"
+                  label={isSavingName ? "" : ""}
+                  loading={isSavingName}
                   disabled={isSavingName}
-                >
-                  {isSavingName ? (
-                    <Spinner className="h-4 w-4" />
-                  ) : (
-                    <Save className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-              <Button
-                type="button"
-                variant="link"
-                size="sm"
-                className="h-auto p-0"
-                onClick={() => {
-                  setIsEditingName(false);
-                  if (profile) {
-                    setFullName(profile.full_name);
-                  }
-                }}
-              >
-                Cancelar
-              </Button>
-            </form>
-          ) : (
-            <DialogDescription asChild>
-              <div className="text-center">
-                <div className="group relative mx-auto inline-block">
-                  <p className="text-md break-words font-medium text-foreground">
-                    {profile?.full_name ?? "..."}
-                  </p>
+                  style={{ width: "48px", height: "48px", flexShrink: 0 }}
+                  icon={<FiSave size={20} />}
+                />
+              </NameForm>
+            ) : (
+              <NameWrapper>
+                <Name>{profile?.full_name ?? "..."}</Name>
+                <EditButton onClick={() => setIsEditingName(true)}>
+                  <FiEdit size={16} />
+                </EditButton>
+              </NameWrapper>
+            )}
+            <Email>{user.email}</Email>
+          </ProfileSection>
 
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute -right-8 top-1/2 h-6 w-6 -translate-y-1/2 transform text-muted-foreground"
-                    onClick={() => setIsEditingName(true)}
-                    aria-label="Editar nome"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                </div>
-                <br />
-                <p className="text-sm text-muted-foreground break-words">
-                  {user.email}
-                </p>
-              </div>
-            </DialogDescription>
-          )}
-
-          <div className="mt-4 space-y-4">
+          <ActionList>
             <Button
               onClick={() => setIsChangePasswordOpen(true)}
-              className="w-full"
-              variant="outline"
-            >
-              <KeyRound className="mr-2 h-4 w-4" />
-              Alterar Senha
-            </Button>
+              label="Alterar Senha"
+              variant="secondary"
+              icon={<FiKey size={16} />}
+            />
+            <Button
+              onClick={signOut}
+              label="Sair"
+              icon={<FiLogOut size={16} />}
+            />
+          </ActionList>
 
-            <Button onClick={handleSignOut} className="w-full">
-              <LogOut className="mr-2 h-4 w-4" />
-              Sair
-            </Button>
-
-            <div className="border-t pt-4 text-center">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    className="h-auto p-0 text-destructive hover:text-destructive/80"
-                  >
-                    Excluir minha conta
-                  </Button>
-                </AlertDialogTrigger>
-
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="flex items-center gap-2">
-                      <AlertCircle className="h-5 w-5 text-destructive" />
-                      Excluir sua conta?
-                    </AlertDialogTitle>
-
-                    <AlertDialogDescription>
-                      Esta ação é permanente. Todos os seus dados, incluindo seu
-                      perfil e acesso, serão excluídos. Deseja continuar?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-
-                  <AlertDialogFooter>
-                    <AlertDialogCancel
-                      disabled={isDeleting}
-                      className={cn(
-                        buttonVariants({ variant: "ghost" }),
-                        "mt-0"
-                      )}
-                    >
-                      Cancelar
-                    </AlertDialogCancel>
-
-                    <AlertDialogAction
-                      onClick={handleDeleteAccount}
-                      disabled={isDeleting}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                    >
-                      {isDeleting ? (
-                        <Spinner className="mr-2 h-4 w-4" />
-                      ) : (
-                        <Trash2 className="mr-2 h-4 w-4" />
-                      )}
-                      Sim, excluir
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          <DeleteLink onClick={() => setDeleteConfirmOpen(true)}>
+            Excluir minha conta
+          </DeleteLink>
+        </Content>
+      </Modal>
 
       <ChangePasswordModal
-        open={isChangePasswordOpen}
-        onOpenChange={setIsChangePasswordOpen}
-        onClose={handleCloseModals}
+        isOpen={isChangePasswordOpen}
+        onClose={() => setIsChangePasswordOpen(false)}
+      />
+
+      <ConfirmationModal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={handleDeleteAccount}
+        title="Excluir sua conta?"
+        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados, incluindo seu perfil e acesso, serão excluídos."
+        confirmText="Sim, excluir"
+        variant="destructive"
+        loading={isDeleting}
       />
     </>
   );

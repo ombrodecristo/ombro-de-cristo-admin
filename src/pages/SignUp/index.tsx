@@ -1,24 +1,156 @@
-import { Mail, Lock, User, Users, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import {
+  FiMail,
+  FiLock,
+  FiUser,
+  FiUsers,
+  FiArrowRight,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 import { FaApple } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
+
 import { useSignUpViewModel } from "./useSignUpViewModel";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { type UserGender } from "@/types/database";
-import { PasswordInput } from "@/components/ui/password-input";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
+
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { PasswordInput } from "@/components/ui/PasswordInput";
+import { Select, type SelectOption } from "@/components/ui/Select";
 import { LegalAgreement } from "./LegalAgreement";
+
+const PageContainer = styled.div`
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+  }
+`;
+
+const IntroPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${props => props.theme.spacing.s}px;
+  background-color: ${props => props.theme.colors.primary};
+  padding: ${props => props.theme.spacing.l}px;
+  text-align: center;
+  color: ${props => props.theme.colors.primaryForeground};
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 33.333%;
+    height: 100%;
+    gap: ${props => props.theme.spacing.m}px;
+    padding: ${props => props.theme.spacing.xl}px;
+  }
+`;
+
+const IntroHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: ${props => props.theme.spacing.m}px;
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    flex-direction: column;
+    gap: ${props => props.theme.spacing.l}px;
+  }
+`;
+
+const LogoImage = styled.img`
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    height: 128px;
+    width: 128px;
+  }
+`;
+
+const AppTitle = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    font-size: 36px;
+  }
+`;
+
+const Slogan = styled.p`
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    font-size: 18px;
+  }
+`;
+
+const FormPanel = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: ${props => props.theme.colors.mainBackground};
+  padding: ${props => props.theme.spacing.m}px;
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 66.666%;
+    overflow-y: auto;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const ErrorMessage = styled.p`
+  font-family: ${props => props.theme.textVariants.error.fontFamily};
+  font-size: ${props => props.theme.textVariants.error.fontSize}px;
+  font-weight: ${props => props.theme.textVariants.error.fontWeight};
+  color: ${props => props.theme.colors.destructiveBackground};
+`;
+
+const Separator = styled.div`
+  border-top: 1px solid ${props => props.theme.colors.border};
+  margin: ${props => props.theme.spacing.m}px 0;
+`;
+
+const FooterText = styled.p`
+  text-align: center;
+  font-size: ${props => props.theme.textVariants.caption.fontSize}px;
+  font-weight: ${props => props.theme.textVariants.caption.fontWeight};
+  color: ${props => props.theme.colors.mutedForeground};
+`;
+
+const StoreButtonsContainer = styled.div`
+  display: flex;
+  gap: ${props => props.theme.spacing.m}px;
+`;
+
+const SuccessMessage = styled.p`
+  text-align: center;
+  color: ${props => props.theme.colors.success};
+  padding: ${props => props.theme.spacing.l}px 0;
+`;
 
 export default function SignUpPage() {
   const {
@@ -40,180 +172,166 @@ export default function SignUpPage() {
     handleSubmit,
   } = useSignUpViewModel();
 
+  const [localError, setLocalError] = useState<string | null>(null);
+
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
+    setLocalError(error);
   }, [error]);
 
   useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage);
+    if (fullName || gender || email || password || confirmPassword) {
+      setLocalError(null);
     }
-  }, [successMessage]);
+  }, [fullName, gender, email, password, confirmPassword]);
+
+  const genderOptions: SelectOption[] = [
+    { value: "MALE", label: "Masculino" },
+    { value: "FEMALE", label: "Feminino" },
+  ];
 
   return (
-    <div className="flex w-full min-h-screen flex-col md:h-screen md:flex-row md:overflow-hidden">
-      <div
-        className="flex flex-col items-center justify-center gap-2 bg-primary p-6 text-center text-primary-foreground
-                   md:h-full md:w-1/3 md:gap-2 md:p-12"
-      >
-        <div className="flex flex-row items-center justify-center gap-3 md:flex-col md:gap-6">
-          <img
-            src="/logo.png"
-            alt="Logo Ombro de Cristo"
-            className="h-12 w-12 md:h-32 md:w-32 object-contain"
-          />
-          <h1 className="text-2xl font-bold md:text-4xl">Ombro de Cristo</h1>
-        </div>
-        <p className="text-sm text-primary-foreground/80 md:text-lg">
-          Sua missão, fortalecida pela mentoria.
-        </p>
-      </div>
-      <div className="flex flex-1 items-center justify-center bg-background p-4 md:w-2/3 md:overflow-y-auto">
-        <Card className="w-full max-w-md">
-          <CardHeader className="items-center text-center">
-            <CardTitle className="pt-2 text-xl">
+    <PageContainer>
+      <IntroPanel>
+        <IntroHeader>
+          <LogoImage src="/logo.png" alt="Logo Ombro de Cristo" />
+          <AppTitle>Ombro de Cristo</AppTitle>
+        </IntroHeader>
+        <Slogan>Sua missão, fortalecida pela mentoria.</Slogan>
+      </IntroPanel>
+      <FormPanel>
+        <Card style={{ width: "100%", maxWidth: "448px" }}>
+          <CardHeader>
+            <CardTitle style={{ fontSize: "24px", paddingTop: "8px" }}>
               Junte-se à nossa comunidade
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-3">
-                <Label htmlFor="fullName">Nome Completo</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            {successMessage ? (
+              <SuccessMessage>{successMessage}</SuccessMessage>
+            ) : (
+              <Form onSubmit={handleSubmit}>
+                <FormGroup>
+                  <Label htmlFor="fullName">Nome Completo</Label>
                   <Input
                     id="fullName"
                     type="text"
                     placeholder="Seu nome"
-                    className="pl-9"
                     value={fullName}
                     onChange={e => setFullName(e.target.value)}
                     required
                     disabled={loading}
+                    icon={<FiUser size={20} />}
                   />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <Label htmlFor="gender">Gênero</Label>
-                <div className="relative">
-                  <Users className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label htmlFor="gender">Gênero</Label>
                   <Select
+                    options={genderOptions}
                     value={gender}
-                    onValueChange={value => setGender(value as UserGender)}
+                    onChange={(value: string) => setGender(value as UserGender)}
                     disabled={loading}
-                    required
-                  >
-                    <SelectTrigger id="gender-select" className="pl-9">
-                      <SelectValue placeholder="Seu gênero" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MALE">Masculino</SelectItem>
-                      <SelectItem value="FEMALE">Feminino</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <Label htmlFor="email">E-mail</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    placeholder="Seu gênero"
+                    icon={<FiUsers size={20} />}
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label htmlFor="email">E-mail</Label>
                   <Input
                     id="email"
                     type="email"
                     placeholder="email@exemplo.com"
-                    className="pl-9"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
                     autoComplete="email"
                     disabled={loading}
+                    icon={<FiMail size={20} />}
                   />
-                </div>
-              </div>
+                </FormGroup>
 
-              <div className="space-y-3">
-                <Label htmlFor="password">Senha</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <FormGroup>
+                  <Label htmlFor="password">Senha</Label>
                   <PasswordInput
                     id="password"
                     placeholder="••••••••"
-                    className="pl-9"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
                     disabled={loading}
+                    icon={<FiLock size={20} />}
+                    toggleIconShow={<FiEye size={20} />}
+                    toggleIconHide={<FiEyeOff size={20} />}
                   />
-                </div>
-              </div>
+                </FormGroup>
 
-              <div className="space-y-3">
-                <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <FormGroup>
+                  <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                   <PasswordInput
                     id="confirmPassword"
                     placeholder="••••••••"
-                    className="pl-9"
                     value={confirmPassword}
                     onChange={e => setConfirmPassword(e.target.value)}
                     required
                     autoComplete="new-password"
                     disabled={loading}
+                    icon={<FiLock size={20} />}
+                    toggleIconShow={<FiEye size={20} />}
+                    toggleIconHide={<FiEyeOff size={20} />}
                   />
-                </div>
-              </div>
+                </FormGroup>
 
-              <LegalAgreement
-                accepted={acceptedTerms}
-                onToggle={setAcceptedTerms}
-                isDisabled={loading}
-              />
+                <LegalAgreement
+                  accepted={acceptedTerms}
+                  onToggle={setAcceptedTerms}
+                  isDisabled={loading}
+                />
 
-              <Button
-                type="submit"
-                variant="default"
-                disabled={loading}
-                className="w-full"
-              >
-                {loading ? (
-                  <Spinner className="h-4 w-4" />
-                ) : (
-                  <ArrowRight className="h-4 w-4" />
-                )}
-                Criar conta
-              </Button>
-            </form>
-            <div className="border-t my-6" />
-            <div className="space-y-4 text-center">
-              <p className="text-sm font-medium text-muted-foreground">
+                {localError && <ErrorMessage>{localError}</ErrorMessage>}
+
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  loading={loading}
+                  label="Criar conta"
+                  icon={<FiArrowRight />}
+                />
+              </Form>
+            )}
+
+            <Separator />
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                textAlign: "center",
+              }}
+            >
+              <FooterText>
                 Em breve nas principais lojas de aplicativos!
-              </p>
-              <div className="flex gap-4">
+              </FooterText>
+              <StoreButtonsContainer>
                 <Button
-                  variant="outline"
-                  className="w-full"
+                  variant="secondary"
                   disabled
-                  title="Em breve"
-                >
-                  <IoLogoGooglePlaystore className="h-4 w-4" /> Google Play
-                </Button>
+                  label="Google Play"
+                  icon={<IoLogoGooglePlaystore size={16} />}
+                />
                 <Button
-                  variant="outline"
-                  className="w-full"
+                  variant="secondary"
                   disabled
-                  title="Em breve"
-                >
-                  <FaApple className="h-4 w-4" /> App Store
-                </Button>
-              </div>
+                  label="App Store"
+                  icon={<FaApple size={16} />}
+                />
+              </StoreButtonsContainer>
             </div>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </FormPanel>
+    </PageContainer>
   );
 }

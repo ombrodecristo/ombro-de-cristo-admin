@@ -3,8 +3,6 @@ import { useUserManagementViewModel } from "./useUserManagementViewModel";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Input } from "@/components/ui/Input";
 import { PageHeader } from "@/components/ui/PageHeader";
-import UserTable from "@/components/UserTable";
-import EditUserModal from "@/components/EditUserModal";
 import { FiSearch } from "react-icons/fi";
 import styled from "@emotion/styled";
 
@@ -16,20 +14,11 @@ const PageContainer = styled.div`
 
 export default function UserManagementPage() {
   const { user } = useAuth();
-  const {
-    loading,
-    searchQuery,
-    setSearchQuery,
-    sortConfig,
-    sortedProfiles,
-    requestSort,
-    editingProfile,
-    handleEdit,
-    handleCloseModal,
-    handleUpdateSuccess,
-  } = useUserManagementViewModel({ currentUserId: user?.id || "" });
+  const { loading, searchQuery, setSearchQuery } = useUserManagementViewModel({
+    currentUserId: user?.id || "",
+  });
 
-  if (loading && !editingProfile) {
+  if (loading) {
     return (
       <PageContainer>
         <PageHeader title="Perfis" />
@@ -49,20 +38,10 @@ export default function UserManagementPage() {
         icon={<FiSearch size={20} />}
         style={{ maxWidth: "400px" }}
       />
-      <UserTable
-        profiles={sortedProfiles}
-        onEdit={handleEdit}
-        sortConfig={sortConfig}
-        requestSort={requestSort}
-      />
-      {editingProfile && (
-        <EditUserModal
-          isOpen={!!editingProfile}
-          profile={editingProfile}
-          onClose={handleCloseModal}
-          onSuccess={handleUpdateSuccess}
-        />
-      )}
+      <p>
+        A tabela e o modal de edição de usuários serão implementados na próxima
+        etapa.
+      </p>
     </PageContainer>
   );
 }

@@ -1,15 +1,28 @@
-import { cn } from "@/lib/utils";
+import { keyframes } from "@emotion/react";
+import styled from "@emotion/styled";
 
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-primary/10", className)}
-      {...props}
-    />
-  );
+const pulse = keyframes`
+  50% {
+    opacity: 0.5;
+  }
+`;
+
+const SkeletonPrimitive = styled.div`
+  background-color: ${props => props.theme.colors.mutedBackground};
+  border-radius: ${props => props.theme.borderRadii.s}px;
+  animation: ${pulse} 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+`;
+
+interface SkeletonProps {
+  height?: string;
+  width?: string;
+  className?: string;
 }
 
-export { Skeleton };
+export function Skeleton({
+  height = "20px",
+  width = "100%",
+  className,
+}: SkeletonProps) {
+  return <SkeletonPrimitive style={{ height, width }} className={className} />;
+}
