@@ -1,49 +1,66 @@
 import styled from "@emotion/styled";
 
-const LogoContainer = styled.div`
+const LogoContainer = styled.div<{ variant: "light" | "dark" }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${props => props.theme.spacing.xs}px;
   text-decoration: none;
+  gap: ${props => props.theme.spacing.none}px;
+
+  h1 {
+    color: ${props =>
+      props.variant === "light"
+        ? props.theme.colors.white
+        : props.theme.colors.primary};
+    font-size: 32px;
+    line-height: 36px;
+    margin-top: -${props => props.theme.spacing.s}px;
+    text-align: center;
+  }
+
+  p {
+    font-family: ${props => props.theme.textVariants.caption.fontFamily};
+    font-size: 16px;
+    font-weight: 600;
+    color: ${props =>
+      props.variant === "light"
+        ? props.theme.colors.white
+        : props.theme.colors.mutedForeground};
+    opacity: 0.95;
+    margin-top: ${props => props.theme.spacing.xs}px;
+    text-align: center;
+  }
+`;
+
+const LogoImageContainer = styled.div`
+  width: 160px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  margin-bottom: ${props => props.theme.spacing.none}px;
 `;
 
 const LogoImage = styled.img`
-  height: 120px;
-  width: 120px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 `;
 
-const AppTitle = styled.h1`
-  font-family: ${props => props.theme.textVariants.header.fontFamily};
-  font-weight: ${props => props.theme.textVariants.header.fontWeight};
-  color: ${props => props.theme.colors.primary};
-  font-size: 32px;
-  text-align: center;
-  line-height: 36px;
-  margin-top: -${props => props.theme.spacing.s}px;
-`;
-
-const AppSlogan = styled.p`
-  font-family: ${props => props.theme.textVariants.caption.fontFamily};
-  font-size: 16px;
-  font-weight: 600;
-  color: ${props => props.theme.colors.mutedForeground};
-  opacity: 0.95;
-  margin-top: ${props => props.theme.spacing.xs}px;
-  text-align: center;
-`;
-
 interface LogoProps {
+  variant?: "light" | "dark";
   className?: string;
 }
 
-export function Logo({ className }: LogoProps) {
+export function Logo({ variant = "dark", className }: LogoProps) {
   return (
-    <LogoContainer className={className}>
-      <LogoImage src="/logo.png" alt="Logo Ombro de Cristo" />
-      <AppTitle>Ombro de Cristo</AppTitle>
-      <AppSlogan>Sua missão, fortalecida pela mentoria.</AppSlogan>
+    <LogoContainer variant={variant} className={className}>
+      <LogoImageContainer>
+        <LogoImage src="/logo.png" alt="Ombro de Cristo Logo" />
+      </LogoImageContainer>
+      <h1>Ombro de Cristo</h1>
+      <p>Sua missão, fortalecida pela mentoria.</p>
     </LogoContainer>
   );
 }

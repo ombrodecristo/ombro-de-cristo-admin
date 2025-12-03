@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { authService } from "../../services/authService";
 import { logService } from "../../services/logService";
 import { type User } from "@/types/database";
+import { validateEmail } from "@/lib/validators";
 
 type LoginResult = {
   success: boolean;
@@ -14,11 +15,34 @@ export function useLoginViewModel() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const [emailError, setEmailError] = useState<string | undefined>();
+  const [passwordError, setPasswordError] = useState<string | undefined>();
+
+  const resetErrors = () => {
+    setEmailError(undefined);
+    setPasswordError(undefined);
+  };
 
   const handleLogin = async (e: FormEvent): Promise<LoginResult> => {
     e.preventDefault();
     setLoading(true);
     setNeedsConfirmation(false);
+    resetErrors();
+
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+      setEmailError(emailValidation.message);
+      setLoading(false);
+
+      return { success: false, error: emailValidation.message };
+    }
+
+    if (!password.trim()) {
+      setPasswordError("Informe sua senha.");
+      setLoading(false);
+
+      return { success: false, error: "Informe sua senha." };
+    }
 
     const { data, error } = await authService.signIn(email, password);
 
@@ -31,6 +55,8 @@ export function useLoginViewModel() {
 
       if (isConfirmationError) {
         setNeedsConfirmation(true);
+      } else {
+        setPasswordError(error.message);
       }
 
       await logService.logError(error, {
@@ -55,6 +81,7 @@ export function useLoginViewModel() {
         const errorMessage = "Acesso restrito à Equipe de Administração.";
         await authService.signOut();
         setPassword("");
+        setPasswordError(errorMessage);
 
         return { success: false, error: errorMessage };
       }
@@ -62,7 +89,10 @@ export function useLoginViewModel() {
       return { success: true };
     }
 
-    return { success: false, error: "Ocorreu um erro desconhecido." };
+    const unknownError = "Ocorreu um erro desconhecido.";
+    setPasswordError(unknownError);
+
+    return { success: false, error: unknownError };
   };
 
   const handleResendConfirmation = async () => {
@@ -83,13 +113,21 @@ export function useLoginViewModel() {
 
   return {
     email,
-    setEmail,
+    setEmail: (value: string) => {
+      setEmail(value);
+      resetErrors();
+    },
     password,
-    setPassword,
+    setPassword: (value: string) => {
+      setPassword(value);
+      resetErrors();
+    },
     loading,
     needsConfirmation,
     setNeedsConfirmation,
     handleLogin,
     handleResendConfirmation,
+    emailError,
+    passwordError,
   };
 }

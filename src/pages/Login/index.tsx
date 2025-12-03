@@ -1,13 +1,13 @@
 import { Navigate, Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { type FormEvent, useEffect } from "react";
+import { useEffect } from "react";
+import type { FormEvent } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLoginViewModel } from "./useLoginViewModel";
 import {
   BaseCard,
   Button,
   Input,
-  Label,
   Logo,
   ConfirmationModal,
 } from "@/shared/components";
@@ -28,37 +28,21 @@ const PageContainer = styled.div`
 const StyledCard = styled(BaseCard)`
   width: 100%;
   max-width: 448px;
-  padding: ${props => props.theme.spacing.xl}px;
-`;
-
-const Header = styled.header`
-  margin-bottom: ${props => props.theme.spacing.xl}px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.l}px;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.s}px;
-`;
-
-const PasswordActions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: ${props => props.theme.spacing.xs}px;
+  gap: ${props => props.theme.spacing.m}px;
 `;
 
 const ForgotPasswordLink = styled(Link)`
   font-size: 14px;
-  font-weight: 600;
-  color: ${props => props.theme.colors.primary};
+  font-family: ${props => props.theme.textVariants.caption.fontFamily};
+  font-weight: 700;
+  color: ${props => props.theme.colors.primaryBackground};
   text-decoration: none;
-  padding: 4px;
+  padding: ${props => props.theme.spacing.xs}px;
 
   &:hover {
     text-decoration: underline;
@@ -68,8 +52,14 @@ const ForgotPasswordLink = styled(Link)`
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.m}px;
-  margin-top: ${props => props.theme.spacing.l}px;
+  gap: ${props => props.theme.spacing.l}px;
+  margin-top: ${props => props.theme.spacing.s}px;
+`;
+
+const Separator = styled.div`
+  height: 1.5px;
+  background-color: ${props => props.theme.colors.border};
+  margin-bottom: ${props => props.theme.spacing.xl}px;
 `;
 
 export default function Login() {
@@ -83,6 +73,8 @@ export default function Login() {
     setNeedsConfirmation,
     handleLogin,
     handleResendConfirmation,
+    emailError,
+    passwordError,
   } = useLoginViewModel();
 
   const { user, loading: authLoading, role } = useAuth();
@@ -124,29 +116,25 @@ export default function Login() {
     <>
       <PageContainer>
         <StyledCard>
-          <Header>
-            <Logo />
-          </Header>
+          <Logo />
+          <Separator />
           <Form onSubmit={handleLoginSubmit}>
-            <FormGroup>
-              <Label htmlFor="email">E-mail</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@exemplo.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                disabled={loading}
-                icon={<FiMail size={22} />}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label htmlFor="password">Senha</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="E-mail"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              disabled={loading}
+              icon={<FiMail size={22} />}
+              error={emailError}
+            />
+            <div>
               <Input
                 id="password"
-                placeholder="••••••••"
+                placeholder="Senha"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
@@ -154,19 +142,28 @@ export default function Login() {
                 disabled={loading}
                 icon={<FiLock size={22} />}
                 isPassword
+                error={passwordError}
               />
-              <PasswordActions>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "8px",
+                }}
+              >
                 <ForgotPasswordLink to="/password-recovery">
                   Esqueci minha senha
                 </ForgotPasswordLink>
-              </PasswordActions>
-            </FormGroup>
+              </div>
+            </div>
+
             <Actions>
               <Button
                 type="submit"
                 disabled={loading}
                 loading={loading}
                 label="Entrar"
+                icon={<FiLock />}
               />
             </Actions>
           </Form>

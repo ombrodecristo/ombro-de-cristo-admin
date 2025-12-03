@@ -2,6 +2,13 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import { GlobalLoader } from "./components/GlobalLoader";
+import styled from "@emotion/styled";
+
+const PageContainer = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  background-color: ${props => props.theme.colors.mainBackground};
+`;
 
 const PUBLIC_ROUTES = [
   "/",
@@ -27,6 +34,8 @@ function App() {
       if (isPublicRoute && location.pathname !== "/") {
         navigate("/admin", { replace: true });
       }
+    } else if (user && role !== "ADMIN") {
+      navigate("/", { replace: true });
     } else if (!user && !isPublicRoute) {
       navigate("/login", { replace: true });
     }
@@ -36,7 +45,11 @@ function App() {
     return <GlobalLoader />;
   }
 
-  return <Outlet />;
+  return (
+    <PageContainer>
+      <Outlet />
+    </PageContainer>
+  );
 }
 
 export default App;

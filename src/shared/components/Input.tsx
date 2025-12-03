@@ -1,33 +1,51 @@
-import styled from "@emotion/styled";
 import { forwardRef, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
+import styled from "@emotion/styled";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-const InputWrapper = styled.div`
-  position: relative;
+const Wrapper = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   width: 100%;
 `;
 
-const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
+const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
+  position: relative;
+  display: flex;
+  align-items: center;
   height: 56px;
   width: 100%;
+  background-color: ${props => props.theme.colors.inputBackground};
   border-radius: ${props => props.theme.borderRadii.m}px;
   border: 1.5px solid
     ${props =>
       props.hasError
         ? props.theme.colors.destructiveBackground
-        : props.theme.colors.inputBorder};
-  background-color: ${props => props.theme.colors.inputBackground};
+        : props.isFocused
+          ? props.theme.colors.primaryBackground
+          : props.theme.colors.inputBorder};
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  box-shadow: ${props =>
+    props.isFocused && !props.hasError
+      ? `0 0 0 2px ${props.theme.colors.primaryBackground}33`
+      : "none"};
+`;
+
+const StyledInput = styled.input<{ hasIcon: boolean }>`
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
   padding: 0 ${props => props.theme.spacing.m}px;
   padding-left: ${props =>
     props.hasIcon
       ? `calc(${props.theme.spacing.m}px + 22px + ${props.theme.spacing.s}px)`
       : `${props.theme.spacing.m}px`};
-  font-size: ${props => props.theme.textVariants.body.fontSize}px;
+  font-family: ${props => props.theme.textVariants.body.fontFamily};
+  font-size: 16px;
   color: ${props => props.theme.colors.inputForeground};
-  transition: all 0.2s;
 
   &::placeholder {
     color: ${props => props.theme.colors.mutedForeground};
@@ -35,47 +53,27 @@ const StyledInput = styled.input<{ hasIcon: boolean; hasError: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${props =>
-      props.hasError
-        ? props.theme.colors.destructiveBackground
-        : props.theme.colors.primary};
-    box-shadow: 0 0 0 2px
-      ${props =>
-        props.hasError
-          ? props.theme.colors.destructiveTransparentBackground
-          : props.theme.colors.primary}33;
-  }
-
-  &:focus + .icon-container > svg,
-  &:focus ~ .icon-container > svg,
-  &:focus ~ button > svg {
-    color: ${props =>
-      props.hasError
-        ? props.theme.colors.destructiveBackground
-        : props.theme.colors.primary};
   }
 
   &:disabled {
-    background-color: ${props => props.theme.colors.buttonDisabledBackground};
+    background-color: transparent;
     cursor: not-allowed;
   }
 `;
 
-const IconContainer = styled.div<{ hasError: boolean }>`
+const IconWrapper = styled.div<{ hasError: boolean; isFocused: boolean }>`
   position: absolute;
   left: ${props => props.theme.spacing.m}px;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
-  & > svg {
-    color: ${props =>
-      props.hasError
-        ? props.theme.colors.destructiveBackground
+  color: ${props =>
+    props.hasError
+      ? props.theme.colors.destructiveBackground
+      : props.isFocused
+        ? props.theme.colors.primaryBackground
         : props.theme.colors.mutedForeground};
-    transition: color 0.2s;
-  }
+  transition: color 0.2s;
 `;
 
 const ToggleButton = styled.button`
@@ -91,22 +89,26 @@ const ToggleButton = styled.button`
   align-items: center;
   justify-content: center;
   color: ${props => props.theme.colors.mutedForeground};
-  transition: color 0.2s;
+`;
 
-  &:hover:not(:disabled) {
-    color: ${props => props.theme.colors.mainForeground};
-  }
+const ErrorMessage = styled.p`
+  margin-top: ${props => props.theme.spacing.s}px;
+  font-family: ${props => props.theme.textVariants.error.fontFamily};
+  font-weight: ${props => props.theme.textVariants.error.fontWeight};
+  font-size: ${props => props.theme.textVariants.error.fontSize};
+  color: ${props => props.theme.colors.destructiveBackground};
 `;
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
   icon?: ReactNode;
   isPassword?: boolean;
-  error?: string | null;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ icon, isPassword = false, error, ...props }, ref) => {
+  ({ error, icon, isPassword, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     const finalType = isPassword
       ? isPasswordVisible
@@ -114,51 +116,33 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         : "password"
       : props.type;
 
-    const togglePasswordVisibility = () => {
-      setIsPasswordVisible(prev => !prev);
-    };
-
-    const hasError = !!error;
-
     return (
-      <div>
-        <InputWrapper>
+      <Wrapper>
+        <InputContainer hasError={!!error} isFocused={isFocused}>
           {icon && (
-            <IconContainer className="icon-container" hasError={hasError}>
+            <IconWrapper hasError={!!error} isFocused={isFocused}>
               {icon}
-            </IconContainer>
+            </IconWrapper>
           )}
           <StyledInput
             ref={ref}
             hasIcon={!!icon}
-            hasError={hasError}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             type={finalType}
             {...props}
           />
           {isPassword && (
             <ToggleButton
               type="button"
-              onClick={togglePasswordVisibility}
-              disabled={props.disabled}
+              onClick={() => setIsPasswordVisible(prev => !prev)}
             >
               {isPasswordVisible ? <FiEyeOff size={22} /> : <FiEye size={22} />}
             </ToggleButton>
           )}
-        </InputWrapper>
-        {error && (
-          <p
-            style={{
-              marginTop: "8px",
-              fontSize: "14px",
-              color: "var(--color-destructive)",
-            }}
-          >
-            {error}
-          </p>
-        )}
-      </div>
+        </InputContainer>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+      </Wrapper>
     );
   }
 );
-
-Input.displayName = "Input";

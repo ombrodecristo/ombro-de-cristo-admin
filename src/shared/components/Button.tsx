@@ -1,19 +1,19 @@
-import styled from "@emotion/styled";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import styled from "@emotion/styled";
 import type { Theme } from "@/core/lib/theme";
 
-type ButtonVariant = "primary" | "secondary" | "destructive";
+type Variant = "primary" | "secondary" | "destructive";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  loading?: boolean;
   label: string;
+  loading?: boolean;
+  variant?: Variant;
   icon?: ReactNode;
 }
 
 const getVariantStyles = (
   theme: Theme,
-  variant: ButtonVariant,
+  variant: Variant,
   disabled?: boolean
 ) => {
   if (disabled) {
@@ -22,9 +22,9 @@ const getVariantStyles = (
       color: ${theme.colors.buttonDisabledForeground};
       border-color: transparent;
       box-shadow: none;
+      elevation: 0;
     `;
   }
-
   switch (variant) {
     case "secondary":
       return `
@@ -32,25 +32,29 @@ const getVariantStyles = (
         color: ${theme.colors.buttonSecondaryForeground};
         border-color: ${theme.colors.buttonSecondaryBorder};
         box-shadow: none;
+        elevation: 0;
       `;
     case "destructive":
       return `
         background-color: ${theme.colors.destructiveBackground};
         color: ${theme.colors.destructiveForeground};
         border-color: transparent;
+        elevation: 0;
+        box-shadow: none;
       `;
-    case "primary":
     default:
       return `
         background-color: ${theme.colors.buttonPrimaryBackground};
         color: ${theme.colors.buttonPrimaryForeground};
         border-color: transparent;
+        elevation: 4;
+        box-shadow: 0 4px 8px ${theme.colors.shadowColor}33;
       `;
   }
 };
 
 const StyledButton = styled.button<{
-  variant: ButtonVariant;
+  variant: Variant;
 }>`
   display: inline-flex;
   align-items: center;
@@ -61,7 +65,7 @@ const StyledButton = styled.button<{
   border-radius: ${props => props.theme.borderRadii.l}px;
   font-family: ${props => props.theme.textVariants.buttonLabel.fontFamily};
   font-weight: ${props => props.theme.textVariants.buttonLabel.fontWeight};
-  font-size: ${props => props.theme.textVariants.buttonLabel.fontSize}px;
+  font-size: ${props => props.theme.textVariants.buttonLabel.fontSize};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   padding: 0 ${props => props.theme.spacing.l}px;
@@ -69,12 +73,11 @@ const StyledButton = styled.button<{
   border-style: solid;
   letter-spacing: ${props =>
     props.theme.textVariants.buttonLabel.letterSpacing};
-  box-shadow: 0 4px 8px ${props => props.theme.colors.shadowColor}26;
 
   ${props => getVariantStyles(props.theme, props.variant, props.disabled)}
 
   &:hover:not(:disabled) {
-    opacity: 0.85;
+    opacity: 0.8;
   }
 
   &:disabled {
@@ -91,21 +94,21 @@ const Spinner = styled.div`
       transform: rotate(360deg);
     }
   }
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid currentColor;
+  border: 2px solid #fff3;
+  border-top-color: currentColor;
   border-radius: 50%;
   width: 20px;
   height: 20px;
   animation: spin 1s linear infinite;
 `;
 
-export const Button = ({
+export function Button({
   label,
-  loading = false,
+  loading,
   variant = "primary",
   icon,
   ...props
-}: ButtonProps) => {
+}: ButtonProps) {
   return (
     <StyledButton
       variant={variant}
@@ -122,4 +125,4 @@ export const Button = ({
       )}
     </StyledButton>
   );
-};
+}

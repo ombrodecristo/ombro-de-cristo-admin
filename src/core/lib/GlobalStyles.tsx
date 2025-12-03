@@ -19,24 +19,18 @@ export function GlobalStyles() {
         body,
         #root {
           height: 100%;
+          width: 100%;
         }
 
         body {
           font-family: ${theme.textVariants.defaults.fontFamily};
-          font-size: ${theme.textVariants.defaults.fontSize}px;
+          font-size: ${theme.textVariants.defaults.fontSize};
           line-height: ${theme.textVariants.defaults.lineHeight};
+          font-weight: ${theme.textVariants.defaults.fontWeight};
           color: ${theme.colors.mainForeground};
           background-color: ${theme.colors.mainBackground};
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
-        }
-
-        button,
-        input,
-        select,
-        textarea {
-          font-family: inherit;
-          font-size: inherit;
         }
 
         h1,
@@ -49,6 +43,13 @@ export function GlobalStyles() {
           font-weight: ${theme.textVariants.header.fontWeight};
           color: ${theme.colors.headerForeground};
           letter-spacing: ${theme.textVariants.header.letterSpacing};
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+          font-family: inherit;
         }
       `}
     />
