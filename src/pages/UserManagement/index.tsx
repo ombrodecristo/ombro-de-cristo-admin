@@ -1,4 +1,4 @@
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useUserManagementViewModel } from "./useUserManagementViewModel";
 import { Skeleton, Input, PageHeader } from "@/shared/components";
 import UserTable from "@/components/UserTable";
@@ -15,6 +15,7 @@ const PageContainer = styled.div`
 
 export default function UserManagementPage() {
   const { user } = useAuth();
+
   const {
     loading,
     searchQuery,

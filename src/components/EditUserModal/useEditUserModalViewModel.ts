@@ -28,9 +28,11 @@ export function useEditUserModalViewModel({
 }: UseEditUserModalViewModelProps) {
   const [newRole, setNewRole] = useState<UserRole>(profile.role);
   const [newGender, setNewGender] = useState<UserGender>(profile.gender);
+
   const [newChurchId, setNewChurchId] = useState<string | null>(
     profile.church_id
   );
+
   const [churches, setChurches] = useState<Church[]>([]);
   const [loadingChurches, setLoadingChurches] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -52,6 +54,7 @@ export function useEditUserModalViewModel({
       }
       setLoadingChurches(false);
     }
+
     fetchChurches();
   }, []);
 
@@ -76,6 +79,7 @@ export function useEditUserModalViewModel({
     ) {
       onClose();
       setLoading(false);
+
       return;
     }
 

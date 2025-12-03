@@ -37,11 +37,13 @@ export function useChurchFormViewModel({
     const nameValidation = validateChurchName(name);
     if (!nameValidation.isValid) {
       setError(nameValidation.message);
+
       return;
     }
 
     if (isEditing && name.trim() === churchToEdit.name) {
       onClose();
+
       return;
     }
 
@@ -57,6 +59,7 @@ export function useChurchFormViewModel({
       const friendlyMessage = isEditing
         ? "Não foi possível salvar as alterações."
         : "Não foi possível criar a nova igreja.";
+
       setError(friendlyMessage);
       await logService.logError(apiError, {
         component: "useChurchFormViewModel",

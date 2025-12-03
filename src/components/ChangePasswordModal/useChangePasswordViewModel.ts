@@ -25,12 +25,14 @@ export function useChangePasswordViewModel({
     const lengthValidation = validatePasswordLength(password);
     if (!lengthValidation.isValid) {
       setError(lengthValidation.message);
+
       return;
     }
 
     const matchValidation = validatePasswordMatch(password, confirmPassword);
     if (!matchValidation.isValid) {
       setError(matchValidation.message);
+
       return;
     }
 

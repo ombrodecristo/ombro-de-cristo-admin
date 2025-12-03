@@ -25,27 +25,32 @@ export function useSignUpViewModel() {
 
     if (!gender) {
       setError("Selecione seu gênero.");
+
       return;
     }
 
     const lengthValidation = validatePasswordLength(password);
     if (!lengthValidation.isValid) {
       setError(lengthValidation.message);
+
       return;
     }
 
     const matchValidation = validatePasswordMatch(password, confirmPassword);
     if (!matchValidation.isValid) {
       setError(matchValidation.message);
+
       return;
     }
 
     if (!acceptedTerms) {
       setError("É preciso aceitar os termos para criar sua conta.");
+
       return;
     }
 
     setLoading(true);
+
     const { error: signUpError } = await authService.signUp(
       fullName,
       gender,

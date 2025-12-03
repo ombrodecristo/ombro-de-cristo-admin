@@ -3,6 +3,7 @@ import type { Theme } from "./theme";
 
 export function GlobalStyles() {
   const theme = useTheme() as Theme;
+
   return (
     <Global
       styles={css`

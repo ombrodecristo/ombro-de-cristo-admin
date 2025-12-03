@@ -93,6 +93,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ icon, isPassword = false, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
     const finalType = isPassword
       ? isPasswordVisible
         ? "text"

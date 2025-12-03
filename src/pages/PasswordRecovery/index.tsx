@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { FiLock, FiLogIn, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import { usePasswordRecoveryViewModel } from "./usePasswordRecoveryViewModel";
 import { Button, BaseCard, Label, Input } from "@/shared/components";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { GlobalLoader } from "@/components/GlobalLoader";
 
 const PageContainer = styled.div`
@@ -78,6 +78,7 @@ const ErrorMessage = styled.p`
 
 export default function PasswordRecovery() {
   const { loading: authLoading, initialHash } = useAuth();
+
   const {
     password,
     setPassword,

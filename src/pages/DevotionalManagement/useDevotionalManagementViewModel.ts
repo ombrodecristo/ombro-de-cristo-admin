@@ -10,8 +10,10 @@ export function useDevotionalManagementViewModel() {
   const [devotionals, setDevotionals] = useState<DevotionalWithAuthor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const [selectedDevotional, setSelectedDevotional] =
     useState<DevotionalWithAuthor | null>(null);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -20,11 +22,13 @@ export function useDevotionalManagementViewModel() {
     key: "updated_at",
     direction: "descending",
   });
+
   const [searchQuery, setSearchQuery] = useState("");
 
   async function fetchDevotionals() {
     setLoading(true);
     setError(null);
+
     const { data, error: fetchError } =
       await devotionalService.getDevotionals();
 
@@ -51,15 +55,15 @@ export function useDevotionalManagementViewModel() {
     const sortableDevotionals = [...filteredDevotionals];
     if (sortConfig.key !== null) {
       sortableDevotionals.sort((a, b) => {
-        let aValue: any;
-        let bValue: any;
+        let aValue: string;
+        let bValue: string;
 
         if (sortConfig.key === "author") {
           aValue = a.author?.full_name ?? "";
           bValue = b.author?.full_name ?? "";
         } else {
-          aValue = a[sortConfig.key as keyof DevotionalWithAuthor];
-          bValue = b[sortConfig.key as keyof DevotionalWithAuthor];
+          aValue = a[sortConfig.key as keyof DevotionalWithAuthor] as string;
+          bValue = b[sortConfig.key as keyof DevotionalWithAuthor] as string;
         }
 
         if (aValue < bValue) {
@@ -73,6 +77,7 @@ export function useDevotionalManagementViewModel() {
         return 0;
       });
     }
+
     return sortableDevotionals;
   }, [devotionals, sortConfig, searchQuery]);
 
@@ -113,9 +118,11 @@ export function useDevotionalManagementViewModel() {
     if (!selectedDevotional) return;
     setIsDeleting(true);
     setError(null);
+
     const { error: deleteError } = await devotionalService.deleteDevotional(
       selectedDevotional.id
     );
+
     setIsDeleting(false);
 
     if (deleteError) {

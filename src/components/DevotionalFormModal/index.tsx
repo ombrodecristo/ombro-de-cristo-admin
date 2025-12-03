@@ -45,6 +45,7 @@ export default function DevotionalFormModal({
   devotionalToEdit,
 }: DevotionalFormModalProps) {
   const [localError, setLocalError] = useState<string | null>(null);
+
   const {
     title,
     setTitle,

@@ -47,12 +47,14 @@ export function useDevotionalFormViewModel({
     const titleValidation = validateDevotionalTitle(title);
     if (!titleValidation.isValid) {
       setError(titleValidation.message);
+
       return;
     }
 
     const contentValidation = validateDevotionalContent(content);
     if (!contentValidation.isValid) {
       setError(contentValidation.message);
+
       return;
     }
 
@@ -62,6 +64,7 @@ export function useDevotionalFormViewModel({
       content.trim() === devotionalToEdit.content
     ) {
       onClose();
+
       return;
     }
 
@@ -85,6 +88,7 @@ export function useDevotionalFormViewModel({
       const friendlyMessage = isEditing
         ? "Não foi possível salvar as alterações."
         : "Não foi possível criar o novo devocional.";
+
       setError(friendlyMessage);
       await logService.logError(apiError, {
         component: "useDevotionalFormViewModel",

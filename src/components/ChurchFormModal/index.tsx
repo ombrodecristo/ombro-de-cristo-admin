@@ -43,6 +43,7 @@ export default function ChurchFormModal({
   churchToEdit,
 }: ChurchFormModalProps) {
   const [localError, setLocalError] = useState<string | null>(null);
+
   const { name, setName, loading, error, isEditing, handleSubmit } =
     useChurchFormViewModel({ churchToEdit, onClose, onSuccess });
 

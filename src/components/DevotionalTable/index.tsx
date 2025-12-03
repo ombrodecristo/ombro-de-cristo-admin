@@ -48,6 +48,7 @@ export default function DevotionalTable({
 }: DevotionalTableProps) {
   const getSortIcon = (key: keyof DevotionalWithAuthor | "author") => {
     if (sortConfig.key !== key) return null;
+
     return sortConfig.direction === "ascending" ? (
       <FiArrowUp size={16} />
     ) : (

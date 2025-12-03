@@ -1,7 +1,7 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { type FormEvent, useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useLoginViewModel } from "./useLoginViewModel";
 import { BaseCard, Button, Input, Label, Logo } from "@/shared/components";
 import { GlobalLoader } from "@/components/GlobalLoader";
@@ -54,9 +54,14 @@ const ErrorMessage = styled.p`
 export default function Login() {
   const { email, setEmail, password, setPassword, loading, handleLogin } =
     useLoginViewModel();
+
   const { user, loading: authLoading, role } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setError(null);
+  }, [email, password]);
 
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -69,12 +74,6 @@ export default function Login() {
       navigate("/admin", { replace: true });
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      setError(null);
-    }
-  }, [email, password]);
 
   if (authLoading) {
     return <GlobalLoader />;

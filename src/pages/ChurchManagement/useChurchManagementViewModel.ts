@@ -19,6 +19,7 @@ export function useChurchManagementViewModel() {
     key: "name",
     direction: "ascending",
   });
+
   const [searchQuery, setSearchQuery] = useState("");
 
   async function fetchChurches() {
@@ -61,6 +62,7 @@ export function useChurchManagementViewModel() {
         return 0;
       });
     }
+
     return sortableChurches;
   }, [churches, sortConfig, searchQuery]);
 
@@ -101,9 +103,11 @@ export function useChurchManagementViewModel() {
     if (!selectedChurch) return;
     setIsDeleting(true);
     setError(null);
+
     const { error: deleteError } = await churchService.deleteChurch(
       selectedChurch.id
     );
+
     setIsDeleting(false);
 
     if (deleteError) {

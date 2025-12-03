@@ -41,6 +41,7 @@ export default function UserTable({
 }: UserTableProps) {
   const getSortIcon = (key: keyof ProfileWithRelations) => {
     if (sortConfig.key !== key) return null;
+
     return sortConfig.direction === "ascending" ? (
       <FiArrowUp size={16} />
     ) : (

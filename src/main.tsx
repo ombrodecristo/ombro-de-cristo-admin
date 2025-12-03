@@ -19,13 +19,17 @@ const SignUpPage = lazy(() => import("./pages/SignUp"));
 const Login = lazy(() => import("./pages/Login"));
 const UserManagementPage = lazy(() => import("./pages/UserManagement"));
 const ChurchManagementPage = lazy(() => import("./pages/ChurchManagement"));
+
 const DevotionalManagementPage = lazy(
   () => import("./pages/DevotionalManagement")
 );
+
 const AuthConfirmed = lazy(() => import("./pages/AuthConfirmed"));
+
 const PasswordRecovery = lazy(
   () => import("./pages/PasswordRecovery/index.tsx")
 );
+
 const TermsAndPolicyPage = lazy(() => import("./pages/TermsAndPolicy"));
 
 const router = createBrowserRouter([

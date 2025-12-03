@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { type FormEvent } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useUserMenuViewModel } from "./useUserMenuViewModel";
 import { Modal, Button, Input, ConfirmationModal } from "@/shared/components";
 import ChangePasswordModal from "../ChangePasswordModal";
@@ -93,6 +93,7 @@ const NameForm = styled.form`
 
 export default function UserMenu() {
   const { user, signOut } = useAuth();
+
   const {
     isOpen,
     setIsOpen,

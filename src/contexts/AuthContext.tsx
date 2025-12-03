@@ -1,23 +1,8 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { type User, type UserRole } from "../types/database";
 import { authService } from "../services/authService";
-
-type AuthContextType = {
-  user: User | null;
-  role: UserRole | null;
-  loading: boolean;
-  signOut: () => Promise<void>;
-  initialHash: string;
-};
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from "@/hooks/useAuth";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -29,9 +14,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
 
     const hasRecoveryToken = initialHash.includes("type=recovery");
+
     const hasError =
       initialHash.includes("error_code") ||
       initialHash.includes("error=access_denied");
+
     const isRecoveryFlow = hasRecoveryToken && !hasError;
 
     const {
@@ -51,7 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           event === "SIGNED_OUT" ||
           (event === "INITIAL_SESSION" && !session)
         ) {
-          // Ação ignorada intencionalmente durante fluxo de recuperação
+          // This case is intentionally left empty to keep the loader active
+          // during the password recovery flow's initial state.
         }
       } else {
         if (
@@ -84,14 +72,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-
-  return context;
 }

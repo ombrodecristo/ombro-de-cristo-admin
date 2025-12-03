@@ -32,6 +32,7 @@ export function useUserMenuViewModel({
       if (user && isOpen) {
         const { data, error: profileError } =
           await profileService.getProfileById(user.id);
+
         if (profileError) {
           setError("Não foi possível carregar os dados da sua conta.");
           logService.logError(profileError, {
@@ -43,6 +44,7 @@ export function useUserMenuViewModel({
         }
       }
     }
+
     loadProfile();
   }, [user, isOpen]);
 
@@ -71,6 +73,7 @@ export function useUserMenuViewModel({
     const nameValidation = validateFullName(fullName);
     if (!nameValidation.isValid) {
       setError(nameValidation.message);
+
       return;
     }
 
@@ -78,16 +81,19 @@ export function useUserMenuViewModel({
 
     if (fullName.trim() === profile.full_name) {
       setIsEditingName(false);
+
       return;
     }
 
     setIsSavingName(true);
+
     const { data, error: updateError } = await profileService.updateProfile(
       user.id,
       {
         full_name: fullName.trim(),
       }
     );
+
     setIsSavingName(false);
 
     if (updateError) {

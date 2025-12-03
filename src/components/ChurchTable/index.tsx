@@ -48,6 +48,7 @@ export default function ChurchTable({
 }: ChurchTableProps) {
   const getSortIcon = (key: keyof Church) => {
     if (sortConfig.key !== key) return null;
+
     return sortConfig.direction === "ascending" ? (
       <FiArrowUp size={16} />
     ) : (

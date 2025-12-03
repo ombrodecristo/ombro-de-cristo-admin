@@ -13,6 +13,7 @@ export const validatePasswordLength = (
       message: `A senha precisa ter no mínimo ${PASSWORD_MIN_LENGTH} caracteres.`,
     };
   }
+
   return { isValid: true };
 };
 
@@ -26,6 +27,7 @@ export const validatePasswordMatch = (
       message: "As senhas não coincidem.",
     };
   }
+
   return { isValid: true };
 };
 
@@ -38,6 +40,7 @@ export const validateFullName = (
       message: `O nome precisa ter no mínimo ${FULL_NAME_MIN_LENGTH} caracteres.`,
     };
   }
+
   return { isValid: true };
 };
 
@@ -50,6 +53,7 @@ export const validateChurchName = (
       message: `O nome da igreja precisa ter no mínimo ${CHURCH_NAME_MIN_LENGTH} caracteres.`,
     };
   }
+
   return { isValid: true };
 };
 
@@ -62,6 +66,7 @@ export const validateDevotionalTitle = (
       message: `O título precisa ter no mínimo ${DEVOTIONAL_TITLE_MIN_LENGTH} caracteres.`,
     };
   }
+
   return { isValid: true };
 };
 
@@ -74,5 +79,6 @@ export const validateDevotionalContent = (
       message: `O conteúdo precisa ter no mínimo ${DEVOTIONAL_CONTENT_MIN_LENGTH} caracteres.`,
     };
   }
+
   return { isValid: true };
 };

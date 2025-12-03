@@ -31,6 +31,7 @@ export function useLoginViewModel() {
       });
       setPassword("");
       setLoading(false);
+
       return { success: false, error: friendlyMessage };
     }
 
@@ -41,17 +42,21 @@ export function useLoginViewModel() {
       if (role !== "ADMIN") {
         const errorMessage =
           "Acesso restrito à Equipe de Administração. Se acredita que isso é um erro, contate o suporte.";
+
         await authService.signOut();
         setPassword("");
         setLoading(false);
+
         return { success: false, error: errorMessage };
       }
 
       setLoading(false);
+
       return { success: true };
     }
 
     setLoading(false);
+
     return { success: false, error: "Ocorreu um erro desconhecido." };
   };
 

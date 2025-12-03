@@ -30,12 +30,14 @@ export function usePasswordRecoveryViewModel({
 
     const urlHash = initialHash;
     const hasRecoveryToken = urlHash.includes("type=recovery");
+
     const hasError =
       urlHash.includes("error=access_denied") || urlHash.includes("error_code");
 
     if (hasError) {
       setIsTokenValid(false);
       setIsCheckingToken(false);
+
       return;
     }
 
@@ -61,18 +63,22 @@ export function usePasswordRecoveryViewModel({
     const lengthValidation = validatePasswordLength(password);
     if (!lengthValidation.isValid) {
       setError(lengthValidation.message);
+
       return;
     }
 
     const matchValidation = validatePasswordMatch(password, confirmPassword);
     if (!matchValidation.isValid) {
       setError(matchValidation.message);
+
       return;
     }
 
     setLoading(true);
+
     const { error: updateError } =
       await authService.updateUserPassword(password);
+
     setLoading(false);
     setPassword("");
     setConfirmPassword("");

@@ -13,6 +13,7 @@ export const genderMap: Record<UserGender, string> = {
 
 export const formatRole = (role: UserRole, gender: UserGender) => {
   const roleInfo = roleMap[role];
+
   return roleInfo?.[gender] || role;
 };
 

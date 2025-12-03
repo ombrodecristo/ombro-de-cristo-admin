@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 import { GlobalLoader } from "./components/GlobalLoader";
 import { useEffect } from "react";
 
@@ -19,6 +19,7 @@ function App() {
     "/login",
     "/auth-confirmed",
     "/password-recovery",
+    "/terms-and-policy",
   ].includes(location.pathname);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ function App() {
 
     if (isRecoveryFlow && location.pathname !== "/password-recovery") {
       navigate("/password-recovery" + hash, { replace: true });
+
       return;
     }
 

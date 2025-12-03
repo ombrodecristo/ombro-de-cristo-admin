@@ -18,18 +18,22 @@ export function useUserManagementViewModel({
 }: UseUserManagementViewModelProps) {
   const [profiles, setProfiles] = useState<ProfileWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [editingProfile, setEditingProfile] =
     useState<ProfileWithRelations | null>(null);
+
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: "full_name",
     direction: "ascending",
   });
+
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   async function fetchProfiles() {
     setLoading(true);
     setError(null);
+
     const { data, error: fetchError } =
       await profileService.getProfilesWithRelations();
 
@@ -58,8 +62,8 @@ export function useUserManagementViewModel({
     const sortableProfiles = [...filteredProfiles];
     if (sortConfig.key !== null) {
       sortableProfiles.sort((a, b) => {
-        let aValue: any;
-        let bValue: any;
+        let aValue: string | null;
+        let bValue: string | null;
 
         if (sortConfig.key === "churches") {
           aValue = a.churches?.name ?? "";
@@ -68,19 +72,27 @@ export function useUserManagementViewModel({
           aValue = a.mentor?.full_name ?? "";
           bValue = b.mentor?.full_name ?? "";
         } else {
-          aValue = a[sortConfig.key as keyof ProfileWithRelations];
-          bValue = b[sortConfig.key as keyof ProfileWithRelations];
+          aValue = a[sortConfig.key as keyof ProfileWithRelations] as
+            | string
+            | null;
+          bValue = b[sortConfig.key as keyof ProfileWithRelations] as
+            | string
+            | null;
         }
 
+        if (aValue === null) return 1;
+        if (bValue === null) return -1;
         if (aValue < bValue) {
           return sortConfig.direction === "ascending" ? -1 : 1;
         }
         if (aValue > bValue) {
           return sortConfig.direction === "ascending" ? 1 : -1;
         }
+
         return 0;
       });
     }
+
     return sortableProfiles;
   }, [profiles, sortConfig, searchQuery, currentUserId]);
 

@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useDevotionalManagementViewModel } from "./useDevotionalManagementViewModel";
 import {
   Skeleton,
@@ -21,6 +21,7 @@ const PageContainer = styled.div`
 
 export default function DevotionalManagementPage() {
   const { user } = useAuth();
+
   const {
     loading,
     searchQuery,
