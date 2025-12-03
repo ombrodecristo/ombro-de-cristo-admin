@@ -38,8 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           event === "SIGNED_OUT" ||
           (event === "INITIAL_SESSION" && !session)
         ) {
-          // This case is intentionally left empty to keep the loader active
-          // during the password recovery flow's initial state.
         }
       } else {
         if (

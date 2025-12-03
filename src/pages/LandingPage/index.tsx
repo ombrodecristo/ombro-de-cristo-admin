@@ -231,7 +231,6 @@ export default function LandingPage() {
             mentores, oferecendo ferramentas para uma jornada espiritual mais
             profunda e acompanhada.
           </HeroSubtitle>
-          {/* A imagem /app-mockup.png deve ser colocada na pasta /public */}
           <AppMockup src="/app-mockup.png" alt="Aplicativo Ombro de Cristo" />
         </HeroSection>
 
