@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FiEdit, FiTrash2, FiArrowUp, FiArrowDown } from "react-icons/fi";
-import { type Church } from "@/types/database";
+import { type Church } from "@/core/types/database";
 import { formatDate } from "@/lib/formatters";
 import {
   Table,

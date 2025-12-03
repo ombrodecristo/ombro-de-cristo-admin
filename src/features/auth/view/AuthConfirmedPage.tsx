@@ -69,14 +69,14 @@ export default function AuthConfirmedPage() {
             {hasError ? <FiAlertCircle /> : <FiCheckCircle />}
           </StatusIcon>
           <Title success={!hasError}>
-            {hasError ? "Link Inválido" : "Conta Confirmada"}
+            {hasError ? "Link Inválido ou Expirado" : "Conta Confirmada"}
           </Title>
         </Header>
 
         <ContentText>
           {hasError
-            ? "Este link é inválido ou já expirou. Por favor, solicite um novo link ou entre em contato com o suporte."
-            : "Sua conta foi confirmada com sucesso. Você já pode fechar esta página."}
+            ? "Este link de confirmação é inválido ou já foi utilizado. Por favor, tente fazer login ou solicitar um novo link."
+            : "Sua conta foi confirmada com sucesso. Você já pode fechar esta página e acessar o aplicativo."}
         </ContentText>
       </StyledCard>
     </PageContainer>

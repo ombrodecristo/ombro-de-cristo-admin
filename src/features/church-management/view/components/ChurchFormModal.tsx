@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { ChurchFormViewModel } from "../../view-models/ChurchFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Label } from "@/shared/components";
-import type { Church } from "@/types/database";
+import type { Church } from "@/core/types/database";
 
 const Content = styled.form`
   display: flex;

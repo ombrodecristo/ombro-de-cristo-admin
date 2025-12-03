@@ -1,11 +1,10 @@
-import { type FormEvent } from "react";
 import { authRepository } from "@/data/repositories/authRepository";
-import { logService } from "@/shared/services/logService";
+import { logRepository } from "@/data/repositories/logRepository";
 import {
   validatePasswordLength,
   validatePasswordMatch,
   validateEmail,
-} from "@/lib/validators";
+} from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 
 type PasswordRecoveryViewModelProps = {
@@ -20,8 +19,8 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
   public loading = false;
   public success = false;
   public isTokenValid = false;
+  public isTokenInvalid = false;
   public isCheckingToken = true;
-  public isEmailSent = false;
   public error: string | null = null;
   private authLoading: boolean;
   private initialHash: string;
@@ -30,63 +29,55 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
     super();
     this.authLoading = props.authLoading;
     this.initialHash = props.initialHash;
-    this.checkToken();
   }
 
-  private checkToken() {
+  public checkToken = async () => {
     if (this.authLoading) return;
+    this.isCheckingToken = true;
+    this.notify();
+
     const hasRecoveryToken = this.initialHash.includes("type=recovery");
+    const hasError = this.initialHash.includes("error=");
 
-    const hasError =
-      this.initialHash.includes("error=access_denied") ||
-      this.initialHash.includes("error_code");
+    this.isTokenInvalid = !hasRecoveryToken || hasError;
 
-    if (hasError) {
-      this.isTokenValid = false;
-      this.isCheckingToken = false;
-      this.notify();
-
-      return;
-    }
-
-    if (hasRecoveryToken) {
-      authRepository.getSession().then(({ data }) => {
-        this.isTokenValid = !!data.session;
-        this.isCheckingToken = false;
-        this.notify();
-      });
+    if (hasRecoveryToken && !hasError) {
+      const { data } = await authRepository.getSession();
+      this.isTokenValid = !!data?.session;
     } else {
       this.isTokenValid = false;
-      this.isCheckingToken = false;
-      this.notify();
     }
-  }
+
+    this.isCheckingToken = false;
+    this.notify();
+  };
 
   public setEmail = (value: string) => {
     this.email = value;
     this.error = null;
     this.notify();
   };
+
   public setPassword = (value: string) => {
     this.password = value;
     this.error = null;
     this.notify();
   };
+
   public setConfirmPassword = (value: string) => {
     this.confirmPassword = value;
     this.error = null;
     this.notify();
   };
 
-  public handleEmailSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  public async handleEmailSubmit() {
     this.error = null;
     const emailValidation = validateEmail(this.email);
     if (!emailValidation.isValid) {
       this.error = emailValidation.message;
       this.notify();
 
-      return;
+      return { error: emailValidation.message };
     }
     this.loading = true;
     this.notify();
@@ -96,26 +87,28 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
     );
 
     this.loading = false;
+    this.notify();
+
     if (recoveryError) {
-      this.error = recoveryError.message;
-      await logService.logError(recoveryError, {
+      const err = "Não foi possível enviar o link. Tente novamente.";
+      await logRepository.logError(recoveryError, {
         component: "PasswordRecoveryViewModel.Email",
       });
-    } else {
-      this.isEmailSent = true;
-    }
-    this.notify();
-  };
 
-  public handlePasswordSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+      return { error: err };
+    }
+
+    return { error: null };
+  }
+
+  public async handlePasswordSubmit() {
     this.error = null;
     const lengthValidation = validatePasswordLength(this.password);
     if (!lengthValidation.isValid) {
       this.error = lengthValidation.message;
       this.notify();
 
-      return;
+      return { error: lengthValidation.message };
     }
 
     const matchValidation = validatePasswordMatch(
@@ -127,8 +120,9 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
       this.error = matchValidation.message;
       this.notify();
 
-      return;
+      return { error: matchValidation.message };
     }
+
     this.loading = true;
     this.notify();
 
@@ -138,14 +132,20 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
 
     this.loading = false;
     if (updateError) {
-      this.error = updateError.message;
-      await logService.logError(updateError, {
+      this.error =
+        "Não foi possível alterar a senha. O link pode ter expirado.";
+      await logRepository.logError(updateError, {
         component: "PasswordRecoveryViewModel.Password",
       });
+      this.notify();
+
+      return { error: this.error };
     } else {
       this.success = true;
       await authRepository.signOut();
+      this.notify();
+
+      return { error: null };
     }
-    this.notify();
-  };
+  }
 }

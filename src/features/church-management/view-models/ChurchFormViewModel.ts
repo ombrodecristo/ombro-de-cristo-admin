@@ -2,8 +2,8 @@ import { type FormEvent } from "react";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 import { churchRepository } from "@/data/repositories/churchRepository";
 import { logService } from "@/shared/services/logService";
-import type { Church } from "@/types/database";
-import { validateChurchName } from "@/lib/validators";
+import type { Church } from "@/core/types/database";
+import { validateChurchName } from "@/core/lib/validators";
 
 type ChurchFormViewModelProps = {
   churchToEdit: Church | null;

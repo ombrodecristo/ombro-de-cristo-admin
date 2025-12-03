@@ -1,7 +1,7 @@
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 import { churchRepository } from "@/data/repositories/churchRepository";
 import { logService } from "@/shared/services/logService";
-import type { Church } from "@/types/database";
+import type { Church } from "@/core/types/database";
 import type { SortConfig } from "../view/components/ChurchTable";
 
 export class ChurchManagementViewModel extends BaseViewModel {

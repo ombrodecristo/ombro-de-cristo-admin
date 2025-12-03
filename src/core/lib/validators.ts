@@ -51,7 +51,7 @@ export const validateFullName = (
   if (name.trim().length < FULL_NAME_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `Seu nome precisa ter no mínimo ${FULL_NAME_MIN_LENGTH} caracteres.`,
+      message: `O nome precisa ter no mínimo ${FULL_NAME_MIN_LENGTH} caracteres.`,
     };
   }
 

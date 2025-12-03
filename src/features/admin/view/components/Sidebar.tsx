@@ -9,6 +9,7 @@ const SidebarContainer = styled.aside<{ isOpen: boolean }>`
   width: ${props => (props.isOpen ? "256px" : "80px")};
   transition: width 0.3s ease-in-out;
   flex-shrink: 0;
+  border-right: 1px solid ${props => props.theme.colors.border};
 `;
 
 const Header = styled.div`
@@ -18,16 +19,19 @@ const Header = styled.div`
   padding: 0 ${props => props.theme.spacing.l}px;
   gap: ${props => props.theme.spacing.m}px;
   white-space: nowrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Logo = styled.img`
   height: 32px;
   width: 32px;
   object-fit: contain;
+  flex-shrink: 0;
 `;
 
 const Title = styled.span<{ isOpen: boolean }>`
   font-weight: bold;
+  font-size: 16px;
   opacity: ${props => (props.isOpen ? 1 : 0)};
   visibility: ${props => (props.isOpen ? "visible" : "hidden")};
   transition:

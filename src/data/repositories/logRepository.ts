@@ -1,5 +1,5 @@
 import { supabase } from "@/core/lib/supabaseClient";
-import type { Json } from "@/types/supabase";
+import type { Json } from "@/core/types/supabase";
 
 type LogLevel = "ERROR" | "INFO" | "WARN";
 
@@ -14,12 +14,15 @@ async function writeLog(
   message: string,
   metadata?: LogMetadata
 ) {
-  if (level === "ERROR") {
-    console.error(message, metadata ?? "");
-  } else if (level === "WARN") {
-    console.warn(message, metadata ?? "");
-  } else {
-    console.log(message, metadata ?? "");
+  if (import.meta.env.MODE !== "production") {
+    const logArgs = metadata ? [message, metadata] : [message];
+    if (level === "ERROR") {
+      console.error(...logArgs);
+    } else if (level === "WARN") {
+      console.warn(...logArgs);
+    } else {
+      console.log(...logArgs);
+    }
   }
 
   const { error } = await supabase.from("logs").insert({
@@ -40,16 +43,6 @@ async function logError(error: Error, metadata?: Omit<LogMetadata, "stack">) {
   });
 }
 
-async function logInfo(message: string, metadata?: LogMetadata) {
-  await writeLog("INFO", message, metadata);
-}
-
-async function logWarn(message: string, metadata?: LogMetadata) {
-  await writeLog("WARN", message, metadata);
-}
-
-export const logService = {
+export const logRepository = {
   logError,
-  logInfo,
-  logWarn,
 };

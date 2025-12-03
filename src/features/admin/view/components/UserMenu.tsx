@@ -1,9 +1,15 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { UserMenuViewModel } from "../../view-models/UserMenuViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
-import { Modal, Button, Input, ConfirmationModal } from "@/shared/components";
+import {
+  Modal,
+  Button,
+  Input,
+  ConfirmationModal,
+  Label,
+} from "@/shared/components";
 import ChangePasswordModal from "./ChangePasswordModal";
 import { FiUser, FiLogOut, FiEdit, FiSave, FiKey } from "react-icons/fi";
 import { toast } from "sonner";
@@ -56,6 +62,7 @@ const EditButton = styled.button`
   border: none;
   cursor: pointer;
   color: ${props => props.theme.colors.mutedForeground};
+  padding: 4px;
   &:hover {
     color: ${props => props.theme.colors.primary};
   }
@@ -81,6 +88,7 @@ const DeleteLink = styled.button`
   text-align: center;
   font-size: 14px;
   margin-top: ${props => props.theme.spacing.m}px;
+  padding: ${props => props.theme.spacing.xs}px;
 
   &:hover {
     text-decoration: underline;
@@ -90,22 +98,32 @@ const DeleteLink = styled.button`
 const NameForm = styled.form`
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-end;
 `;
 
 export default function UserMenu() {
-  const { user, signOut } = useAuth();
-  const [viewModel] = useState(() => new UserMenuViewModel({ user, signOut }));
+  const { user, signOut, refreshUserContext } = useAuth();
+
+  const [viewModel] = useState(
+    () => new UserMenuViewModel({ user, signOut, refreshUserContext })
+  );
+
   useViewModel(viewModel);
+
+  useEffect(() => {
+    if (viewModel.isOpen) {
+      viewModel.loadProfile();
+    }
+  }, [viewModel.isOpen, viewModel]);
 
   if (!user) return null;
 
   const onFormSubmit = async (e: FormEvent) => {
-    const { error, success } = await viewModel.handleSaveName(e);
+    e.preventDefault();
+    const { error } = await viewModel.handleSaveName();
     if (error) {
       toast.error(error);
-    }
-    if (success) {
+    } else {
       toast.success("Seu nome foi atualizado!");
     }
   };
@@ -138,26 +156,38 @@ export default function UserMenu() {
           <ProfileSection>
             {viewModel.isEditingName ? (
               <NameForm onSubmit={onFormSubmit}>
-                <Input
-                  id="fullNameEdit"
-                  value={viewModel.fullName}
-                  onChange={e => viewModel.setFullName(e.target.value)}
-                  disabled={viewModel.isSavingName}
-                  autoFocus
-                />
+                <div style={{ flex: 1 }}>
+                  <Label
+                    htmlFor="fullNameEdit"
+                    style={{ textAlign: "left", marginBottom: "4px" }}
+                  >
+                    Editar Nome
+                  </Label>
+                  <Input
+                    id="fullNameEdit"
+                    value={viewModel.fullName}
+                    onChange={e => viewModel.setFullName(e.target.value)}
+                    disabled={viewModel.isSavingName}
+                    autoFocus
+                    error={viewModel.nameError}
+                  />
+                </div>
                 <Button
                   type="submit"
                   label=""
                   loading={viewModel.isSavingName}
                   disabled={viewModel.isSavingName}
-                  style={{ width: "48px", height: "48px", flexShrink: 0 }}
+                  style={{ width: "56px", height: "56px", flexShrink: 0 }}
                   icon={<FiSave size={20} />}
                 />
               </NameForm>
             ) : (
               <NameWrapper>
                 <Name>{viewModel.profile?.full_name ?? "..."}</Name>
-                <EditButton onClick={() => viewModel.setIsEditingName(true)}>
+                <EditButton
+                  onClick={() => viewModel.setIsEditingName(true)}
+                  title="Editar nome"
+                >
                   <FiEdit size={16} />
                 </EditButton>
               </NameWrapper>
@@ -175,6 +205,7 @@ export default function UserMenu() {
             <Button
               onClick={onSignOut}
               label="Encerrar sessão"
+              variant="secondary"
               icon={<FiLogOut size={16} />}
             />
           </ActionList>

@@ -1,12 +1,17 @@
 import { type FormEvent } from "react";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
-import type { Profile, UserRole, UserGender, Church } from "@/types/database";
+import type {
+  Profile,
+  UserRole,
+  UserGender,
+  Church,
+} from "@/core/types/database";
 import {
   profileRepository,
   type ProfileWithRelations,
 } from "@/data/repositories/profileRepository";
 import { churchRepository } from "@/data/repositories/churchRepository";
-import { logService } from "@/shared/services/logService";
+import { logRepository } from "@/data/repositories/logRepository";
 
 export const allRoles: UserRole[] = ["MISSIONARY", "MENTOR", "ADMIN"];
 export const allGenders: UserGender[] = ["MALE", "FEMALE"];
@@ -59,8 +64,8 @@ export class EditUserViewModel extends BaseViewModel {
     const { data, error } = await churchRepository.getChurches();
     if (error) {
       this.error = "Falha ao carregar a lista de igrejas.";
-      logService.logError(error, { component: "EditUserViewModel" });
-    } else {
+      await logRepository.logError(error, { component: "EditUserViewModel" });
+    } else if (data) {
       this.churches = data;
     }
     this.loadingChurches = false;
@@ -93,7 +98,7 @@ export class EditUserViewModel extends BaseViewModel {
     this.loading = false;
     if (updateError) {
       this.error = updateError.message;
-      await logService.logError(updateError, {
+      await logRepository.logError(updateError, {
         component: "EditUserViewModel",
         context: { profileId: this.profile.id },
       });

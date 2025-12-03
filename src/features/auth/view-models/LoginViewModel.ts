@@ -1,8 +1,7 @@
-import { type FormEvent } from "react";
 import { authRepository } from "@/data/repositories/authRepository";
-import { logService } from "@/shared/services/logService";
-import type { User } from "@/types/database";
-import { validateEmail } from "@/lib/validators";
+import { logRepository } from "@/data/repositories/logRepository";
+import type { User } from "@/core/types/database";
+import { validateEmail } from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 
 type LoginResult = {
@@ -40,8 +39,7 @@ export class LoginViewModel extends BaseViewModel {
     this.notify();
   };
 
-  public handleLogin = async (e: FormEvent): Promise<LoginResult> => {
-    e.preventDefault();
+  public async handleLogin(): Promise<LoginResult> {
     this.loading = true;
     this.needsConfirmation = false;
     this.resetErrors();
@@ -76,19 +74,13 @@ export class LoginViewModel extends BaseViewModel {
         "Sua conta precisa ser ativada"
       );
 
-      if (isConfirmationError) {
-        this.needsConfirmation = true;
-      } else {
-        this.passwordError = error.message;
-      }
+      this.password = "";
+      this.notify();
 
-      await logService.logError(error, {
+      await logRepository.logError(error, {
         component: "LoginViewModel",
         context: { email: this.email.substring(0, 3) + "..." },
       });
-
-      this.password = "";
-      this.notify();
 
       return {
         success: false,
@@ -97,32 +89,30 @@ export class LoginViewModel extends BaseViewModel {
       };
     }
 
-    if (data.user) {
+    if (data?.user) {
       const user = data.user as User;
       const role = user.app_metadata?.role;
 
       if (role !== "ADMIN") {
         const errorMessage = "Acesso restrito à Equipe de Administração.";
         await authRepository.signOut();
-        this.password = "";
-        this.passwordError = errorMessage;
         this.notify();
 
         return { success: false, error: errorMessage };
       }
+
       this.notify();
 
       return { success: true };
     }
 
-    const unknownError = "Ocorreu um erro desconhecido.";
-    this.passwordError = unknownError;
+    const unknownError = "Ocorreu um erro desconhecido durante o login.";
     this.notify();
 
     return { success: false, error: unknownError };
-  };
+  }
 
-  public handleResendConfirmation = async () => {
+  public async handleResendConfirmation() {
     this.loading = true;
     this.notify();
     const { error } = await authRepository.resendConfirmation(this.email);
@@ -131,12 +121,12 @@ export class LoginViewModel extends BaseViewModel {
     this.notify();
 
     if (error) {
-      await logService.logError(error, {
+      await logRepository.logError(error, {
         component: "LoginViewModel.Resend",
         context: { email: this.email.substring(0, 3) + "..." },
       });
     }
 
     return { error };
-  };
+  }
 }

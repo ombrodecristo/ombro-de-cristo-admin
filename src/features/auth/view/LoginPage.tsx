@@ -1,6 +1,6 @@
 import { Navigate, Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { LoginViewModel } from "../view-models/LoginViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
@@ -10,8 +10,8 @@ import {
   Input,
   Logo,
   ConfirmationModal,
+  GlobalLoader,
 } from "@/shared/components";
-import { GlobalLoader } from "@/shared/components/GlobalLoader";
 import { FiMail, FiLock } from "react-icons/fi";
 import { toast } from "sonner";
 
@@ -69,17 +69,15 @@ export default function LoginPage() {
 
   const { user, loading: authLoading, role } = useAuth();
 
-  useEffect(() => {
-    if (viewModel.needsConfirmation) {
-      viewModel.setNeedsConfirmation(false);
-    }
-  }, [viewModel]);
-
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const result = await viewModel.handleLogin(e);
-    if (result.error && !result.needsConfirmation) {
-      toast.error(result.error);
+    const result = await viewModel.handleLogin();
+    if (result.error) {
+      if (result.needsConfirmation) {
+        viewModel.setNeedsConfirmation(true);
+      } else {
+        toast.error(result.error);
+      }
     }
   };
 

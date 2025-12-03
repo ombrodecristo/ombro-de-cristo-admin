@@ -9,7 +9,7 @@ import App from "./App.tsx";
 import { AuthProvider } from "./shared/contexts/AuthContext.tsx";
 import ProtectedRoute from "@/features/admin/view/components/ProtectedRoute.tsx";
 import AdminLayout from "@/features/admin/view/layouts/AdminLayout.tsx";
-import { GlobalLoader } from "./shared/components/GlobalLoader.tsx";
+import { GlobalLoader } from "./shared/components/index.ts";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./core/lib/theme.ts";
 import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
@@ -52,12 +52,12 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <LandingPage /> },
-      { path: "/login", element: <LoginPage /> },
-      { path: "/auth-confirmed", element: <AuthConfirmedPage /> },
-      { path: "/password-recovery", element: <PasswordRecoveryPage /> },
-      { path: "/terms-and-policy", element: <TermsAndPolicyPage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "auth-confirmed", element: <AuthConfirmedPage /> },
+      { path: "password-recovery", element: <PasswordRecoveryPage /> },
+      { path: "terms-and-policy", element: <TermsAndPolicyPage /> },
       {
-        path: "/admin",
+        path: "admin",
         element: <ProtectedRoute />,
         children: [
           {

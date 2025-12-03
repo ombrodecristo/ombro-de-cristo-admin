@@ -1,8 +1,9 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import type { User, UserRole } from "@/types/database";
+import { useEffect, useState, type ReactNode, useCallback } from "react";
+import { supabase } from "@/core/lib/supabaseClient";
+import type { User, UserRole } from "@/core/types/database";
 import { authRepository } from "@/data/repositories/authRepository";
-import { AuthContext } from "@/shared/hooks/useAuth";
+import { profileRepository } from "@/data/repositories/profileRepository";
+import { AuthContext } from "../hooks/useAuth";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -10,51 +11,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [initialHash] = useState(() => window.location.hash);
 
+  const refreshUserContext = useCallback(async () => {
+    const { data: sessionData } = await authRepository.getSession();
+
+    if (sessionData?.session?.user) {
+      const currentUser = sessionData.session.user as User;
+
+      const { data: profileData } = await profileRepository.getProfileById(
+        currentUser.id
+      );
+
+      setUser(currentUser);
+      setRole(profileData?.role ?? null);
+    } else {
+      setUser(null);
+      setRole(null);
+    }
+  }, []);
+
   useEffect(() => {
     setLoading(true);
-
-    const hasRecoveryToken = initialHash.includes("type=recovery");
-
-    const hasError =
-      initialHash.includes("error_code") ||
-      initialHash.includes("error=access_denied");
-
-    const isRecoveryFlow = hasRecoveryToken && !hasError;
+    refreshUserContext().finally(() => setLoading(false));
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user as User | null;
-      setUser(currentUser);
-      setRole(currentUser?.app_metadata?.role ?? null);
-
-      if (isRecoveryFlow) {
-        if (
-          event === "PASSWORD_RECOVERY" ||
-          (event === "SIGNED_IN" && session)
-        ) {
-          setLoading(false);
-        } else if (
-          event === "SIGNED_OUT" ||
-          (event === "INITIAL_SESSION" && !session)
-        ) {
-          void 0;
-        }
+      if (currentUser) {
+        await refreshUserContext();
       } else {
-        if (
-          event === "INITIAL_SESSION" ||
-          event === "SIGNED_OUT" ||
-          event === "SIGNED_IN"
-        ) {
-          setLoading(false);
-        }
+        setUser(null);
+        setRole(null);
       }
+      setLoading(false);
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [initialHash]);
+  }, [refreshUserContext]);
 
   const signOut = async () => {
     await authRepository.signOut();
@@ -68,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     signOut,
     initialHash,
+    refreshUserContext,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

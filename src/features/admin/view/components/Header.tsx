@@ -26,7 +26,14 @@ const MenuButton = styled.button`
   border: none;
   cursor: pointer;
   color: ${props => props.theme.colors.mutedForeground};
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &:hover {
+    background-color: ${props => props.theme.colors.mutedBackground};
     color: ${props => props.theme.colors.mainForeground};
   }
 `;
@@ -35,6 +42,7 @@ const AppTitle = styled.h1`
   font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
   font-weight: ${props => props.theme.textVariants.bodyMedium.fontWeight};
   font-size: 18px;
+  color: ${props => props.theme.colors.headerForeground};
 `;
 
 type HeaderProps = {

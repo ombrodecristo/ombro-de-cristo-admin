@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { GlobalLoader } from "@/shared/components/GlobalLoader";
+import { GlobalLoader } from "@/shared/components";
 import styled from "@emotion/styled";
 
 const PageContainer = styled.div`
@@ -28,20 +28,20 @@ function App() {
       return;
     }
 
-    const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
+    const isPublicRoute = PUBLIC_ROUTES.some(route =>
+      location.pathname.startsWith(route)
+    );
 
     if (user && role === "ADMIN") {
       if (isPublicRoute && location.pathname !== "/") {
         navigate("/admin", { replace: true });
       }
-    } else if (user && role !== "ADMIN") {
-      navigate("/", { replace: true });
     } else if (!user && !isPublicRoute) {
       navigate("/login", { replace: true });
     }
   }, [loading, user, role, location.pathname, navigate]);
 
-  if (loading && !PUBLIC_ROUTES.includes(location.pathname)) {
+  if (loading && !PUBLIC_ROUTES.some(r => location.pathname.startsWith(r))) {
     return <GlobalLoader />;
   }
 

@@ -1,11 +1,13 @@
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/core/lib/supabaseClient";
+import type { ServiceResponse } from "@/core/types/service";
+import type { Session, User } from "@supabase/supabase-js";
 
 const SITE_URL = import.meta.env.VITE_SITE_URL;
 if (!SITE_URL) {
   throw new Error("VITE_SITE_URL is not set in .env files");
 }
 
-function formatAuthError(error: { message: string }): Error {
+function formatAuthError(error: Error): Error {
   const msg = (error.message || "").toLowerCase();
   let friendlyMsg = "Algo deu errado. Por favor, tente novamente.";
 
@@ -34,7 +36,10 @@ function formatAuthError(error: { message: string }): Error {
   return new Error(friendlyMsg);
 }
 
-async function signIn(email: string, password: string) {
+async function signIn(
+  email: string,
+  password: string
+): Promise<ServiceResponse<{ session: Session; user: User | null }>> {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -45,11 +50,15 @@ async function signIn(email: string, password: string) {
   return { data, error: null };
 }
 
-async function signOut() {
-  return supabase.auth.signOut();
+async function signOut(): Promise<{ error: Error | null }> {
+  const { error } = await supabase.auth.signOut();
+
+  return { error: error ? formatAuthError(error) : null };
 }
 
-async function updateUserPassword(password: string) {
+async function updateUserPassword(
+  password: string
+): Promise<ServiceResponse<{ user: User }>> {
   const { data, error } = await supabase.auth.updateUser({ password });
 
   if (error) return { data: null, error: formatAuthError(error) };
@@ -57,18 +66,25 @@ async function updateUserPassword(password: string) {
   return { data, error: null };
 }
 
-async function deleteOwnUser() {
+async function deleteOwnUser(): Promise<ServiceResponse<null>> {
   const { error } = await supabase.rpc("delete_own_user");
   if (error) return { data: null, error: formatAuthError(error) };
 
   return { data: null, error: null };
 }
 
-async function getSession() {
-  return supabase.auth.getSession();
+async function getSession(): Promise<
+  ServiceResponse<{ session: Session | null }>
+> {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) return { data: null, error: formatAuthError(error) };
+
+  return { data, error: null };
 }
 
-async function sendPasswordRecovery(email: string) {
+async function sendPasswordRecovery(
+  email: string
+): Promise<ServiceResponse<null>> {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${SITE_URL}/password-recovery`,
   });
@@ -78,13 +94,20 @@ async function sendPasswordRecovery(email: string) {
   return { data: null, error: null };
 }
 
-async function resendConfirmation(email: string) {
+async function resendConfirmation(
+  email: string
+): Promise<ServiceResponse<null>> {
   const { error } = await supabase.auth.resend({
     type: "signup",
     email: email,
+    options: {
+      emailRedirectTo: `${SITE_URL}/auth-confirmed`,
+    },
   });
 
-  if (error) return { data: null, error: formatAuthError(error) };
+  if (error) {
+    return { data: null, error: formatAuthError(error) };
+  }
 
   return { data: null, error: null };
 }

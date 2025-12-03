@@ -8,7 +8,7 @@ import { logService } from "@/shared/services/logService";
 import {
   validateDevotionalTitle,
   validateDevotionalContent,
-} from "@/lib/validators";
+} from "@/core/lib/validators";
 
 type DevotionalFormViewModelProps = {
   authorId: string;

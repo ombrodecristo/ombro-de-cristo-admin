@@ -4,7 +4,7 @@ import {
   type ProfileWithRelations,
 } from "@/data/repositories/profileRepository";
 import { logService } from "@/shared/services/logService";
-import type { Profile } from "@/types/database";
+import type { Profile } from "@/core/types/database";
 
 export type SortConfig = {
   key: string | null;

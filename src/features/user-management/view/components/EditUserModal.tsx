@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
-import type { Profile, UserRole, UserGender } from "@/types/database";
+import type { Profile, UserRole, UserGender } from "@/core/types/database";
 import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
 import {
   EditUserViewModel,

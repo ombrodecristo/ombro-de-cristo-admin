@@ -1,4 +1,4 @@
-import { type UserRole, type UserGender } from "@/types/database";
+import type { UserRole, UserGender } from "@/core/types/database";
 
 export const roleMap: Record<UserRole, { MALE: string; FEMALE: string }> = {
   ADMIN: { MALE: "Administrador", FEMALE: "Administradora" },
@@ -20,6 +20,8 @@ export const formatRole = (role: UserRole, gender: UserGender) => {
 export const formatGender = (gender: UserGender) => genderMap[gender] || gender;
 
 export const formatDate = (dateString: string) => {
+  if (!dateString) return "N/A";
+
   return new Date(dateString).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",

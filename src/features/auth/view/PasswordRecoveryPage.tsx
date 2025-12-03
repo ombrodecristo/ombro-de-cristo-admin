@@ -1,5 +1,6 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
+import { Link, useNavigate } from "react-router-dom";
 import { FiLock, FiSend, FiAlertCircle, FiMail } from "react-icons/fi";
 import { PasswordRecoveryViewModel } from "../view-models/PasswordRecoveryViewModel";
 import {
@@ -7,12 +8,11 @@ import {
   BaseCard,
   Label,
   Input,
-  ConfirmationModal,
+  GlobalLoader,
 } from "@/shared/components";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useViewModel } from "@/shared/hooks/useViewModel";
-import { GlobalLoader } from "@/shared/components/GlobalLoader";
-import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const PageContainer = styled.div`
   display: flex;
@@ -37,26 +37,21 @@ const Header = styled.header`
   margin-bottom: ${props => props.theme.spacing.l}px;
 `;
 
-const StatusIcon = styled.div<{ success: boolean; isTokenInvalid: boolean }>`
+const StatusIcon = styled.div<{ isTokenInvalid: boolean }>`
   color: ${props =>
     props.isTokenInvalid
       ? props.theme.colors.destructiveBackground
-      : props.success
-        ? props.theme.colors.success
-        : props.theme.colors.primary};
+      : props.theme.colors.primary};
   svg {
     width: 48px;
     height: 48px;
   }
 `;
 
-const Title = styled.h1<{ isTokenInvalid: boolean }>`
+const Title = styled.h1`
   font-family: ${props => props.theme.textVariants.header.fontFamily};
   font-weight: ${props => props.theme.textVariants.header.fontWeight};
-  color: ${props =>
-    props.isTokenInvalid
-      ? props.theme.colors.destructiveBackground
-      : props.theme.colors.mainForeground};
+  color: ${props => props.theme.colors.mainForeground};
   font-size: 24px;
 `;
 
@@ -69,12 +64,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 `;
 
 const SeparatorWithText = styled.div`
@@ -97,6 +86,7 @@ const SeparatorWithText = styled.div`
 
 export default function PasswordRecoveryPage() {
   const { loading: authLoading, initialHash } = useAuth();
+  const navigate = useNavigate();
 
   const [viewModel] = useState(
     () => new PasswordRecoveryViewModel({ authLoading, initialHash })
@@ -105,42 +95,55 @@ export default function PasswordRecoveryPage() {
   useViewModel(viewModel);
 
   useEffect(() => {
+    viewModel.checkToken();
+  }, [authLoading, viewModel]);
+
+  useEffect(() => {
     if (viewModel.success) {
-      window.history.replaceState({}, document.title, window.location.pathname);
+      toast.success("Senha alterada", {
+        description: "Você já pode fazer login com sua nova senha.",
+      });
+      navigate("/login", { replace: true });
     }
-  }, [viewModel.success]);
+  }, [viewModel.success, navigate]);
+
+  const onEmailSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const { error } = await viewModel.handleEmailSubmit();
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Link enviado!", {
+        description:
+          "Se seu e-mail estiver cadastrado, verifique sua caixa de entrada e spam.",
+      });
+    }
+  };
+
+  const onPasswordSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const { error } = await viewModel.handlePasswordSubmit();
+    if (error) {
+      toast.error(error);
+    }
+  };
 
   if (viewModel.isCheckingToken) {
     return <GlobalLoader />;
   }
 
-  const isTokenInvalid =
-    !viewModel.isTokenValid && !viewModel.success && !viewModel.isEmailSent;
-
-  const onEmailSubmit = (e: FormEvent) => viewModel.handleEmailSubmit(e);
-  const onPasswordSubmit = (e: FormEvent) => viewModel.handlePasswordSubmit(e);
-
   if (viewModel.isTokenValid) {
     return (
       <PageContainer>
-        <ConfirmationModal
-          isOpen={viewModel.success}
-          onClose={() => {}}
-          onConfirm={() => (window.location.href = "/login")}
-          title="Senha alterada"
-          message="Sua senha foi alterada com sucesso! Você já pode fazer login com sua nova senha."
-          confirmText="Ir para Login"
-        />
-
         <StyledCard>
           <Header>
-            <StatusIcon success={false} isTokenInvalid={false}>
+            <StatusIcon isTokenInvalid={false}>
               <FiLock />
             </StatusIcon>
-            <Title isTokenInvalid={false}>Redefina sua Senha</Title>
+            <Title>Redefina sua Senha</Title>
           </Header>
           <Form onSubmit={onPasswordSubmit}>
-            <FormGroup>
+            <div>
               <Label htmlFor="password">Nova Senha</Label>
               <Input
                 id="password"
@@ -154,8 +157,8 @@ export default function PasswordRecoveryPage() {
                 isPassword
                 error={viewModel.error || ""}
               />
-            </FormGroup>
-            <FormGroup>
+            </div>
+            <div>
               <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
               <Input
                 id="confirmPassword"
@@ -169,7 +172,7 @@ export default function PasswordRecoveryPage() {
                 isPassword
                 error={viewModel.error || ""}
               />
-            </FormGroup>
+            </div>
             <Button
               type="submit"
               disabled={viewModel.loading}
@@ -184,30 +187,23 @@ export default function PasswordRecoveryPage() {
 
   return (
     <PageContainer>
-      <ConfirmationModal
-        isOpen={viewModel.isEmailSent}
-        onClose={() => {}}
-        onConfirm={() => (window.location.href = "/login")}
-        title="Link enviado!"
-        message="Se seu e-mail estiver cadastrado, você receberá um link para redefinir sua senha. Verifique sua caixa de entrada e spam."
-        confirmText="Entendi"
-      />
-
       <StyledCard>
         <Header>
-          <StatusIcon success={false} isTokenInvalid={isTokenInvalid}>
-            {isTokenInvalid ? <FiAlertCircle /> : <FiMail />}
+          <StatusIcon isTokenInvalid={viewModel.isTokenInvalid}>
+            {viewModel.isTokenInvalid ? <FiAlertCircle /> : <FiMail />}
           </StatusIcon>
-          <Title isTokenInvalid={isTokenInvalid}>Recuperar Senha</Title>
+          <Title>
+            {viewModel.isTokenInvalid ? "Link Inválido" : "Recuperar Senha"}
+          </Title>
           <Description>
-            {isTokenInvalid
-              ? "Link de redefinição de senha inválido ou expirado. Por favor, solicite um novo link no aplicativo."
-              : "Sem problemas! Informe seu e-mail e enviaremos um link para você criar uma nova senha."}
+            {viewModel.isTokenInvalid
+              ? "Este link de redefinição de senha é inválido ou expirou. Por favor, solicite um novo link no aplicativo."
+              : "Informe seu e-mail e enviaremos um link para você criar uma nova senha."}
           </Description>
         </Header>
-        {!isTokenInvalid && (
+        {!viewModel.isTokenInvalid && (
           <Form onSubmit={onEmailSubmit}>
-            <FormGroup>
+            <div>
               <Label htmlFor="email">E-mail</Label>
               <Input
                 id="email"
@@ -221,7 +217,7 @@ export default function PasswordRecoveryPage() {
                 icon={<FiMail size={20} />}
                 error={viewModel.error || ""}
               />
-            </FormGroup>
+            </div>
             <Button
               type="submit"
               disabled={viewModel.loading}
@@ -232,7 +228,7 @@ export default function PasswordRecoveryPage() {
           </Form>
         )}
         <SeparatorWithText>Lembrou a senha?</SeparatorWithText>
-        <Link to="/login">
+        <Link to="/login" style={{ textDecoration: "none" }}>
           <Button label="Fazer Login" variant="secondary" />
         </Link>
       </StyledCard>

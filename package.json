@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "supabase:gen": "powershell -Command \"npx supabase gen types typescript --linked | Out-File -FilePath 'src/core/types/supabase.ts' -Encoding utf8\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
