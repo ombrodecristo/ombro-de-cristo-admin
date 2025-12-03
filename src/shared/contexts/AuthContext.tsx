@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode, useCallback } from "react";
 import { supabase } from "@/core/lib/supabaseClient";
 import type { User, UserRole } from "@/core/types/database";
+import type { Session } from "@supabase/supabase-js";
 import { profileRepository } from "@/data/repositories/profileRepository";
 import { AuthContext } from "../hooks/useAuth";
 
@@ -33,11 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const updateUserState = async (session: Session | null) => {
       if (session?.user) {
         const currentUser = session.user as User;
 
@@ -51,7 +48,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setRole(null);
       }
+    };
+
+    const initializeSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      await updateUserState(session);
       setLoading(false);
+    };
+
+    initializeSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      updateUserState(session);
     });
 
     return () => {
