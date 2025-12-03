@@ -101,14 +101,16 @@ export default function ChurchTable({
                       onClick={() => onEdit(church)}
                       icon={<IoPencil />}
                       variant="secondary"
-                      style={{ height: "40px", width: "auto" }}
+                      size="small"
+                      style={{ width: "auto" }}
                     />
                     <Button
                       label="Excluir"
                       onClick={() => onDelete(church)}
                       icon={<IoTrashOutline />}
                       variant="destructive"
-                      style={{ height: "40px", width: "auto" }}
+                      size="small"
+                      style={{ width: "auto" }}
                     />
                   </ActionsCell>
                 </TableCell>

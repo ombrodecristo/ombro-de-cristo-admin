@@ -109,7 +109,8 @@ export default function UserTable({
                     label="Editar"
                     onClick={() => onEdit(profile)}
                     icon={<IoPencil />}
-                    style={{ height: "40px", width: "auto" }}
+                    size="small"
+                    style={{ width: "auto" }}
                   />
                 </TableCell>
               </TableRow>

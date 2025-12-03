@@ -109,14 +109,16 @@ export default function DevotionalTable({
                       onClick={() => onEdit(devotional)}
                       icon={<IoPencil />}
                       variant="secondary"
-                      style={{ height: "40px", width: "auto" }}
+                      size="small"
+                      style={{ width: "auto" }}
                     />
                     <Button
                       label="Excluir"
                       onClick={() => onDelete(devotional)}
                       icon={<IoTrashOutline />}
                       variant="destructive"
-                      style={{ height: "40px", width: "auto" }}
+                      size="small"
+                      style={{ width: "auto" }}
                     />
                   </ActionsCell>
                 </TableCell>

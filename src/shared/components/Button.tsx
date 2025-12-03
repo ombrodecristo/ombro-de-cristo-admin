@@ -3,11 +3,13 @@ import styled from "@emotion/styled";
 import type { Theme } from "@/core/lib/theme";
 
 type Variant = "primary" | "secondary" | "destructive";
+type Size = "medium" | "small";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
   loading?: boolean;
   variant?: Variant;
+  size?: Size;
   icon?: ReactNode;
 }
 
@@ -64,20 +66,29 @@ const getVariantStyles = (
 
 const StyledButton = styled.button<{
   variant: Variant;
+  size: Size;
 }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: ${props => props.theme.spacing.s}px;
-  height: 56px;
+  height: ${props => (props.size === "small" ? "40px" : "56px")};
   width: 100%;
-  border-radius: ${props => props.theme.borderRadii.l}px;
+  border-radius: ${props =>
+    props.size === "small"
+      ? props.theme.borderRadii.m
+      : props.theme.borderRadii.l}px;
   font-family: ${props => props.theme.textVariants.buttonLabel.fontFamily};
   font-weight: ${props => props.theme.textVariants.buttonLabel.fontWeight};
-  font-size: ${props => props.theme.textVariants.buttonLabel.fontSize};
+  font-size: ${props =>
+    props.size === "small"
+      ? "14px"
+      : props.theme.textVariants.buttonLabel.fontSize};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  padding: 0 ${props => props.theme.spacing.l}px;
+  padding: 0
+    ${props =>
+      props.size === "small" ? props.theme.spacing.m : props.theme.spacing.l}px;
   border-width: 1.5px;
   border-style: solid;
   letter-spacing: ${props =>
@@ -111,12 +122,14 @@ export function Button({
   label,
   loading,
   variant = "primary",
+  size = "medium",
   icon,
   ...props
 }: ButtonProps) {
   return (
     <StyledButton
       variant={variant}
+      size={size}
       disabled={loading || props.disabled}
       {...props}
     >
