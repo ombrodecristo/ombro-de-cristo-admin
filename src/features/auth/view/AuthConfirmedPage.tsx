@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
-import { useLocation } from "react-router-dom";
 import { IoCheckmarkCircle, IoAlertCircle } from "react-icons/io5";
-import { BaseCard } from "@/shared/components";
+import { BaseCard, GlobalLoader } from "@/shared/components";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { useEffect, useState } from "react";
 
 const PageContainer = styled.div`
   display: flex;
@@ -54,30 +55,58 @@ const ContentText = styled.p`
   text-align: center;
 `;
 
-export default function AuthConfirmedPage() {
-  const { hash } = useLocation();
-  const hashParams = new URLSearchParams(hash.substring(1));
-  const errorDescription = hashParams.get("error_description");
+enum PageState {
+  Loading,
+  Success,
+  Error,
+}
 
-  const hasError = !!errorDescription;
+export default function AuthConfirmedPage() {
+  const { initialHash, loading: authLoading } = useAuth();
+  const [pageState, setPageState] = useState<PageState>(PageState.Loading);
+
+  useEffect(() => {
+    if (authLoading) {
+      setPageState(PageState.Loading);
+
+      return;
+    }
+
+    const hashParams = new URLSearchParams(initialHash.substring(1));
+    const errorDescription = hashParams.get("error_description");
+    const tokenType = hashParams.get("type");
+
+    if (errorDescription) {
+      setPageState(PageState.Error);
+    } else if (tokenType === "signup" || tokenType === "invite") {
+      setPageState(PageState.Success);
+    } else {
+      setPageState(PageState.Error);
+    }
+  }, [initialHash, authLoading]);
+
+  if (pageState === PageState.Loading) {
+    return <GlobalLoader />;
+  }
+
+  const isSuccess = pageState === PageState.Success;
+  const title = isSuccess ? "Conta Confirmada" : "Link Inválido ou Expirado";
+
+  const message = isSuccess
+    ? "Sua conta foi confirmada com sucesso. Você já pode fechar esta página e acessar o aplicativo."
+    : "Este link de confirmação é inválido ou já foi utilizado. Por favor, tente fazer o login no aplicativo. Se a conta ainda não estiver confirmada, você pode solicitar um novo link de confirmação na tela de login do aplicativo.";
 
   return (
     <PageContainer>
       <StyledCard>
         <Header>
-          <StatusIcon success={!hasError}>
-            {hasError ? <IoAlertCircle /> : <IoCheckmarkCircle />}
+          <StatusIcon success={isSuccess}>
+            {isSuccess ? <IoCheckmarkCircle /> : <IoAlertCircle />}
           </StatusIcon>
-          <Title success={!hasError}>
-            {hasError ? "Link Inválido ou Expirado" : "Conta Confirmada"}
-          </Title>
+          <Title success={isSuccess}>{title}</Title>
         </Header>
 
-        <ContentText>
-          {hasError
-            ? "Este link de confirmação é inválido ou já foi utilizado. Por favor, tente fazer o login no aplicativo. Se a conta ainda não estiver confirmada, você pode solicitar um novo link de confirmação na tela de login do aplicativo."
-            : "Sua conta foi confirmada com sucesso. Você já pode fechar esta página e acessar o aplicativo."}
-        </ContentText>
+        <ContentText>{message}</ContentText>
       </StyledCard>
     </PageContainer>
   );

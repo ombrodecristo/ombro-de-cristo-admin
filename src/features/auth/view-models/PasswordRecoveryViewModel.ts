@@ -34,17 +34,19 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
       return;
     }
 
-    const hasError = hash.includes("error=");
+    const params = new URLSearchParams(hash.substring(1));
+    const tokenType = params.get("type");
+    const errorDescription = params.get("error_description");
 
-    if (hasError) {
+    if (errorDescription) {
       this.isTokenValid = false;
       this.isTokenInvalid = true;
-    } else if (user) {
+    } else if (user && tokenType === "recovery") {
       this.isTokenValid = true;
       this.isTokenInvalid = false;
     } else {
       this.isTokenValid = false;
-      this.isTokenInvalid = false;
+      this.isTokenInvalid = !user;
     }
 
     this.isCheckingToken = false;
