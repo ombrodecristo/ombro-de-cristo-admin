@@ -73,9 +73,11 @@ const BaseButton = styled("button")<BaseButtonProps>(
   )
 );
 
-const StyledButton = styled(BaseButton)<{ variant: Variant }>`
+const StyledButton = styled(BaseButton)<{ variant: Variant; size: Size }>`
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   transition: all 0.2s ease-in-out;
+  padding: 0
+    ${props => props.theme.spacing[props.size === "small" ? "m" : "l"]}px;
   &:hover {
     ${props => {
       if (props.disabled) return "";
@@ -162,11 +164,11 @@ export function Button({
       alignItems="center"
       justifyContent="center"
       gap="s"
-      px={size === "small" ? "m" : "l"}
       borderWidth="1.5px"
       borderStyle="solid"
       disabled={isDisabled}
       variant={variant}
+      size={size}
       {...styles}
       {...props}
     >
