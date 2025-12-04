@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import type { ReactNode } from "react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { GlobalLoader } from "@/shared/components";
 
-export default function ProtectedRoute() {
+export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, role, loading } = useAuth();
 
   if (loading) {
@@ -13,5 +14,5 @@ export default function ProtectedRoute() {
     return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
+  return <>{children}</>;
 }

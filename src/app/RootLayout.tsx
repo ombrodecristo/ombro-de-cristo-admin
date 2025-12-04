@@ -34,7 +34,7 @@ function RootLayout() {
 
     if (user && role === "ADMIN") {
       if (isPublicRoute && location.pathname !== "/") {
-        navigate("/admin", { replace: true });
+        navigate("/admin/users", { replace: true });
       }
     } else if (!user && !isPublicRoute) {
       navigate("/login", { replace: true });

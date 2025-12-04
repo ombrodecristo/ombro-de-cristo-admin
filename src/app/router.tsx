@@ -52,28 +52,27 @@ export const router = createBrowserRouter([
       { path: "terms-and-policy", element: <TermsAndPolicyPage /> },
       {
         path: "admin",
-        element: <ProtectedRoute />,
+        element: (
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        ),
         children: [
           {
-            element: <AdminLayout />,
-            children: [
-              {
-                index: true,
-                element: <Navigate to="/admin/users" replace />,
-              },
-              {
-                path: "users",
-                element: <UserManagementPage />,
-              },
-              {
-                path: "churches",
-                element: <ChurchManagementPage />,
-              },
-              {
-                path: "devotionals",
-                element: <DevotionalManagementPage />,
-              },
-            ],
+            index: true,
+            element: <Navigate to="/admin/users" replace />,
+          },
+          {
+            path: "users",
+            element: <UserManagementPage />,
+          },
+          {
+            path: "churches",
+            element: <ChurchManagementPage />,
+          },
+          {
+            path: "devotionals",
+            element: <DevotionalManagementPage />,
           },
         ],
       },
