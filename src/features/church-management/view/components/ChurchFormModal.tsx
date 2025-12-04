@@ -63,6 +63,7 @@ export default function ChurchFormModal({
             disabled={viewModel.loading}
             required
             error={viewModel.error || ""}
+            placeholder="Ex: Igreja Batista da Aliança"
           />
         </div>
         <Actions>

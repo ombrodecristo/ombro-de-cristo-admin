@@ -6,13 +6,11 @@ import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
 import { IoSaveOutline } from "react-icons/io5";
 
-const Content = styled.form`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.m}px;
   width: 500px;
   max-height: 80vh;
-  overflow-y: auto;
 `;
 
 const Title = styled.h2(props => ({
@@ -20,6 +18,18 @@ const Title = styled.h2(props => ({
   fontSize: "22px",
   color: props.theme.colors.mainForeground,
   textAlign: "center",
+  paddingBottom: props.theme.spacing.m,
+  flexShrink: 0,
+}));
+
+const ScrollableContent = styled.div(props => ({
+  overflowY: "auto",
+  flexGrow: 1,
+  display: "flex",
+  flexDirection: "column",
+  gap: props.theme.spacing.m,
+  padding: `4px ${props.theme.spacing.s}px 4px 4px`,
+  marginRight: -props.theme.spacing.s,
 }));
 
 const Actions = styled.div`
@@ -62,47 +72,51 @@ export default function DevotionalFormModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Content onSubmit={onFormSubmit}>
+      <FormContainer onSubmit={onFormSubmit}>
         <Title>
           {viewModel.isEditing ? "Editar Devocional" : "Novo Devocional"}
         </Title>
-        <div>
-          <Label htmlFor="title">Título</Label>
-          <Input
-            id="title"
-            value={viewModel.title}
-            onChange={e => viewModel.setTitle(e.target.value)}
-            disabled={viewModel.loading}
-            required
-            error={viewModel.error || ""}
-          />
-        </div>
-        <div>
-          <Label htmlFor="content">Conteúdo</Label>
-          <Textarea
-            id="content"
-            value={viewModel.content}
-            onChange={e => viewModel.setContent(e.target.value)}
-            disabled={viewModel.loading}
-            required
-          />
-        </div>
-        <Actions>
-          <Button
-            type="submit"
-            label="Salvar"
-            loading={viewModel.loading}
-            icon={<IoSaveOutline size={20} />}
-          />
-          <Button
-            type="button"
-            label="Cancelar"
-            variant="secondary"
-            onClick={onClose}
-            disabled={viewModel.loading}
-          />
-        </Actions>
-      </Content>
+        <ScrollableContent>
+          <div>
+            <Label htmlFor="title">Título</Label>
+            <Input
+              id="title"
+              value={viewModel.title}
+              onChange={e => viewModel.setTitle(e.target.value)}
+              disabled={viewModel.loading}
+              required
+              error={viewModel.error || ""}
+              placeholder="Ex: A Fé que Move Montanhas"
+            />
+          </div>
+          <div>
+            <Label htmlFor="content">Conteúdo</Label>
+            <Textarea
+              id="content"
+              value={viewModel.content}
+              onChange={e => viewModel.setContent(e.target.value)}
+              disabled={viewModel.loading}
+              required
+              placeholder="Comece a escrever a reflexão aqui..."
+            />
+          </div>
+          <Actions>
+            <Button
+              type="submit"
+              label="Salvar"
+              loading={viewModel.loading}
+              icon={<IoSaveOutline size={20} />}
+            />
+            <Button
+              type="button"
+              label="Cancelar"
+              variant="secondary"
+              onClick={onClose}
+              disabled={viewModel.loading}
+            />
+          </Actions>
+        </ScrollableContent>
+      </FormContainer>
     </Modal>
   );
 }

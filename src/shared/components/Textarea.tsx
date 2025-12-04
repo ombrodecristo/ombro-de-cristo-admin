@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { TextareaHTMLAttributes } from "react";
 
 const StyledTextarea = styled.textarea`
-  min-height: 120px;
+  min-height: 240px;
   width: 100%;
   border-radius: ${props => props.theme.radii.m}px;
   border: 1.5px solid ${props => props.theme.colors.inputBorder};
@@ -13,7 +13,7 @@ const StyledTextarea = styled.textarea`
   font-size: 16px;
   color: ${props => props.theme.colors.inputForeground};
   transition: all 0.2s;
-  resize: vertical;
+  resize: none;
   font-family: inherit;
 
   &::placeholder {

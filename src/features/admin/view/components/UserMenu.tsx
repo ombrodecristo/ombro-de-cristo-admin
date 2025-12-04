@@ -177,6 +177,7 @@ export default function UserMenu() {
                     disabled={viewModel.isSavingName}
                     autoFocus
                     error={viewModel.nameError}
+                    placeholder="Seu nome completo"
                   />
                 </div>
                 <Button
@@ -233,7 +234,7 @@ export default function UserMenu() {
         onClose={() => viewModel.setDeleteConfirmOpen(false)}
         onConfirm={onDelete}
         title="Excluir sua conta?"
-        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados serão excluídos para sempre. Tem certeza?"
+        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados, incluindo as anotações do diário, serão excluídos para sempre. Tem certeza?"
         confirmText="Sim, excluir"
         variant="destructive"
         loading={viewModel.isDeleting}

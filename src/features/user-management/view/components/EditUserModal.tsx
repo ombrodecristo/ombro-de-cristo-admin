@@ -12,11 +12,11 @@ import { formatGender, formatRole } from "@/core/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
 import { IoInformationCircleOutline, IoSaveOutline } from "react-icons/io5";
 
-const Content = styled.form`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.m}px;
   width: 400px;
+  max-height: 80vh;
 `;
 
 const Title = styled.h2(props => ({
@@ -24,6 +24,18 @@ const Title = styled.h2(props => ({
   fontSize: "22px",
   color: props.theme.colors.mainForeground,
   textAlign: "center",
+  paddingBottom: props.theme.spacing.m,
+  flexShrink: 0,
+}));
+
+const ScrollableContent = styled.div(props => ({
+  overflowY: "auto",
+  flexGrow: 1,
+  display: "flex",
+  flexDirection: "column",
+  gap: props.theme.spacing.m,
+  padding: `4px ${props.theme.spacing.s}px 4px 4px`,
+  marginRight: -props.theme.spacing.s,
 }));
 
 const FormGroup = styled.div`
@@ -45,7 +57,7 @@ const Alert = styled.div`
   padding: ${props => props.theme.spacing.sm}px;
   display: flex;
   gap: ${props => props.theme.spacing.s}px;
-  align-items: flex-start;
+  align-items: center;
   color: ${props => props.theme.colors.mutedForeground};
   font-size: 13px;
 `;
@@ -80,92 +92,91 @@ export default function EditUserModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Content onSubmit={onFormSubmit}>
+      <FormContainer onSubmit={onFormSubmit}>
         <Title>Editar Perfil</Title>
-        <FormGroup>
-          <Label htmlFor="user-name">Nome Completo</Label>
-          <Input id="user-name" value={profile.full_name} disabled />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="mentor-name">Mentoria</Label>
-          <Input
-            id="mentor-name"
-            value={profile.mentor?.full_name ?? "Nenhuma"}
-            disabled
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>Permissão</Label>
-          <Select
-            value={viewModel.newRole}
-            onChange={value => viewModel.setNewRole(value as UserRole)}
-            disabled={viewModel.loading}
-            options={allRoles.map(role => ({
-              value: role,
-              label: formatRole(role, viewModel.newGender || profile.gender),
-            }))}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>Gênero</Label>
-          <Select
-            value={viewModel.newGender}
-            onChange={value => viewModel.setNewGender(value as UserGender)}
-            disabled={viewModel.loading}
-            options={allGenders.map(gender => ({
-              value: gender,
-              label: formatGender(gender),
-            }))}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>Igreja</Label>
-          <Select
-            value={viewModel.newChurchId || "none"}
-            onChange={value =>
-              viewModel.setNewChurchId(value === "none" ? null : value)
-            }
-            disabled={viewModel.loading || viewModel.loadingChurches}
-            options={churchOptions}
-            placeholder={
-              viewModel.loadingChurches
-                ? "Carregando..."
-                : "Selecione uma igreja"
-            }
-          />
-        </FormGroup>
-        <Alert>
-          <IoInformationCircleOutline
-            size={24}
-            style={{ flexShrink: 0, marginTop: "2px" }}
-          />
-          <div>
-            <p>
-              As alterações de permissão e gênero serão aplicadas no próximo
-              login do perfil no aplicativo.
-            </p>
-            <p style={{ marginTop: "4px" }}>
-              O nome e a mentoria são gerenciados pelo próprio perfil no
-              aplicativo.
-            </p>
-          </div>
-        </Alert>
-        <Actions>
-          <Button
-            type="submit"
-            label="Salvar"
-            loading={viewModel.loading}
-            icon={<IoSaveOutline size={20} />}
-          />
-          <Button
-            type="button"
-            label="Cancelar"
-            variant="secondary"
-            onClick={onClose}
-            disabled={viewModel.loading}
-          />
-        </Actions>
-      </Content>
+        <ScrollableContent>
+          <FormGroup>
+            <Label htmlFor="user-name">Nome Completo</Label>
+            <Input id="user-name" value={profile.full_name} disabled />
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="mentor-name">Mentoria</Label>
+            <Input
+              id="mentor-name"
+              value={profile.mentor?.full_name ?? "Nenhuma"}
+              disabled
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Permissão</Label>
+            <Select
+              value={viewModel.newRole}
+              onChange={value => viewModel.setNewRole(value as UserRole)}
+              disabled={viewModel.loading}
+              options={allRoles.map(role => ({
+                value: role,
+                label: formatRole(role, viewModel.newGender || profile.gender),
+              }))}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Gênero</Label>
+            <Select
+              value={viewModel.newGender}
+              onChange={value => viewModel.setNewGender(value as UserGender)}
+              disabled={viewModel.loading}
+              options={allGenders.map(gender => ({
+                value: gender,
+                label: formatGender(gender),
+              }))}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Igreja</Label>
+            <Select
+              value={viewModel.newChurchId || "none"}
+              onChange={value =>
+                viewModel.setNewChurchId(value === "none" ? null : value)
+              }
+              disabled={viewModel.loading || viewModel.loadingChurches}
+              options={churchOptions}
+              placeholder={
+                viewModel.loadingChurches
+                  ? "Carregando..."
+                  : "Selecione uma igreja"
+              }
+            />
+          </FormGroup>
+          <Alert>
+            <IoInformationCircleOutline size={28} style={{ flexShrink: 0 }} />
+            <div>
+              <p>
+                As alterações de permissão e gênero serão aplicadas no próximo
+                login do perfil no aplicativo.
+              </p>
+              <p style={{ marginTop: "4px" }}>
+                O nome e a mentoria são gerenciados pelo próprio perfil no
+                aplicativo.
+              </p>
+            </div>
+          </Alert>
+          <Actions>
+            <Button
+              type="submit"
+              label="Salvar"
+              loading={viewModel.loading}
+              icon={<IoSaveOutline size={20} />}
+            />
+            <Button
+              type="button"
+              label="Cancelar"
+              variant="secondary"
+              onClick={onClose}
+              disabled={viewModel.loading}
+            />
+          </Actions>
+        </ScrollableContent>
+      </FormContainer>
     </Modal>
   );
 }
