@@ -8,6 +8,7 @@ const SidebarContainer = styled.aside<{ isOpen: boolean }>`
   color: ${props => props.theme.colors.primaryForeground};
   flex-shrink: 0;
   border-right: 1px solid ${props => props.theme.colors.border};
+  overflow-x: hidden;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     position: fixed;
@@ -47,7 +48,7 @@ const Header = styled.div`
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
     padding: 0 24px;
     justify-content: center;
-    ${SidebarContainer}:hover & {
+    .sidebar-container:hover & {
       padding: 0 ${props => props.theme.spacing.l}px;
       justify-content: flex-start;
     }
@@ -64,6 +65,7 @@ const Logo = styled.img`
 const Title = styled.span`
   font-weight: bold;
   font-size: 16px;
+  white-space: nowrap;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     opacity: 1;
@@ -71,15 +73,16 @@ const Title = styled.span`
   }
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    max-width: 0;
     opacity: 0;
-    visibility: hidden;
+    overflow: hidden;
     transition:
-      opacity 0.2s,
-      visibility 0.2s;
-    transition-delay: 0s;
-    ${SidebarContainer}:hover & {
+      max-width 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
+
+    .sidebar-container:hover & {
+      max-width: 200px;
       opacity: 1;
-      visibility: visible;
       transition-delay: 0.1s;
     }
   }
@@ -100,7 +103,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     <SidebarContainer className="sidebar-container" isOpen={isOpen}>
       <Header>
         <Logo src="/logo.png" alt="Logo Ombro de Cristo" />
-        <Title>Administração</Title>
+        <Title>Ombro de Cristo</Title>
       </Header>
       <NavContainer>
         <SidebarNav isSidebarOpen={isOpen} />

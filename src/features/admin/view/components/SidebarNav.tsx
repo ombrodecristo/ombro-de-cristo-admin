@@ -54,15 +54,16 @@ const LinkText = styled.span<{ isSidebarOpen: boolean }>`
   }
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    max-width: 0;
     opacity: 0;
-    visibility: hidden;
+    overflow: hidden;
     transition:
-      opacity 0.2s,
-      visibility 0.2s;
-    transition-delay: 0s;
+      max-width 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
+
     .sidebar-container:hover & {
+      max-width: 150px;
       opacity: 1;
-      visibility: visible;
       transition-delay: 0.1s;
     }
   }
