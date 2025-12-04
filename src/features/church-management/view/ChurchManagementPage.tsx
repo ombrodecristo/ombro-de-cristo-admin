@@ -46,6 +46,7 @@ export default function ChurchManagementPage() {
           label="Nova Igreja"
           onClick={viewModel.handleOpenCreate}
           icon={<IoAdd size={20} />}
+          size="small"
         />
       </PageHeader>
       <Input

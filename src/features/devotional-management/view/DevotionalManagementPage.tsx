@@ -48,6 +48,7 @@ export default function DevotionalManagementPage() {
           label="Novo Devocional"
           onClick={viewModel.handleOpenCreate}
           icon={<IoAdd size={20} />}
+          size="small"
         />
       </PageHeader>
       <Input
