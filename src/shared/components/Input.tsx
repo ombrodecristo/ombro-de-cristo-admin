@@ -52,10 +52,8 @@ const StyledInput = styled.input<{ hasIcon: boolean; isFocused: boolean }>`
   font-family: ${props => props.theme.textVariants.body.fontFamily};
   font-size: 16px;
   color: ${props => props.theme.colors.inputForeground};
-  padding-top: ${props =>
-    props.isFocused ? "1px" : "0"}; // Adjust for border width change
-  padding-bottom: ${props =>
-    props.isFocused ? "1px" : "0"}; // Adjust for border width change
+  padding-top: ${props => (props.isFocused ? "1px" : "0")};
+  padding-bottom: ${props => (props.isFocused ? "1px" : "0")};
 
   &::placeholder {
     color: ${props => props.theme.colors.mutedForeground};

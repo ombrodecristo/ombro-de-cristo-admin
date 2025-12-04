@@ -5,11 +5,7 @@ import {
   validatePasswordMatch,
 } from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
-
-type PasswordRecoveryViewModelProps = {
-  authLoading: boolean;
-  initialHash: string;
-};
+import type { User } from "@/core/types/database";
 
 export class PasswordRecoveryViewModel extends BaseViewModel {
   public password = "";
@@ -20,30 +16,34 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
   public isTokenInvalid = false;
   public isCheckingToken = true;
   public error: string | null = null;
-  private authLoading: boolean;
-  private initialHash: string;
 
-  constructor(props: PasswordRecoveryViewModelProps) {
+  constructor() {
     super();
-    this.authLoading = props.authLoading;
-    this.initialHash = props.initialHash;
   }
 
-  public checkToken = async () => {
-    if (this.authLoading) return;
-    this.isCheckingToken = true;
-    this.notify();
+  public evaluateAuthState = (
+    user: User | null,
+    authLoading: boolean,
+    hash: string
+  ) => {
+    if (authLoading) {
+      this.isCheckingToken = true;
+      this.notify();
 
-    const hasRecoveryToken = this.initialHash.includes("type=recovery");
-    const hasError = this.initialHash.includes("error=");
+      return;
+    }
 
-    this.isTokenInvalid = !hasRecoveryToken || hasError;
+    const hasError = hash.includes("error=");
 
-    if (hasRecoveryToken && !hasError) {
-      const { data } = await authRepository.getSession();
-      this.isTokenValid = !!data?.session;
+    if (hasError) {
+      this.isTokenValid = false;
+      this.isTokenInvalid = true;
+    } else if (user) {
+      this.isTokenValid = true;
+      this.isTokenInvalid = false;
     } else {
       this.isTokenValid = false;
+      this.isTokenInvalid = false;
     }
 
     this.isCheckingToken = false;

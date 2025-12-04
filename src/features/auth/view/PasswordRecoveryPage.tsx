@@ -72,18 +72,16 @@ const Form = styled.form`
 `;
 
 export default function PasswordRecoveryPage() {
-  const { loading: authLoading, initialHash } = useAuth();
+  const { loading: authLoading, initialHash, user } = useAuth();
   const navigate = useNavigate();
 
-  const [viewModel] = useState(
-    () => new PasswordRecoveryViewModel({ authLoading, initialHash })
-  );
+  const [viewModel] = useState(() => new PasswordRecoveryViewModel());
 
   useViewModel(viewModel);
 
   useEffect(() => {
-    viewModel.checkToken();
-  }, [authLoading, viewModel]);
+    viewModel.evaluateAuthState(user, authLoading, initialHash);
+  }, [user, authLoading, initialHash, viewModel]);
 
   useEffect(() => {
     if (viewModel.success) {
