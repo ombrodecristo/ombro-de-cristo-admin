@@ -23,43 +23,9 @@ import type {
   GridProps,
   TypographyProps,
 } from "styled-system";
+import type { ElementType, HTMLAttributes } from "react";
 
-const gapSystem = system({
-  gap: {
-    property: "gap",
-    scale: "space",
-  },
-});
-
-const boxSystem = compose(
-  space,
-  layout,
-  color,
-  flexbox,
-  border,
-  position,
-  shadow,
-  grid,
-  gapSystem,
-  typography
-);
-
-const systemPropNames = new Set([
-  ...(space.propNames ?? []),
-  ...(layout.propNames ?? []),
-  ...(color.propNames ?? []),
-  ...(flexbox.propNames ?? []),
-  ...(border.propNames ?? []),
-  ...(position.propNames ?? []),
-  ...(shadow.propNames ?? []),
-  ...(grid.propNames ?? []),
-  ...(typography.propNames ?? []),
-  "gap",
-]);
-
-const shouldForwardProp = (prop: string) => !systemPropNames.has(prop);
-
-export type BoxProps = SpaceProps &
+type StyledSystemProps = SpaceProps &
   LayoutProps &
   ColorProps &
   FlexboxProps &
@@ -67,11 +33,36 @@ export type BoxProps = SpaceProps &
   PositionProps &
   ShadowProps &
   GridProps &
-  TypographyProps & {
-    gap?: SpaceProps["margin"];
-    as?: React.ElementType;
-    children?: React.ReactNode;
-    className?: string;
-  };
+  TypographyProps;
 
-export const Box = styled("div", { shouldForwardProp })<BoxProps>(boxSystem);
+type CustomProps = {
+  gap?: SpaceProps["margin"];
+  as?: ElementType;
+};
+
+export type BoxProps = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  keyof StyledSystemProps
+> &
+  StyledSystemProps &
+  CustomProps;
+
+export const Box = styled("div")<BoxProps>(
+  compose(
+    space,
+    layout,
+    color,
+    flexbox,
+    border,
+    position,
+    shadow,
+    grid,
+    typography,
+    system({
+      gap: {
+        property: "gap",
+        scale: "space",
+      },
+    })
+  )
+);
