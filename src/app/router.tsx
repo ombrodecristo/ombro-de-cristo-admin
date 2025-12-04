@@ -51,28 +51,29 @@ export const router = createBrowserRouter([
       { path: "password-recovery", element: <PasswordRecoveryPage /> },
       { path: "terms-and-policy", element: <TermsAndPolicyPage /> },
       {
-        path: "admin",
-        element: (
-          <ProtectedRoute>
-            <AdminLayout />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute />,
         children: [
           {
-            index: true,
-            element: <Navigate to="/admin/users" replace />,
-          },
-          {
-            path: "users",
-            element: <UserManagementPage />,
-          },
-          {
-            path: "churches",
-            element: <ChurchManagementPage />,
-          },
-          {
-            path: "devotionals",
-            element: <DevotionalManagementPage />,
+            path: "admin",
+            element: <AdminLayout />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/admin/users" replace />,
+              },
+              {
+                path: "users",
+                element: <UserManagementPage />,
+              },
+              {
+                path: "churches",
+                element: <ChurchManagementPage />,
+              },
+              {
+                path: "devotionals",
+                element: <DevotionalManagementPage />,
+              },
+            ],
           },
         ],
       },
