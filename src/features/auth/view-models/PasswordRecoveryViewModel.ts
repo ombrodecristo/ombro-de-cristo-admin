@@ -12,6 +12,7 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
   public confirmPassword = "";
   public loading = false;
   public success = false;
+  public showSuccessMessage = false;
   public isTokenValid = false;
   public isTokenInvalid = false;
   public isCheckingToken = true;
@@ -103,6 +104,7 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
       return { error: this.error };
     } else {
       this.success = true;
+      this.showSuccessMessage = true;
       await authRepository.signOut();
       this.notify();
 

@@ -1,11 +1,11 @@
 import { useState, type FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
 import {
   IoLockClosedOutline,
   IoAlertCircleOutline,
   IoMailOutline,
   IoSaveOutline,
+  IoCheckmarkCircle,
 } from "react-icons/io5";
 import { PasswordRecoveryViewModel } from "../view-models/PasswordRecoveryViewModel";
 import {
@@ -42,11 +42,19 @@ const Header = styled.header`
   margin-bottom: ${props => props.theme.spacing.l}px;
 `;
 
-const StatusIcon = styled.div<{ isTokenInvalid: boolean }>`
-  color: ${props =>
-    props.isTokenInvalid
-      ? props.theme.colors.destructiveBackground
-      : props.theme.colors.primary};
+const StatusIcon = styled.div<{
+  variant?: "success" | "error" | "primary";
+}>`
+  color: ${props => {
+    switch (props.variant) {
+      case "success":
+        return props.theme.colors.success;
+      case "error":
+        return props.theme.colors.destructiveBackground;
+      default:
+        return props.theme.colors.primary;
+    }
+  }};
   svg {
     width: 48px;
     height: 48px;
@@ -63,6 +71,7 @@ const Title = styled.h1`
 const Description = styled.p`
   color: ${props => props.theme.colors.mutedForeground};
   line-height: 1.6;
+  text-align: center;
 `;
 
 const Form = styled.form`
@@ -73,8 +82,6 @@ const Form = styled.form`
 
 export default function PasswordRecoveryPage() {
   const { loading: authLoading, initialHash, user } = useAuth();
-  const navigate = useNavigate();
-
   const [viewModel] = useState(() => new PasswordRecoveryViewModel());
 
   useViewModel(viewModel);
@@ -82,15 +89,6 @@ export default function PasswordRecoveryPage() {
   useEffect(() => {
     viewModel.evaluateAuthState(user, authLoading, initialHash);
   }, [user, authLoading, initialHash, viewModel]);
-
-  useEffect(() => {
-    if (viewModel.success) {
-      toast.success("Senha alterada", {
-        description: "Você já pode fazer login com sua nova senha.",
-      });
-      navigate("/login", { replace: true });
-    }
-  }, [viewModel.success, navigate]);
 
   const onPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -104,12 +102,30 @@ export default function PasswordRecoveryPage() {
     return <GlobalLoader />;
   }
 
+  if (viewModel.showSuccessMessage) {
+    return (
+      <PageContainer>
+        <StyledCard>
+          <Header>
+            <StatusIcon variant="success">
+              <IoCheckmarkCircle />
+            </StatusIcon>
+            <Title>Senha Redefinida</Title>
+          </Header>
+          <Description>
+            Sua senha foi alterada com sucesso. Você já pode fechar esta página.
+          </Description>
+        </StyledCard>
+      </PageContainer>
+    );
+  }
+
   if (viewModel.isTokenValid) {
     return (
       <PageContainer>
         <StyledCard>
           <Header>
-            <StatusIcon isTokenInvalid={false}>
+            <StatusIcon variant="primary">
               <IoLockClosedOutline />
             </StatusIcon>
             <Title>Redefina sua Senha</Title>
@@ -162,7 +178,7 @@ export default function PasswordRecoveryPage() {
     <PageContainer>
       <StyledCard>
         <Header>
-          <StatusIcon isTokenInvalid={viewModel.isTokenInvalid}>
+          <StatusIcon variant={viewModel.isTokenInvalid ? "error" : "primary"}>
             {viewModel.isTokenInvalid ? (
               <IoAlertCircleOutline />
             ) : (
