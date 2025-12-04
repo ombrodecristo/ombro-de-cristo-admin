@@ -5,7 +5,7 @@ import type { TextareaHTMLAttributes } from "react";
 const StyledTextarea = styled.textarea`
   min-height: 120px;
   width: 100%;
-  border-radius: ${props => props.theme.borderRadii.m}px;
+  border-radius: ${props => props.theme.radii.m}px;
   border: 1.5px solid ${props => props.theme.colors.inputBorder};
   background-color: ${props => props.theme.colors.inputBackground};
   padding: ${props => props.theme.spacing.sm}px
