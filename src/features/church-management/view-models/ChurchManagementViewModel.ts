@@ -9,8 +9,10 @@ export class ChurchManagementViewModel extends BaseViewModel {
   public loading = true;
   public error: string | null = null;
   public selectedChurch: Church | null = null;
+  public selectedChurchForDetails: Church | null = null;
   public isFormOpen = false;
   public isDeleteAlertOpen = false;
+  public isDetailsModalOpen = false;
   public isDeleting = false;
   public searchQuery = "";
   public sortConfig: SortConfig = {
@@ -86,6 +88,18 @@ export class ChurchManagementViewModel extends BaseViewModel {
     this.selectedChurch = null;
     this.isFormOpen = false;
     this.isDeleteAlertOpen = false;
+    this.notify();
+  };
+
+  public handleOpenDetailsModal = (church: Church) => {
+    this.selectedChurchForDetails = church;
+    this.isDetailsModalOpen = true;
+    this.notify();
+  };
+
+  public handleCloseDetailsModal = () => {
+    this.selectedChurchForDetails = null;
+    this.isDetailsModalOpen = false;
     this.notify();
   };
 

@@ -9,7 +9,8 @@ import { IoSaveOutline } from "react-icons/io5";
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   max-height: 80vh;
 `;
 

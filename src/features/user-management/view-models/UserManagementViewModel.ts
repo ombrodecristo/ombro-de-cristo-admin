@@ -16,6 +16,7 @@ export class UserManagementViewModel extends BaseViewModel {
   public loading = true;
   public error: string | null = null;
   public editingProfile: ProfileWithRelations | null = null;
+  public viewingProfile: ProfileWithRelations | null = null;
   public searchQuery = "";
   public sortConfig: SortConfig = {
     key: "full_name",
@@ -99,16 +100,31 @@ export class UserManagementViewModel extends BaseViewModel {
     this.notify();
   };
 
+  public handleOpenDetailsModal = (profile: ProfileWithRelations) => {
+    this.viewingProfile = profile;
+    this.notify();
+  };
+
+  public handleCloseDetailsModal = () => {
+    this.viewingProfile = null;
+    this.notify();
+  };
+
   public handleUpdateSuccess = (updatedProfileData: Profile) => {
     const index = this.profiles.findIndex(p => p.id === updatedProfileData.id);
 
     if (index !== -1) {
+      const currentProfile = this.profiles[index];
+
       const updatedProfile = {
-        ...this.profiles[index],
+        ...currentProfile,
         ...updatedProfileData,
+        churches: this.profiles[index].churches,
+        mentor: this.profiles[index].mentor,
       };
 
       this.profiles[index] = updatedProfile;
+      this.fetchProfiles();
       this.notify();
     } else {
       this.fetchProfiles();

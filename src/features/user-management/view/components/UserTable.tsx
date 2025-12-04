@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import { IoPencil, IoArrowUp, IoArrowDown } from "react-icons/io5";
+import {
+  IoPencil,
+  IoArrowUp,
+  IoArrowDown,
+  IoEyeOutline,
+} from "react-icons/io5";
 import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
 import { formatGender, formatRole } from "@/core/lib/formatters";
 import {
@@ -26,9 +31,44 @@ const HeaderCellContent = styled.div`
   user-select: none;
 `;
 
+const ActionsContainer = styled(TableCell)`
+  width: auto;
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 120px;
+  }
+`;
+
+const DesktopOnlyCell = styled(TableCell)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const DesktopOnlyHeaderCell = styled(TableHeaderCell)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const DesktopActions = styled.div`
+  display: flex;
+  gap: 8px;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const MobileActions = styled.div`
+  display: none;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: flex;
+  }
+`;
+
 type UserTableProps = {
   profiles: ProfileWithRelations[];
   onEdit: (profile: ProfileWithRelations) => void;
+  onDetails: (profile: ProfileWithRelations) => void;
   sortConfig: SortConfig;
   requestSort: (key: string) => void;
 };
@@ -36,6 +76,7 @@ type UserTableProps = {
 export default function UserTable({
   profiles,
   onEdit,
+  onDetails,
   sortConfig,
   requestSort,
 }: UserTableProps) {
@@ -59,27 +100,27 @@ export default function UserTable({
                 Nome {getSortIcon("full_name")}
               </HeaderCellContent>
             </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("role")}>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("role")}>
               <HeaderCellContent>
                 Permissão {getSortIcon("role")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("gender")}>
+            </DesktopOnlyHeaderCell>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("gender")}>
               <HeaderCellContent>
                 Gênero {getSortIcon("gender")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("churches")}>
+            </DesktopOnlyHeaderCell>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("churches")}>
               <HeaderCellContent>
                 Igreja {getSortIcon("churches")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("mentor")}>
+            </DesktopOnlyHeaderCell>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("mentor")}>
               <HeaderCellContent>
                 Mentoria {getSortIcon("mentor")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell style={{ width: "120px" }}>Ações</TableHeaderCell>
+            </DesktopOnlyHeaderCell>
+            <TableHeaderCell>Ações</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -98,21 +139,39 @@ export default function UserTable({
                 <TableCell style={{ fontWeight: "500" }}>
                   {profile.full_name}
                 </TableCell>
-                <TableCell>
+                <DesktopOnlyCell>
                   {formatRole(profile.role, profile.gender)}
-                </TableCell>
-                <TableCell>{formatGender(profile.gender)}</TableCell>
-                <TableCell>{profile.churches?.name ?? "N/A"}</TableCell>
-                <TableCell>{profile.mentor?.full_name ?? "N/A"}</TableCell>
-                <TableCell>
-                  <Button
-                    label="Editar"
-                    onClick={() => onEdit(profile)}
-                    icon={<IoPencil />}
-                    size="small"
-                    style={{ width: "auto" }}
-                  />
-                </TableCell>
+                </DesktopOnlyCell>
+                <DesktopOnlyCell>
+                  {formatGender(profile.gender)}
+                </DesktopOnlyCell>
+                <DesktopOnlyCell>
+                  {profile.churches?.name ?? "N/A"}
+                </DesktopOnlyCell>
+                <DesktopOnlyCell>
+                  {profile.mentor?.full_name ?? "N/A"}
+                </DesktopOnlyCell>
+                <ActionsContainer>
+                  <DesktopActions>
+                    <Button
+                      label="Editar"
+                      onClick={() => onEdit(profile)}
+                      icon={<IoPencil />}
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                  </DesktopActions>
+                  <MobileActions>
+                    <Button
+                      label="Visualizar"
+                      onClick={() => onDetails(profile)}
+                      icon={<IoEyeOutline />}
+                      variant="secondary"
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                  </MobileActions>
+                </ActionsContainer>
               </TableRow>
             ))
           )}

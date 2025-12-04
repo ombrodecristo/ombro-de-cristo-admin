@@ -11,8 +11,10 @@ export class DevotionalManagementViewModel extends BaseViewModel {
   public loading = true;
   public error: string | null = null;
   public selectedDevotional: DevotionalWithAuthor | null = null;
+  public selectedDevotionalForDetails: DevotionalWithAuthor | null = null;
   public isFormOpen = false;
   public isDeleteAlertOpen = false;
+  public isDetailsModalOpen = false;
   public isDeleting = false;
   public searchQuery = "";
   public sortConfig: SortConfig = {
@@ -101,6 +103,18 @@ export class DevotionalManagementViewModel extends BaseViewModel {
     this.selectedDevotional = null;
     this.isFormOpen = false;
     this.isDeleteAlertOpen = false;
+    this.notify();
+  };
+
+  public handleOpenDetailsModal = (devotional: DevotionalWithAuthor) => {
+    this.selectedDevotionalForDetails = devotional;
+    this.isDetailsModalOpen = true;
+    this.notify();
+  };
+
+  public handleCloseDetailsModal = () => {
+    this.selectedDevotionalForDetails = null;
+    this.isDetailsModalOpen = false;
     this.notify();
   };
 

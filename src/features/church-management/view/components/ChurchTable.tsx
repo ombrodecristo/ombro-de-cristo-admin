@@ -4,6 +4,7 @@ import {
   IoTrashOutline,
   IoArrowUp,
   IoArrowDown,
+  IoEyeOutline,
 } from "react-icons/io5";
 import { type Church } from "@/core/types/database";
 import { formatDate } from "@/core/lib/formatters";
@@ -31,15 +32,45 @@ const HeaderCellContent = styled.div`
   user-select: none;
 `;
 
-const ActionsCell = styled.div`
+const ActionsContainer = styled(TableCell)`
+  width: auto;
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 220px;
+  }
+`;
+
+const DesktopOnlyCell = styled(TableCell)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const DesktopOnlyHeaderCell = styled(TableHeaderCell)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const DesktopActions = styled.div`
   display: flex;
   gap: 8px;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const MobileActions = styled.div`
+  display: none;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: flex;
+  }
 `;
 
 type ChurchTableProps = {
   churches: Church[];
   onEdit: (church: Church) => void;
   onDelete: (church: Church) => void;
+  onDetails: (church: Church) => void;
   sortConfig: SortConfig;
   requestSort: (key: keyof Church) => void;
 };
@@ -48,6 +79,7 @@ export default function ChurchTable({
   churches,
   onEdit,
   onDelete,
+  onDetails,
   sortConfig,
   requestSort,
 }: ChurchTableProps) {
@@ -69,12 +101,12 @@ export default function ChurchTable({
             <TableHeaderCell onClick={() => requestSort("name")}>
               <HeaderCellContent>Nome {getSortIcon("name")}</HeaderCellContent>
             </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("updated_at")}>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("updated_at")}>
               <HeaderCellContent>
                 Última Modificação {getSortIcon("updated_at")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell style={{ width: "220px" }}>Ações</TableHeaderCell>
+            </DesktopOnlyHeaderCell>
+            <TableHeaderCell>Ações</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -93,9 +125,11 @@ export default function ChurchTable({
                 <TableCell style={{ fontWeight: "500" }}>
                   {church.name}
                 </TableCell>
-                <TableCell>{formatDate(church.updated_at)}</TableCell>
-                <TableCell>
-                  <ActionsCell>
+                <DesktopOnlyCell>
+                  {formatDate(church.updated_at)}
+                </DesktopOnlyCell>
+                <ActionsContainer>
+                  <DesktopActions>
                     <Button
                       label="Editar"
                       onClick={() => onEdit(church)}
@@ -112,8 +146,18 @@ export default function ChurchTable({
                       size="small"
                       style={{ width: "auto" }}
                     />
-                  </ActionsCell>
-                </TableCell>
+                  </DesktopActions>
+                  <MobileActions>
+                    <Button
+                      label="Visualizar"
+                      onClick={() => onDetails(church)}
+                      icon={<IoEyeOutline />}
+                      variant="secondary"
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                  </MobileActions>
+                </ActionsContainer>
               </TableRow>
             ))
           )}

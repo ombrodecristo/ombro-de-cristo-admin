@@ -13,6 +13,8 @@ import {
 import DevotionalTable from "./components/DevotionalTable";
 import DevotionalFormModal from "./components/DevotionalFormModal";
 import { IoAdd, IoSearchOutline } from "react-icons/io5";
+import { DevotionalDetailsModal } from "./components/DevotionalDetailsModal";
+import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
 
 const PageContainer = styled.div`
   display: flex;
@@ -33,13 +35,23 @@ export default function DevotionalManagementPage() {
     return (
       <PageContainer>
         <PageHeader title="Devocionais">
-          <Skeleton height="56px" width="200px" />
+          <Skeleton height="40px" width="40px" />
         </PageHeader>
-        <Skeleton height="56px" width="400px" />
+        <Skeleton height="56px" width="100%" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
     );
   }
+
+  const handleEditFromDetails = (devotional: DevotionalWithAuthor) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleOpenEdit(devotional);
+  };
+
+  const handleDeleteFromDetails = (devotional: DevotionalWithAuthor) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleOpenDelete(devotional);
+  };
 
   return (
     <PageContainer>
@@ -49,6 +61,7 @@ export default function DevotionalManagementPage() {
           onClick={viewModel.handleOpenCreate}
           icon={<IoAdd size={20} />}
           size="small"
+          hideTextOnMobile
         />
       </PageHeader>
       <Input
@@ -63,6 +76,7 @@ export default function DevotionalManagementPage() {
         devotionals={viewModel.sortedDevotionals}
         onEdit={viewModel.handleOpenEdit}
         onDelete={viewModel.handleOpenDelete}
+        onDetails={viewModel.handleOpenDetailsModal}
         sortConfig={viewModel.sortConfig}
         requestSort={viewModel.requestSort}
       />
@@ -74,6 +88,16 @@ export default function DevotionalManagementPage() {
           authorId={user!.id}
           onClose={viewModel.handleCloseModals}
           onSuccess={viewModel.handleFormSuccess}
+        />
+      )}
+
+      {viewModel.selectedDevotionalForDetails && (
+        <DevotionalDetailsModal
+          isOpen={viewModel.isDetailsModalOpen}
+          onClose={viewModel.handleCloseDetailsModal}
+          devotional={viewModel.selectedDevotionalForDetails}
+          onEdit={handleEditFromDetails}
+          onDelete={handleDeleteFromDetails}
         />
       )}
 

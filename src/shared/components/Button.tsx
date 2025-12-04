@@ -47,11 +47,18 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   icon?: ReactNode;
+  hideTextOnMobile?: boolean;
 }
 
 type BaseButtonProps = StyledSystemProps & {
   gap?: SpaceProps["margin"];
 } & ButtonHTMLAttributes<HTMLButtonElement>;
+
+const ButtonLabel = styled(Text)<{ hideOnMobile?: boolean }>`
+  ${props =>
+    props.hideOnMobile &&
+    `@media (max-width: ${props.theme.breakpoints.tablet}) { display: none; }`}
+`;
 
 const BaseButton = styled("button")<BaseButtonProps>(
   compose(
@@ -73,12 +80,18 @@ const BaseButton = styled("button")<BaseButtonProps>(
   )
 );
 
-const StyledButton = styled(BaseButton)<{ variant: Variant; size: Size }>`
+const StyledButton = styled(BaseButton)<{
+  variant: Variant;
+  size: Size;
+  hideTextOnMobile?: boolean;
+}>`
   height: ${props => (props.size === "small" ? "40px" : "56px")};
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   transition: all 0.2s ease-in-out;
   padding: 0
     ${props => props.theme.spacing[props.size === "small" ? "m" : "l"]}px;
+  white-space: nowrap;
+
   &:hover {
     ${props => {
       if (props.disabled) return "";
@@ -89,6 +102,16 @@ const StyledButton = styled(BaseButton)<{ variant: Variant; size: Size }>`
       return `opacity: 0.9;`;
     }}
   }
+
+  ${props =>
+    props.hideTextOnMobile &&
+    `
+    @media (max-width: ${props.theme.breakpoints.tablet}) {
+      width: ${props.size === "small" ? "40px" : "56px"};
+      min-width: ${props.size === "small" ? "40px" : "56px"};
+      padding: 0;
+    }
+  `}
 `;
 
 const Spinner = styled.div`
@@ -115,6 +138,7 @@ export function Button({
   variant = "primary",
   size = "medium",
   icon,
+  hideTextOnMobile,
   ...props
 }: ButtonProps) {
   const theme = useTheme() as Theme;
@@ -156,29 +180,6 @@ export function Button({
 
   const styles = getVariantStyles();
 
-  if (!label && icon) {
-    return (
-      <StyledButton
-        width="auto"
-        borderRadius={size === "small" ? "l" : "xl"}
-        display="inline-flex"
-        alignItems="center"
-        justifyContent="center"
-        gap="none"
-        borderWidth="1.5px"
-        borderStyle="solid"
-        disabled={isDisabled}
-        variant={variant}
-        size={size}
-        {...styles}
-        {...props}
-        style={{ padding: 0, ...props.style }}
-      >
-        {loading ? <Spinner /> : icon}
-      </StyledButton>
-    );
-  }
-
   return (
     <StyledButton
       width="100%"
@@ -192,6 +193,7 @@ export function Button({
       disabled={isDisabled}
       variant={variant}
       size={size}
+      hideTextOnMobile={hideTextOnMobile}
       {...styles}
       {...props}
     >
@@ -200,14 +202,17 @@ export function Button({
       ) : (
         <>
           {icon}
-          <Text
-            as="span"
-            variant="buttonLabel"
-            color="inherit"
-            fontSize={size === "small" ? "14px" : "16px"}
-          >
-            {label}
-          </Text>
+          {label && (
+            <ButtonLabel
+              as="span"
+              hideOnMobile={hideTextOnMobile}
+              variant="buttonLabel"
+              color="inherit"
+              fontSize={size === "small" ? "14px" : "16px"}
+            >
+              {label}
+            </ButtonLabel>
+          )}
         </>
       )}
     </StyledButton>

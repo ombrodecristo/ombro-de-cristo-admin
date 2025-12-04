@@ -75,6 +75,7 @@ const LinkText = styled.span<{ isSidebarOpen: boolean }>`
 
 type SidebarNavProps = {
   isSidebarOpen: boolean;
+  onNavigate: () => void;
 };
 
 const navItems = [
@@ -91,7 +92,10 @@ const navItems = [
   },
 ];
 
-export default function SidebarNav({ isSidebarOpen }: SidebarNavProps) {
+export default function SidebarNav({
+  isSidebarOpen,
+  onNavigate,
+}: SidebarNavProps) {
   return (
     <Nav>
       {navItems.map(item => (
@@ -100,6 +104,7 @@ export default function SidebarNav({ isSidebarOpen }: SidebarNavProps) {
           to={item.to}
           isSidebarOpen={isSidebarOpen}
           title={!isSidebarOpen ? item.label : ""}
+          onClick={onNavigate}
         >
           {item.icon}
           <LinkText isSidebarOpen={isSidebarOpen}>{item.label}</LinkText>

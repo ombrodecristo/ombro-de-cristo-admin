@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 export const TableContainer = styled.div`
   border-radius: ${props => props.theme.radii.l}px;
   border: 1px solid ${props => props.theme.colors.border};
-  overflow: hidden;
+  overflow-x: auto;
   background-color: ${props => props.theme.colors.cardBackground};
 `;
 
@@ -40,6 +40,7 @@ export const TableHeaderCell = styled.th`
     props.theme.textVariants.sectionHeader.textTransform};
   letter-spacing: ${props =>
     props.theme.textVariants.sectionHeader.letterSpacing};
+  word-break: break-word;
 `;
 
 export const TableCell = styled.td`
@@ -47,4 +48,5 @@ export const TableCell = styled.td`
   font-size: 14px;
   color: ${props => props.theme.colors.mainForeground};
   vertical-align: middle;
+  word-break: break-word;
 `;

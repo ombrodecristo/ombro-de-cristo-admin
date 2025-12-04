@@ -22,6 +22,10 @@ const ContentArea = styled.main`
   flex: 1;
   overflow-y: auto;
   padding: ${props => props.theme.spacing.l}px;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: ${props => props.theme.spacing.m}px;
+  }
 `;
 
 const MobileOverlay = styled.div<{ isOpen: boolean }>`
@@ -43,9 +47,13 @@ export default function AdminLayout() {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <LayoutContainer>
-      <Sidebar isOpen={isSidebarOpen} />
+      <Sidebar isOpen={isSidebarOpen} onNavigate={closeSidebar} />
       <MainContent>
         <Header onToggleSidebar={toggleSidebar} />
         <ContentArea>

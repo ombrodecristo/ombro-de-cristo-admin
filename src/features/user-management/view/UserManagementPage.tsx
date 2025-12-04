@@ -7,6 +7,8 @@ import { Skeleton, Input, PageHeader } from "@/shared/components";
 import UserTable from "./components/UserTable";
 import EditUserModal from "./components/EditUserModal";
 import { IoSearchOutline } from "react-icons/io5";
+import { UserDetailsModal } from "./components/UserDetailsModal";
+import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
 
 const PageContainer = styled.div`
   display: flex;
@@ -27,11 +29,16 @@ export default function UserManagementPage() {
     return (
       <PageContainer>
         <PageHeader title="Perfis" />
-        <Skeleton height="56px" width="400px" />
+        <Skeleton height="56px" width="100%" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
     );
   }
+
+  const handleEditFromDetails = (profile: ProfileWithRelations) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleEdit(profile);
+  };
 
   return (
     <PageContainer>
@@ -47,6 +54,7 @@ export default function UserManagementPage() {
       <UserTable
         profiles={viewModel.sortedProfiles}
         onEdit={viewModel.handleEdit}
+        onDetails={viewModel.handleOpenDetailsModal}
         sortConfig={viewModel.sortConfig}
         requestSort={viewModel.requestSort}
       />
@@ -56,6 +64,14 @@ export default function UserManagementPage() {
           profile={viewModel.editingProfile}
           onClose={viewModel.handleCloseModal}
           onSuccess={viewModel.handleUpdateSuccess}
+        />
+      )}
+      {viewModel.viewingProfile && (
+        <UserDetailsModal
+          isOpen={!!viewModel.viewingProfile}
+          profile={viewModel.viewingProfile}
+          onClose={viewModel.handleCloseDetailsModal}
+          onEdit={handleEditFromDetails}
         />
       )}
     </PageContainer>

@@ -4,6 +4,7 @@ import {
   IoTrashOutline,
   IoArrowUp,
   IoArrowDown,
+  IoEyeOutline,
 } from "react-icons/io5";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
 import { formatDate } from "@/core/lib/formatters";
@@ -31,15 +32,45 @@ const HeaderCellContent = styled.div`
   user-select: none;
 `;
 
-const ActionsCell = styled.div`
+const ActionsContainer = styled(TableCell)`
+  width: auto;
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 220px;
+  }
+`;
+
+const DesktopOnlyCell = styled(TableCell)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const DesktopOnlyHeaderCell = styled(TableHeaderCell)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const DesktopActions = styled.div`
   display: flex;
   gap: 8px;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const MobileActions = styled.div`
+  display: none;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: flex;
+  }
 `;
 
 type DevotionalTableProps = {
   devotionals: DevotionalWithAuthor[];
   onEdit: (devotional: DevotionalWithAuthor) => void;
   onDelete: (devotional: DevotionalWithAuthor) => void;
+  onDetails: (devotional: DevotionalWithAuthor) => void;
   sortConfig: SortConfig;
   requestSort: (key: string) => void;
 };
@@ -48,6 +79,7 @@ export default function DevotionalTable({
   devotionals,
   onEdit,
   onDelete,
+  onDetails,
   sortConfig,
   requestSort,
 }: DevotionalTableProps) {
@@ -71,17 +103,17 @@ export default function DevotionalTable({
                 Título {getSortIcon("title")}
               </HeaderCellContent>
             </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("author")}>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("author")}>
               <HeaderCellContent>
                 Autoria {getSortIcon("author")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell onClick={() => requestSort("updated_at")}>
+            </DesktopOnlyHeaderCell>
+            <DesktopOnlyHeaderCell onClick={() => requestSort("updated_at")}>
               <HeaderCellContent>
                 Última Modificação {getSortIcon("updated_at")}
               </HeaderCellContent>
-            </TableHeaderCell>
-            <TableHeaderCell style={{ width: "220px" }}>Ações</TableHeaderCell>
+            </DesktopOnlyHeaderCell>
+            <TableHeaderCell>Ações</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -100,10 +132,14 @@ export default function DevotionalTable({
                 <TableCell style={{ fontWeight: "500" }}>
                   {devotional.title}
                 </TableCell>
-                <TableCell>{devotional.author?.full_name ?? "N/A"}</TableCell>
-                <TableCell>{formatDate(devotional.updated_at)}</TableCell>
-                <TableCell>
-                  <ActionsCell>
+                <DesktopOnlyCell>
+                  {devotional.author?.full_name ?? "N/A"}
+                </DesktopOnlyCell>
+                <DesktopOnlyCell>
+                  {formatDate(devotional.updated_at)}
+                </DesktopOnlyCell>
+                <ActionsContainer>
+                  <DesktopActions>
                     <Button
                       label="Editar"
                       onClick={() => onEdit(devotional)}
@@ -120,8 +156,18 @@ export default function DevotionalTable({
                       size="small"
                       style={{ width: "auto" }}
                     />
-                  </ActionsCell>
-                </TableCell>
+                  </DesktopActions>
+                  <MobileActions>
+                    <Button
+                      label="Visualizar"
+                      onClick={() => onDetails(devotional)}
+                      icon={<IoEyeOutline />}
+                      variant="secondary"
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                  </MobileActions>
+                </ActionsContainer>
               </TableRow>
             ))
           )}

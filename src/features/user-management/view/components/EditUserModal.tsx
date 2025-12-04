@@ -15,7 +15,8 @@ import { IoInformationCircleOutline, IoSaveOutline } from "react-icons/io5";
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   max-height: 80vh;
 `;
 

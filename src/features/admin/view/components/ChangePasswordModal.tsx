@@ -10,7 +10,8 @@ const Content = styled.form`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.m}px;
-  width: 340px;
+  width: 100%;
+  max-width: 340px;
 `;
 
 const Title = styled.h2`

@@ -96,9 +96,10 @@ const NavContainer = styled.div`
 
 type SidebarProps = {
   isOpen: boolean;
+  onNavigate: () => void;
 };
 
-export default function Sidebar({ isOpen }: SidebarProps) {
+export default function Sidebar({ isOpen, onNavigate }: SidebarProps) {
   return (
     <SidebarContainer className="sidebar-container" isOpen={isOpen}>
       <Header>
@@ -106,7 +107,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         <Title>Administração</Title>
       </Header>
       <NavContainer>
-        <SidebarNav isSidebarOpen={isOpen} />
+        <SidebarNav isSidebarOpen={isOpen} onNavigate={onNavigate} />
       </NavContainer>
     </SidebarContainer>
   );

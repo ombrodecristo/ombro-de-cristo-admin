@@ -12,6 +12,8 @@ import {
 import ChurchTable from "./components/ChurchTable";
 import ChurchFormModal from "./components/ChurchFormModal";
 import { IoAdd, IoSearchOutline } from "react-icons/io5";
+import { ChurchDetailsModal } from "./components/ChurchDetailsModal";
+import type { Church } from "@/core/types/database";
 
 const PageContainer = styled.div`
   display: flex;
@@ -31,13 +33,23 @@ export default function ChurchManagementPage() {
     return (
       <PageContainer>
         <PageHeader title="Igrejas">
-          <Skeleton height="56px" width="160px" />
+          <Skeleton height="40px" width="40px" />
         </PageHeader>
-        <Skeleton height="56px" width="400px" />
+        <Skeleton height="56px" width="100%" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
     );
   }
+
+  const handleEditFromDetails = (church: Church) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleOpenEdit(church);
+  };
+
+  const handleDeleteFromDetails = (church: Church) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleOpenDelete(church);
+  };
 
   return (
     <PageContainer>
@@ -47,6 +59,7 @@ export default function ChurchManagementPage() {
           onClick={viewModel.handleOpenCreate}
           icon={<IoAdd size={20} />}
           size="small"
+          hideTextOnMobile
         />
       </PageHeader>
       <Input
@@ -61,6 +74,7 @@ export default function ChurchManagementPage() {
         churches={viewModel.sortedChurches}
         onEdit={viewModel.handleOpenEdit}
         onDelete={viewModel.handleOpenDelete}
+        onDetails={viewModel.handleOpenDetailsModal}
         sortConfig={viewModel.sortConfig}
         requestSort={viewModel.requestSort}
       />
@@ -71,6 +85,16 @@ export default function ChurchManagementPage() {
           churchToEdit={viewModel.selectedChurch}
           onClose={viewModel.handleCloseModals}
           onSuccess={viewModel.handleFormSuccess}
+        />
+      )}
+
+      {viewModel.selectedChurchForDetails && (
+        <ChurchDetailsModal
+          isOpen={viewModel.isDetailsModalOpen}
+          onClose={viewModel.handleCloseDetailsModal}
+          church={viewModel.selectedChurchForDetails}
+          onEdit={handleEditFromDetails}
+          onDelete={handleDeleteFromDetails}
         />
       )}
 
