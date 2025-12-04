@@ -1,6 +1,6 @@
 import { type FormEvent } from "react";
 import { authRepository } from "@/data/repositories/authRepository";
-import { logRepository } from "@/data/repositories/logRepository";
+import { logService } from "@/shared/services/logService";
 import {
   validatePasswordLength,
   validatePasswordMatch,
@@ -69,7 +69,7 @@ export class ChangePasswordViewModel extends BaseViewModel {
 
     if (authError) {
       this.error = authError.message;
-      await logRepository.logError(authError, {
+      await logService.logError(authError, {
         component: "ChangePasswordViewModel",
       });
     } else {

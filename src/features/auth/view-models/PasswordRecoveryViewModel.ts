@@ -1,5 +1,5 @@
 import { authRepository } from "@/data/repositories/authRepository";
-import { logRepository } from "@/data/repositories/logRepository";
+import { logService } from "@/shared/services/logService";
 import {
   validatePasswordLength,
   validatePasswordMatch,
@@ -98,7 +98,7 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
     if (updateError) {
       this.error =
         "Não foi possível alterar a senha. O link pode ter expirado.";
-      await logRepository.logError(updateError, {
+      await logService.logError(updateError, {
         component: "PasswordRecoveryViewModel.Password",
       });
       this.notify();

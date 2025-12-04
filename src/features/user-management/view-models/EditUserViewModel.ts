@@ -11,7 +11,7 @@ import {
   type ProfileWithRelations,
 } from "@/data/repositories/profileRepository";
 import { churchRepository } from "@/data/repositories/churchRepository";
-import { logRepository } from "@/data/repositories/logRepository";
+import { logService } from "@/shared/services/logService";
 
 export const allRoles: UserRole[] = ["MISSIONARY", "MENTOR", "ADMIN"];
 export const allGenders: UserGender[] = ["MALE", "FEMALE"];
@@ -64,7 +64,7 @@ export class EditUserViewModel extends BaseViewModel {
     const { data, error } = await churchRepository.getChurches();
     if (error) {
       this.error = "Falha ao carregar a lista de igrejas.";
-      await logRepository.logError(error, { component: "EditUserViewModel" });
+      await logService.logError(error, { component: "EditUserViewModel" });
     } else if (data) {
       this.churches = data;
     }
@@ -112,7 +112,7 @@ export class EditUserViewModel extends BaseViewModel {
     this.loading = false;
     if (updateError) {
       this.error = updateError.message;
-      await logRepository.logError(updateError, {
+      await logService.logError(updateError, {
         component: "EditUserViewModel",
         context: { profileId: this.profile.id },
       });

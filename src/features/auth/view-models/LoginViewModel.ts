@@ -1,5 +1,5 @@
 import { authRepository } from "@/data/repositories/authRepository";
-import { logRepository } from "@/data/repositories/logRepository";
+import { logService } from "@/shared/services/logService";
 import type { User } from "@/core/types/database";
 import { validateEmail } from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
@@ -65,7 +65,7 @@ export class LoginViewModel extends BaseViewModel {
       this.password = "";
       this.notify();
 
-      await logRepository.logError(error, {
+      await logService.logError(error, {
         component: "LoginViewModel",
         context: { email: this.email.substring(0, 3) + "..." },
       });

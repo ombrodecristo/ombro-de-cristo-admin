@@ -1,7 +1,7 @@
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 import type { User, Profile } from "@/core/types/database";
 import { authRepository } from "@/data/repositories/authRepository";
-import { logRepository } from "@/data/repositories/logRepository";
+import { logService } from "@/shared/services/logService";
 import { profileRepository } from "@/data/repositories/profileRepository";
 import { validateFullName } from "@/core/lib/validators";
 
@@ -47,7 +47,7 @@ export class UserMenuViewModel extends BaseViewModel {
     );
 
     if (error) {
-      await logRepository.logError(error, {
+      await logService.logError(error, {
         component: "UserMenuViewModel.loadProfile",
       });
     } else {
@@ -92,7 +92,7 @@ export class UserMenuViewModel extends BaseViewModel {
     this.notify();
 
     if (deleteError) {
-      await logRepository.logError(deleteError, {
+      await logService.logError(deleteError, {
         component: "UserMenuViewModel.handleDeleteAccount",
       });
 
@@ -135,7 +135,7 @@ export class UserMenuViewModel extends BaseViewModel {
 
     this.isSavingName = false;
     if (error) {
-      await logRepository.logError(error, {
+      await logService.logError(error, {
         component: "UserMenuViewModel.handleSaveName",
       });
 
