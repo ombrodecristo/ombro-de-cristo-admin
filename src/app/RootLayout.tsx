@@ -18,6 +18,8 @@ const PUBLIC_ROUTES = [
   "/terms-and-policy",
 ];
 
+const AUTH_ONLY_ROUTES = ["/login", "/password-recovery"];
+
 function RootLayout() {
   const { loading, user, role } = useAuth();
   const location = useLocation();
@@ -28,10 +30,14 @@ function RootLayout() {
       return;
     }
 
-    const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
+    const isPublicRoute = PUBLIC_ROUTES.some(route =>
+      location.pathname.startsWith(route)
+    );
+
+    const isOnAuthOnlyRoute = AUTH_ONLY_ROUTES.includes(location.pathname);
 
     if (user && role === "ADMIN") {
-      if (isPublicRoute && location.pathname !== "/") {
+      if (isOnAuthOnlyRoute) {
         navigate("/admin/users", { replace: true });
       }
     } else if (!user && !isPublicRoute) {
@@ -39,7 +45,7 @@ function RootLayout() {
     }
   }, [loading, user, role, location.pathname, navigate]);
 
-  if (loading && !PUBLIC_ROUTES.includes(location.pathname)) {
+  if (loading && !PUBLIC_ROUTES.some(r => location.pathname.startsWith(r))) {
     return <GlobalLoader />;
   }
 

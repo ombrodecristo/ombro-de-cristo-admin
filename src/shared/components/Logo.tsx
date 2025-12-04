@@ -2,14 +2,6 @@ import { Box } from "./Box";
 import { Text } from "./Text";
 import styled from "@emotion/styled";
 
-const LogoImageContainer = styled(Box)`
-  width: 160px;
-  height: 160px;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-`;
-
 const LogoImage = styled.img`
   width: 100%;
   height: 100%;
@@ -19,37 +11,61 @@ const LogoImage = styled.img`
 interface LogoProps {
   variant?: "light" | "dark";
   className?: string;
+  showSlogan?: boolean;
+  direction?: "column" | "row";
+  size?: number;
 }
 
-export function Logo({ variant = "dark", className }: LogoProps) {
+export function Logo({
+  variant = "dark",
+  className,
+  showSlogan = true,
+  direction = "column",
+  size = 160,
+}: LogoProps) {
   const titleColor = variant === "light" ? "white" : "primary";
   const sloganColor = variant === "light" ? "white" : "mutedForeground";
+
+  const isRow = direction === "row";
 
   return (
     <Box
       display="flex"
-      flexDirection="column"
+      flexDirection={direction}
       alignItems="center"
+      gap={isRow ? "s" : "none"}
       className={className}
     >
-      <LogoImageContainer>
+      <Box width={size} height={size} flexShrink={0}>
         <LogoImage src="/logo.png" alt="Ombro de Cristo Logo" />
-      </LogoImageContainer>
-      <Box alignItems="center" marginTop="-s">
-        <Text variant="header" color={titleColor} textAlign="center">
+      </Box>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems={isRow ? "flex-start" : "center"}
+        marginTop={isRow ? "0" : "-s"}
+      >
+        <Text
+          variant={isRow ? "subHeader" : "header"}
+          color={titleColor}
+          textAlign={isRow ? "left" : "center"}
+          fontSize={isRow ? "20px" : undefined}
+        >
           Ombro de Cristo
         </Text>
-        <Text
-          variant="caption"
-          fontSize="16px"
-          color={sloganColor}
-          textAlign="center"
-          opacity={0.95}
-          fontWeight={600}
-          marginTop="xs"
-        >
-          Sua missão, fortalecida pela mentoria.
-        </Text>
+        {showSlogan && (
+          <Text
+            variant="caption"
+            fontSize="16px"
+            color={sloganColor}
+            textAlign={isRow ? "left" : "center"}
+            opacity={0.95}
+            fontWeight={600}
+            marginTop="xs"
+          >
+            Sua missão, fortalecida pela mentoria.
+          </Text>
+        )}
       </Box>
     </Box>
   );
