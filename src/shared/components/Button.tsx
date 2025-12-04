@@ -177,14 +177,16 @@ export function Button({
       ) : (
         <>
           {icon}
-          <Text
-            as="span"
-            variant="buttonLabel"
-            color="inherit"
-            fontSize={size === "small" ? "14px" : "16px"}
-          >
-            {label}
-          </Text>
+          {label && (
+            <Text
+              as="span"
+              variant="buttonLabel"
+              color="inherit"
+              fontSize={size === "small" ? "14px" : "16px"}
+            >
+              {label}
+            </Text>
+          )}
         </>
       )}
     </StyledButton>

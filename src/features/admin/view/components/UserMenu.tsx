@@ -64,13 +64,20 @@ const Name = styled.p(props => ({
 }));
 
 const EditButton = styled.button`
-  background: none;
+  background: ${props => props.theme.colors.primary};
   border: none;
   cursor: pointer;
-  color: ${props => props.theme.colors.mutedForeground};
-  padding: 4px;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => props.theme.colors.primaryForeground};
+  transition: opacity 0.2s ease-in-out;
+
   &:hover {
-    color: ${props => props.theme.colors.primary};
+    opacity: 0.9;
   }
 `;
 
