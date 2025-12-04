@@ -43,7 +43,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
 
 const ModalContainer = styled.div<{ isOpen: boolean }>`
   background-color: ${props => props.theme.colors.cardBackground};
-  border-radius: ${props => props.theme.borderRadii.xl}px;
+  border-radius: ${props => props.theme.radii.xl}px;
   padding: ${props => props.theme.spacing.l}px;
   max-width: 90vw;
   max-height: 90vh;

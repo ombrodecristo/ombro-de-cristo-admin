@@ -15,7 +15,7 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   gap: ${props => props.theme.spacing.m}px;
   padding: ${props => props.theme.spacing.sm}px;
   height: 48px;
-  border-radius: ${props => props.theme.borderRadii.s}px;
+  border-radius: ${props => props.theme.radii.s}px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   justify-content: ${props => (props.isSidebarOpen ? "flex-start" : "center")};

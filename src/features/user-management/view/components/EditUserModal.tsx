@@ -41,7 +41,7 @@ const Actions = styled.div`
 
 const Alert = styled.div`
   background-color: ${props => props.theme.colors.mutedBackground};
-  border-radius: ${props => props.theme.borderRadii.s}px;
+  border-radius: ${props => props.theme.radii.s}px;
   padding: ${props => props.theme.spacing.sm}px;
   display: flex;
   gap: ${props => props.theme.spacing.s}px;

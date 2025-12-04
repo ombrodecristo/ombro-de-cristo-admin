@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const TableContainer = styled.div`
-  border-radius: ${props => props.theme.borderRadii.l}px;
+  border-radius: ${props => props.theme.radii.l}px;
   border: 1px solid ${props => props.theme.colors.border};
   overflow: hidden;
   background-color: ${props => props.theme.colors.cardBackground};

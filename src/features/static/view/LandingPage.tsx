@@ -119,7 +119,7 @@ const FeaturesGrid = styled(Box)`
 const FeatureCard = styled(Box)`
   background-color: ${props => props.theme.colors.mainBackground};
   padding: ${props => props.theme.spacing.l};
-  border-radius: ${props => props.theme.borderRadii.l};
+  border-radius: ${props => props.theme.radii.l};
   border: 1px solid ${props => props.theme.colors.border};
   text-align: left;
 `;
@@ -150,7 +150,7 @@ const StoreButton = styled.a`
   padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.l};
   background-color: #000;
   color: #fff;
-  border-radius: ${props => props.theme.borderRadii.m};
+  border-radius: ${props => props.theme.radii.m};
   text-decoration: none;
   transition: transform 0.2s;
   min-width: 220px;

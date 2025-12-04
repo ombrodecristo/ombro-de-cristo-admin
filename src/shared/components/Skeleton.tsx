@@ -9,7 +9,7 @@ const pulse = keyframes`
 
 const SkeletonPrimitive = styled.div`
   background-color: ${props => props.theme.colors.mutedBackground};
-  border-radius: ${props => props.theme.borderRadii.s}px;
+  border-radius: ${props => props.theme.radii.s}px;
   animation: ${pulse} 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 `;
 

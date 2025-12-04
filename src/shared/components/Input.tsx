@@ -16,7 +16,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
   height: 56px;
   width: 100%;
   background-color: ${props => props.theme.colors.inputBackground};
-  border-radius: ${props => props.theme.borderRadii.m}px;
+  border-radius: ${props => props.theme.radii.m}px;
   border-width: ${props => (props.isFocused ? "2px" : "1px")};
   border-style: solid;
   border-color: ${props =>

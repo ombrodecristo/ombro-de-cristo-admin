@@ -13,7 +13,7 @@ const SelectTrigger = styled.button<{ hasIcon: boolean; isOpen: boolean }>`
   justify-content: space-between;
   height: 56px;
   width: 100%;
-  border-radius: ${props => props.theme.borderRadii.m}px;
+  border-radius: ${props => props.theme.radii.m}px;
   border: 1.5px solid
     ${props =>
       props.isOpen
@@ -53,7 +53,7 @@ const Dropdown = styled.div`
   right: 0;
   background-color: ${props => props.theme.colors.cardBackground};
   border: 1px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borderRadii.m}px;
+  border-radius: ${props => props.theme.radii.m}px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   max-height: 200px;
   overflow-y: auto;

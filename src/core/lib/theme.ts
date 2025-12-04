@@ -30,7 +30,7 @@ const spacing = {
   xxxl: 48,
 };
 
-const borderRadii = {
+const radii = {
   none: 0,
   s: 8,
   m: 16,
@@ -77,7 +77,7 @@ const themeConfig = {
     shadowColor: palette.black,
   },
   spacing,
-  borderRadii,
+  radii,
   textVariants: {
     defaults: {
       fontFamily: "'Inter', sans-serif",
@@ -150,7 +150,7 @@ const themeConfig = {
   cardVariants: {
     elevated: {
       backgroundColor: palette.card,
-      borderRadius: `${borderRadii.l}px`,
+      borderRadius: `${radii.l}px`,
       padding: `${spacing.l}px`,
       boxShadow: `0 4px 12px rgba(0, 0, 0, 0.08)`,
     },
