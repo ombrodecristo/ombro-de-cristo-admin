@@ -18,6 +18,27 @@ const palette = {
   mutedBackground: "#F0EFEC",
 };
 
+const spacing = {
+  none: 0,
+  xs: 4,
+  s: 8,
+  sm: 12,
+  m: 16,
+  l: 24,
+  xl: 32,
+  xxl: 40,
+  xxxl: 48,
+};
+
+const borderRadii = {
+  none: 0,
+  s: 8,
+  m: 16,
+  l: 24,
+  xl: 32,
+  round: 999,
+};
+
 const themeConfig = {
   colors: {
     primary: palette.primary,
@@ -55,25 +76,8 @@ const themeConfig = {
     border: palette.border,
     shadowColor: palette.black,
   },
-  spacing: {
-    none: 0,
-    xs: 4,
-    s: 8,
-    sm: 12,
-    m: 16,
-    l: 24,
-    xl: 32,
-    xxl: 40,
-    xxxl: 48,
-  },
-  borderRadii: {
-    none: 0,
-    s: 8,
-    m: 16,
-    l: 24,
-    xl: 32,
-    round: 999,
-  },
+  spacing,
+  borderRadii,
   textVariants: {
     defaults: {
       fontFamily: "'Inter', sans-serif",
@@ -146,8 +150,8 @@ const themeConfig = {
   cardVariants: {
     elevated: {
       backgroundColor: palette.card,
-      borderRadius: "24px",
-      padding: "24px",
+      borderRadius: `${borderRadii.l}px`,
+      padding: `${spacing.l}px`,
       boxShadow: `0 4px 12px rgba(0, 0, 0, 0.08)`,
     },
   },
