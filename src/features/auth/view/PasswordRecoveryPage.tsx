@@ -6,6 +6,7 @@ import {
   IoSendOutline,
   IoAlertCircleOutline,
   IoMailOutline,
+  IoSaveOutline,
 } from "react-icons/io5";
 import { PasswordRecoveryViewModel } from "../view-models/PasswordRecoveryViewModel";
 import {
@@ -165,6 +166,7 @@ export default function PasswordRecoveryPage() {
               disabled={viewModel.loading}
               loading={viewModel.loading}
               label="Alterar Senha"
+              icon={<IoSaveOutline size={20} />}
             />
           </Form>
         </StyledCard>

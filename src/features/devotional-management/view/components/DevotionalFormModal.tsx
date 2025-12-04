@@ -4,6 +4,7 @@ import { DevotionalFormViewModel } from "../../view-models/DevotionalFormViewMod
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
+import { IoSaveOutline } from "react-icons/io5";
 
 const Content = styled.form`
   display: flex;
@@ -87,7 +88,12 @@ export default function DevotionalFormModal({
           />
         </div>
         <Actions>
-          <Button type="submit" label="Salvar" loading={viewModel.loading} />
+          <Button
+            type="submit"
+            label="Salvar"
+            loading={viewModel.loading}
+            icon={<IoSaveOutline size={20} />}
+          />
           <Button
             type="button"
             label="Cancelar"

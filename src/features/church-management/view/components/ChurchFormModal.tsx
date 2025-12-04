@@ -4,6 +4,7 @@ import { ChurchFormViewModel } from "../../view-models/ChurchFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Label } from "@/shared/components";
 import type { Church } from "@/core/types/database";
+import { IoSaveOutline } from "react-icons/io5";
 
 const Content = styled.form`
   display: flex;
@@ -65,7 +66,12 @@ export default function ChurchFormModal({
           />
         </div>
         <Actions>
-          <Button type="submit" label="Salvar" loading={viewModel.loading} />
+          <Button
+            type="submit"
+            label="Salvar"
+            loading={viewModel.loading}
+            icon={<IoSaveOutline size={20} />}
+          />
           <Button
             type="button"
             label="Cancelar"

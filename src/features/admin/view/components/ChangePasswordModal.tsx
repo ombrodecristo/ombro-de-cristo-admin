@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { ChangePasswordViewModel } from "../../view-models/ChangePasswordViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Label } from "@/shared/components";
-import { IoLockClosedOutline } from "react-icons/io5";
+import { IoLockClosedOutline, IoSaveOutline } from "react-icons/io5";
 import { toast } from "sonner";
 
 const Content = styled.form`
@@ -90,6 +90,7 @@ export default function ChangePasswordModal({
             label="Alterar Senha"
             loading={viewModel.loading}
             disabled={viewModel.loading}
+            icon={<IoSaveOutline size={20} />}
           />
           <Button
             type="button"

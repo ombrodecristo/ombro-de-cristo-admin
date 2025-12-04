@@ -67,7 +67,7 @@ const BaseButton = styled("button")<BaseButtonProps>(
     system({
       gap: {
         property: "gap",
-        scale: "space",
+        scale: "spacing",
       },
     })
   )
@@ -157,7 +157,7 @@ export function Button({
     <StyledButton
       height={size === "small" ? 40 : 56}
       width="100%"
-      borderRadius={size === "small" ? "m" : "l"}
+      borderRadius={size === "small" ? "l" : "xl"}
       display="inline-flex"
       alignItems="center"
       justifyContent="center"

@@ -10,7 +10,7 @@ import {
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { formatGender, formatRole } from "@/core/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
-import { IoInformationCircleOutline } from "react-icons/io5";
+import { IoInformationCircleOutline, IoSaveOutline } from "react-icons/io5";
 
 const Content = styled.form`
   display: flex;
@@ -151,7 +151,12 @@ export default function EditUserModal({
           </div>
         </Alert>
         <Actions>
-          <Button type="submit" label="Salvar" loading={viewModel.loading} />
+          <Button
+            type="submit"
+            label="Salvar"
+            loading={viewModel.loading}
+            icon={<IoSaveOutline size={20} />}
+          />
           <Button
             type="button"
             label="Cancelar"

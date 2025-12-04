@@ -11,9 +11,12 @@ import {
   GlobalLoader,
   Input,
   Logo,
-  SeparatorWithText,
 } from "@/shared/components";
-import { IoMailOutline, IoLockClosedOutline } from "react-icons/io5";
+import {
+  IoMailOutline,
+  IoLockClosedOutline,
+  IoLogInOutline,
+} from "react-icons/io5";
 import { toast } from "sonner";
 
 export default function LoginPage() {
@@ -72,13 +75,13 @@ export default function LoginPage() {
           maxWidth="448px"
         >
           <Logo />
-          <SeparatorWithText text="" />
+          <Box height="1.5px" backgroundColor="border" />
           <Box
             as="form"
             onSubmit={handleLoginSubmit}
             display="flex"
             flexDirection="column"
-            gap="l"
+            gap="xl"
           >
             <Box display="flex" flexDirection="column" gap="m">
               <Input
@@ -112,6 +115,7 @@ export default function LoginPage() {
               disabled={viewModel.loading}
               loading={viewModel.loading}
               label="Entrar"
+              icon={<IoLogInOutline size={20} />}
             />
           </Box>
         </BaseCard>
