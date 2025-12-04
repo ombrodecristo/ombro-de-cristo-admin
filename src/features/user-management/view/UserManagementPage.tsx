@@ -43,7 +43,6 @@ export default function UserManagementPage() {
           viewModel.setSearchQuery(e.target.value)
         }
         icon={<IoSearchOutline size={20} />}
-        style={{ maxWidth: "400px" }}
       />
       <UserTable
         profiles={viewModel.sortedProfiles}

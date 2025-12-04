@@ -56,7 +56,6 @@ export default function ChurchManagementPage() {
           viewModel.setSearchQuery(e.target.value)
         }
         icon={<IoSearchOutline size={20} />}
-        style={{ maxWidth: "400px" }}
       />
       <ChurchTable
         churches={viewModel.sortedChurches}

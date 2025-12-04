@@ -18,7 +18,8 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   text-decoration: none;
   transition:
     background-color 0.2s,
-    color 0.2s;
+    color 0.2s,
+    gap 0.3s ease-in-out;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -34,18 +35,16 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     justify-content: flex-start;
     gap: ${props => props.theme.spacing.m}px;
-    padding: ${props => props.theme.spacing.sm}px;
+    padding: 0 ${props => props.theme.spacing.sm}px;
   }
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 0 ${props => props.theme.spacing.sm}px;
     gap: 0;
-    padding: ${props => props.theme.spacing.sm}px 0;
 
     .sidebar-container:hover & {
-      justify-content: flex-start;
       gap: ${props => props.theme.spacing.m}px;
-      padding: ${props => props.theme.spacing.sm}px;
     }
   }
 `;

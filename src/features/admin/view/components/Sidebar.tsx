@@ -36,24 +36,20 @@ const Header = styled.div`
   white-space: nowrap;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition:
-    padding 0.3s ease-in-out,
-    justify-content 0.3s ease-in-out,
-    gap 0.3s ease-in-out;
+    gap 0.3s ease-in-out,
+    padding 0.3s ease-in-out;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     padding: 0 ${props => props.theme.spacing.l}px;
-    justify-content: flex-start;
     gap: ${props => props.theme.spacing.m}px;
   }
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    padding: 0;
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 0 ${props => props.theme.spacing.l}px;
     gap: 0;
 
     .sidebar-container:hover & {
-      padding: 0 ${props => props.theme.spacing.l}px;
-      justify-content: flex-start;
       gap: ${props => props.theme.spacing.m}px;
     }
   }
@@ -107,7 +103,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     <SidebarContainer className="sidebar-container" isOpen={isOpen}>
       <Header>
         <Logo src="/logo.png" alt="Logo Ombro de Cristo" />
-        <Title>Ombro de Cristo</Title>
+        <Title>Administração</Title>
       </Header>
       <NavContainer>
         <SidebarNav isSidebarOpen={isOpen} />
