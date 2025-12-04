@@ -39,6 +39,10 @@ const MenuButton = styled.button`
     background-color: ${props => props.theme.colors.mutedBackground};
     color: ${props => props.theme.colors.mainForeground};
   }
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
 `;
 
 const AppTitle = styled.h1(props => ({

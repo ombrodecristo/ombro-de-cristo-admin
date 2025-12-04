@@ -18,7 +18,6 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   border-radius: ${props => props.theme.radii.s}px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  justify-content: ${props => (props.isSidebarOpen ? "flex-start" : "center")};
   transition:
     background-color 0.2s,
     color 0.2s;
@@ -33,16 +32,40 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
     color: ${props => props.theme.colors.secondaryForeground};
     font-weight: 600;
   }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    justify-content: flex-start;
+  }
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    justify-content: center;
+    aside:hover & {
+      justify-content: flex-start;
+    }
+  }
 `;
 
 const LinkText = styled.span<{ isSidebarOpen: boolean }>`
-  opacity: ${props => (props.isSidebarOpen ? 1 : 0)};
-  visibility: ${props => (props.isSidebarOpen ? "visible" : "hidden")};
-  transition:
-    opacity 0.2s,
-    visibility 0.2s;
-  transition-delay: ${props => (props.isSidebarOpen ? "0.1s" : "0s")};
   white-space: nowrap;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s,
+      visibility 0.2s;
+    transition-delay: 0s;
+    aside:hover & {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0.1s;
+    }
+  }
 `;
 
 type SidebarNavProps = {

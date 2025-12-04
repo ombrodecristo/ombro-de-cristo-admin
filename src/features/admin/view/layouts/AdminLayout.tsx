@@ -24,8 +24,20 @@ const ContentArea = styled.main`
   padding: ${props => props.theme.spacing.l}px;
 `;
 
+const MobileOverlay = styled.div<{ isOpen: boolean }>`
+  display: none;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: ${props => (props.isOpen ? "block" : "none")};
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+  }
+`;
+
 export default function AdminLayout() {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -40,6 +52,7 @@ export default function AdminLayout() {
           <Outlet />
         </ContentArea>
       </MainContent>
+      <MobileOverlay isOpen={isSidebarOpen} onClick={toggleSidebar} />
     </LayoutContainer>
   );
 }
