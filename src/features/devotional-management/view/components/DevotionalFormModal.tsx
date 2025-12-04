@@ -87,7 +87,7 @@ export default function DevotionalFormModal({
               disabled={viewModel.loading}
               required
               error={viewModel.error || ""}
-              placeholder="Ex: A Fé que Move Montanhas"
+              placeholder="Ex: Fortaleça-se no Senhor"
             />
           </div>
           <div>
