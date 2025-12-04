@@ -61,7 +61,7 @@ export const Box = styled("div")<BoxProps>(
     system({
       gap: {
         property: "gap",
-        scale: "space",
+        scale: "spacing",
       },
     })
   )
