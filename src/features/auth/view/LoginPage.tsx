@@ -64,7 +64,13 @@ export default function LoginPage() {
         minHeight="100vh"
         padding="m"
       >
-        <BaseCard width="100%" maxWidth="448px">
+        <BaseCard
+          display="flex"
+          flexDirection="column"
+          gap="l"
+          width="100%"
+          maxWidth="448px"
+        >
           <Logo />
           <SeparatorWithText text="" />
           <Box
@@ -87,20 +93,18 @@ export default function LoginPage() {
                 icon={<IoMailOutline size={22} />}
                 error={viewModel.emailError}
               />
-              <Box>
-                <Input
-                  id="password"
-                  placeholder="Senha"
-                  value={viewModel.password}
-                  onChange={e => viewModel.setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  disabled={viewModel.loading}
-                  icon={<IoLockClosedOutline size={22} />}
-                  isPassword
-                  error={viewModel.passwordError}
-                />
-              </Box>
+              <Input
+                id="password"
+                placeholder="Senha"
+                value={viewModel.password}
+                onChange={e => viewModel.setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                disabled={viewModel.loading}
+                icon={<IoLockClosedOutline size={22} />}
+                isPassword
+                error={viewModel.passwordError}
+              />
             </Box>
 
             <Button

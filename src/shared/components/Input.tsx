@@ -26,6 +26,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
         ? props.theme.colors.primaryBackground
         : props.theme.colors.inputBorder};
   transition: border-color 0.2s;
+  overflow: hidden;
 `;
 
 const StyledInput = styled.input<{ hasIcon: boolean; isFocused: boolean }>`

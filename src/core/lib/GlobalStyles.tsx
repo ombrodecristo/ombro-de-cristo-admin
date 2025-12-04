@@ -56,6 +56,15 @@ export function GlobalStyles() {
           color: inherit;
           text-decoration: none;
         }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+          -webkit-text-fill-color: ${theme.colors.inputForeground} !important;
+          -webkit-box-shadow: 0 0 0 1000px ${theme.colors.inputBackground} inset !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
       `}
     />
   );
