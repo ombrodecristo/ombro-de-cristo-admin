@@ -9,13 +9,20 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
+const InputContainer = styled.div<{
+  hasError: boolean;
+  isFocused: boolean;
+  disabled?: boolean;
+}>`
   position: relative;
   display: flex;
   align-items: center;
   height: 56px;
   width: 100%;
-  background-color: ${props => props.theme.colors.inputBackground};
+  background-color: ${props =>
+    props.disabled
+      ? props.theme.colors.mutedBackground
+      : props.theme.colors.inputBackground};
   border-radius: ${props => props.theme.radii.m}px;
   border-width: ${props => (props.isFocused ? "2px" : "1px")};
   border-style: solid;
@@ -25,8 +32,11 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
       : props.isFocused
         ? props.theme.colors.primaryBackground
         : props.theme.colors.inputBorder};
-  transition: border-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
   overflow: hidden;
+  opacity: ${props => (props.disabled ? 0.7 : 1)};
 `;
 
 const StyledInput = styled.input<{ hasIcon: boolean; isFocused: boolean }>`
@@ -56,24 +66,28 @@ const StyledInput = styled.input<{ hasIcon: boolean; isFocused: boolean }>`
   }
 
   &:disabled {
-    background-color: transparent;
     cursor: not-allowed;
-    opacity: 0.7;
   }
 `;
 
-const IconWrapper = styled.div<{ hasError: boolean; isFocused: boolean }>`
+const IconWrapper = styled.div<{
+  hasError: boolean;
+  isFocused: boolean;
+  disabled?: boolean;
+}>`
   position: absolute;
   left: ${props => props.theme.spacing.m}px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: ${props =>
-    props.hasError
-      ? props.theme.colors.destructiveBackground
-      : props.isFocused
-        ? props.theme.colors.primaryBackground
-        : props.theme.colors.mutedForeground};
+    props.disabled
+      ? props.theme.colors.mutedForeground
+      : props.hasError
+        ? props.theme.colors.destructiveBackground
+        : props.isFocused
+          ? props.theme.colors.primaryBackground
+          : props.theme.colors.mutedForeground};
   transition: color 0.2s;
 `;
 
@@ -90,6 +104,10 @@ const ToggleButton = styled.button`
   align-items: center;
   justify-content: center;
   color: ${props => props.theme.colors.mutedForeground};
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const ErrorMessage = styled.p(props => ({
@@ -104,7 +122,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ error, icon, isPassword, ...props }, ref) => {
+  ({ error, icon, isPassword, disabled, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
@@ -116,25 +134,35 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <Wrapper>
-        <InputContainer hasError={!!error} isFocused={isFocused}>
+        <InputContainer
+          hasError={!!error}
+          isFocused={isFocused && !disabled}
+          disabled={disabled}
+        >
           {icon && (
-            <IconWrapper hasError={!!error} isFocused={isFocused}>
+            <IconWrapper
+              hasError={!!error}
+              isFocused={isFocused && !disabled}
+              disabled={disabled}
+            >
               {icon}
             </IconWrapper>
           )}
           <StyledInput
             ref={ref}
             hasIcon={!!icon}
-            isFocused={isFocused}
+            isFocused={isFocused && !disabled}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             type={finalType}
+            disabled={disabled}
             {...props}
           />
           {isPassword && (
             <ToggleButton
               type="button"
               onClick={() => setIsPasswordVisible(prev => !prev)}
+              disabled={disabled}
             >
               {isPasswordVisible ? (
                 <IoEyeOffOutline size={22} />
