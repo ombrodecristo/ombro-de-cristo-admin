@@ -1,6 +1,5 @@
-export * from "./base/Box";
-export * from "./base/Text";
 export * from "./BaseCard";
+export * from "./Box";
 export * from "./Button";
 export * from "./Checkbox";
 export * from "./ConfirmationModal";
@@ -11,6 +10,9 @@ export * from "./Logo";
 export * from "./Modal";
 export * from "./PageHeader";
 export * from "./Select";
+export * from "./SeparatorWithText";
 export * from "./Skeleton";
 export * from "./Table";
+export * from "./Text";
 export * from "./Textarea";
+export * from "./TouchableBox";

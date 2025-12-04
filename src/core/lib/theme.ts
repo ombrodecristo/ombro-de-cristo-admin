@@ -18,7 +18,7 @@ const palette = {
   mutedBackground: "#F0EFEC",
 };
 
-export const theme = {
+const themeConfig = {
   colors: {
     primary: palette.primary,
     secondary: palette.secondary,
@@ -56,23 +56,23 @@ export const theme = {
     shadowColor: palette.black,
   },
   spacing: {
-    none: 0,
-    xs: 4,
-    s: 8,
-    sm: 12,
-    m: 16,
-    l: 24,
-    xl: 32,
-    xxl: 40,
-    xxxl: 48,
+    none: "0px",
+    xs: "4px",
+    s: "8px",
+    sm: "12px",
+    m: "16px",
+    l: "24px",
+    xl: "32px",
+    xxl: "40px",
+    xxxl: "48px",
   },
   borderRadii: {
-    none: 0,
-    s: 8,
-    m: 16,
-    l: 24,
-    xl: 32,
-    round: 999,
+    none: "0px",
+    s: "8px",
+    m: "16px",
+    l: "24px",
+    xl: "32px",
+    round: "999px",
   },
   textVariants: {
     defaults: {
@@ -157,4 +157,5 @@ export const theme = {
   },
 };
 
+export const theme = themeConfig;
 export type Theme = typeof theme;

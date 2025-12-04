@@ -4,13 +4,14 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { LoginViewModel } from "../view-models/LoginViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import {
-  Box,
   BaseCard,
+  Box,
   Button,
-  Input,
-  Logo,
   ConfirmationModal,
   GlobalLoader,
+  Input,
+  Logo,
+  SeparatorWithText,
 } from "@/shared/components";
 import { IoMailOutline, IoLockClosedOutline } from "react-icons/io5";
 import { toast } from "sonner";
@@ -61,25 +62,19 @@ export default function LoginPage() {
         justifyContent="center"
         width="100%"
         minHeight="100vh"
-        p="m"
+        padding="m"
       >
         <BaseCard width="100%" maxWidth="448px">
           <Logo />
-          <Box
-            as="hr"
-            height="1.5px"
-            backgroundColor="border"
-            borderWidth={0}
-            my="m"
-          />
+          <SeparatorWithText text="" />
           <Box
             as="form"
+            onSubmit={handleLoginSubmit}
             display="flex"
             flexDirection="column"
-            gap="24px"
-            onSubmit={handleLoginSubmit}
+            gap="l"
           >
-            <Box display="flex" flexDirection="column" gap="16px">
+            <Box display="flex" flexDirection="column" gap="m">
               <Input
                 id="email"
                 type="email"
@@ -92,18 +87,20 @@ export default function LoginPage() {
                 icon={<IoMailOutline size={22} />}
                 error={viewModel.emailError}
               />
-              <Input
-                id="password"
-                placeholder="Senha"
-                value={viewModel.password}
-                onChange={e => viewModel.setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                disabled={viewModel.loading}
-                icon={<IoLockClosedOutline size={22} />}
-                isPassword
-                error={viewModel.passwordError}
-              />
+              <Box>
+                <Input
+                  id="password"
+                  placeholder="Senha"
+                  value={viewModel.password}
+                  onChange={e => viewModel.setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  disabled={viewModel.loading}
+                  icon={<IoLockClosedOutline size={22} />}
+                  isPassword
+                  error={viewModel.passwordError}
+                />
+              </Box>
             </Box>
 
             <Button

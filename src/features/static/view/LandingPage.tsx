@@ -1,13 +1,13 @@
+import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { Link } from "react-router-dom";
-import { Box, Text, Button, Logo } from "@/shared/components";
+import { Box, Button, Logo, Text } from "@/shared/components";
+import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
 import {
-  IoLogoGooglePlaystore,
-  IoLogoApple,
   IoBookOutline,
   IoHeartOutline,
   IoShieldOutline,
 } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const fadeInUp = keyframes`
   from {
@@ -20,109 +20,172 @@ const fadeInUp = keyframes`
   }
 `;
 
-const Feature = ({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) => (
-  <Box
-    backgroundColor="mainBackground"
-    p="l"
-    borderRadius="l"
-    border="1px solid"
-    borderColor="border"
-    textAlign="left"
-  >
-    <Box color="primary" mb="m">
-      {icon}
-    </Box>
-    <Text
-      as="h3"
-      variant="subHeader"
-      color="headerForeground"
-      fontSize="20px"
-      mb="s"
-    >
-      {title}
-    </Text>
-    <Text variant="body" color="mutedForeground" lineHeight="1.6">
-      {description}
-    </Text>
-  </Box>
-);
+const PageContainer = styled(Box)`
+  width: 100%;
+  background-color: ${props => props.theme.colors.mainBackground};
+  color: ${props => props.theme.colors.mainForeground};
+`;
 
-const StoreButton = ({
-  href,
-  icon,
-  line1,
-  line2,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  line1: string;
-  line2: string;
-}) => (
-  <Box
-    as="a"
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    display="inline-flex"
-    alignItems="center"
-    gap="8px"
-    p="12px 24px"
-    backgroundColor="black"
-    color="white"
-    borderRadius="m"
-    minWidth="220px"
-    css={{
-      textDecoration: "none",
-      transition: "transform 0.2s",
-      "&:hover": { transform: "scale(1.05)" },
-    }}
-  >
-    {icon}
-    <Box>
-      <Text fontSize="12px" color="white">
-        {line1}
-      </Text>
-      <Text fontSize="18px" fontWeight="600" color="white">
-        {line2}
-      </Text>
-    </Box>
-  </Box>
-);
+const Header = styled(Box)`
+  padding: ${props => props.theme.spacing.m};
+  background-color: ${props => props.theme.colors.cardBackground};
+  border-bottom: 1px solid ${props => props.theme.colors.border};
+`;
+
+const Nav = styled(Box)`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLogo = styled(Logo)`
+  transform: scale(0.6);
+  & > div {
+    align-items: flex-start;
+  }
+`;
+
+const Main = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Section = styled(Box)`
+  padding-top: ${props => props.theme.spacing.xxxl};
+  padding-bottom: ${props => props.theme.spacing.xxxl};
+  padding-left: ${props => props.theme.spacing.l};
+  padding-right: ${props => props.theme.spacing.l};
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+`;
+
+const HeroSection = styled(Section)`
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${props => props.theme.spacing.l};
+  animation: ${fadeInUp} 0.8s ease-out;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    min-height: 60vh;
+    padding-top: ${props => props.theme.spacing.xl};
+    padding-bottom: ${props => props.theme.spacing.xl};
+  }
+`;
+
+const HeroTitle = styled(Text)`
+  font-size: 56px;
+  line-height: 1.2;
+  color: ${props => props.theme.colors.headerForeground};
+
+  span {
+    color: ${props => props.theme.colors.primary};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+  }
+`;
+
+const FeaturesSection = styled(Section)`
+  background-color: ${props => props.theme.colors.cardBackground};
+  border-top: 1px solid ${props => props.theme.colors.border};
+  border-bottom: 1px solid ${props => props.theme.colors.border};
+`;
+
+const SectionTitle = styled(Text)`
+  font-size: 36px;
+  margin-bottom: ${props => props.theme.spacing.l};
+  color: ${props => props.theme.colors.headerForeground};
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+`;
+
+const FeaturesGrid = styled(Box)`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: ${props => props.theme.spacing.l};
+  margin-top: ${props => props.theme.spacing.xl};
+`;
+
+const FeatureCard = styled(Box)`
+  background-color: ${props => props.theme.colors.mainBackground};
+  padding: ${props => props.theme.spacing.l};
+  border-radius: ${props => props.theme.borderRadii.l};
+  border: 1px solid ${props => props.theme.colors.border};
+  text-align: left;
+`;
+
+const FeatureIcon = styled(Box)`
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: ${props => props.theme.spacing.m};
+`;
+
+const CTASection = styled(Section)``;
+
+const StoreButtons = styled(Box)`
+  display: flex;
+  gap: ${props => props.theme.spacing.m};
+  justify-content: center;
+  margin-top: ${props => props.theme.spacing.l};
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const StoreButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.s};
+  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.l};
+  background-color: #000;
+  color: #fff;
+  border-radius: ${props => props.theme.borderRadii.m};
+  text-decoration: none;
+  transition: transform 0.2s;
+  min-width: 220px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const Footer = styled.footer`
+  text-align: center;
+  padding: ${props => props.theme.spacing.l};
+  background-color: ${props => props.theme.colors.mutedBackground};
+  color: ${props => props.theme.colors.mutedForeground};
+  font-size: 14px;
+  border-top: 1px solid ${props => props.theme.colors.border};
+`;
+
+const FooterLink = styled(Link)`
+  font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
+  font-weight: ${props => props.theme.textVariants.bodyMedium.fontWeight};
+  font-size: 14px;
+  color: ${props => props.theme.colors.primary};
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 export default function LandingPage() {
   return (
-    <Box width="100%" backgroundColor="mainBackground" color="mainForeground">
-      <Box
-        as="header"
-        p="m"
-        backgroundColor="cardBackground"
-        borderBottom="1px solid"
-        borderColor="border"
-      >
-        <Box
-          as="nav"
-          maxWidth="1200px"
-          mx="auto"
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Logo
-            css={{
-              transform: "scale(0.6)",
-              alignItems: "flex-start",
-              gap: 0,
-              "& h1, & p": { textAlign: "left" },
-            }}
-          />
+    <PageContainer>
+      <Header as="header">
+        <Nav>
+          <StyledLogo variant="dark" />
           <Link to="/login" style={{ textDecoration: "none" }}>
             <Button
               label="Acesso Administrativo"
@@ -130,170 +193,156 @@ export default function LandingPage() {
               style={{ width: "auto", height: "44px" }}
             />
           </Link>
-        </Box>
-      </Box>
-
-      <Box as="main" display="flex" flexDirection="column">
-        <Box
-          as="section"
-          minHeight={{ _: "60vh", tablet: "70vh" }}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-          gap="24px"
-          p={{ _: "32px 24px", tablet: "48px 24px" }}
-          maxWidth="1200px"
-          mx="auto"
-          css={{ animation: `${fadeInUp} 0.8s ease-out` }}
-        >
+        </Nav>
+      </Header>
+      <Main as="main">
+        <HeroSection>
+          <HeroTitle as="h1" variant="header" maxWidth="800px">
+            Sua missão, <span>fortalecida</span> pela mentoria.
+          </HeroTitle>
           <Text
-            as="h1"
-            variant="header"
-            fontSize={{ _: "36px", tablet: "56px" }}
-            lineHeight={1.2}
-            maxWidth="800px"
-          >
-            Sua missão,{" "}
-            <Text as="span" color="primary">
-              fortalecida
-            </Text>{" "}
-            pela mentoria.
-          </Text>
-          <Text
+            as="p"
             variant="body"
-            fontSize={{ _: "18px", tablet: "20px" }}
-            lineHeight={1.6}
+            fontSize="20px"
             color="mutedForeground"
+            lineHeight="1.6"
             maxWidth="600px"
           >
             O Ombro de Cristo é a plataforma que conecta missionários e
             mentores, oferecendo ferramentas para uma jornada espiritual mais
             profunda e acompanhada.
           </Text>
-        </Box>
+        </HeroSection>
 
-        <Box
-          as="section"
-          p={{ _: "32px 24px", tablet: "48px 24px" }}
-          maxWidth="1200px"
-          mx="auto"
-          width="100%"
-          textAlign="center"
-          backgroundColor="cardBackground"
-          borderTop="1px solid"
-          borderBottom="1px solid"
-          borderColor="border"
-        >
-          <Text
-            as="h2"
-            variant="header"
-            fontSize={{ _: "28px", tablet: "36px" }}
-            mb="l"
-          >
+        <FeaturesSection>
+          <SectionTitle as="h2" variant="header">
             Ferramentas para sua caminhada
-          </Text>
-          <Box
-            display="grid"
-            gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-            gap="24px"
-            mt="xl"
-          >
-            <Feature
-              icon={<IoBookOutline size={32} />}
-              title="Devocionais Inspiradores"
-              description="Comece e termine seu dia com reflexões que nutrem a alma e direcionam seu propósito."
-            />
-            <Feature
-              icon={<IoHeartOutline size={32} />}
-              title="Diário Pessoal"
-              description="Um espaço seguro para registrar suas orações, pensamentos e o agir de Deus em sua vida."
-            />
-            <Feature
-              icon={<IoShieldOutline size={32} />}
-              title="Mentoria Segura"
-              description="Compartilhe suas jornadas com seu mentor e receba apoio, oração e direcionamento com total privacidade."
-            />
-          </Box>
-        </Box>
+          </SectionTitle>
+          <FeaturesGrid>
+            <FeatureCard>
+              <FeatureIcon>
+                <IoBookOutline size={32} />
+              </FeatureIcon>
+              <Text
+                as="h3"
+                variant="subHeader"
+                color="headerForeground"
+                fontSize="20px"
+                mb="s"
+              >
+                Devocionais Inspiradores
+              </Text>
+              <Text
+                as="p"
+                variant="body"
+                color="mutedForeground"
+                lineHeight="1.6"
+              >
+                Comece e termine seu dia com reflexões que nutrem a alma e
+                direcionam seu propósito.
+              </Text>
+            </FeatureCard>
+            <FeatureCard>
+              <FeatureIcon>
+                <IoHeartOutline size={32} />
+              </FeatureIcon>
+              <Text
+                as="h3"
+                variant="subHeader"
+                color="headerForeground"
+                fontSize="20px"
+                mb="s"
+              >
+                Diário Pessoal
+              </Text>
+              <Text
+                as="p"
+                variant="body"
+                color="mutedForeground"
+                lineHeight="1.6"
+              >
+                Um espaço seguro para registrar suas orações, pensamentos e o
+                agir de Deus em sua vida.
+              </Text>
+            </FeatureCard>
+            <FeatureCard>
+              <FeatureIcon>
+                <IoShieldOutline size={32} />
+              </FeatureIcon>
+              <Text
+                as="h3"
+                variant="subHeader"
+                color="headerForeground"
+                fontSize="20px"
+                mb="s"
+              >
+                Mentoria Segura
+              </Text>
+              <Text
+                as="p"
+                variant="body"
+                color="mutedForeground"
+                lineHeight="1.6"
+              >
+                Compartilhe suas jornadas com seu mentor e receba apoio, oração
+                e direcionamento com total privacidade.
+              </Text>
+            </FeatureCard>
+          </FeaturesGrid>
+        </FeaturesSection>
 
-        <Box
-          as="section"
-          p={{ _: "32px 24px", tablet: "48px 24px" }}
-          maxWidth="1200px"
-          mx="auto"
-          width="100%"
-          textAlign="center"
-        >
-          <Text
-            as="h2"
-            variant="header"
-            fontSize={{ _: "28px", tablet: "36px" }}
-          >
+        <CTASection>
+          <SectionTitle as="h2" variant="header">
             Faça parte desta jornada
-          </Text>
+          </SectionTitle>
           <Text
+            as="p"
             variant="body"
-            fontSize={{ _: "18px", tablet: "20px" }}
-            lineHeight={1.6}
+            fontSize="20px"
             color="mutedForeground"
+            lineHeight="1.6"
             maxWidth="600px"
-            mx="auto"
           >
             Baixe o aplicativo e transforme sua vida ministerial.
           </Text>
-          <Box
-            display="flex"
-            flexDirection={{ _: "column", tablet: "row" }}
-            gap="16px"
-            justifyContent="center"
-            alignItems="center"
-            mt="l"
-          >
+          <StoreButtons>
             <StoreButton
               href="https://play.google.com/store/apps/details?id=com.br.ombrodecristo"
-              icon={<IoLogoGooglePlaystore size={24} />}
-              line1="Disponível no"
-              line2="Google Play"
-            />
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <IoLogoGooglePlaystore size={24} />
+              <div>
+                <div style={{ fontSize: "12px" }}>Disponível no</div>
+                <div style={{ fontSize: "18px", fontWeight: 600 }}>
+                  Google Play
+                </div>
+              </div>
+            </StoreButton>
             <StoreButton
               href="https://apps.apple.com"
-              icon={<IoLogoApple size={30} />}
-              line1="Baixar na"
-              line2="App Store"
-            />
-          </Box>
-        </Box>
-      </Box>
-
-      <Box
-        as="footer"
-        textAlign="center"
-        p="l"
-        backgroundColor="mutedBackground"
-        color="mutedForeground"
-        fontSize="14px"
-        borderTop="1px solid"
-        borderColor="border"
-      >
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <IoLogoApple size={30} />
+              <div>
+                <div style={{ fontSize: "12px" }}>Baixar na</div>
+                <div style={{ fontSize: "18px", fontWeight: 600 }}>
+                  App Store
+                </div>
+              </div>
+            </StoreButton>
+          </StoreButtons>
+        </CTASection>
+      </Main>
+      <Footer>
         © {new Date().getFullYear()} Ombro de Cristo. Todos os direitos
         reservados.
         <br />
-        <Text
-          as={Link}
-          to="/terms-and-policy"
-          variant="bodyMedium"
-          fontSize="14px"
-          color="primary"
-          css={{
-            textDecoration: "none",
-            "&:hover": { textDecoration: "underline" },
-          }}
-        >
+        <FooterLink to="/terms-and-policy">
           Termos de Uso e Política de Privacidade
-        </Text>
-      </Box>
-    </Box>
+        </FooterLink>
+      </Footer>
+    </PageContainer>
   );
 }
