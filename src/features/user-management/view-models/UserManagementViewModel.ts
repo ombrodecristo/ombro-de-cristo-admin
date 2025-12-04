@@ -99,8 +99,20 @@ export class UserManagementViewModel extends BaseViewModel {
     this.notify();
   };
 
-  public handleUpdateSuccess = (_: Profile) => {
-    this.fetchProfiles();
+  public handleUpdateSuccess = (updatedProfileData: Profile) => {
+    const index = this.profiles.findIndex(p => p.id === updatedProfileData.id);
+
+    if (index !== -1) {
+      const updatedProfile = {
+        ...this.profiles[index],
+        ...updatedProfileData,
+      };
+
+      this.profiles[index] = updatedProfile;
+      this.notify();
+    } else {
+      this.fetchProfiles();
+    }
   };
 
   private fetchProfiles = async () => {
