@@ -29,15 +29,16 @@ async function getProfilesWithRelations(): Promise<
 
 async function updateAdminProfileDetails(
   profileId: string,
-  details: { role: UserRole; gender: UserGender; church_id: string | null }
+  details: {
+    role: UserRole;
+    gender: UserGender;
+    church_id: string | null;
+    mentor_id?: string | null;
+  }
 ): Promise<ServiceResponse<Profile>> {
   const { data, error } = await supabase
     .from("profiles")
-    .update({
-      role: details.role,
-      gender: details.gender,
-      church_id: details.church_id,
-    })
+    .update(details)
     .eq("id", profileId)
     .select()
     .single();
