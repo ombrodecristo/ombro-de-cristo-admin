@@ -65,6 +65,11 @@ export function GlobalStyles() {
           -webkit-box-shadow: 0 0 0 1000px ${theme.colors.inputBackground} inset !important;
           transition: background-color 5000s ease-in-out 0s;
         }
+
+        input:-webkit-autofill:disabled {
+          -webkit-text-fill-color: ${theme.colors.mutedForeground} !important;
+          -webkit-box-shadow: 0 0 0 1000px ${theme.colors.mutedBackground} inset !important;
+        }
       `}
     />
   );
