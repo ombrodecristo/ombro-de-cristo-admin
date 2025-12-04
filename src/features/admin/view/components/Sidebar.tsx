@@ -97,7 +97,7 @@ type SidebarProps = {
 
 export default function Sidebar({ isOpen }: SidebarProps) {
   return (
-    <SidebarContainer isOpen={isOpen}>
+    <SidebarContainer className="sidebar-container" isOpen={isOpen}>
       <Header>
         <Logo src="/logo.png" alt="Logo Ombro de Cristo" />
         <Title>Administração</Title>

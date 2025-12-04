@@ -39,7 +39,7 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
     justify-content: center;
-    aside:hover & {
+    .sidebar-container:hover & {
       justify-content: flex-start;
     }
   }
@@ -60,7 +60,7 @@ const LinkText = styled.span<{ isSidebarOpen: boolean }>`
       opacity 0.2s,
       visibility 0.2s;
     transition-delay: 0s;
-    aside:hover & {
+    .sidebar-container:hover & {
       opacity: 1;
       visibility: visible;
       transition-delay: 0.1s;
