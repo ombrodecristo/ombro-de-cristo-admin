@@ -71,6 +71,8 @@ export default function LoginPage() {
     return <Navigate to="/admin" replace />;
   }
 
+  const isDisabled = viewModel.loading || viewModel.isLockedOnError;
+
   return (
     <PageContainer>
       <StyledCard>
@@ -86,7 +88,7 @@ export default function LoginPage() {
               onChange={e => viewModel.setEmail(e.target.value)}
               required
               autoComplete="email"
-              disabled={viewModel.loading}
+              disabled={isDisabled}
               icon={<IoMailOutline size={22} />}
               error={viewModel.emailError}
             />
@@ -97,7 +99,7 @@ export default function LoginPage() {
               onChange={e => viewModel.setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              disabled={viewModel.loading}
+              disabled={isDisabled}
               icon={<IoLockClosedOutline size={22} />}
               isPassword
               error={viewModel.passwordError}
@@ -106,7 +108,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            disabled={viewModel.loading}
+            disabled={isDisabled}
             loading={viewModel.loading}
             label="Entrar"
             icon={<IoLogInOutline size={20} />}

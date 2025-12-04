@@ -15,14 +15,17 @@ export class LoginViewModel extends BaseViewModel {
   public loading = false;
   public emailError?: string;
   public passwordError?: string;
+  public isLockedOnError = false;
 
   public setEmail = (value: string) => {
     this.email = value;
+    this.isLockedOnError = false;
     this.resetErrors();
   };
 
   public setPassword = (value: string) => {
     this.password = value;
+    this.isLockedOnError = false;
     this.resetErrors();
   };
 
@@ -63,6 +66,7 @@ export class LoginViewModel extends BaseViewModel {
 
     if (error) {
       this.password = "";
+      this.isLockedOnError = true;
       this.notify();
 
       await logRepository.logError(error, {
