@@ -1,6 +1,42 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styled from "@emotion/styled";
+import { useTheme } from "@emotion/react";
+import {
+  compose,
+  space,
+  layout,
+  color,
+  flexbox,
+  border,
+  position,
+  shadow,
+  grid,
+  typography,
+  system,
+} from "styled-system";
+import type {
+  SpaceProps,
+  LayoutProps,
+  ColorProps,
+  FlexboxProps,
+  BorderProps,
+  PositionProps,
+  ShadowProps,
+  GridProps,
+  TypographyProps,
+} from "styled-system";
+import { Text } from "./Text";
 import type { Theme } from "@/core/lib/theme";
+
+type StyledSystemProps = SpaceProps &
+  LayoutProps &
+  ColorProps &
+  FlexboxProps &
+  BorderProps &
+  PositionProps &
+  ShadowProps &
+  GridProps &
+  TypographyProps;
 
 type Variant = "primary" | "secondary" | "destructive";
 type Size = "medium" | "small";
@@ -13,91 +49,42 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactNode;
 }
 
-const getVariantStyles = (
-  theme: Theme,
-  variant: Variant,
-  disabled?: boolean
-) => {
-  if (disabled) {
-    return `
-      background-color: ${theme.colors.buttonDisabledBackground};
-      color: ${theme.colors.buttonDisabledForeground};
-      border-color: transparent;
-      box-shadow: none;
-      cursor: not-allowed;
-    `;
-  }
-  switch (variant) {
-    case "secondary":
-      return `
-        background-color: ${theme.colors.buttonSecondaryBackground};
-        color: ${theme.colors.buttonSecondaryForeground};
-        border-color: ${theme.colors.buttonSecondaryBorder};
-        box-shadow: none;
-        
-        &:hover {
-            background-color: ${theme.colors.mutedBackground};
-        }
-      `;
-    case "destructive":
-      return `
-        background-color: ${theme.colors.destructiveBackground};
-        color: ${theme.colors.destructiveForeground};
-        border-color: transparent;
-        box-shadow: 0 4px 8px ${theme.colors.destructiveBackground}33;
+type BaseButtonProps = StyledSystemProps & {
+  gap?: SpaceProps["margin"];
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
-        &:hover {
-            opacity: 0.9;
-        }
-      `;
-    default:
-      return `
-        background-color: ${theme.colors.buttonPrimaryBackground};
-        color: ${theme.colors.buttonPrimaryForeground};
-        border-color: transparent;
-        box-shadow: 0 4px 8px ${theme.colors.primary}33;
+const BaseButton = styled("button")<BaseButtonProps>(
+  compose(
+    space,
+    layout,
+    color,
+    flexbox,
+    border,
+    position,
+    shadow,
+    grid,
+    typography,
+    system({
+      gap: {
+        property: "gap",
+        scale: "space",
+      },
+    })
+  )
+);
 
-        &:hover {
-            opacity: 0.9;
-        }
-      `;
-  }
-};
-
-const StyledButton = styled.button<{
-  variant: Variant;
-  size: Size;
-}>`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${props => props.theme.spacing.s}px;
-  height: ${props => (props.size === "small" ? "40px" : "56px")};
-  width: 100%;
-  border-radius: ${props =>
-    props.size === "small"
-      ? props.theme.borderRadii.m
-      : props.theme.borderRadii.l}px;
-  font-family: ${props => props.theme.textVariants.buttonLabel.fontFamily};
-  font-weight: ${props => props.theme.textVariants.buttonLabel.fontWeight};
-  font-size: ${props =>
-    props.size === "small"
-      ? "14px"
-      : props.theme.textVariants.buttonLabel.fontSize};
-  cursor: pointer;
+const StyledButton = styled(BaseButton)<{ variant: Variant }>`
+  cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   transition: all 0.2s ease-in-out;
-  padding: 0
-    ${props =>
-      props.size === "small" ? props.theme.spacing.m : props.theme.spacing.l}px;
-  border-width: 1.5px;
-  border-style: solid;
-  letter-spacing: ${props =>
-    props.theme.textVariants.buttonLabel.letterSpacing};
+  &:hover {
+    ${props => {
+      if (props.disabled) return "";
+      if (props.variant === "secondary") {
+        return `background-color: ${props.theme.colors.mutedBackground};`;
+      }
 
-  ${props => getVariantStyles(props.theme, props.variant, props.disabled)}
-
-  &:disabled {
-    ${props => getVariantStyles(props.theme, props.variant, true)}
+      return `opacity: 0.9;`;
+    }}
   }
 `;
 
@@ -121,16 +108,66 @@ const Spinner = styled.div`
 export function Button({
   label,
   loading,
+  disabled,
   variant = "primary",
   size = "medium",
   icon,
   ...props
 }: ButtonProps) {
+  const theme = useTheme() as Theme;
+  const isDisabled = disabled || loading;
+
+  const getVariantStyles = () => {
+    if (isDisabled) {
+      return {
+        backgroundColor: "buttonDisabledBackground",
+        color: "buttonDisabledForeground",
+        borderColor: "transparent",
+        boxShadow: "none",
+      };
+    }
+    switch (variant) {
+      case "secondary":
+        return {
+          backgroundColor: "buttonSecondaryBackground",
+          color: "buttonSecondaryForeground",
+          borderColor: "buttonSecondaryBorder",
+          boxShadow: "none",
+        };
+      case "destructive":
+        return {
+          backgroundColor: "destructiveBackground",
+          color: "destructiveForeground",
+          borderColor: "transparent",
+          boxShadow: `0 4px 8px ${theme.colors.destructiveBackground}33`,
+        };
+      default:
+        return {
+          backgroundColor: "buttonPrimaryBackground",
+          color: "buttonPrimaryForeground",
+          borderColor: "transparent",
+          boxShadow: `0 4px 8px ${theme.colors.primary}33`,
+        };
+    }
+  };
+
+  const styles = getVariantStyles();
+
   return (
     <StyledButton
+      height={size === "small" ? 40 : 56}
+      width="100%"
+      borderRadius={size === "small" ? "m" : "l"}
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      gap="s"
+      px={size === "small" ? "m" : "l"}
+      borderWidth="1.5px"
+      borderStyle="solid"
+      disabled={isDisabled}
       variant={variant}
-      size={size}
-      disabled={loading || props.disabled}
+      {...styles}
       {...props}
     >
       {loading ? (
@@ -138,7 +175,14 @@ export function Button({
       ) : (
         <>
           {icon}
-          <span>{label}</span>
+          <Text
+            as="span"
+            variant="buttonLabel"
+            color="inherit"
+            fontSize={size === "small" ? "14px" : "16px"}
+          >
+            {label}
+          </Text>
         </>
       )}
     </StyledButton>

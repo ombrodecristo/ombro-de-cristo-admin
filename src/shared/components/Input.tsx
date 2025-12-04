@@ -17,7 +17,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
   width: 100%;
   background-color: ${props => props.theme.colors.inputBackground};
   border-radius: ${props => props.theme.borderRadii.m}px;
-  border-width: 1.5px;
+  border-width: ${props => (props.isFocused ? "2px" : "1px")};
   border-style: solid;
   border-color: ${props =>
     props.hasError
@@ -28,7 +28,7 @@ const InputContainer = styled.div<{ hasError: boolean; isFocused: boolean }>`
   transition: border-color 0.2s;
 `;
 
-const StyledInput = styled.input<{ hasIcon: boolean }>`
+const StyledInput = styled.input<{ hasIcon: boolean; isFocused: boolean }>`
   flex: 1;
   height: 100%;
   border: none;
@@ -41,6 +41,10 @@ const StyledInput = styled.input<{ hasIcon: boolean }>`
   font-family: ${props => props.theme.textVariants.body.fontFamily};
   font-size: 16px;
   color: ${props => props.theme.colors.inputForeground};
+  padding-top: ${props =>
+    props.isFocused ? "1px" : "0"}; // Adjust for border width change
+  padding-bottom: ${props =>
+    props.isFocused ? "1px" : "0"}; // Adjust for border width change
 
   &::placeholder {
     color: ${props => props.theme.colors.mutedForeground};
@@ -120,6 +124,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <StyledInput
             ref={ref}
             hasIcon={!!icon}
+            isFocused={isFocused}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             type={finalType}
