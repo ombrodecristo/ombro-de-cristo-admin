@@ -164,7 +164,8 @@ export default function LandingPage() {
             <Button
               label="Acesso Administrativo"
               variant="secondary"
-              style={{ width: "auto", height: "44px" }}
+              size="small"
+              style={{ width: "auto" }}
             />
           </a>
         </Nav>

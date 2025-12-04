@@ -74,6 +74,7 @@ const BaseButton = styled("button")<BaseButtonProps>(
 );
 
 const StyledButton = styled(BaseButton)<{ variant: Variant; size: Size }>`
+  height: ${props => (props.size === "small" ? "40px" : "56px")};
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   transition: all 0.2s ease-in-out;
   padding: 0
@@ -157,7 +158,6 @@ export function Button({
 
   return (
     <StyledButton
-      height={size === "small" ? 40 : 56}
       width="100%"
       borderRadius={size === "small" ? "l" : "xl"}
       display="inline-flex"
