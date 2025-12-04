@@ -26,7 +26,7 @@ export const TableRow = styled.tr`
     border-bottom: none;
   }
 
-  ${TableBody} &:hover {
+  tbody &:hover {
     background-color: ${props => props.theme.colors.mutedBackground}80;
   }
 `;

@@ -28,9 +28,7 @@ function RootLayout() {
       return;
     }
 
-    const isPublicRoute = PUBLIC_ROUTES.some(route =>
-      location.pathname.startsWith(route)
-    );
+    const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
 
     if (user && role === "ADMIN") {
       if (isPublicRoute && location.pathname !== "/") {
@@ -41,7 +39,7 @@ function RootLayout() {
     }
   }, [loading, user, role, location.pathname, navigate]);
 
-  if (loading && !PUBLIC_ROUTES.some(r => location.pathname.startsWith(r))) {
+  if (loading && !PUBLIC_ROUTES.includes(location.pathname)) {
     return <GlobalLoader />;
   }
 
