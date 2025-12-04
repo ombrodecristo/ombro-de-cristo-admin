@@ -2,6 +2,16 @@ import { Box } from "./Box";
 import { Text } from "./Text";
 import styled from "@emotion/styled";
 
+const LogoTitle = styled(Text)`
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    ${(props: { direction?: "row" | "column" }) =>
+      props.direction === "row" &&
+      `
+      display: none;
+    `}
+  }
+`;
+
 const LogoImage = styled.img`
   width: 100%;
   height: 100%;
@@ -45,14 +55,15 @@ export function Logo({
         alignItems={isRow ? "flex-start" : "center"}
         marginTop={isRow ? "0" : "-s"}
       >
-        <Text
+        <LogoTitle
+          direction={direction}
           variant={isRow ? "subHeader" : "header"}
           color={titleColor}
           textAlign={isRow ? "left" : "center"}
           fontSize={isRow ? "20px" : undefined}
         >
           Ombro de Cristo
-        </Text>
+        </LogoTitle>
         {showSlogan && (
           <Text
             variant="caption"

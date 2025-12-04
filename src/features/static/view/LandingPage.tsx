@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef, type TouchEvent } from "react";
 import styled from "@emotion/styled";
 import { Box, Button, Logo, Text } from "@/shared/components";
 import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
@@ -7,22 +8,44 @@ import {
   IoShieldOutline,
 } from "react-icons/io5";
 
+const features = [
+  {
+    icon: <IoBookOutline size={32} />,
+    title: "Devocionais",
+    description: "Reflexões que nutrem a alma e direcionam seu propósito.",
+  },
+  {
+    icon: <IoHeartOutline size={32} />,
+    title: "Diário Pessoal",
+    description: "Um espaço seguro para registrar suas orações e pensamentos.",
+  },
+  {
+    icon: <IoShieldOutline size={32} />,
+    title: "Mentoria Segura",
+    description: "Receba apoio, oração e direcionamento com total privacidade.",
+  },
+];
+
 const PageContainer = styled(Box)`
-  width: 100%;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.mainBackground};
-  color: ${props => props.theme.colors.mainForeground};
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  height: 100vh;
+  width: 100%;
+  background-color: ${props => props.theme.colors.mainBackground};
+  color: ${props => props.theme.colors.mainForeground};
+  background: radial-gradient(
+    ellipse at 50% -20%,
+    ${props => props.theme.colors.mutedBackground},
+    ${props => props.theme.colors.mainBackground} 70%
+  );
 `;
 
 const Header = styled(Box)`
-  padding: ${props => props.theme.spacing.s}px
-    ${props => props.theme.spacing.m}px;
-  background-color: ${props => props.theme.colors.cardBackground};
-  border-bottom: 1px solid ${props => props.theme.colors.border};
+  padding: ${props => props.theme.spacing.m}px
+    ${props => props.theme.spacing.l}px;
   flex-shrink: 0;
+  width: 100%;
+  border-bottom: 1px solid ${props => props.theme.colors.border};
 `;
 
 const Nav = styled(Box)`
@@ -39,9 +62,9 @@ const Main = styled(Box)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: ${props => props.theme.spacing.l};
+  overflow: hidden;
+  padding: ${props => props.theme.spacing.l}px;
   text-align: center;
-  position: relative;
 `;
 
 const ContentWrapper = styled(Box)`
@@ -50,30 +73,70 @@ const ContentWrapper = styled(Box)`
   align-items: center;
   gap: ${props => props.theme.spacing.l}px;
   max-width: 800px;
+  width: 100%;
+  padding: ${props => props.theme.spacing.m}px 0;
+  transition: all 0.2s ease-out;
+
+  @media (max-height: 720px) {
+    gap: ${props => props.theme.spacing.m}px;
+    padding: ${props => props.theme.spacing.s}px 0;
+  }
 `;
 
 const HeroTitle = styled(Text)`
   font-size: 48px;
   line-height: 1.2;
   color: ${props => props.theme.colors.headerForeground};
+  font-weight: 700;
 
   span {
     color: ${props => props.theme.colors.primary};
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     font-size: 32px;
   }
 `;
 
-const FeaturesContainer = styled(Box)`
-  display: flex;
-  gap: ${props => props.theme.spacing.xxl}px;
-  margin-top: ${props => props.theme.spacing.m}px;
+const Subtitle = styled(Text)`
+  font-size: 18px;
+  color: ${props => props.theme.colors.mutedForeground};
+  line-height: 1.6;
+  max-width: 600px;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    flex-direction: column;
-    gap: ${props => props.theme.spacing.l}px;
+    font-size: 16px;
+  }
+  @media (max-height: 680px) {
+    display: none;
+  }
+`;
+
+const FeaturesSection = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: ${props => props.theme.spacing.m}px;
+`;
+
+const FeaturesContainer = styled(Box)`
+  display: flex;
+  justify-content: center;
+  gap: ${props => props.theme.spacing.l}px;
+  flex-wrap: wrap;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 100%;
+    overflow: hidden;
+  }
+`;
+
+const CarouselTrack = styled(Box)<{ activeIndex: number }>`
+  display: flex;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    transition: transform 0.4s ease-in-out;
+    transform: translateX(-${props => props.activeIndex * 100}%);
   }
 `;
 
@@ -83,7 +146,13 @@ const FeatureItem = styled(Box)`
   align-items: center;
   gap: ${props => props.theme.spacing.s}px;
   color: ${props => props.theme.colors.mutedForeground};
-  max-width: 200px;
+  width: 240px;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 100%;
+    flex-shrink: 0;
+    padding: 0 ${props => props.theme.spacing.m}px;
+  }
 `;
 
 const FeatureIcon = styled(Box)`
@@ -91,15 +160,45 @@ const FeatureIcon = styled(Box)`
   margin-bottom: ${props => props.theme.spacing.xs}px;
 `;
 
+const CarouselDots = styled(Box)`
+  display: none;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: flex;
+    justify-content: center;
+    gap: ${props => props.theme.spacing.s}px;
+    margin-top: ${props => props.theme.spacing.l}px;
+  }
+`;
+
+const Dot = styled.button<{ isActive: boolean }>`
+  background-color: ${props =>
+    props.isActive ? props.theme.colors.primary : props.theme.colors.border};
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s;
+  transform: ${props => (props.isActive ? "scale(1.2)" : "scale(1)")};
+`;
+
 const StoreButtons = styled(Box)`
   display: flex;
   gap: ${props => props.theme.spacing.m}px;
   justify-content: center;
   margin-top: ${props => props.theme.spacing.l}px;
+  flex-wrap: wrap;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  @media (max-height: 720px) {
+    margin-top: ${props => props.theme.spacing.m}px;
   }
 `;
 
@@ -110,8 +209,8 @@ const StoreButton = styled.a`
   gap: ${props => props.theme.spacing.s}px;
   padding: ${props => props.theme.spacing.sm}px
     ${props => props.theme.spacing.l}px;
-  background-color: ${props => props.theme.colors.primary};
-  color: ${props => props.theme.colors.primaryForeground};
+  background-color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.white};
   border-radius: ${props => props.theme.radii.m}px;
   text-decoration: none;
   transition: all 0.2s ease-in-out;
@@ -119,29 +218,29 @@ const StoreButton = styled.a`
 
   &:hover {
     transform: scale(1.05);
-    opacity: 0.9;
+    background-color: #111;
   }
 
   & > div {
     text-align: left;
   }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 100%;
+  }
 `;
 
 const Footer = styled.footer`
-  position: absolute;
-  bottom: ${props => props.theme.spacing.m}px;
-  left: 0;
-  right: 0;
   text-align: center;
-  padding: 0 ${props => props.theme.spacing.m}px;
+  padding: ${props => props.theme.spacing.m}px;
   font-size: 14px;
   color: ${props => props.theme.colors.mutedForeground};
+  flex-shrink: 0;
+  border-top: 1px solid ${props => props.theme.colors.border};
 `;
 
 const FooterLink = styled.a`
-  font-family: ${props => props.theme.textVariants.bodyMedium.fontFamily};
-  font-weight: ${props => props.theme.textVariants.bodyMedium.fontWeight};
-  font-size: 14px;
+  font-weight: 500;
   color: ${props => props.theme.colors.primary};
   text-decoration: none;
   &:hover {
@@ -150,6 +249,58 @@ const FooterLink = styled.a`
 `;
 
 export default function LandingPage() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const resetInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
+      setActiveIndex(prevIndex => (prevIndex + 1) % features.length);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    resetInterval();
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    const touchEnd = e.changedTouches[0].clientX;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setActiveIndex(prev => (prev + 1) % features.length);
+    } else if (isRightSwipe) {
+      setActiveIndex(prev => (prev - 1 + features.length) % features.length);
+    }
+
+    resetInterval();
+  };
+
+  const handleDotClick = (index: number) => {
+    setActiveIndex(index);
+    resetInterval();
+  };
+
   return (
     <PageContainer>
       <Header as="header">
@@ -157,7 +308,6 @@ export default function LandingPage() {
           <Logo direction="row" size={40} showSlogan={false} variant="dark" />
           <a
             href="/login"
-            target="_blank"
             rel="noopener noreferrer"
             style={{ textDecoration: "none" }}
           >
@@ -170,59 +320,54 @@ export default function LandingPage() {
           </a>
         </Nav>
       </Header>
+
       <Main as="main">
         <ContentWrapper>
           <HeroTitle as="h1" variant="header">
             Sua missão, <span>fortalecida</span> pela mentoria.
           </HeroTitle>
 
-          <Text
-            as="p"
-            variant="body"
-            fontSize="18px"
-            color="mutedForeground"
-            lineHeight="1.6"
-            maxWidth="600px"
-          >
+          <Subtitle as="p">
             O Ombro de Cristo conecta missionários e mentores com ferramentas
             para uma jornada espiritual mais profunda e acompanhada.
-          </Text>
+          </Subtitle>
 
-          <FeaturesContainer>
-            <FeatureItem>
-              <FeatureIcon>
-                <IoBookOutline size={32} />
-              </FeatureIcon>
-              <Text as="h3" variant="bodyMedium" color="headerForeground">
-                Devocionais
-              </Text>
-              <Text as="p" variant="caption" fontSize="14px">
-                Reflexões que nutrem a alma e direcionam seu propósito.
-              </Text>
-            </FeatureItem>
-            <FeatureItem>
-              <FeatureIcon>
-                <IoHeartOutline size={32} />
-              </FeatureIcon>
-              <Text as="h3" variant="bodyMedium" color="headerForeground">
-                Diário Pessoal
-              </Text>
-              <Text as="p" variant="caption" fontSize="14px">
-                Um espaço seguro para registrar suas orações e pensamentos.
-              </Text>
-            </FeatureItem>
-            <FeatureItem>
-              <FeatureIcon>
-                <IoShieldOutline size={32} />
-              </FeatureIcon>
-              <Text as="h3" variant="bodyMedium" color="headerForeground">
-                Mentoria Segura
-              </Text>
-              <Text as="p" variant="caption" fontSize="14px">
-                Receba apoio, oração e direcionamento com total privacidade.
-              </Text>
-            </FeatureItem>
-          </FeaturesContainer>
+          <FeaturesSection>
+            <FeaturesContainer>
+              <CarouselTrack
+                activeIndex={activeIndex}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                {features.map((feature, index) => (
+                  <FeatureItem key={index}>
+                    <FeatureIcon>{feature.icon}</FeatureIcon>
+                    <Text as="h3" variant="bodyMedium" color="headerForeground">
+                      {feature.title}
+                    </Text>
+                    <Text
+                      as="p"
+                      variant="caption"
+                      fontSize="14px"
+                      lineHeight="1.5"
+                    >
+                      {feature.description}
+                    </Text>
+                  </FeatureItem>
+                ))}
+              </CarouselTrack>
+            </FeaturesContainer>
+            <CarouselDots>
+              {features.map((_, index) => (
+                <Dot
+                  key={index}
+                  isActive={index === activeIndex}
+                  onClick={() => handleDotClick(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </CarouselDots>
+          </FeaturesSection>
 
           <StoreButtons>
             <StoreButton
@@ -236,7 +381,11 @@ export default function LandingPage() {
                   Disponível no
                 </div>
                 <div
-                  style={{ fontSize: "18px", fontWeight: 600, lineHeight: 1.2 }}
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    lineHeight: 1.2,
+                  }}
                 >
                   Google Play
                 </div>
@@ -253,7 +402,11 @@ export default function LandingPage() {
                   Baixar na
                 </div>
                 <div
-                  style={{ fontSize: "18px", fontWeight: 600, lineHeight: 1.2 }}
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    lineHeight: 1.2,
+                  }}
                 >
                   App Store
                 </div>
@@ -261,19 +414,20 @@ export default function LandingPage() {
             </StoreButton>
           </StoreButtons>
         </ContentWrapper>
-        <Footer>
-          © {new Date().getFullYear()} Ombro de Cristo. Todos os direitos
-          reservados.
-          {" | "}
-          <FooterLink
-            href="/terms-and-policy"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Termos de Uso e Política de Privacidade
-          </FooterLink>
-        </Footer>
       </Main>
+
+      <Footer>
+        © {new Date().getFullYear()} Ombro de Cristo. Todos os direitos
+        reservados.
+        {" | "}
+        <FooterLink
+          href="/terms-and-policy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Termos e Privacidade
+        </FooterLink>
+      </Footer>
     </PageContainer>
   );
 }
