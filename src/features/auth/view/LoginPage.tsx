@@ -81,9 +81,9 @@ export default function LoginPage() {
             onSubmit={handleLoginSubmit}
             display="flex"
             flexDirection="column"
-            gap="xl"
+            gap="l"
           >
-            <Box display="flex" flexDirection="column" gap="m">
+            <Box display="flex" flexDirection="column" gap="s">
               <Input
                 id="email"
                 type="email"
