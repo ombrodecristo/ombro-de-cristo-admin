@@ -22,8 +22,12 @@ export class ChurchManagementViewModel extends BaseViewModel {
 
   constructor() {
     super();
-    this.fetchChurches();
   }
+
+  public init = () => {
+    if (this.churches.length > 0) return;
+    this.fetchChurches();
+  };
 
   public setSearchQuery = (query: string) => {
     this.searchQuery = query;

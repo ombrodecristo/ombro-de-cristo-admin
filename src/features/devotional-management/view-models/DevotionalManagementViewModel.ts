@@ -24,8 +24,12 @@ export class DevotionalManagementViewModel extends BaseViewModel {
 
   constructor() {
     super();
-    this.fetchDevotionals();
   }
+
+  public init = () => {
+    if (this.devotionals.length > 0) return;
+    this.fetchDevotionals();
+  };
 
   public setSearchQuery = (query: string) => {
     this.searchQuery = query;

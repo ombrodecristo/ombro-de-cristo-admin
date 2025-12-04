@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { ChurchManagementViewModel } from "../view-models/ChurchManagementViewModel";
@@ -24,6 +24,10 @@ const PageContainer = styled.div`
 export default function ChurchManagementPage() {
   const [viewModel] = useState(() => new ChurchManagementViewModel());
   useViewModel(viewModel);
+
+  useEffect(() => {
+    viewModel.init();
+  }, [viewModel]);
 
   if (
     viewModel.loading &&

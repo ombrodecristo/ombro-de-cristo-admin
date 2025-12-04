@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useViewModel } from "@/shared/hooks/useViewModel";
@@ -24,6 +24,10 @@ export default function UserManagementPage() {
   );
 
   useViewModel(viewModel);
+
+  useEffect(() => {
+    viewModel.init();
+  }, [viewModel]);
 
   if (viewModel.loading && !viewModel.editingProfile) {
     return (

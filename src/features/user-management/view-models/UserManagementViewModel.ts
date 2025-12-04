@@ -27,8 +27,12 @@ export class UserManagementViewModel extends BaseViewModel {
   constructor({ currentUserId }: { currentUserId: string }) {
     super();
     this.currentUserId = currentUserId;
-    this.fetchProfiles();
   }
+
+  public init = () => {
+    if (this.profiles.length > 0) return;
+    this.fetchProfiles();
+  };
 
   public setSearchQuery = (query: string) => {
     this.searchQuery = query;
