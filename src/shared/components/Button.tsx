@@ -156,6 +156,29 @@ export function Button({
 
   const styles = getVariantStyles();
 
+  if (!label && icon) {
+    return (
+      <StyledButton
+        width="auto"
+        borderRadius={size === "small" ? "l" : "xl"}
+        display="inline-flex"
+        alignItems="center"
+        justifyContent="center"
+        gap="none"
+        borderWidth="1.5px"
+        borderStyle="solid"
+        disabled={isDisabled}
+        variant={variant}
+        size={size}
+        {...styles}
+        {...props}
+        style={{ padding: 0, ...props.style }}
+      >
+        {loading ? <Spinner /> : icon}
+      </StyledButton>
+    );
+  }
+
   return (
     <StyledButton
       width="100%"
@@ -177,16 +200,14 @@ export function Button({
       ) : (
         <>
           {icon}
-          {label && (
-            <Text
-              as="span"
-              variant="buttonLabel"
-              color="inherit"
-              fontSize={size === "small" ? "14px" : "16px"}
-            >
-              {label}
-            </Text>
-          )}
+          <Text
+            as="span"
+            variant="buttonLabel"
+            color="inherit"
+            fontSize={size === "small" ? "14px" : "16px"}
+          >
+            {label}
+          </Text>
         </>
       )}
     </StyledButton>
