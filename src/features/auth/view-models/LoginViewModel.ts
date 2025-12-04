@@ -7,14 +7,12 @@ import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 type LoginResult = {
   success: boolean;
   error?: string;
-  needsConfirmation?: boolean;
 };
 
 export class LoginViewModel extends BaseViewModel {
   public email = "";
   public password = "";
   public loading = false;
-  public needsConfirmation = false;
   public emailError?: string;
   public passwordError?: string;
 
@@ -28,11 +26,6 @@ export class LoginViewModel extends BaseViewModel {
     this.resetErrors();
   };
 
-  public setNeedsConfirmation = (value: boolean) => {
-    this.needsConfirmation = value;
-    this.notify();
-  };
-
   private resetErrors = () => {
     this.emailError = undefined;
     this.passwordError = undefined;
@@ -41,7 +34,6 @@ export class LoginViewModel extends BaseViewModel {
 
   public async handleLogin(): Promise<LoginResult> {
     this.loading = true;
-    this.needsConfirmation = false;
     this.resetErrors();
     this.notify();
 
@@ -70,10 +62,6 @@ export class LoginViewModel extends BaseViewModel {
     this.loading = false;
 
     if (error) {
-      const isConfirmationError = error.message.includes(
-        "Sua conta precisa ser ativada"
-      );
-
       this.password = "";
       this.notify();
 
@@ -85,7 +73,6 @@ export class LoginViewModel extends BaseViewModel {
       return {
         success: false,
         error: error.message,
-        needsConfirmation: isConfirmationError,
       };
     }
 
@@ -110,23 +97,5 @@ export class LoginViewModel extends BaseViewModel {
     this.notify();
 
     return { success: false, error: unknownError };
-  }
-
-  public async handleResendConfirmation() {
-    this.loading = true;
-    this.notify();
-    const { error } = await authRepository.resendConfirmation(this.email);
-    this.loading = false;
-    this.needsConfirmation = false;
-    this.notify();
-
-    if (error) {
-      await logRepository.logError(error, {
-        component: "LoginViewModel.Resend",
-        context: { email: this.email.substring(0, 3) + "..." },
-      });
-    }
-
-    return { error };
   }
 }

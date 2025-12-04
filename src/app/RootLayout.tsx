@@ -18,7 +18,7 @@ const PUBLIC_ROUTES = [
   "/terms-and-policy",
 ];
 
-const AUTH_ONLY_ROUTES = ["/login", "/password-recovery"];
+const AUTH_ONLY_ROUTES = ["/login"];
 
 function RootLayout() {
   const { loading, user, role } = useAuth();

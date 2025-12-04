@@ -75,7 +75,7 @@ export default function AuthConfirmedPage() {
 
         <ContentText>
           {hasError
-            ? "Este link de confirmação é inválido ou já foi utilizado. Por favor, tente fazer login ou solicitar um novo link."
+            ? "Este link de confirmação é inválido ou já foi utilizado. Por favor, tente fazer o login no aplicativo. Se a conta ainda não estiver confirmada, você pode solicitar um novo link de confirmação na tela de login do aplicativo."
             : "Sua conta foi confirmada com sucesso. Você já pode fechar esta página e acessar o aplicativo."}
         </ContentText>
       </StyledCard>

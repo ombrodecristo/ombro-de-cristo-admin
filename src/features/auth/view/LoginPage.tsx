@@ -7,7 +7,6 @@ import {
   BaseCard,
   Box,
   Button,
-  ConfirmationModal,
   GlobalLoader,
   Input,
   Logo,
@@ -29,22 +28,7 @@ export default function LoginPage() {
     e.preventDefault();
     const result = await viewModel.handleLogin();
     if (result.error) {
-      if (result.needsConfirmation) {
-        viewModel.setNeedsConfirmation(true);
-      } else {
-        toast.error(result.error);
-      }
-    }
-  };
-
-  const handleConfirmResend = async () => {
-    const { error } = await viewModel.handleResendConfirmation();
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Link enviado!", {
-        description: "Verifique sua caixa de entrada e a pasta de spam.",
-      });
+      toast.error(result.error);
     }
   };
 
@@ -120,17 +104,6 @@ export default function LoginPage() {
           </Box>
         </BaseCard>
       </Box>
-      <ConfirmationModal
-        isOpen={viewModel.needsConfirmation}
-        onClose={() => viewModel.setNeedsConfirmation(false)}
-        onConfirm={handleConfirmResend}
-        title="Ative sua conta"
-        message={`Enviamos um link de ativação para seu e-mail, mas parece que ele ainda não foi usado. Quer que a gente envie novamente para ${viewModel.email}?`}
-        confirmText="Reenviar e-mail"
-        cancelText="Agora não"
-        variant="primary"
-        loading={viewModel.loading}
-      />
     </>
   );
 }

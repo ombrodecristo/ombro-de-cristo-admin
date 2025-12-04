@@ -16,8 +16,7 @@ function formatAuthError(error: Error): Error {
   } else if (msg.includes("invalid login credentials")) {
     friendlyMsg = "E-mail ou senha incorretos. Verifique e tente novamente.";
   } else if (msg.includes("email not confirmed")) {
-    friendlyMsg =
-      "Sua conta precisa ser ativada. Verifique o link em seu e-mail.";
+    friendlyMsg = "E-mail ou senha incorretos. Verifique e tente novamente.";
   } else if (msg.includes("password should be at least")) {
     friendlyMsg = "Sua senha é muito curta. Tente uma mais longa.";
   } else if (
@@ -94,24 +93,6 @@ async function sendPasswordRecovery(
   return { data: null, error: null };
 }
 
-async function resendConfirmation(
-  email: string
-): Promise<ServiceResponse<null>> {
-  const { error } = await supabase.auth.resend({
-    type: "signup",
-    email: email,
-    options: {
-      emailRedirectTo: `${SITE_URL}/auth-confirmed`,
-    },
-  });
-
-  if (error) {
-    return { data: null, error: formatAuthError(error) };
-  }
-
-  return { data: null, error: null };
-}
-
 export const authRepository = {
   signIn,
   signOut,
@@ -119,5 +100,4 @@ export const authRepository = {
   deleteOwnUser,
   getSession,
   sendPasswordRecovery,
-  resendConfirmation,
 };

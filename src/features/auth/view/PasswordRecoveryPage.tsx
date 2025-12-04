@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import {
   IoLockClosedOutline,
-  IoSendOutline,
   IoAlertCircleOutline,
   IoMailOutline,
   IoSaveOutline,
@@ -95,19 +94,6 @@ export default function PasswordRecoveryPage() {
     }
   }, [viewModel.success, navigate]);
 
-  const onEmailSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const { error } = await viewModel.handleEmailSubmit();
-    if (error) {
-      toast.error(error);
-    } else {
-      toast.success("Link enviado!", {
-        description:
-          "Se seu e-mail estiver cadastrado, verifique sua caixa de entrada e spam.",
-      });
-    }
-  };
-
   const onPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const { error } = await viewModel.handlePasswordSubmit();
@@ -186,40 +172,16 @@ export default function PasswordRecoveryPage() {
             )}
           </StatusIcon>
           <Title>
-            {viewModel.isTokenInvalid ? "Link Inválido" : "Recuperar Senha"}
+            {viewModel.isTokenInvalid
+              ? "Link Inválido ou Expirado"
+              : "Recuperar Senha"}
           </Title>
           <Description>
             {viewModel.isTokenInvalid
-              ? "Este link de redefinição de senha é inválido ou expirou. Por favor, solicite um novo link no aplicativo."
-              : "Informe seu e-mail e enviaremos um link para você criar uma nova senha."}
+              ? "Este link de redefinição de senha é inválido ou expirou. Por favor, solicite um novo link de recuperação no aplicativo móvel."
+              : "Para recuperar sua senha, o processo deve ser iniciado através do aplicativo móvel Ombro de Cristo. Por favor, acesse o app para solicitar o link de recuperação."}
           </Description>
         </Header>
-        {!viewModel.isTokenInvalid && (
-          <Form onSubmit={onEmailSubmit}>
-            <div>
-              <Label htmlFor="email">E-mail</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@exemplo.com"
-                value={viewModel.email}
-                onChange={e => viewModel.setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                disabled={viewModel.loading}
-                icon={<IoMailOutline size={20} />}
-                error={viewModel.error || ""}
-              />
-            </div>
-            <Button
-              type="submit"
-              disabled={viewModel.loading}
-              loading={viewModel.loading}
-              label="Enviar link de recuperação"
-              icon={<IoSendOutline />}
-            />
-          </Form>
-        )}
       </StyledCard>
     </PageContainer>
   );

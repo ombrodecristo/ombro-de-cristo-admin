@@ -3,7 +3,6 @@ import { logRepository } from "@/data/repositories/logRepository";
 import {
   validatePasswordLength,
   validatePasswordMatch,
-  validateEmail,
 } from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 
@@ -13,7 +12,6 @@ type PasswordRecoveryViewModelProps = {
 };
 
 export class PasswordRecoveryViewModel extends BaseViewModel {
-  public email = "";
   public password = "";
   public confirmPassword = "";
   public loading = false;
@@ -52,12 +50,6 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
     this.notify();
   };
 
-  public setEmail = (value: string) => {
-    this.email = value;
-    this.error = null;
-    this.notify();
-  };
-
   public setPassword = (value: string) => {
     this.password = value;
     this.error = null;
@@ -69,37 +61,6 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
     this.error = null;
     this.notify();
   };
-
-  public async handleEmailSubmit() {
-    this.error = null;
-    const emailValidation = validateEmail(this.email);
-    if (!emailValidation.isValid) {
-      this.error = emailValidation.message;
-      this.notify();
-
-      return { error: emailValidation.message };
-    }
-    this.loading = true;
-    this.notify();
-
-    const { error: recoveryError } = await authRepository.sendPasswordRecovery(
-      this.email
-    );
-
-    this.loading = false;
-    this.notify();
-
-    if (recoveryError) {
-      const err = "Não foi possível enviar o link. Tente novamente.";
-      await logRepository.logError(recoveryError, {
-        component: "PasswordRecoveryViewModel.Email",
-      });
-
-      return { error: err };
-    }
-
-    return { error: null };
-  }
 
   public async handlePasswordSubmit() {
     this.error = null;
