@@ -328,7 +328,7 @@ export default function LandingPage() {
           </HeroTitle>
 
           <Subtitle as="p">
-            O Ombro de Cristo conecta missionários e mentores com ferramentas
+            O Ombro de Cristo conecta sua missão à mentoria, com ferramentas
             para uma jornada espiritual mais profunda e acompanhada.
           </Subtitle>
 
