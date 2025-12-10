@@ -7,10 +7,8 @@ import { IoPencil, IoTrashOutline } from "react-icons/io5";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.l}px;
   width: 100%;
-  max-width: 640px;
-  max-height: 80vh;
+  height: 100%;
 `;
 
 const Title = styled.h2(props => ({
@@ -19,13 +17,32 @@ const Title = styled.h2(props => ({
   color: props.theme.colors.mainForeground,
   textAlign: "center",
   flexShrink: 0,
+  paddingBottom: props.theme.spacing.m,
 }));
 
 const ScrollableContent = styled.div`
   overflow-y: auto;
-  flex-grow: 1;
+  flex: 1;
   padding-right: ${props => props.theme.spacing.s}px;
   margin-right: -${props => props.theme.spacing.m}px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${props => props.theme.colors.border};
+    border-radius: ${props => props.theme.radii.round}px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: ${props => props.theme.colors.mutedForeground};
+  }
+  scrollbar-width: thin;
+  scrollbar-color: ${props => props.theme.colors.border} transparent;
 `;
 
 const DetailsList = styled.div`
@@ -76,7 +93,7 @@ export function DevotionalDetailsModal({
   onDelete,
 }: DevotionalDetailsModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <Container>
         <Title>Detalhes do Devocional</Title>
         <ScrollableContent>

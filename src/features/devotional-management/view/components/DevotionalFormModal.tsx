@@ -10,8 +10,7 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 640px;
-  max-height: 80vh;
+  height: 100%;
 `;
 
 const Title = styled.h2(props => ({
@@ -25,19 +24,38 @@ const Title = styled.h2(props => ({
 
 const ScrollableContent = styled.div(props => ({
   overflowY: "auto",
-  flexGrow: 1,
+  flex: 1,
   display: "flex",
   flexDirection: "column",
   gap: props.theme.spacing.m,
   padding: `4px ${props.theme.spacing.s}px 4px 4px`,
   marginRight: -props.theme.spacing.s,
+
+  "&::-webkit-scrollbar": {
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "transparent",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: props.theme.colors.border,
+    borderRadius: props.theme.radii.round,
+    border: `2px solid transparent`,
+    backgroundClip: "content-box",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: props.theme.colors.mutedForeground,
+  },
+  scrollbarWidth: "thin",
+  scrollbarColor: `${props.theme.colors.border} transparent`,
 }));
 
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: ${props => props.theme.spacing.m}px;
+  flex-shrink: 0;
 `;
 
 interface DevotionalFormModalProps {
@@ -72,7 +90,7 @@ export default function DevotionalFormModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <FormContainer onSubmit={onFormSubmit}>
         <Title>
           {viewModel.isEditing ? "Editar Devocional" : "Novo Devocional"}
@@ -101,22 +119,22 @@ export default function DevotionalFormModal({
               placeholder="Comece a escrever a reflexão aqui..."
             />
           </div>
-          <Actions>
-            <Button
-              type="submit"
-              label="Salvar"
-              loading={viewModel.loading}
-              icon={<IoSaveOutline size={20} />}
-            />
-            <Button
-              type="button"
-              label="Cancelar"
-              variant="secondary"
-              onClick={onClose}
-              disabled={viewModel.loading}
-            />
-          </Actions>
         </ScrollableContent>
+        <Actions>
+          <Button
+            type="submit"
+            label="Salvar"
+            loading={viewModel.loading}
+            icon={<IoSaveOutline size={20} />}
+          />
+          <Button
+            type="button"
+            label="Cancelar"
+            variant="secondary"
+            onClick={onClose}
+            disabled={viewModel.loading}
+          />
+        </Actions>
       </FormContainer>
     </Modal>
   );

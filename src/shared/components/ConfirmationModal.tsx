@@ -11,7 +11,6 @@ const Content = styled.div`
   text-align: center;
   gap: ${props => props.theme.spacing.m}px;
   width: 100%;
-  max-width: 400px;
 `;
 
 const IconWrapper = styled.div<{ variant: "primary" | "destructive" }>`
@@ -81,7 +80,7 @@ export function ConfirmationModal({
   variant = "primary",
 }: ConfirmationModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="400px">
       <Content>
         <IconWrapper variant={variant}>
           <IoAlertCircleOutline />

@@ -9,7 +9,6 @@ const Container = styled.div`
   flex-direction: column;
   gap: ${props => props.theme.spacing.l}px;
   width: 100%;
-  max-width: 400px;
 `;
 
 const Title = styled.h2(props => ({
@@ -64,7 +63,7 @@ export function ChurchDetailsModal({
   onDelete,
 }: ChurchDetailsModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="400px">
       <Container>
         <Title>Detalhes da Igreja</Title>
         <DetailsList>

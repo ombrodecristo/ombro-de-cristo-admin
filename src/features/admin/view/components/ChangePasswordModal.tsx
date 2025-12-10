@@ -11,7 +11,6 @@ const Content = styled.form`
   flex-direction: column;
   gap: ${props => props.theme.spacing.m}px;
   width: 100%;
-  max-width: 400px;
 `;
 
 const Title = styled.h2`
@@ -51,7 +50,7 @@ export default function ChangePasswordModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="400px">
       <Content onSubmit={onFormSubmit}>
         <Title>Alterar Senha</Title>
 

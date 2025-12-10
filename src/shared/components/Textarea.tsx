@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { TextareaHTMLAttributes } from "react";
 
 const StyledTextarea = styled.textarea`
-  min-height: 240px;
+  min-height: 400px;
   width: 100%;
   border-radius: ${props => props.theme.radii.m}px;
   border: 1.5px solid ${props => props.theme.colors.inputBorder};

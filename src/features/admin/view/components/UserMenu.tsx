@@ -44,7 +44,6 @@ const Content = styled.div`
   flex-direction: column;
   gap: ${props => props.theme.spacing.l}px;
   width: 100%;
-  max-width: 400px;
 `;
 
 const ProfileSection = styled.div`
@@ -166,6 +165,7 @@ export default function UserMenu() {
       <Modal
         isOpen={viewModel.isOpen}
         onClose={() => viewModel.setIsOpen(false)}
+        maxWidth="400px"
       >
         <Content>
           <ProfileSection>
@@ -194,7 +194,7 @@ export default function UserMenu() {
                   loading={viewModel.isSavingName}
                   disabled={viewModel.isSavingName}
                   style={{ width: "56px", height: "56px", flexShrink: 0 }}
-                  icon={<IoSaveOutline size={20} />}
+                  icon={<IoSaveOutline size={24} />}
                 />
               </NameForm>
             ) : (

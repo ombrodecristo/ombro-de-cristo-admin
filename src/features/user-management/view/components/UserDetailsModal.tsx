@@ -9,7 +9,6 @@ const Container = styled.div`
   flex-direction: column;
   gap: ${props => props.theme.spacing.l}px;
   width: 100%;
-  max-width: 512px;
 `;
 
 const Title = styled.h2(props => ({
@@ -62,7 +61,7 @@ export function UserDetailsModal({
   onEdit,
 }: UserDetailsModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="512px">
       <Container>
         <Title>Detalhes do Perfil</Title>
         <DetailsList>

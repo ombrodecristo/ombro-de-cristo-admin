@@ -42,12 +42,16 @@ const Overlay = styled.div<{ isOpen: boolean }>`
   padding: ${props => props.theme.spacing.m}px;
 `;
 
-const ModalContainer = styled.div<{ isOpen: boolean }>`
+const ModalContainer = styled.div<{
+  isOpen: boolean;
+  maxWidth?: string;
+}>`
   background-color: ${props => props.theme.colors.cardBackground};
   border-radius: ${props => props.theme.radii.xl}px;
   padding: ${props => props.theme.spacing.l}px;
-  max-width: 90vw;
-  max-height: 90vh;
+  width: 100%;
+  max-width: ${props => props.maxWidth || "512px"};
+  max-height: calc(100vh - ${props => props.theme.spacing.l * 2}px);
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -63,9 +67,10 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  maxWidth?: string;
 }
 
-export function Modal({ isOpen, onClose, children }: ModalProps) {
+export function Modal({ isOpen, onClose, children, maxWidth }: ModalProps) {
   if (!isOpen) return null;
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -74,7 +79,11 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return (
     <Overlay isOpen={isOpen} onClick={onClose}>
-      <ModalContainer isOpen={isOpen} onClick={handleContainerClick}>
+      <ModalContainer
+        isOpen={isOpen}
+        onClick={handleContainerClick}
+        maxWidth={maxWidth}
+      >
         {children}
       </ModalContainer>
     </Overlay>
