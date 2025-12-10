@@ -11,7 +11,8 @@ export class ChangePasswordViewModel extends BaseViewModel {
   public password = "";
   public confirmPassword = "";
   public loading = false;
-  public error: string | null = null;
+  public passwordError: string | null = null;
+  public confirmPasswordError: string | null = null;
   public success = false;
   private onClose: () => void;
 
@@ -22,25 +23,27 @@ export class ChangePasswordViewModel extends BaseViewModel {
 
   public setPassword = (value: string) => {
     this.password = value;
-    this.error = null;
+    this.passwordError = null;
+    this.confirmPasswordError = null;
     this.notify();
   };
 
   public setConfirmPassword = (value: string) => {
     this.confirmPassword = value;
-    this.error = null;
+    this.confirmPasswordError = null;
     this.notify();
   };
 
   public handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    this.error = null;
+    this.passwordError = null;
+    this.confirmPasswordError = null;
     this.success = false;
     this.notify();
 
     const lengthValidation = validatePasswordLength(this.password);
     if (!lengthValidation.isValid) {
-      this.error = lengthValidation.message;
+      this.passwordError = lengthValidation.message;
       this.notify();
 
       return;
@@ -52,7 +55,7 @@ export class ChangePasswordViewModel extends BaseViewModel {
     );
 
     if (!matchValidation.isValid) {
-      this.error = matchValidation.message;
+      this.confirmPasswordError = matchValidation.message;
       this.notify();
 
       return;
@@ -68,7 +71,7 @@ export class ChangePasswordViewModel extends BaseViewModel {
     this.loading = false;
 
     if (authError) {
-      this.error = authError.message;
+      this.passwordError = authError.message;
       await logService.logError(authError, {
         component: "ChangePasswordViewModel",
       });

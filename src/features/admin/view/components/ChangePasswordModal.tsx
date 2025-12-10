@@ -65,7 +65,7 @@ export default function ChangePasswordModal({
             disabled={viewModel.loading}
             icon={<IoLockClosedOutline size={20} />}
             isPassword
-            error={viewModel.error || ""}
+            error={viewModel.passwordError || ""}
           />
         </div>
 
@@ -80,7 +80,7 @@ export default function ChangePasswordModal({
             disabled={viewModel.loading}
             icon={<IoLockClosedOutline size={20} />}
             isPassword
-            error={viewModel.error || ""}
+            error={viewModel.confirmPasswordError || ""}
           />
         </div>
 

@@ -16,7 +16,8 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
   public isTokenValid = false;
   public isTokenInvalid = false;
   public isCheckingToken = true;
-  public error: string | null = null;
+  public passwordError: string | null = null;
+  public confirmPasswordError: string | null = null;
 
   constructor() {
     super();
@@ -55,21 +56,23 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
 
   public setPassword = (value: string) => {
     this.password = value;
-    this.error = null;
+    this.passwordError = null;
+    this.confirmPasswordError = null;
     this.notify();
   };
 
   public setConfirmPassword = (value: string) => {
     this.confirmPassword = value;
-    this.error = null;
+    this.confirmPasswordError = null;
     this.notify();
   };
 
   public async handlePasswordSubmit() {
-    this.error = null;
+    this.passwordError = null;
+    this.confirmPasswordError = null;
     const lengthValidation = validatePasswordLength(this.password);
     if (!lengthValidation.isValid) {
-      this.error = lengthValidation.message;
+      this.passwordError = lengthValidation.message;
       this.notify();
 
       return { error: lengthValidation.message };
@@ -81,7 +84,7 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
     );
 
     if (!matchValidation.isValid) {
-      this.error = matchValidation.message;
+      this.confirmPasswordError = matchValidation.message;
       this.notify();
 
       return { error: matchValidation.message };
@@ -96,14 +99,14 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
 
     this.loading = false;
     if (updateError) {
-      this.error =
+      this.passwordError =
         "Não foi possível alterar a senha. O link pode ter expirado.";
       await logService.logError(updateError, {
         component: "PasswordRecoveryViewModel.Password",
       });
       this.notify();
 
-      return { error: this.error };
+      return { error: this.passwordError };
     } else {
       this.success = true;
       this.showSuccessMessage = true;

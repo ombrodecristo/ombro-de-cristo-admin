@@ -104,7 +104,7 @@ export default function DevotionalFormModal({
               onChange={e => viewModel.setTitle(e.target.value)}
               disabled={viewModel.loading}
               required
-              error={viewModel.error || ""}
+              error={viewModel.titleError || ""}
               placeholder="Ex: Fortaleça-se no Senhor"
             />
           </div>
@@ -116,6 +116,7 @@ export default function DevotionalFormModal({
               onChange={e => viewModel.setContent(e.target.value)}
               disabled={viewModel.loading}
               required
+              error={viewModel.contentError || ""}
               placeholder="Comece a escrever a reflexão aqui..."
             />
           </div>

@@ -21,7 +21,8 @@ export class DevotionalFormViewModel extends BaseViewModel {
   public title: string;
   public content: string;
   public loading = false;
-  public error: string | null = null;
+  public titleError: string | null = null;
+  public contentError: string | null = null;
   public isEditing: boolean;
   private authorId: string;
   private devotionalToEdit: DevotionalWithAuthor | null;
@@ -41,24 +42,25 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
   public setTitle = (value: string) => {
     this.title = value;
-    this.error = null;
+    this.titleError = null;
     this.notify();
   };
 
   public setContent = (value: string) => {
     this.content = value;
-    this.error = null;
+    this.contentError = null;
     this.notify();
   };
 
   public handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    this.error = null;
+    this.titleError = null;
+    this.contentError = null;
     this.notify();
 
     const titleValidation = validateDevotionalTitle(this.title);
     if (!titleValidation.isValid) {
-      this.error = titleValidation.message;
+      this.titleError = titleValidation.message;
       this.notify();
 
       return;
@@ -66,7 +68,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
     const contentValidation = validateDevotionalContent(this.content);
     if (!contentValidation.isValid) {
-      this.error = contentValidation.message;
+      this.contentError = contentValidation.message;
       this.notify();
 
       return;
@@ -104,7 +106,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
         ? "Não foi possível salvar as alterações."
         : "Não foi possível criar o novo devocional.";
 
-      this.error = friendlyMessage;
+      this.titleError = friendlyMessage;
       await logService.logError(apiError, {
         component: "DevotionalFormViewModel",
         context: { devotionalId: this.devotionalToEdit?.id, title: this.title },
