@@ -10,7 +10,7 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 512px;
+  max-width: 640px;
   max-height: 80vh;
 `;
 
