@@ -16,7 +16,7 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 400px;
+  max-width: 512px;
   max-height: 80vh;
 `;
 

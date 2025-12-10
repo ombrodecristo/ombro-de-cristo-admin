@@ -44,7 +44,7 @@ const Content = styled.div`
   flex-direction: column;
   gap: ${props => props.theme.spacing.l}px;
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
 `;
 
 const ProfileSection = styled.div`

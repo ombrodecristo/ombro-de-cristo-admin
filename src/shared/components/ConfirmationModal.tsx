@@ -11,7 +11,7 @@ const Content = styled.div`
   text-align: center;
   gap: ${props => props.theme.spacing.m}px;
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
 `;
 
 const IconWrapper = styled.div<{ variant: "primary" | "destructive" }>`

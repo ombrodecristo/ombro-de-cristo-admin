@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: ${props => props.theme.spacing.l}px;
   width: 100%;
-  max-width: 400px;
+  max-width: 512px;
 `;
 
 const Title = styled.h2(props => ({

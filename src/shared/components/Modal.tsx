@@ -39,6 +39,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
     opacity 0.3s ease,
     visibility 0.3s ease;
   animation: ${fadeIn} 0.3s ease forwards;
+  padding: ${props => props.theme.spacing.m}px;
 `;
 
 const ModalContainer = styled.div<{ isOpen: boolean }>`

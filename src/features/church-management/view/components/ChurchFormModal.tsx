@@ -11,7 +11,7 @@ const Content = styled.form`
   flex-direction: column;
   gap: ${props => props.theme.spacing.m}px;
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
 `;
 
 const Title = styled.h2(props => ({
