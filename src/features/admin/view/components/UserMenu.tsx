@@ -115,6 +115,47 @@ const NameForm = styled.form`
   align-items: flex-end;
 `;
 
+const SaveButton = styled.button`
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: ${props => props.theme.radii.xl}px;
+  background-color: ${props => props.theme.colors.buttonPrimaryBackground};
+  color: ${props => props.theme.colors.buttonPrimaryForeground};
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  &:hover {
+    opacity: 0.9;
+  }
+  &:disabled {
+    background-color: ${props => props.theme.colors.buttonDisabledBackground};
+    color: ${props => props.theme.colors.buttonDisabledForeground};
+    cursor: not-allowed;
+    opacity: 1;
+  }
+`;
+
+const Spinner = styled.div`
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  border: 3px solid #fff3;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+`;
+
 export default function UserMenu() {
   const { user, signOut, refreshUserContext } = useAuth();
 
@@ -188,14 +229,13 @@ export default function UserMenu() {
                     placeholder="Seu nome completo"
                   />
                 </div>
-                <Button
-                  type="submit"
-                  label=""
-                  loading={viewModel.isSavingName}
-                  disabled={viewModel.isSavingName}
-                  style={{ width: "56px", height: "56px", flexShrink: 0 }}
-                  icon={<IoSaveOutline style={{ fontSize: "32px" }} />}
-                />
+                <SaveButton type="submit" disabled={viewModel.isSavingName}>
+                  {viewModel.isSavingName ? (
+                    <Spinner />
+                  ) : (
+                    <IoSaveOutline size={26} />
+                  )}
+                </SaveButton>
               </NameForm>
             ) : (
               <NameWrapper>
