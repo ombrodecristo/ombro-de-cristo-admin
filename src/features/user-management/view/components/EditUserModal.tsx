@@ -17,6 +17,7 @@ const FormContainer = styled.form`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 `;
 
 const Title = styled.h2(props => ({
@@ -29,31 +30,30 @@ const Title = styled.h2(props => ({
 }));
 
 const ScrollableContent = styled.div(props => ({
-  overflowY: "auto",
   flex: 1,
+  overflowY: "auto",
+  minHeight: 0,
   display: "flex",
   flexDirection: "column",
   gap: props.theme.spacing.m,
-  padding: `4px ${props.theme.spacing.s}px 4px 4px`,
-  marginRight: -props.theme.spacing.s,
+  paddingRight: props.theme.spacing.sm,
 
   "&::-webkit-scrollbar": {
-    width: "8px",
+    width: "10px",
   },
   "&::-webkit-scrollbar-track": {
-    background: "transparent",
+    background: props.theme.colors.mutedBackground,
+    borderRadius: props.theme.radii.round,
   },
   "&::-webkit-scrollbar-thumb": {
-    backgroundColor: props.theme.colors.border,
+    backgroundColor: props.theme.colors.mutedForeground,
     borderRadius: props.theme.radii.round,
-    border: `2px solid transparent`,
-    backgroundClip: "content-box",
   },
   "&::-webkit-scrollbar-thumb:hover": {
-    backgroundColor: props.theme.colors.mutedForeground,
+    backgroundColor: props.theme.colors.primary,
   },
-  scrollbarWidth: "thin",
-  scrollbarColor: `${props.theme.colors.border} transparent`,
+  scrollbarWidth: "auto",
+  scrollbarColor: `${props.theme.colors.mutedForeground} ${props.theme.colors.mutedBackground}`,
 }));
 
 const FormGroup = styled.div`
@@ -66,7 +66,7 @@ const Actions = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: ${props => props.theme.spacing.m}px;
+  padding-top: ${props => props.theme.spacing.m}px;
   flex-shrink: 0;
 `;
 

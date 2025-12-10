@@ -194,7 +194,7 @@ export default function UserMenu() {
                   loading={viewModel.isSavingName}
                   disabled={viewModel.isSavingName}
                   style={{ width: "56px", height: "56px", flexShrink: 0 }}
-                  icon={<IoSaveOutline size={24} />}
+                  icon={<IoSaveOutline style={{ fontSize: "32px" }} />}
                 />
               </NameForm>
             ) : (

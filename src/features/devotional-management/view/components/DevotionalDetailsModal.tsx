@@ -9,6 +9,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 `;
 
 const Title = styled.h2(props => ({
@@ -16,33 +17,33 @@ const Title = styled.h2(props => ({
   fontSize: "22px",
   color: props.theme.colors.mainForeground,
   textAlign: "center",
-  flexShrink: 0,
   paddingBottom: props.theme.spacing.m,
+  flexShrink: 0,
 }));
 
 const ScrollableContent = styled.div`
-  overflow-y: auto;
   flex: 1;
-  padding-right: ${props => props.theme.spacing.s}px;
-  margin-right: -${props => props.theme.spacing.m}px;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: ${props => props.theme.spacing.sm}px;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
   &::-webkit-scrollbar-track {
-    background: transparent;
+    background: ${props => props.theme.colors.mutedBackground};
+    border-radius: ${props => props.theme.radii.round}px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: ${props => props.theme.colors.border};
+    background-color: ${props => props.theme.colors.mutedForeground};
     border-radius: ${props => props.theme.radii.round}px;
-    border: 2px solid transparent;
-    background-clip: content-box;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background-color: ${props => props.theme.colors.mutedForeground};
+    background-color: ${props => props.theme.colors.primary};
   }
-  scrollbar-width: thin;
-  scrollbar-color: ${props => props.theme.colors.border} transparent;
+  scrollbar-width: auto;
+  scrollbar-color: ${props => props.theme.colors.mutedForeground}
+    ${props => props.theme.colors.mutedBackground};
 `;
 
 const DetailsList = styled.div`
@@ -73,7 +74,7 @@ const Actions = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.s}px;
-  margin-top: ${props => props.theme.spacing.l}px;
+  padding-top: ${props => props.theme.spacing.l}px;
   flex-shrink: 0;
 `;
 
