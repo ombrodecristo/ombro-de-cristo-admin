@@ -139,9 +139,7 @@ export default function UserTable({
                 <TableCell style={{ fontWeight: "500" }}>
                   {profile.full_name}
                 </TableCell>
-                <DesktopOnlyCell>
-                  {formatRole(profile.role, profile.gender)}
-                </DesktopOnlyCell>
+                <DesktopOnlyCell>{formatRole(profile.role)}</DesktopOnlyCell>
                 <DesktopOnlyCell>
                   {formatGender(profile.gender)}
                 </DesktopOnlyCell>

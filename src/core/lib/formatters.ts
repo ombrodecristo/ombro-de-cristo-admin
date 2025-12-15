@@ -11,11 +11,17 @@ export const genderMap: Record<UserGender, string> = {
   FEMALE: "Feminino",
 };
 
-export const formatRole = (role: UserRole, _gender?: UserGender) => {
+export const formatRole = (role: UserRole) => {
   return roleMap[role] || role;
 };
 
-export const formatGender = (gender: UserGender) => genderMap[gender] || gender;
+export const formatGender = (gender: UserGender | null | undefined) => {
+  if (!gender) {
+    return "Não definido";
+  }
+
+  return genderMap[gender] || gender;
+};
 
 export const formatDate = (dateString: string) => {
   if (!dateString) return "N/A";

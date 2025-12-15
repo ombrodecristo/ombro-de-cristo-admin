@@ -101,9 +101,7 @@ export function UserDetailsModal({
             </DetailItem>
             <DetailItem>
               <DetailLabel>Permissão</DetailLabel>
-              <DetailValue>
-                {formatRole(profile.role, profile.gender)}
-              </DetailValue>
+              <DetailValue>{formatRole(profile.role)}</DetailValue>
             </DetailItem>
             <DetailItem>
               <DetailLabel>Gênero</DetailLabel>

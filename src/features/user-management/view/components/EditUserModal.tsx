@@ -134,7 +134,7 @@ export default function EditUserModal({
               disabled={viewModel.loading}
               options={allRoles.map(role => ({
                 value: role,
-                label: formatRole(role, viewModel.newGender || profile.gender),
+                label: formatRole(role),
               }))}
             />
           </FormGroup>
