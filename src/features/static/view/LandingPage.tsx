@@ -392,7 +392,7 @@ export default function LandingPage() {
               </div>
             </StoreButton>
             <StoreButton
-              href="https://apps.apple.com"
+              href="https://apps.apple.com/us/app/ombro-de-cristo/id6756277223"
               target="_blank"
               rel="noopener noreferrer"
             >
