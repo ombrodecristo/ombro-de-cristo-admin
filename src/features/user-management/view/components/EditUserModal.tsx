@@ -174,7 +174,7 @@ export default function EditUserModal({
                 login do perfil no aplicativo.
               </p>
               <p style={{ marginTop: "4px" }}>
-                O nome e a mentoria são gerenciados pelo próprio perfil no
+                O nome e a Mentoria são gerenciados pelo próprio perfil no
                 aplicativo.
               </p>
             </div>

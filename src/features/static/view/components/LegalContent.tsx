@@ -65,10 +65,10 @@ export function LegalContent() {
     <Container>
       <H1>Termos de Uso</H1>
       <P>
-        Bem-vindo(a) ao Ombro de Cristo. Estes Termos de Uso ("Termos") regem
-        seu acesso e uso de nosso aplicativo móvel e serviços web
-        ("Plataforma"). Ao criar uma conta ou usar nossa Plataforma, você
-        concorda com o vínculo a estes Termos.
+        Bem-vindo(a) ao Ombro de Cristo. Estes Termos de Uso
+        (&quot;Termos&quot;) regem seu acesso e uso de nosso aplicativo móvel e
+        serviços web (&quot;Plataforma&quot;). Ao criar uma conta ou usar nossa
+        Plataforma, você concorda com o vínculo a estes Termos.
       </P>
 
       <H2>1. Aceitação dos Termos</H2>
@@ -84,7 +84,7 @@ export function LegalContent() {
         A Plataforma Ombro de Cristo é destinada a fortalecer a jornada
         espiritual por meio de devocionais, um diário pessoal e um sistema de
         mentoria. Os usuários(as) da plataforma são classificados como
-        "Missionário(a)" ou "Mentor(a)".
+        &quot;Membro da Missão&quot; ou &quot;Mentoria&quot;.
       </P>
 
       <H2>3. Elegibilidade e Contas</H2>
@@ -95,8 +95,8 @@ export function LegalContent() {
           conta.
         </LI>
         <LI>
-          Todas as informações fornecidas durante o cadastro devem ser
-          verdadeiras, precisas e completas.
+          Todas as informações fornecidas durante o cadastro e atualização de
+          perfil devem ser verdadeiras, precisas e completas.
         </LI>
         <LI>
           Você é a única pessoa responsável por todas as atividades que ocorrem
@@ -122,16 +122,15 @@ export function LegalContent() {
       <H2>5. Conteúdo do Diário e Compartilhamento</H2>
       <UL>
         <LI>
-          Usuários(as) com o papel de Missionário(a) podem manter um diário
+          Usuários(as) com o papel de Membro da Missão podem manter um diário
           pessoal.
         </LI>
         <LI>As entradas do diário são privadas por padrão.</LI>
         <LI>
-          Usuários(as) com o papel de Missionário(a) têm a opção de compartilhar
-          entradas específicas com seu/sua Mentor(a) designado(a). Ao
-          compartilhar, você concede ao/à seu/sua Mentor(a) permissão para
-          visualizar o conteúdo daquela entrada específica com o propósito de
-          fornecer apoio espiritual e orientação.
+          Membros da Missão têm a opção de compartilhar entradas específicas com
+          sua Mentoria designada. Ao compartilhar, você concede à Mentoria
+          permissão para visualizar o conteúdo daquela entrada específica com o
+          propósito de fornecer apoio espiritual e orientação.
         </LI>
         <LI>
           Nem o Ombro de Cristo nem sua Equipe de Administração têm acesso ao
@@ -155,11 +154,11 @@ export function LegalContent() {
       <H2>7. Isenção de Responsabilidade de Mentoria</H2>
       <UL>
         <LI>
-          O relacionamento entre Mentor(a) e Missionário(a) é baseado em
+          O relacionamento entre Mentoria e Membro da Missão é baseado em
           voluntariado e apoio espiritual.
         </LI>
         <LI>
-          Usuários(as) com o papel de Mentor(a) não são conselheiros(as)
+          Usuários(as) com o papel de Mentoria não são conselheiros(as)
           profissionais, terapeutas ou profissionais de saúde mental
           licenciados(as), a menos que se especifique o contrário. A orientação
           fornecida é de natureza espiritual e não substitui o aconselhamento
@@ -167,8 +166,8 @@ export function LegalContent() {
         </LI>
         <LI>
           O Ombro de Cristo não se responsabiliza pela conduta ou conselhos
-          dados por usuários(as) no papel de Mentor(a). Encorajamos que cada
-          usuário(a) exerça seu próprio discernimento.
+          dados por usuários(as). Encorajamos que cada usuário(a) exerça seu
+          próprio discernimento.
         </LI>
       </UL>
 
@@ -187,10 +186,10 @@ export function LegalContent() {
 
       <H2>9. Limitação de Responsabilidade</H2>
       <P>
-        A Plataforma é fornecida "como está". Não garantimos que a Plataforma
-        será ininterrupta ou livre de erros. Em nenhuma circunstância seremos
-        responsáveis por quaisquer danos diretos, indiretos, incidentais ou
-        consequenciais resultantes do uso ou da incapacidade de usar a
+        A Plataforma é fornecida &quot;como está&quot;. Não garantimos que a
+        Plataforma será ininterrupta ou livre de erros. Em nenhuma circunstância
+        seremos responsáveis por quaisquer danos diretos, indiretos, incidentais
+        ou consequenciais resultantes do uso ou da incapacidade de usar a
         Plataforma.
       </P>
 
@@ -213,8 +212,9 @@ export function LegalContent() {
       <H1>Política de Privacidade</H1>
       <P>
         Sua privacidade é de extrema importância para nós. Esta Política de
-        Privacidade descreve como a Plataforma Ombro de Cristo ("Plataforma",
-        "nós", "nosso") coleta, usa e protege suas informações pessoais.
+        Privacidade descreve como a Plataforma Ombro de Cristo
+        (&quot;Plataforma&quot;, &quot;nós&quot;, &quot;nosso&quot;) coleta, usa
+        e protege suas informações pessoais.
       </P>
 
       <H2>1. Informações que Coletamos</H2>
@@ -224,15 +224,13 @@ export function LegalContent() {
       <UL>
         <LI>
           <Bold>Cadastro de Conta:</Bold> Coletamos seu nome completo, endereço
-          de e-mail, gênero e igreja. Estas informações são usadas para criar e
-          gerenciar sua conta, personalizar sua experiência e conectar
-          Missionários(as) a Mentores(as) do mesmo gênero.
+          de e-mail, gênero e igreja.
         </LI>
         <LI>
           <Bold>Conteúdo do Diário:</Bold> As entradas do seu diário são
           armazenadas em nossos servidores. Este conteúdo é criptografado e
           privado. Você tem controle total sobre ele e pode optar por
-          compartilhá-lo com seu/sua Mentor(a).
+          compartilhá-lo com sua Mentoria.
         </LI>
       </UL>
 
@@ -265,9 +263,8 @@ export function LegalContent() {
           alterações em nossas políticas.
         </LI>
         <LI>
-          <Bold>Personalização:</Bold> Usamos informações como seu nome e gênero
-          para personalizar sua experiência (por exemplo, saudações e designação
-          de mentoria).
+          <Bold>Personalização:</Bold> Usamos informações como seu nome para
+          personalizar sua experiência.
         </LI>
         <LI>
           <Bold>Segurança e Proteção:</Bold> Usamos as informações para proteger
@@ -283,10 +280,10 @@ export function LegalContent() {
       </P>
       <UL>
         <LI>
-          <Bold>Mentoria:</Bold> Se você é um(a) Missionário(a) e opta por
+          <Bold>Mentoria:</Bold> Se você é um Membro da Missão e opta por
           compartilhar uma entrada de diário, essa entrada específica será
-          visível para seu/sua Mentor(a) designado(a). Nenhuma outra informação
-          ou entrada é compartilhada sem sua ação explícita.
+          visível para sua Mentoria designada. Nenhuma outra informação ou
+          entrada é compartilhada sem sua ação explícita.
         </LI>
         <LI>
           <Bold>Obrigações Legais:</Bold> Podemos divulgar suas informações se
@@ -314,8 +311,8 @@ export function LegalContent() {
         </LI>
         <LI>
           <Bold>Acesso Restrito:</Bold> O acesso direto ao banco de dados é
-          estritamente limitado a pessoal autorizado. Nossa equipe de
-          administração não pode visualizar o conteúdo das entradas do seu
+          estritamente limitado a pessoal autorizado. Nossa Equipe de
+          Administração não pode visualizar o conteúdo das entradas do seu
           diário.
         </LI>
         <LI>
@@ -338,8 +335,8 @@ export function LegalContent() {
         </LI>
         <LI>
           <Bold>Compartilhamento do Diário:</Bold> Você tem controle total sobre
-          quais entradas do diário, se houver, são compartilhadas com seu/sua
-          Mentor(a).
+          quais entradas do diário, se houver, são compartilhadas com sua
+          Mentoria.
         </LI>
       </UL>
 

@@ -1,9 +1,9 @@
 import type { UserRole, UserGender } from "@/core/types/database";
 
-export const roleMap: Record<UserRole, { MALE: string; FEMALE: string }> = {
-  ADMIN: { MALE: "Administrador", FEMALE: "Administradora" },
-  MENTOR: { MALE: "Mentor", FEMALE: "Mentora" },
-  MISSIONARY: { MALE: "Missionário", FEMALE: "Missionária" },
+export const roleMap: Record<UserRole, string> = {
+  ADMIN: "Administração",
+  MENTOR: "Mentoria",
+  MISSIONARY: "Membro da Missão",
 };
 
 export const genderMap: Record<UserGender, string> = {
@@ -11,10 +11,8 @@ export const genderMap: Record<UserGender, string> = {
   FEMALE: "Feminino",
 };
 
-export const formatRole = (role: UserRole, gender: UserGender) => {
-  const roleInfo = roleMap[role];
-
-  return roleInfo?.[gender] || role;
+export const formatRole = (role: UserRole, _gender?: UserGender) => {
+  return roleMap[role] || role;
 };
 
 export const formatGender = (gender: UserGender) => genderMap[gender] || gender;

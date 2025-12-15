@@ -92,16 +92,11 @@ export class EditUserViewModel extends BaseViewModel {
       role: UserRole;
       gender: UserGender;
       church_id: string | null;
-      mentor_id?: string | null;
     } = {
       role: this.newRole,
       gender: this.newGender,
       church_id: this.newChurchId,
     };
-
-    if (this.newRole === "ADMIN" || this.newRole === "MENTOR") {
-      detailsToUpdate.mentor_id = null;
-    }
 
     const { data, error: updateError } =
       await profileRepository.updateAdminProfileDetails(
