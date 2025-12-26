@@ -10,6 +10,7 @@ import {
   Button,
   GlobalLoader,
   Input,
+  LanguageSwitcher,
   Logo,
 } from "@/shared/components";
 import {
@@ -18,6 +19,7 @@ import {
   IoLogInOutline,
 } from "react-icons/io5";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -49,7 +51,14 @@ const InputsContainer = styled.div`
   gap: ${props => props.theme.spacing.s}px;
 `;
 
+const Footer = styled.div`
+  margin-top: ${props => props.theme.spacing.m}px;
+  display: flex;
+  justify-content: center;
+`;
+
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [viewModel] = useState(() => new LoginViewModel());
   useViewModel(viewModel);
 
@@ -81,7 +90,7 @@ export default function LoginPage() {
             <Input
               id="email"
               type="email"
-              placeholder="E-mail"
+              placeholder={t("common_email")}
               value={viewModel.email}
               onChange={e => viewModel.setEmail(e.target.value)}
               required
@@ -92,7 +101,7 @@ export default function LoginPage() {
             />
             <Input
               id="password"
-              placeholder="Senha"
+              placeholder={t("common_password")}
               value={viewModel.password}
               onChange={e => viewModel.setPassword(e.target.value)}
               required
@@ -108,10 +117,13 @@ export default function LoginPage() {
             type="submit"
             disabled={viewModel.loading}
             loading={viewModel.loading}
-            label="Entrar"
+            label={t("auth_login_title")}
             icon={<IoLogInOutline size={20} />}
           />
         </Form>
+        <Footer>
+          <LanguageSwitcher />
+        </Footer>
       </StyledCard>
     </PageContainer>
   );

@@ -9,7 +9,7 @@ const Nav = styled.nav`
   padding: 0 ${props => props.theme.spacing.m}px;
 `;
 
-const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
+const StyledNavLink = styled(NavLink)`
   display: flex;
   align-items: center;
   height: 48px;
@@ -49,7 +49,7 @@ const StyledNavLink = styled(NavLink)<{ isSidebarOpen: boolean }>`
   }
 `;
 
-const LinkText = styled.span<{ isSidebarOpen: boolean }>`
+const LinkText = styled.span`
   white-space: nowrap;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
@@ -102,12 +102,11 @@ export default function SidebarNav({
         <StyledNavLink
           key={item.to}
           to={item.to}
-          isSidebarOpen={isSidebarOpen}
           title={!isSidebarOpen ? item.label : ""}
           onClick={onNavigate}
         >
           {item.icon}
-          <LinkText isSidebarOpen={isSidebarOpen}>{item.label}</LinkText>
+          <LinkText>{item.label}</LinkText>
         </StyledNavLink>
       ))}
     </Nav>

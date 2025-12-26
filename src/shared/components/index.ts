@@ -5,6 +5,7 @@ export * from "./ConfirmationModal";
 export * from "./GlobalLoader";
 export * from "./Input";
 export * from "./Label";
+export * from "./LanguageSwitcher";
 export * from "./Logo";
 export * from "./Modal";
 export * from "./PageHeader";

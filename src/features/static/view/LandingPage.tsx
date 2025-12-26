@@ -1,30 +1,14 @@
 import { useState, useEffect, useRef, type TouchEvent } from "react";
 import styled from "@emotion/styled";
-import { Box, Button, Logo, Text } from "@/shared/components";
-import { IoLogoGooglePlaystore, IoLogoApple } from "react-icons/io5";
+import { Box, Button, Logo, Text, LanguageSwitcher } from "@/shared/components";
 import {
+  IoLogoGooglePlaystore,
+  IoLogoApple,
   IoBookOutline,
   IoHeartOutline,
   IoShieldOutline,
 } from "react-icons/io5";
-
-const features = [
-  {
-    icon: <IoBookOutline size={32} />,
-    title: "Devocionais",
-    description: "Reflexões que nutrem a alma e direcionam seu propósito.",
-  },
-  {
-    icon: <IoHeartOutline size={32} />,
-    title: "Diário Pessoal",
-    description: "Um espaço seguro para registrar suas orações e pensamentos.",
-  },
-  {
-    icon: <IoShieldOutline size={32} />,
-    title: "Mentoria Segura",
-    description: "Receba apoio, oração e direcionamento com total privacidade.",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled(Box)`
   display: flex;
@@ -54,6 +38,12 @@ const Nav = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const NavRight = styled(Box)`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.l}px;
 `;
 
 const Main = styled(Box)`
@@ -249,9 +239,28 @@ const FooterLink = styled.a`
 `;
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const features = [
+    {
+      icon: <IoBookOutline size={32} />,
+      title: t("landing_feature1_title"),
+      description: t("landing_feature1_desc"),
+    },
+    {
+      icon: <IoHeartOutline size={32} />,
+      title: t("landing_feature2_title"),
+      description: t("landing_feature2_desc"),
+    },
+    {
+      icon: <IoShieldOutline size={32} />,
+      title: t("landing_feature3_title"),
+      description: t("landing_feature3_desc"),
+    },
+  ];
 
   const minSwipeDistance = 50;
 
@@ -306,31 +315,33 @@ export default function LandingPage() {
       <Header as="header">
         <Nav>
           <Logo direction="row" size={40} showSlogan={false} variant="dark" />
-          <a
-            href="/login"
-            rel="noopener noreferrer"
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              label="Acesso Administrativo"
-              variant="secondary"
-              size="small"
-              style={{ width: "auto" }}
-            />
-          </a>
+          <NavRight>
+            <LanguageSwitcher />
+            <a
+              href="/login"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                label={t("landing_admin_access_button")}
+                variant="secondary"
+                size="small"
+                style={{ width: "auto" }}
+              />
+            </a>
+          </NavRight>
         </Nav>
       </Header>
 
       <Main as="main">
         <ContentWrapper>
           <HeroTitle as="h1" variant="header">
-            Sua missão, <span>fortalecida</span> pela mentoria.
+            {t("landing_hero_title_part1")}{" "}
+            <span>{t("landing_hero_title_part2")}</span>{" "}
+            {t("landing_hero_title_part3")}
           </HeroTitle>
 
-          <Subtitle as="p">
-            O Ombro de Cristo conecta sua missão à mentoria, com ferramentas
-            para uma jornada espiritual mais profunda e acompanhada.
-          </Subtitle>
+          <Subtitle as="p">{t("landing_hero_subtitle")}</Subtitle>
 
           <FeaturesSection>
             <FeaturesContainer>
@@ -378,7 +389,7 @@ export default function LandingPage() {
               <IoLogoGooglePlaystore size={24} />
               <div>
                 <div style={{ fontSize: "12px", lineHeight: 1.2 }}>
-                  Disponível no
+                  {t("landing_store_google_label")}
                 </div>
                 <div
                   style={{
@@ -399,7 +410,7 @@ export default function LandingPage() {
               <IoLogoApple size={30} />
               <div>
                 <div style={{ fontSize: "12px", lineHeight: 1.2 }}>
-                  Baixar na
+                  {t("landing_store_apple_label")}
                 </div>
                 <div
                   style={{
@@ -417,15 +428,14 @@ export default function LandingPage() {
       </Main>
 
       <Footer>
-        © {new Date().getFullYear()} Ombro de Cristo. Todos os direitos
-        reservados.
+        {t("landing_footer_text", { year: new Date().getFullYear() })}
         {" | "}
         <FooterLink
           href="/terms-and-policy"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Termos e Privacidade
+          {t("landing_footer_link")}
         </FooterLink>
       </Footer>
     </PageContainer>

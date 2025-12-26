@@ -165,8 +165,9 @@ export type Database = {
           church_id: string | null;
           created_at: string;
           full_name: string;
-          gender: Database["public"]["Enums"]["user_genders"];
+          gender: Database["public"]["Enums"]["user_genders"] | null;
           id: string;
+          language_preference: string | null;
           mentor_id: string | null;
           role: Database["public"]["Enums"]["user_roles"];
           updated_at: string;
@@ -175,8 +176,9 @@ export type Database = {
           church_id?: string | null;
           created_at?: string;
           full_name: string;
-          gender: Database["public"]["Enums"]["user_genders"];
+          gender?: Database["public"]["Enums"]["user_genders"] | null;
           id: string;
+          language_preference?: string | null;
           mentor_id?: string | null;
           role?: Database["public"]["Enums"]["user_roles"];
           updated_at?: string;
@@ -185,8 +187,9 @@ export type Database = {
           church_id?: string | null;
           created_at?: string;
           full_name?: string;
-          gender?: Database["public"]["Enums"]["user_genders"];
+          gender?: Database["public"]["Enums"]["user_genders"] | null;
           id?: string;
+          language_preference?: string | null;
           mentor_id?: string | null;
           role?: Database["public"]["Enums"]["user_roles"];
           updated_at?: string;

@@ -3,6 +3,7 @@ import { logService } from "@/shared/services/logService";
 import type { User } from "@/core/types/database";
 import { validateEmail } from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
+import i18n from "@/core/i18n";
 
 type LoginResult = {
   success: boolean;
@@ -47,11 +48,11 @@ export class LoginViewModel extends BaseViewModel {
     }
 
     if (!this.password.trim()) {
-      this.passwordError = "Informe sua senha.";
+      this.passwordError = i18n.t("validation_password_required");
       this.loading = false;
       this.notify();
 
-      return { success: false, error: "Informe sua senha." };
+      return { success: false, error: this.passwordError };
     }
 
     const { data, error } = await authRepository.signIn(
@@ -81,7 +82,7 @@ export class LoginViewModel extends BaseViewModel {
       const role = user.app_metadata?.role;
 
       if (role !== "ADMIN") {
-        const errorMessage = "Acesso restrito à Equipe de Administração.";
+        const errorMessage = i18n.t("common_access_denied");
         await authRepository.signOut();
         this.notify();
 
@@ -93,7 +94,7 @@ export class LoginViewModel extends BaseViewModel {
       return { success: true };
     }
 
-    const unknownError = "Ocorreu um erro desconhecido durante o login.";
+    const unknownError = i18n.t("error_generic");
     this.notify();
 
     return { success: false, error: unknownError };

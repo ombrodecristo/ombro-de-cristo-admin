@@ -40,7 +40,7 @@ export class EditUserViewModel extends BaseViewModel {
     this.onClose = props.onClose;
     this.onSuccess = props.onSuccess;
     this.newRole = props.profile.role;
-    this.newGender = props.profile.gender;
+    this.newGender = props.profile.gender ?? "MALE";
     this.newChurchId = props.profile.church_id;
     this.fetchChurches();
   }
@@ -49,10 +49,12 @@ export class EditUserViewModel extends BaseViewModel {
     this.newRole = role;
     this.notify();
   };
+
   public setNewGender = (gender: UserGender) => {
     this.newGender = gender;
     this.notify();
   };
+
   public setNewChurchId = (churchId: string | null) => {
     this.newChurchId = churchId;
     this.notify();

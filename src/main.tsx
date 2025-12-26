@@ -7,6 +7,7 @@ import { theme } from "./core/lib/theme.ts";
 import { GlobalStyles } from "./core/lib/GlobalStyles.tsx";
 import { Toaster } from "sonner";
 import { router } from "./app/router.tsx";
+import "./core/i18n";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

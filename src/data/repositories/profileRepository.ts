@@ -1,5 +1,10 @@
 import { supabase } from "@/core/lib/supabaseClient";
-import type { Profile, UserRole, UserGender } from "@/core/types/database";
+import type {
+  Profile,
+  UserRole,
+  UserGender,
+  LanguagePreference,
+} from "@/core/types/database";
 import type { ServiceResponse } from "@/core/types/service";
 import type { QueryData } from "@supabase/supabase-js";
 
@@ -9,6 +14,7 @@ const profilesWithRelationsQuery = supabase.from("profiles").select(
     full_name,
     role,
     gender,
+    language_preference,
     church_id,
     churches ( name ),
     mentor:mentor_id ( full_name )
@@ -58,11 +64,14 @@ async function getProfileById(id: string): Promise<ServiceResponse<Profile>> {
 
 async function updateProfile(
   id: string,
-  { full_name }: { full_name: string }
+  updates: {
+    full_name?: string;
+    language_preference?: LanguagePreference;
+  }
 ): Promise<ServiceResponse<Profile>> {
   const { data, error } = await supabase
     .from("profiles")
-    .update({ full_name })
+    .update(updates)
     .eq("id", id)
     .select()
     .single();

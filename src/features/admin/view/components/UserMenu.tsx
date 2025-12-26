@@ -17,8 +17,11 @@ import {
   IoPencil,
   IoSaveOutline,
   IoKeyOutline,
+  IoLanguageOutline,
+  IoCheckmark,
 } from "react-icons/io5";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const MenuTrigger = styled.button`
   height: 40px;
@@ -93,6 +96,35 @@ const ActionList = styled.div`
   gap: ${props => props.theme.spacing.s}px;
 `;
 
+const LanguageSelectorContainer = styled.div`
+  border-top: 1px solid ${props => props.theme.colors.border};
+  padding-top: ${props => props.theme.spacing.m}px;
+`;
+
+const LanguageButton = styled.button<{ isActive: boolean }>`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: ${props =>
+    props.isActive ? props.theme.colors.mutedBackground : "transparent"};
+  border: none;
+  padding: ${props => props.theme.spacing.sm}px;
+  border-radius: ${props => props.theme.radii.s}px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: ${props =>
+    props.isActive
+      ? props.theme.colors.primary
+      : props.theme.colors.mainForeground};
+  font-weight: ${props => (props.isActive ? "600" : "400")};
+
+  &:hover {
+    background: ${props => props.theme.colors.mutedBackground};
+  }
+`;
+
 const DeleteLink = styled.button(props => ({
   ...props.theme.textVariants.defaults,
   fontSize: "14px",
@@ -157,7 +189,8 @@ const Spinner = styled.div`
 `;
 
 export default function UserMenu() {
-  const { user, signOut, refreshUserContext } = useAuth();
+  const { user, signOut, refreshUserContext, changeLanguage } = useAuth();
+  const { t, i18n } = useTranslation();
 
   const [viewModel] = useState(
     () => new UserMenuViewModel({ user, signOut, refreshUserContext })
@@ -196,6 +229,16 @@ export default function UserMenu() {
       toast.success("Sua conta foi excluída com sucesso.");
     }
   };
+
+  const handleLanguageChange = (lang: string) => {
+    changeLanguage(lang);
+  };
+
+  const languageOptions = [
+    { value: "pt", label: t("profile_language_pt") },
+    { value: "en", label: t("profile_language_en") },
+    { value: "es", label: t("profile_language_es") },
+  ];
 
   return (
     <>
@@ -251,6 +294,29 @@ export default function UserMenu() {
             <Email>{user.email}</Email>
           </ProfileSection>
 
+          <LanguageSelectorContainer>
+            <Label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "8px",
+              }}
+            >
+              <IoLanguageOutline /> {t("profile_language")}
+            </Label>
+            {languageOptions.map(lang => (
+              <LanguageButton
+                key={lang.value}
+                isActive={i18n.language === lang.value}
+                onClick={() => handleLanguageChange(lang.value)}
+              >
+                {lang.label}
+                {i18n.language === lang.value && <IoCheckmark />}
+              </LanguageButton>
+            ))}
+          </LanguageSelectorContainer>
+
           <ActionList>
             <Button
               onClick={() => viewModel.setIsChangePasswordOpen(true)}
@@ -282,7 +348,7 @@ export default function UserMenu() {
         onClose={() => viewModel.setDeleteConfirmOpen(false)}
         onConfirm={onDelete}
         title="Excluir sua conta?"
-        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados, incluindo as anotações do diário, serão excluídos para sempre. Tem certeza?"
+        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados serão excluídos para sempre. Tem certeza?"
         confirmText="Sim, excluir"
         variant="destructive"
         loading={viewModel.isDeleting}

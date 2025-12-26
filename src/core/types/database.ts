@@ -6,6 +6,7 @@ type DbEnums = Database["public"]["Enums"];
 
 export type UserRole = DbEnums["user_roles"];
 export type UserGender = DbEnums["user_genders"];
+export type LanguagePreference = "pt" | "en" | "es";
 export type Church = DbTables["churches"]["Row"];
 export type Profile = DbTables["profiles"]["Row"];
 export type Devotional = DbTables["devotionals"]["Row"];

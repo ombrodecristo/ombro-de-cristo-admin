@@ -1,32 +1,22 @@
+import i18n from "@/core/i18n";
 import type { UserRole, UserGender } from "@/core/types/database";
 
-export const roleMap: Record<UserRole, string> = {
-  ADMIN: "Administração",
-  MENTOR: "Mentoria",
-  MISSIONARY: "Membro da Missão",
-};
-
-export const genderMap: Record<UserGender, string> = {
-  MALE: "Masculino",
-  FEMALE: "Feminino",
-};
-
 export const formatRole = (role: UserRole) => {
-  return roleMap[role] || role;
+  return i18n.t(`role_${role}`);
 };
 
 export const formatGender = (gender: UserGender | null | undefined) => {
   if (!gender) {
-    return "Não definido";
+    return i18n.t("gender_undefined");
   }
 
-  return genderMap[gender] || gender;
+  return i18n.t(`gender_${gender}`);
 };
 
 export const formatDate = (dateString: string) => {
-  if (!dateString) return "N/A";
+  if (!dateString) return i18n.t("common_undefined");
 
-  return new Date(dateString).toLocaleDateString("pt-BR", {
+  return new Date(dateString).toLocaleDateString(i18n.language, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

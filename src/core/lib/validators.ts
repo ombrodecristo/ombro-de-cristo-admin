@@ -1,3 +1,5 @@
+import i18n from "@/core/i18n";
+
 export const PASSWORD_MIN_LENGTH = 6;
 export const FULL_NAME_MIN_LENGTH = 3;
 export const CHURCH_NAME_MIN_LENGTH = 2;
@@ -11,7 +13,7 @@ export const validateEmail = (
   if (!email.trim() || !emailRegex.test(email)) {
     return {
       isValid: false,
-      message: "Informe um e-mail válido.",
+      message: i18n.t("validation_email_invalid"),
     };
   }
 
@@ -24,7 +26,9 @@ export const validatePasswordLength = (
   if (password.length < PASSWORD_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `Sua senha precisa ter no mínimo ${PASSWORD_MIN_LENGTH} caracteres.`,
+      message: i18n.t("validation_password_min_length", {
+        count: PASSWORD_MIN_LENGTH,
+      }),
     };
   }
 
@@ -38,7 +42,7 @@ export const validatePasswordMatch = (
   if (password !== confirm) {
     return {
       isValid: false,
-      message: "As senhas não coincidem.",
+      message: i18n.t("validation_password_mismatch"),
     };
   }
 
@@ -51,7 +55,9 @@ export const validateFullName = (
   if (name.trim().length < FULL_NAME_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `O nome precisa ter no mínimo ${FULL_NAME_MIN_LENGTH} caracteres.`,
+      message: i18n.t("validation_fullname_min_length", {
+        count: FULL_NAME_MIN_LENGTH,
+      }),
     };
   }
 

@@ -1,3 +1,4 @@
+import i18n from "@/core/i18n";
 import { supabase } from "@/core/lib/supabaseClient";
 import type { ServiceResponse } from "@/core/types/service";
 import type { Session, User } from "@supabase/supabase-js";
@@ -9,27 +10,26 @@ if (!SITE_URL) {
 
 function formatAuthError(error: Error): Error {
   const msg = (error.message || "").toLowerCase();
-  let friendlyMsg = "Algo deu errado. Por favor, tente novamente.";
+  let friendlyMsg = i18n.t("error_generic");
 
   if (msg.includes("user already registered")) {
-    friendlyMsg = "Este e-mail já foi cadastrado. Tente fazer login.";
+    friendlyMsg = i18n.t("auth_error_user_already_registered");
   } else if (msg.includes("invalid login credentials")) {
-    friendlyMsg = "E-mail ou senha incorretos. Verifique e tente novamente.";
+    friendlyMsg = i18n.t("auth_error_invalid_login_credentials");
   } else if (msg.includes("email not confirmed")) {
-    friendlyMsg = "E-mail ou senha incorretos. Verifique e tente novamente.";
+    friendlyMsg = i18n.t("auth_error_invalid_login_credentials");
   } else if (msg.includes("password should be at least")) {
-    friendlyMsg = "Sua senha é muito curta. Tente uma mais longa.";
+    friendlyMsg = i18n.t("auth_error_password_too_short");
   } else if (
     msg.includes("rate limit") ||
     msg.includes("for security purposes")
   ) {
-    friendlyMsg =
-      "Muitas tentativas. Para sua segurança, tente novamente mais tarde.";
+    friendlyMsg = i18n.t("auth_error_rate_limit");
   } else if (
     msg.includes("user is already confirmed") ||
     msg.includes("already been confirmed")
   ) {
-    friendlyMsg = "Este e-mail já foi confirmado. Você pode fazer o login.";
+    friendlyMsg = i18n.t("auth_error_user_already_confirmed");
   }
 
   return new Error(friendlyMsg);
