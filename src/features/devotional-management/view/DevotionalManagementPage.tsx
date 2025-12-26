@@ -15,6 +15,7 @@ import DevotionalFormModal from "./components/DevotionalFormModal";
 import { IoAdd, IoSearchOutline } from "react-icons/io5";
 import { DevotionalDetailsModal } from "./components/DevotionalDetailsModal";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ const PageContainer = styled.div`
 `;
 
 export default function DevotionalManagementPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [viewModel] = useState(() => new DevotionalManagementViewModel());
   useViewModel(viewModel);
@@ -38,7 +40,7 @@ export default function DevotionalManagementPage() {
   ) {
     return (
       <PageContainer>
-        <PageHeader title="Devocionais">
+        <PageHeader title={t("devotionals_page_title")}>
           <Skeleton height="40px" width="40px" />
         </PageHeader>
         <Skeleton height="56px" width="100%" />
@@ -59,9 +61,9 @@ export default function DevotionalManagementPage() {
 
   return (
     <PageContainer>
-      <PageHeader title="Devocionais">
+      <PageHeader title={t("devotionals_page_title")}>
         <Button
-          label="Novo Devocional"
+          label={t("devotionals_new_button")}
           onClick={viewModel.handleOpenCreate}
           icon={<IoAdd size={20} />}
           size="small"
@@ -69,7 +71,7 @@ export default function DevotionalManagementPage() {
         />
       </PageHeader>
       <Input
-        placeholder="Pesquisar por título..."
+        placeholder={t("devotionals_search_placeholder")}
         value={viewModel.searchQuery}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           viewModel.setSearchQuery(e.target.value)
@@ -110,9 +112,9 @@ export default function DevotionalManagementPage() {
           isOpen={viewModel.isDeleteAlertOpen}
           onClose={viewModel.handleCloseModals}
           onConfirm={viewModel.handleDeleteConfirm}
-          title="Excluir Devocional?"
-          message="Este devocional será excluído permanentemente. Esta ação não pode ser desfeita."
-          confirmText="Sim, excluir"
+          title={t("devotionals_delete_title")}
+          message={t("devotionals_delete_message")}
+          confirmText={t("common_yes_delete")}
           variant="destructive"
           loading={viewModel.isDeleting}
         />

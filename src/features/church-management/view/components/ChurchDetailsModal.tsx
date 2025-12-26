@@ -3,6 +3,7 @@ import type { Church } from "@/core/types/database";
 import { Button, Modal } from "@/shared/components";
 import { formatDate } from "@/core/lib/formatters";
 import { IoPencil, IoTrashOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const Container = styled.div`
   display: flex;
@@ -62,33 +63,35 @@ export function ChurchDetailsModal({
   onEdit,
   onDelete,
 }: ChurchDetailsModalProps) {
+  const { t } = useTranslation();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="400px">
       <Container>
-        <Title>Detalhes da Igreja</Title>
+        <Title>{t("churches_details_title")}</Title>
         <DetailsList>
           <DetailItem>
-            <DetailLabel>Nome</DetailLabel>
+            <DetailLabel>{t("churches_details_name")}</DetailLabel>
             <DetailValue>{church.name}</DetailValue>
           </DetailItem>
           <DetailItem>
-            <DetailLabel>Criada em</DetailLabel>
+            <DetailLabel>{t("churches_details_created")}</DetailLabel>
             <DetailValue>{formatDate(church.created_at)}</DetailValue>
           </DetailItem>
           <DetailItem>
-            <DetailLabel>Última Modificação</DetailLabel>
+            <DetailLabel>{t("churches_details_updated")}</DetailLabel>
             <DetailValue>{formatDate(church.updated_at)}</DetailValue>
           </DetailItem>
         </DetailsList>
         <Actions>
           <Button
-            label="Editar"
+            label={t("churches_details_edit_button")}
             onClick={() => onEdit(church)}
             icon={<IoPencil />}
             variant="secondary"
           />
           <Button
-            label="Excluir"
+            label={t("churches_details_delete_button")}
             onClick={() => onDelete(church)}
             icon={<IoTrashOutline />}
             variant="destructive"

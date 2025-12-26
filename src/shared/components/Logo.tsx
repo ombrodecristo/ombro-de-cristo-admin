@@ -1,6 +1,7 @@
 import { Box } from "./Box";
 import { Text } from "./Text";
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
 
 const LogoTitle = styled(Text)`
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
@@ -33,6 +34,7 @@ export function Logo({
   direction = "column",
   size = 160,
 }: LogoProps) {
+  const { t } = useTranslation();
   const titleColor = variant === "light" ? "white" : "primary";
   const sloganColor = variant === "light" ? "white" : "mutedForeground";
 
@@ -74,7 +76,7 @@ export function Logo({
             fontWeight={600}
             marginTop="xs"
           >
-            Sua missão, fortalecida pela mentoria.
+            {t("logo_slogan")}
           </Text>
         )}
       </Box>

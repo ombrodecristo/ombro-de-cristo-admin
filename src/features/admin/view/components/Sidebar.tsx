@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import SidebarNav from "./SidebarNav";
+import { useTranslation } from "react-i18next";
 
 const SidebarContainer = styled.aside<{ isOpen: boolean }>`
   display: flex;
@@ -100,11 +101,13 @@ type SidebarProps = {
 };
 
 export default function Sidebar({ isOpen, onNavigate }: SidebarProps) {
+  const { t } = useTranslation();
+
   return (
     <SidebarContainer className="sidebar-container" isOpen={isOpen}>
       <Header>
         <Logo src="/logo.png" alt="Logo Ombro de Cristo" />
-        <Title>Administração</Title>
+        <Title>{t("role_ADMIN")}</Title>
       </Header>
       <NavContainer>
         <SidebarNav isSidebarOpen={isOpen} onNavigate={onNavigate} />

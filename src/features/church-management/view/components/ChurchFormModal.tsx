@@ -5,6 +5,7 @@ import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Label } from "@/shared/components";
 import type { Church } from "@/core/types/database";
 import { IoSaveOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const Content = styled.form`
   display: flex;
@@ -40,6 +41,8 @@ export default function ChurchFormModal({
   onSuccess,
   churchToEdit,
 }: ChurchFormModalProps) {
+  const { t } = useTranslation();
+
   const [viewModel] = useState(
     () => new ChurchFormViewModel({ churchToEdit, onClose, onSuccess })
   );
@@ -53,9 +56,13 @@ export default function ChurchFormModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="400px">
       <Content onSubmit={onFormSubmit}>
-        <Title>{viewModel.isEditing ? "Editar Igreja" : "Nova Igreja"}</Title>
+        <Title>
+          {viewModel.isEditing
+            ? t("churches_form_edit_title")
+            : t("churches_form_new_title")}
+        </Title>
         <div>
-          <Label htmlFor="name">Nome da igreja</Label>
+          <Label htmlFor="name">{t("churches_form_name_label")}</Label>
           <Input
             id="name"
             value={viewModel.name}
@@ -63,19 +70,19 @@ export default function ChurchFormModal({
             disabled={viewModel.loading}
             required
             error={viewModel.error || ""}
-            placeholder="Ex: Igreja Central"
+            placeholder={t("churches_form_name_placeholder")}
           />
         </div>
         <Actions>
           <Button
             type="submit"
-            label="Salvar"
+            label={t("common_save")}
             loading={viewModel.loading}
             icon={<IoSaveOutline size={20} />}
           />
           <Button
             type="button"
-            label="Cancelar"
+            label={t("common_cancel")}
             variant="secondary"
             onClick={onClose}
             disabled={viewModel.loading}

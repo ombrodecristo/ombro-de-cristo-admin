@@ -5,6 +5,7 @@ import {
 } from "@/data/repositories/devotionalRepository";
 import { logService } from "@/shared/services/logService";
 import type { SortConfig } from "../view/components/DevotionalTable";
+import i18n from "@/core/i18n";
 
 export class DevotionalManagementViewModel extends BaseViewModel {
   public devotionals: DevotionalWithAuthor[] = [];
@@ -137,7 +138,7 @@ export class DevotionalManagementViewModel extends BaseViewModel {
 
     this.isDeleting = false;
     if (deleteError) {
-      this.error = "Erro ao excluir o devocional.";
+      this.error = i18n.t("devotionals_delete_error");
       await logService.logError(deleteError, {
         component: "DevotionalManagementViewModel",
         context: { devotionalId: this.selectedDevotional.id },
@@ -154,7 +155,9 @@ export class DevotionalManagementViewModel extends BaseViewModel {
     this.notify();
     const { data, error } = await devotionalRepository.getDevotionals();
     if (error) {
-      this.error = "Erro ao carregar devocionais.";
+      this.error = i18n.t("error_loading_resource", {
+        resource: i18n.t("resource_devotionals"),
+      });
       await logService.logError(error, {
         component: "DevotionalManagementViewModel",
       });

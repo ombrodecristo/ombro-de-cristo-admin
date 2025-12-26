@@ -9,6 +9,7 @@ import {
   Input,
   ConfirmationModal,
   Label,
+  LanguageSwitcher,
 } from "@/shared/components";
 import ChangePasswordModal from "./ChangePasswordModal";
 import {
@@ -18,7 +19,6 @@ import {
   IoSaveOutline,
   IoKeyOutline,
   IoLanguageOutline,
-  IoCheckmark,
 } from "react-icons/io5";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -99,30 +99,9 @@ const ActionList = styled.div`
 const LanguageSelectorContainer = styled.div`
   border-top: 1px solid ${props => props.theme.colors.border};
   padding-top: ${props => props.theme.spacing.m}px;
-`;
-
-const LanguageButton = styled.button<{ isActive: boolean }>`
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: ${props =>
-    props.isActive ? props.theme.colors.mutedBackground : "transparent"};
-  border: none;
-  padding: ${props => props.theme.spacing.sm}px;
-  border-radius: ${props => props.theme.radii.s}px;
-  cursor: pointer;
-  text-align: left;
-  font-size: 14px;
-  color: ${props =>
-    props.isActive
-      ? props.theme.colors.primary
-      : props.theme.colors.mainForeground};
-  font-weight: ${props => (props.isActive ? "600" : "400")};
-
-  &:hover {
-    background: ${props => props.theme.colors.mutedBackground};
-  }
 `;
 
 const DeleteLink = styled.button(props => ({
@@ -189,8 +168,8 @@ const Spinner = styled.div`
 `;
 
 export default function UserMenu() {
-  const { user, signOut, refreshUserContext, changeLanguage } = useAuth();
-  const { t, i18n } = useTranslation();
+  const { user, signOut, refreshUserContext } = useAuth();
+  const { t } = useTranslation();
 
   const [viewModel] = useState(
     () => new UserMenuViewModel({ user, signOut, refreshUserContext })
@@ -210,35 +189,25 @@ export default function UserMenu() {
     e.preventDefault();
     const { error } = await viewModel.handleSaveName();
     if (error) {
-      toast.error(error);
+      toast.error(t("auth_error_update_name"));
     } else {
-      toast.success("Seu nome foi atualizado!");
+      toast.success(t("auth_toast_name_updated"));
     }
   };
 
   const onSignOut = async () => {
     await signOut();
-    toast.success("Sessão encerrada com sucesso.");
+    toast.success(t("auth_toast_logout_success"));
   };
 
   const onDelete = async () => {
     const { error } = await viewModel.handleDeleteAccount();
     if (error) {
-      toast.error(error);
+      toast.error(t("auth_error_delete_account"));
     } else {
-      toast.success("Sua conta foi excluída com sucesso.");
+      toast.success(t("auth_toast_account_deleted"));
     }
   };
-
-  const handleLanguageChange = (lang: string) => {
-    changeLanguage(lang);
-  };
-
-  const languageOptions = [
-    { value: "pt", label: t("profile_language_pt") },
-    { value: "en", label: t("profile_language_en") },
-    { value: "es", label: t("profile_language_es") },
-  ];
 
   return (
     <>
@@ -260,7 +229,7 @@ export default function UserMenu() {
                     htmlFor="fullNameEdit"
                     style={{ textAlign: "left", marginBottom: "4px" }}
                   >
-                    Editar Nome
+                    {t("user_menu_edit_name")}
                   </Label>
                   <Input
                     id="fullNameEdit"
@@ -269,7 +238,7 @@ export default function UserMenu() {
                     disabled={viewModel.isSavingName}
                     autoFocus
                     error={viewModel.nameError}
-                    placeholder="Seu nome completo"
+                    placeholder={t("user_menu_edit_name_placeholder")}
                   />
                 </div>
                 <SaveButton type="submit" disabled={viewModel.isSavingName}>
@@ -285,7 +254,7 @@ export default function UserMenu() {
                 <Name>{viewModel.profile?.full_name ?? "..."}</Name>
                 <EditButton
                   onClick={() => viewModel.setIsEditingName(true)}
-                  title="Editar nome"
+                  title={t("user_menu_edit_name")}
                 >
                   <IoPencil size={16} />
                 </EditButton>
@@ -300,40 +269,31 @@ export default function UserMenu() {
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
-                marginBottom: "8px",
+                marginBottom: 0,
               }}
             >
               <IoLanguageOutline /> {t("profile_language")}
             </Label>
-            {languageOptions.map(lang => (
-              <LanguageButton
-                key={lang.value}
-                isActive={i18n.language === lang.value}
-                onClick={() => handleLanguageChange(lang.value)}
-              >
-                {lang.label}
-                {i18n.language === lang.value && <IoCheckmark />}
-              </LanguageButton>
-            ))}
+            <LanguageSwitcher />
           </LanguageSelectorContainer>
 
           <ActionList>
             <Button
               onClick={() => viewModel.setIsChangePasswordOpen(true)}
-              label="Alterar Senha"
+              label={t("user_menu_change_password")}
               variant="secondary"
               icon={<IoKeyOutline size={16} />}
             />
             <Button
               onClick={onSignOut}
-              label="Encerrar sessão"
+              label={t("user_menu_logout")}
               variant="secondary"
               icon={<IoLogOutOutline size={16} />}
             />
           </ActionList>
 
           <DeleteLink onClick={() => viewModel.setDeleteConfirmOpen(true)}>
-            Excluir minha conta
+            {t("user_menu_delete_account")}
           </DeleteLink>
         </Content>
       </Modal>
@@ -347,9 +307,9 @@ export default function UserMenu() {
         isOpen={viewModel.isDeleteConfirmOpen}
         onClose={() => viewModel.setDeleteConfirmOpen(false)}
         onConfirm={onDelete}
-        title="Excluir sua conta?"
-        message="Esta ação é permanente e não pode ser desfeita. Todos os seus dados serão excluídos para sempre. Tem certeza?"
-        confirmText="Sim, excluir"
+        title={t("user_menu_delete_confirm_title")}
+        message={t("user_menu_delete_confirm_message")}
+        confirmText={t("user_menu_delete_confirm_button")}
         variant="destructive"
         loading={viewModel.isDeleting}
       />

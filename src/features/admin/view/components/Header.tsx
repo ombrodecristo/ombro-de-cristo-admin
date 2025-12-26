@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { IoMenu } from "react-icons/io5";
 import UserMenu from "./UserMenu";
+import { useTranslation } from "react-i18next";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -56,13 +57,15 @@ type HeaderProps = {
 };
 
 export default function Header({ onToggleSidebar }: HeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <HeaderContainer>
       <LeftSection>
         <MenuButton onClick={onToggleSidebar}>
           <IoMenu size={24} />
         </MenuButton>
-        <AppTitle>Painel Administrativo</AppTitle>
+        <AppTitle>{t("admin_panel_title")}</AppTitle>
       </LeftSection>
       <UserMenu />
     </HeaderContainer>

@@ -1,4 +1,11 @@
-import { useState, useEffect, useRef, type TouchEvent } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  type TouchEvent,
+  useCallback,
+  useMemo,
+} from "react";
 import styled from "@emotion/styled";
 import { Box, Button, Logo, Text, LanguageSwitcher } from "@/shared/components";
 import {
@@ -244,34 +251,37 @@ export default function LandingPage() {
   const [touchStart, setTouchStart] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const features = [
-    {
-      icon: <IoBookOutline size={32} />,
-      title: t("landing_feature1_title"),
-      description: t("landing_feature1_desc"),
-    },
-    {
-      icon: <IoHeartOutline size={32} />,
-      title: t("landing_feature2_title"),
-      description: t("landing_feature2_desc"),
-    },
-    {
-      icon: <IoShieldOutline size={32} />,
-      title: t("landing_feature3_title"),
-      description: t("landing_feature3_desc"),
-    },
-  ];
+  const features = useMemo(
+    () => [
+      {
+        icon: <IoBookOutline size={32} />,
+        title: t("landing_feature1_title"),
+        description: t("landing_feature1_desc"),
+      },
+      {
+        icon: <IoHeartOutline size={32} />,
+        title: t("landing_feature2_title"),
+        description: t("landing_feature2_desc"),
+      },
+      {
+        icon: <IoShieldOutline size={32} />,
+        title: t("landing_feature3_title"),
+        description: t("landing_feature3_desc"),
+      },
+    ],
+    [t]
+  );
 
   const minSwipeDistance = 50;
 
-  const resetInterval = () => {
+  const resetInterval = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(() => {
       setActiveIndex(prevIndex => (prevIndex + 1) % features.length);
     }, 5000);
-  };
+  }, [features.length]);
 
   useEffect(() => {
     resetInterval();
@@ -281,7 +291,7 @@ export default function LandingPage() {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [resetInterval]);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     setTouchStart(e.targetTouches[0].clientX);

@@ -18,6 +18,7 @@ import {
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -81,6 +82,7 @@ const Form = styled.form`
 `;
 
 export default function PasswordRecoveryPage() {
+  const { t } = useTranslation();
   const { loading: authLoading, initialHash, user } = useAuth();
   const [viewModel] = useState(() => new PasswordRecoveryViewModel());
 
@@ -110,11 +112,9 @@ export default function PasswordRecoveryPage() {
             <StatusIcon variant="success">
               <IoCheckmarkCircle />
             </StatusIcon>
-            <Title>Senha Redefinida</Title>
+            <Title>{t("password_recovery_title_success")}</Title>
           </Header>
-          <Description>
-            Sua senha foi alterada com sucesso. Você já pode fechar esta página.
-          </Description>
+          <Description>{t("password_recovery_message_success")}</Description>
         </StyledCard>
       </PageContainer>
     );
@@ -128,11 +128,13 @@ export default function PasswordRecoveryPage() {
             <StatusIcon variant="primary">
               <IoLockClosedOutline />
             </StatusIcon>
-            <Title>Redefina sua Senha</Title>
+            <Title>{t("password_recovery_title_form")}</Title>
           </Header>
           <Form onSubmit={onPasswordSubmit}>
             <div>
-              <Label htmlFor="password">Nova Senha</Label>
+              <Label htmlFor="password">
+                {t("password_recovery_new_password_label")}
+              </Label>
               <Input
                 id="password"
                 placeholder="••••••••"
@@ -147,7 +149,9 @@ export default function PasswordRecoveryPage() {
               />
             </div>
             <div>
-              <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
+              <Label htmlFor="confirmPassword">
+                {t("password_recovery_confirm_password_label")}
+              </Label>
               <Input
                 id="confirmPassword"
                 placeholder="••••••••"
@@ -165,7 +169,7 @@ export default function PasswordRecoveryPage() {
               type="submit"
               disabled={viewModel.loading}
               loading={viewModel.loading}
-              label="Alterar Senha"
+              label={t("password_recovery_change_button")}
               icon={<IoSaveOutline size={20} />}
             />
           </Form>
@@ -187,13 +191,13 @@ export default function PasswordRecoveryPage() {
           </StatusIcon>
           <Title>
             {viewModel.isTokenInvalid
-              ? "Link Inválido ou Expirado"
-              : "Recuperar Senha"}
+              ? t("password_recovery_title_error")
+              : t("password_recovery_title_info")}
           </Title>
           <Description>
             {viewModel.isTokenInvalid
-              ? "Este link de redefinição de senha é inválido ou expirou. Por favor, solicite um novo link de recuperação no aplicativo móvel."
-              : "Para recuperar sua senha, o processo deve ser iniciado através do aplicativo móvel Ombro de Cristo. Por favor, acesse o app para solicitar o link de recuperação."}
+              ? t("password_recovery_message_error")
+              : t("password_recovery_message_info")}
           </Description>
         </Header>
       </StyledCard>

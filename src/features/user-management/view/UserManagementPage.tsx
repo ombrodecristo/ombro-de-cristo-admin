@@ -9,6 +9,7 @@ import EditUserModal from "./components/EditUserModal";
 import { IoSearchOutline } from "react-icons/io5";
 import { UserDetailsModal } from "./components/UserDetailsModal";
 import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ const PageContainer = styled.div`
 `;
 
 export default function UserManagementPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   const [viewModel] = useState(
@@ -32,7 +34,7 @@ export default function UserManagementPage() {
   if (viewModel.loading && !viewModel.editingProfile) {
     return (
       <PageContainer>
-        <PageHeader title="Perfis" />
+        <PageHeader title={t("users_page_title")} />
         <Skeleton height="56px" width="100%" />
         <Skeleton height="400px" width="100%" />
       </PageContainer>
@@ -46,9 +48,9 @@ export default function UserManagementPage() {
 
   return (
     <PageContainer>
-      <PageHeader title="Perfis" />
+      <PageHeader title={t("users_page_title")} />
       <Input
-        placeholder="Pesquisar por nome..."
+        placeholder={t("users_search_placeholder")}
         value={viewModel.searchQuery}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           viewModel.setSearchQuery(e.target.value)

@@ -5,6 +5,7 @@ import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Label } from "@/shared/components";
 import { IoLockClosedOutline, IoSaveOutline } from "react-icons/io5";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Content = styled.form`
   display: flex;
@@ -36,14 +37,15 @@ export default function ChangePasswordModal({
   isOpen,
   onClose,
 }: ChangePasswordModalProps) {
+  const { t } = useTranslation();
   const [viewModel] = useState(() => new ChangePasswordViewModel({ onClose }));
   useViewModel(viewModel);
 
   useEffect(() => {
     if (viewModel.success) {
-      toast.success("Senha alterada com sucesso!");
+      toast.success(t("auth_toast_password_changed"));
     }
-  }, [viewModel.success]);
+  }, [viewModel.success, t]);
 
   const onFormSubmit = (e: FormEvent) => {
     viewModel.handleSubmit(e);
@@ -52,10 +54,12 @@ export default function ChangePasswordModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="400px">
       <Content onSubmit={onFormSubmit}>
-        <Title>Alterar Senha</Title>
+        <Title>{t("change_password_modal_title")}</Title>
 
         <div>
-          <Label htmlFor="new-password">Nova Senha</Label>
+          <Label htmlFor="new-password">
+            {t("change_password_new_password")}
+          </Label>
           <Input
             id="new-password"
             placeholder="••••••••"
@@ -70,7 +74,9 @@ export default function ChangePasswordModal({
         </div>
 
         <div>
-          <Label htmlFor="confirm-password">Confirmar Nova Senha</Label>
+          <Label htmlFor="confirm-password">
+            {t("change_password_confirm_password")}
+          </Label>
           <Input
             id="confirm-password"
             placeholder="••••••••"
@@ -87,14 +93,14 @@ export default function ChangePasswordModal({
         <Actions>
           <Button
             type="submit"
-            label="Alterar Senha"
+            label={t("password_recovery_change_button")}
             loading={viewModel.loading}
             disabled={viewModel.loading}
             icon={<IoSaveOutline size={20} />}
           />
           <Button
             type="button"
-            label="Cancelar"
+            label={t("common_cancel")}
             variant="secondary"
             onClick={onClose}
             disabled={viewModel.loading}

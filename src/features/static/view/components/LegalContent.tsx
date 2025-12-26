@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
 
 const Container = styled.div`
   max-width: 800px;
@@ -61,299 +62,134 @@ const Divider = styled.div`
 `;
 
 export function LegalContent() {
+  const { t } = useTranslation();
+
   return (
     <Container>
-      <H1>Termos de Uso</H1>
-      <P>
-        Bem-vindo(a) ao Ombro de Cristo. Estes Termos de Uso
-        (&quot;Termos&quot;) regem seu acesso e uso de nosso aplicativo móvel e
-        serviços web (&quot;Plataforma&quot;). Ao criar uma conta ou usar nossa
-        Plataforma, você concorda com o vínculo a estes Termos.
-      </P>
+      <H1>{t("legal_terms_title")}</H1>
+      <P>{t("legal_terms_intro")}</P>
 
-      <H2>1. Aceitação dos Termos</H2>
-      <P>
-        Ao usar a Plataforma, você confirma que leu, entendeu e concorda em
-        cumprir estes Termos, nossa Política de Privacidade e todas as leis e
-        regulamentações aplicáveis. Se você não concordar com estes Termos, não
-        deverá usar a Plataforma.
-      </P>
+      <H2>{t("legal_terms_1_header")}</H2>
+      <P>{t("legal_terms_1_p1")}</P>
 
-      <H2>2. Descrição do Serviço</H2>
-      <P>
-        A Plataforma Ombro de Cristo é destinada a fortalecer a jornada
-        espiritual por meio de devocionais, um diário pessoal e um sistema de
-        mentoria. Os usuários(as) da plataforma são classificados como
-        &quot;Membro da Missão&quot; ou &quot;Mentoria&quot;.
-      </P>
+      <H2>{t("legal_terms_2_header")}</H2>
+      <P>{t("legal_terms_2_p1")}</P>
 
-      <H2>3. Elegibilidade e Contas</H2>
+      <H2>{t("legal_terms_3_header")}</H2>
       <UL>
-        <LI>Você deve ter pelo menos 18 anos para criar uma conta.</LI>
-        <LI>
-          Você é responsável por manter a confidencialidade de sua senha e
-          conta.
-        </LI>
-        <LI>
-          Todas as informações fornecidas durante o cadastro e atualização de
-          perfil devem ser verdadeiras, precisas e completas.
-        </LI>
-        <LI>
-          Você é a única pessoa responsável por todas as atividades que ocorrem
-          em sua conta.
-        </LI>
+        <LI>{t("legal_terms_3_li1")}</LI>
+        <LI>{t("legal_terms_3_li2")}</LI>
+        <LI>{t("legal_terms_3_li3")}</LI>
+        <LI>{t("legal_terms_3_li4")}</LI>
       </UL>
 
-      <H2>4. Conduta na Plataforma</H2>
-      <P>Você concorda em não usar a Plataforma para:</P>
+      <H2>{t("legal_terms_4_header")}</H2>
+      <P>{t("legal_terms_4_p1")}</P>
       <UL>
-        <LI>
-          Publicar conteúdo ilegal, ofensivo, difamatório, odioso ou que viole
-          direitos de terceiros.
-        </LI>
-        <LI>Assediar, abusar ou prejudicar outra pessoa.</LI>
-        <LI>Tentar obter acesso não autorizado a outras contas ou sistemas.</LI>
-        <LI>
-          Usar a Plataforma para qualquer finalidade comercial sem nosso
-          consentimento prévio por escrito.
-        </LI>
+        <LI>{t("legal_terms_4_li1")}</LI>
+        <LI>{t("legal_terms_4_li2")}</LI>
+        <LI>{t("legal_terms_4_li3")}</LI>
+        <LI>{t("legal_terms_4_li4")}</LI>
       </UL>
 
-      <H2>5. Conteúdo do Diário e Compartilhamento</H2>
+      <H2>{t("legal_terms_5_header")}</H2>
       <UL>
-        <LI>
-          Usuários(as) com o papel de Membro da Missão podem manter um diário
-          pessoal.
-        </LI>
-        <LI>As entradas do diário são privadas por padrão.</LI>
-        <LI>
-          Membros da Missão têm a opção de compartilhar entradas específicas com
-          sua Mentoria designada. Ao compartilhar, você concede à Mentoria
-          permissão para visualizar o conteúdo daquela entrada específica com o
-          propósito de fornecer apoio espiritual e orientação.
-        </LI>
-        <LI>
-          Nem o Ombro de Cristo nem sua Equipe de Administração têm acesso ao
-          conteúdo do seu diário, seja ele compartilhado ou não.
-        </LI>
+        <LI>{t("legal_terms_5_li1")}</LI>
+        <LI>{t("legal_terms_5_li2")}</LI>
+        <LI>{t("legal_terms_5_li3")}</LI>
+        <LI>{t("legal_terms_5_li5")}</LI>
       </UL>
 
-      <H2>6. Propriedade Intelectual</H2>
+      <H2>{t("legal_terms_6_header")}</H2>
       <UL>
-        <LI>
-          O conteúdo fornecido pela Plataforma, incluindo devocionais, textos,
-          gráficos e logotipos, é de nossa propriedade ou de nossos
-          licenciadores e protegido por leis de direitos autorais.
-        </LI>
-        <LI>
-          O conteúdo que você cria (como entradas de diário) permanece sua
-          propriedade.
-        </LI>
+        <LI>{t("legal_terms_6_li1")}</LI>
+        <LI>{t("legal_terms_6_li2")}</LI>
       </UL>
 
-      <H2>7. Isenção de Responsabilidade de Mentoria</H2>
+      <H2>{t("legal_terms_7_header")}</H2>
       <UL>
-        <LI>
-          O relacionamento entre Mentoria e Membro da Missão é baseado em
-          voluntariado e apoio espiritual.
-        </LI>
-        <LI>
-          Usuários(as) com o papel de Mentoria não são conselheiros(as)
-          profissionais, terapeutas ou profissionais de saúde mental
-          licenciados(as), a menos que se especifique o contrário. A orientação
-          fornecida é de natureza espiritual e não substitui o aconselhamento
-          profissional.
-        </LI>
-        <LI>
-          O Ombro de Cristo não se responsabiliza pela conduta ou conselhos
-          dados por usuários(as). Encorajamos que cada usuário(a) exerça seu
-          próprio discernimento.
-        </LI>
+        <LI>{t("legal_terms_7_li1")}</LI>
+        <LI>{t("legal_terms_7_li2")}</LI>
+        <LI>{t("legal_terms_7_li3")}</LI>
       </UL>
 
-      <H2>8. Rescisão</H2>
+      <H2>{t("legal_terms_8_header")}</H2>
       <UL>
-        <LI>
-          Podemos suspender ou encerrar sua conta a qualquer momento, por
-          qualquer motivo, incluindo a violação destes Termos.
-        </LI>
-        <LI>
-          Você pode excluir sua conta a qualquer momento nas configurações do
-          seu perfil. A exclusão da conta é permanente e resultará na remoção de
-          todos os seus dados, incluindo as entradas do diário.
-        </LI>
+        <LI>{t("legal_terms_8_li1")}</LI>
+        <LI>{t("legal_terms_8_li2")}</LI>
       </UL>
 
-      <H2>9. Limitação de Responsabilidade</H2>
-      <P>
-        A Plataforma é fornecida &quot;como está&quot;. Não garantimos que a
-        Plataforma será ininterrupta ou livre de erros. Em nenhuma circunstância
-        seremos responsáveis por quaisquer danos diretos, indiretos, incidentais
-        ou consequenciais resultantes do uso ou da incapacidade de usar a
-        Plataforma.
-      </P>
+      <H2>{t("legal_terms_9_header")}</H2>
+      <P>{t("legal_terms_9_p1")}</P>
 
-      <H2>10. Alterações nos Termos</H2>
-      <P>
-        Reservamo-nos o direito de modificar estes Termos a qualquer momento.
-        Notificaremos sobre quaisquer alterações significativas. O uso contínuo
-        da Plataforma após tais alterações constitui sua aceitação dos novos
-        Termos.
-      </P>
+      <H2>{t("legal_terms_10_header")}</H2>
+      <P>{t("legal_terms_10_p1")}</P>
 
-      <H2>11. Contato</H2>
-      <P>
-        Se você tiver alguma dúvida sobre estes Termos, entre em contato
-        conosco.
-      </P>
+      <H2>{t("legal_terms_11_header")}</H2>
+      <P>{t("legal_terms_11_p1")}</P>
 
       <Divider />
 
-      <H1>Política de Privacidade</H1>
-      <P>
-        Sua privacidade é de extrema importância para nós. Esta Política de
-        Privacidade descreve como a Plataforma Ombro de Cristo
-        (&quot;Plataforma&quot;, &quot;nós&quot;, &quot;nosso&quot;) coleta, usa
-        e protege suas informações pessoais.
-      </P>
+      <H1>{t("legal_privacy_title")}</H1>
+      <P>{t("legal_privacy_intro")}</P>
 
-      <H2>1. Informações que Coletamos</H2>
+      <H2>{t("legal_privacy_1_header")}</H2>
       <P>
-        <Bold>a) Informações que você nos fornece:</Bold>
+        <Bold>{t("legal_privacy_1_a_header")}</Bold>
       </P>
       <UL>
-        <LI>
-          <Bold>Cadastro de Conta:</Bold> Coletamos seu nome completo, endereço
-          de e-mail, gênero e igreja.
-        </LI>
-        <LI>
-          <Bold>Conteúdo do Diário:</Bold> As entradas do seu diário são
-          armazenadas em nossos servidores. Este conteúdo é criptografado e
-          privado. Você tem controle total sobre ele e pode optar por
-          compartilhá-lo com sua Mentoria.
-        </LI>
+        <LI>{t("legal_privacy_1_li1")}</LI>
+        <LI>{t("legal_privacy_1_li2")}</LI>
+        <LI>{t("legal_privacy_1_li3")}</LI>
       </UL>
 
       <P style={{ marginTop: "16px" }}>
-        <Bold>b) Informações coletadas automaticamente:</Bold>
+        <Bold>{t("legal_privacy_1_b_header")}</Bold>
       </P>
       <UL>
-        <LI>
-          <Bold>Dados de Uso:</Bold> Podemos coletar informações sobre como você
-          interage com a Plataforma, como os recursos que utiliza e o tempo
-          gasto. Isso nos ajuda a melhorar nossos serviços.
-        </LI>
-        <LI>
-          <Bold>Informações do Dispositivo:</Bold> Podemos coletar informações
-          sobre o seu dispositivo, como modelo, sistema operacional e
-          identificadores únicos, para fins de solução de problemas e análise.
-        </LI>
+        <LI>{t("legal_privacy_1_li4")}</LI>
+        <LI>{t("legal_privacy_1_li5")}</LI>
       </UL>
 
-      <H2>2. Como Usamos Suas Informações</H2>
+      <H2>{t("legal_privacy_2_header")}</H2>
       <UL>
-        <LI>
-          <Bold>Para Fornecer e Manter o Serviço:</Bold> Usamos suas informações
-          para operar a Plataforma, autenticar o acesso, fornecer devocionais e
-          facilitar a funcionalidade de diário e mentoria.
-        </LI>
-        <LI>
-          <Bold>Comunicação:</Bold> Podemos usar seu e-mail para enviar
-          notificações importantes sobre sua conta, atualizações do serviço ou
-          alterações em nossas políticas.
-        </LI>
-        <LI>
-          <Bold>Personalização:</Bold> Usamos informações como seu nome para
-          personalizar sua experiência.
-        </LI>
-        <LI>
-          <Bold>Segurança e Proteção:</Bold> Usamos as informações para proteger
-          a segurança e a integridade de nosso serviço e de seus usuários(as).
-        </LI>
+        <LI>{t("legal_privacy_2_li1")}</LI>
+        <LI>{t("legal_privacy_2_li2")}</LI>
+        <LI>{t("legal_privacy_2_li3")}</LI>
+        <LI>{t("legal_privacy_2_li4")}</LI>
       </UL>
 
-      <H2>3. Compartilhamento e Divulgação de Informações</H2>
-      <P>
-        Sua privacidade é nossa prioridade. Não vendemos, alugamos ou
-        compartilhamos suas informações pessoais com terceiros para fins de
-        marketing.
-      </P>
+      <H2>{t("legal_privacy_3_header")}</H2>
+      <P>{t("legal_privacy_3_p1")}</P>
       <UL>
-        <LI>
-          <Bold>Mentoria:</Bold> Se você é um Membro da Missão e opta por
-          compartilhar uma entrada de diário, essa entrada específica será
-          visível para sua Mentoria designada. Nenhuma outra informação ou
-          entrada é compartilhada sem sua ação explícita.
-        </LI>
-        <LI>
-          <Bold>Obrigações Legais:</Bold> Podemos divulgar suas informações se
-          formos obrigados por lei ou se acreditarmos de boa fé que tal ação é
-          necessária para cumprir um processo legal.
-        </LI>
-        <LI>
-          <Bold>Provedores de Serviço:</Bold> Usamos provedores de serviços de
-          terceiros (como Supabase para backend e armazenamento) que processam
-          dados em nosso nome. Tais provedores são obrigados contratualmente a
-          proteger suas informações e só podem usá-las para os fins que
-          especificamos.
-        </LI>
+        <LI>{t("legal_privacy_3_li1")}</LI>
+        <LI>{t("legal_privacy_3_li2")}</LI>
+        <LI>{t("legal_privacy_3_li3")}</LI>
       </UL>
 
-      <H2>4. Segurança de Dados</H2>
-      <P>
-        Implementamos medidas de segurança técnicas e organizacionais para
-        proteger suas informações pessoais.
-      </P>
+      <H2>{t("legal_privacy_4_header")}</H2>
+      <P>{t("legal_privacy_4_p1")}</P>
       <UL>
-        <LI>
-          <Bold>Criptografia:</Bold> O conteúdo do seu diário é criptografado em
-          nosso banco de dados.
-        </LI>
-        <LI>
-          <Bold>Acesso Restrito:</Bold> O acesso direto ao banco de dados é
-          estritamente limitado a pessoal autorizado. Nossa Equipe de
-          Administração não pode visualizar o conteúdo das entradas do seu
-          diário.
-        </LI>
-        <LI>
-          <Bold>Autenticação Segura:</Bold> Usamos métodos de autenticação
-          seguros para proteger o acesso à sua conta.
-        </LI>
+        <LI>{t("legal_privacy_4_li1")}</LI>
+        <LI>{t("legal_privacy_4_li2")}</LI>
+        <LI>{t("legal_privacy_4_li3")}</LI>
       </UL>
 
-      <H2>5. Seus Direitos e Escolhas</H2>
+      <H2>{t("legal_privacy_5_header")}</H2>
       <UL>
-        <LI>
-          <Bold>Acesso e Atualização:</Bold> Você pode revisar e atualizar as
-          informações do seu perfil a qualquer momento na Plataforma.
-        </LI>
-        <LI>
-          <Bold>Exclusão de Conta:</Bold> Você pode excluir sua conta
-          permanentemente na seção de configurações do perfil. A exclusão
-          resultará na remoção completa e irreversível de todos os seus dados,
-          incluindo nome, e-mail e todas as entradas do diário.
-        </LI>
-        <LI>
-          <Bold>Compartilhamento do Diário:</Bold> Você tem controle total sobre
-          quais entradas do diário, se houver, são compartilhadas com sua
-          Mentoria.
-        </LI>
+        <LI>{t("legal_privacy_5_li1")}</LI>
+        <LI>{t("legal_privacy_5_li2")}</LI>
+        <LI>{t("legal_privacy_5_li3")}</LI>
       </UL>
 
-      <H2>6. Privacidade de Crianças</H2>
-      <P>
-        Nosso serviço não se destina a indivíduos menores de 18 anos. Não
-        coletamos intencionalmente informações pessoais de crianças.
-      </P>
+      <H2>{t("legal_privacy_6_header")}</H2>
+      <P>{t("legal_privacy_6_p1")}</P>
 
-      <H2>7. Alterações a esta Política</H2>
-      <P>Podemos atualizar nossa Política de Privacidade periodicamente.</P>
+      <H2>{t("legal_privacy_7_header")}</H2>
+      <P>{t("legal_privacy_7_p1")}</P>
 
-      <H2>8. Contato</H2>
-      <P>
-        Se você tiver alguma dúvida ou preocupação sobre nossa Política de
-        Privacidade, entre em contato conosco.
-      </P>
+      <H2>{t("legal_privacy_8_header")}</H2>
+      <P>{t("legal_privacy_8_p1")}</P>
     </Container>
   );
 }

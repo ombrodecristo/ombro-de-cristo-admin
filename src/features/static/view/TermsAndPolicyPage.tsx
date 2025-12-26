@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { LegalContent } from "./components/LegalContent";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -38,11 +39,13 @@ const Main = styled.main`
 `;
 
 export default function TermsAndPolicyPage() {
+  const { t } = useTranslation();
+
   return (
     <PageContainer>
       <Header>
         <Logo src="/logo.png" alt="Logo Ombro de Cristo" />
-        <Title>Termos de Uso e Política de Privacidade</Title>
+        <Title>{t("terms_page_title")}</Title>
       </Header>
       <Main>
         <LegalContent />

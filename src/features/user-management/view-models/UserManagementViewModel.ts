@@ -5,6 +5,7 @@ import {
 } from "@/data/repositories/profileRepository";
 import { logService } from "@/shared/services/logService";
 import type { Profile } from "@/core/types/database";
+import i18n from "@/core/i18n";
 
 export type SortConfig = {
   key: string | null;
@@ -144,7 +145,9 @@ export class UserManagementViewModel extends BaseViewModel {
       await profileRepository.getProfilesWithRelations();
 
     if (fetchError) {
-      this.error = "Erro ao carregar perfis.";
+      this.error = i18n.t("error_loading_resource", {
+        resource: i18n.t("resource_profile"),
+      });
       await logService.logError(fetchError, {
         component: "UserManagementViewModel",
       });

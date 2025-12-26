@@ -17,6 +17,7 @@ import {
   TableRow,
   Button,
 } from "@/shared/components";
+import { useTranslation } from "react-i18next";
 
 export type SortConfig = {
   key: string | null;
@@ -80,6 +81,8 @@ export default function UserTable({
   sortConfig,
   requestSort,
 }: UserTableProps) {
+  const { t } = useTranslation();
+
   const getSortIcon = (key: string) => {
     if (sortConfig.key !== key) return null;
 
@@ -97,30 +100,32 @@ export default function UserTable({
           <TableRow>
             <TableHeaderCell onClick={() => requestSort("full_name")}>
               <HeaderCellContent>
-                Nome {getSortIcon("full_name")}
+                {t("users_table_header_name")} {getSortIcon("full_name")}
               </HeaderCellContent>
             </TableHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("role")}>
               <HeaderCellContent>
-                Permissão {getSortIcon("role")}
+                {t("users_table_header_role")} {getSortIcon("role")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("gender")}>
               <HeaderCellContent>
-                Gênero {getSortIcon("gender")}
+                {t("users_table_header_gender")} {getSortIcon("gender")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("churches")}>
               <HeaderCellContent>
-                Igreja {getSortIcon("churches")}
+                {t("users_table_header_church")} {getSortIcon("churches")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("mentor")}>
               <HeaderCellContent>
-                Mentoria {getSortIcon("mentor")}
+                {t("users_table_header_mentor")} {getSortIcon("mentor")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
-            <TableHeaderCell>Ações</TableHeaderCell>
+            <TableHeaderCell>
+              {t("churches_table_header_actions")}
+            </TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -130,7 +135,7 @@ export default function UserTable({
                 colSpan={6}
                 style={{ textAlign: "center", height: "100px" }}
               >
-                Nenhum perfil encontrado.
+                {t("users_table_no_results")}
               </TableCell>
             </TableRow>
           ) : (
@@ -144,15 +149,15 @@ export default function UserTable({
                   {formatGender(profile.gender)}
                 </DesktopOnlyCell>
                 <DesktopOnlyCell>
-                  {profile.churches?.name ?? "N/A"}
+                  {profile.churches?.name ?? t("common_undefined")}
                 </DesktopOnlyCell>
                 <DesktopOnlyCell>
-                  {profile.mentor?.full_name ?? "N/A"}
+                  {profile.mentor?.full_name ?? t("common_undefined")}
                 </DesktopOnlyCell>
                 <ActionsContainer>
                   <DesktopActions>
                     <Button
-                      label="Editar"
+                      label={t("users_edit_button")}
                       onClick={() => onEdit(profile)}
                       icon={<IoPencil />}
                       size="small"
@@ -161,7 +166,7 @@ export default function UserTable({
                   </DesktopActions>
                   <MobileActions>
                     <Button
-                      label="Visualizar"
+                      label={t("common_view")}
                       onClick={() => onDetails(profile)}
                       icon={<IoEyeOutline />}
                       variant="secondary"

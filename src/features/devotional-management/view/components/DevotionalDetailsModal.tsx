@@ -3,6 +3,7 @@ import type { DevotionalWithAuthor } from "@/data/repositories/devotionalReposit
 import { Button, Modal } from "@/shared/components";
 import { formatDate } from "@/core/lib/formatters";
 import { IoPencil, IoTrashOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const Container = styled.div`
   display: flex;
@@ -93,39 +94,47 @@ export function DevotionalDetailsModal({
   onEdit,
   onDelete,
 }: DevotionalDetailsModalProps) {
+  const { t } = useTranslation();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <Container>
-        <Title>Detalhes do Devocional</Title>
+        <Title>{t("devotionals_details_title")}</Title>
         <ScrollableContent>
           <DetailsList>
             <DetailItem>
-              <DetailLabel>Título</DetailLabel>
+              <DetailLabel>{t("devotionals_details_title_label")}</DetailLabel>
               <DetailValue>{devotional.title}</DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Autoria</DetailLabel>
-              <DetailValue>{devotional.author?.full_name ?? "N/A"}</DetailValue>
+              <DetailLabel>{t("devotionals_details_author_label")}</DetailLabel>
+              <DetailValue>
+                {devotional.author?.full_name ?? t("common_undefined")}
+              </DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Última Modificação</DetailLabel>
+              <DetailLabel>
+                {t("devotionals_details_modified_label")}
+              </DetailLabel>
               <DetailValue>{formatDate(devotional.updated_at)}</DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Conteúdo</DetailLabel>
+              <DetailLabel>
+                {t("devotionals_details_content_label")}
+              </DetailLabel>
               <DetailValue>{devotional.content}</DetailValue>
             </DetailItem>
           </DetailsList>
         </ScrollableContent>
         <Actions>
           <Button
-            label="Editar"
+            label={t("churches_details_edit_button")}
             onClick={() => onEdit(devotional)}
             icon={<IoPencil />}
             variant="secondary"
           />
           <Button
-            label="Excluir"
+            label={t("churches_details_delete_button")}
             onClick={() => onDelete(devotional)}
             icon={<IoTrashOutline />}
             variant="destructive"

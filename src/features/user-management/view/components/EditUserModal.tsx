@@ -11,6 +11,7 @@ import { useViewModel } from "@/shared/hooks/useViewModel";
 import { formatGender, formatRole } from "@/core/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
 import { IoInformationCircleOutline, IoSaveOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const FormContainer = styled.form`
   display: flex;
@@ -94,6 +95,8 @@ export default function EditUserModal({
   profile,
   onSuccess,
 }: EditUserModalProps) {
+  const { t } = useTranslation();
+
   const [viewModel] = useState(
     () => new EditUserViewModel({ profile, onClose, onSuccess })
   );
@@ -101,7 +104,7 @@ export default function EditUserModal({
   useViewModel(viewModel);
 
   const churchOptions = [
-    { value: "none", label: "Nenhuma" },
+    { value: "none", label: t("users_edit_no_church") },
     ...viewModel.churches.map(c => ({ value: c.id, label: c.name })),
   ];
 
@@ -112,22 +115,22 @@ export default function EditUserModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="512px">
       <FormContainer onSubmit={onFormSubmit}>
-        <Title>Editar Perfil</Title>
+        <Title>{t("users_edit_title")}</Title>
         <ScrollableContent>
           <FormGroup>
-            <Label htmlFor="user-name">Nome Completo</Label>
+            <Label htmlFor="user-name">{t("users_edit_name_label")}</Label>
             <Input id="user-name" value={profile.full_name} disabled />
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="mentor-name">Mentoria</Label>
+            <Label htmlFor="mentor-name">{t("users_edit_mentor_label")}</Label>
             <Input
               id="mentor-name"
-              value={profile.mentor?.full_name ?? "Nenhuma"}
+              value={profile.mentor?.full_name ?? t("users_edit_no_church")}
               disabled
             />
           </FormGroup>
           <FormGroup>
-            <Label>Permissão</Label>
+            <Label>{t("users_edit_role_label")}</Label>
             <Select
               value={viewModel.newRole}
               onChange={value => viewModel.setNewRole(value as UserRole)}
@@ -139,7 +142,7 @@ export default function EditUserModal({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Gênero</Label>
+            <Label>{t("users_edit_gender_label")}</Label>
             <Select
               value={viewModel.newGender}
               onChange={value => viewModel.setNewGender(value as UserGender)}
@@ -151,7 +154,7 @@ export default function EditUserModal({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Igreja</Label>
+            <Label>{t("users_edit_church_label")}</Label>
             <Select
               value={viewModel.newChurchId || "none"}
               onChange={value =>
@@ -161,35 +164,28 @@ export default function EditUserModal({
               options={churchOptions}
               placeholder={
                 viewModel.loadingChurches
-                  ? "Carregando..."
-                  : "Selecione uma igreja"
+                  ? t("users_edit_loading_churches")
+                  : t("users_edit_select_church")
               }
             />
           </FormGroup>
           <Alert>
             <IoInformationCircleOutline size={28} style={{ flexShrink: 0 }} />
             <div>
-              <p>
-                As alterações de permissão e gênero serão aplicadas no próximo
-                login do perfil no aplicativo.
-              </p>
-              <p style={{ marginTop: "4px" }}>
-                O nome e a Mentoria são gerenciados pelo próprio perfil no
-                aplicativo.
-              </p>
+              <p>{t("users_edit_alert")}</p>
             </div>
           </Alert>
         </ScrollableContent>
         <Actions>
           <Button
             type="submit"
-            label="Salvar"
+            label={t("common_save")}
             loading={viewModel.loading}
             icon={<IoSaveOutline size={20} />}
           />
           <Button
             type="button"
-            label="Cancelar"
+            label={t("common_cancel")}
             variant="secondary"
             onClick={onClose}
             disabled={viewModel.loading}

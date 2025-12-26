@@ -5,6 +5,7 @@ import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
 import { IoSaveOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const FormContainer = styled.form`
   display: flex;
@@ -73,6 +74,8 @@ export default function DevotionalFormModal({
   authorId,
   devotionalToEdit,
 }: DevotionalFormModalProps) {
+  const { t } = useTranslation();
+
   const [viewModel] = useState(
     () =>
       new DevotionalFormViewModel({
@@ -93,11 +96,13 @@ export default function DevotionalFormModal({
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <FormContainer onSubmit={onFormSubmit}>
         <Title>
-          {viewModel.isEditing ? "Editar Devocional" : "Novo Devocional"}
+          {viewModel.isEditing
+            ? t("devotionals_form_edit_title")
+            : t("devotionals_form_new_title")}
         </Title>
         <ScrollableContent>
           <div>
-            <Label htmlFor="title">Título</Label>
+            <Label htmlFor="title">{t("devotionals_form_title_label")}</Label>
             <Input
               id="title"
               value={viewModel.title}
@@ -105,11 +110,13 @@ export default function DevotionalFormModal({
               disabled={viewModel.loading}
               required
               error={viewModel.titleError || ""}
-              placeholder="Ex: Fortaleça-se no Senhor"
+              placeholder={t("devotionals_form_title_placeholder")}
             />
           </div>
           <div>
-            <Label htmlFor="content">Conteúdo</Label>
+            <Label htmlFor="content">
+              {t("devotionals_form_content_label")}
+            </Label>
             <Textarea
               id="content"
               value={viewModel.content}
@@ -117,20 +124,20 @@ export default function DevotionalFormModal({
               disabled={viewModel.loading}
               required
               error={viewModel.contentError || ""}
-              placeholder="Comece a escrever a reflexão aqui..."
+              placeholder={t("devotionals_form_content_placeholder")}
             />
           </div>
         </ScrollableContent>
         <Actions>
           <Button
             type="submit"
-            label="Salvar"
+            label={t("common_save")}
             loading={viewModel.loading}
             icon={<IoSaveOutline size={20} />}
           />
           <Button
             type="button"
-            label="Cancelar"
+            label={t("common_cancel")}
             variant="secondary"
             onClick={onClose}
             disabled={viewModel.loading}

@@ -3,6 +3,7 @@ import { churchRepository } from "@/data/repositories/churchRepository";
 import { logService } from "@/shared/services/logService";
 import type { Church } from "@/core/types/database";
 import type { SortConfig } from "../view/components/ChurchTable";
+import i18n from "@/core/i18n";
 
 export class ChurchManagementViewModel extends BaseViewModel {
   public churches: Church[] = [];
@@ -122,7 +123,7 @@ export class ChurchManagementViewModel extends BaseViewModel {
 
     this.isDeleting = false;
     if (deleteError) {
-      this.error = "Erro ao excluir a igreja.";
+      this.error = i18n.t("churches_delete_error");
       await logService.logError(deleteError, {
         component: "ChurchManagementViewModel",
         context: { churchId: this.selectedChurch.id },
@@ -139,7 +140,9 @@ export class ChurchManagementViewModel extends BaseViewModel {
     this.notify();
     const { data, error } = await churchRepository.getChurches();
     if (error) {
-      this.error = "Erro ao carregar igrejas.";
+      this.error = i18n.t("error_loading_resource", {
+        resource: i18n.t("resource_churches"),
+      });
       await logService.logError(error, {
         component: "ChurchManagementViewModel",
       });

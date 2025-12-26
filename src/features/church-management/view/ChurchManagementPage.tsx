@@ -14,6 +14,7 @@ import ChurchFormModal from "./components/ChurchFormModal";
 import { IoAdd, IoSearchOutline } from "react-icons/io5";
 import { ChurchDetailsModal } from "./components/ChurchDetailsModal";
 import type { Church } from "@/core/types/database";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const PageContainer = styled.div`
 `;
 
 export default function ChurchManagementPage() {
+  const { t } = useTranslation();
   const [viewModel] = useState(() => new ChurchManagementViewModel());
   useViewModel(viewModel);
 
@@ -36,7 +38,7 @@ export default function ChurchManagementPage() {
   ) {
     return (
       <PageContainer>
-        <PageHeader title="Igrejas">
+        <PageHeader title={t("churches_page_title")}>
           <Skeleton height="40px" width="40px" />
         </PageHeader>
         <Skeleton height="56px" width="100%" />
@@ -57,9 +59,9 @@ export default function ChurchManagementPage() {
 
   return (
     <PageContainer>
-      <PageHeader title="Igrejas">
+      <PageHeader title={t("churches_page_title")}>
         <Button
-          label="Nova Igreja"
+          label={t("churches_new_button")}
           onClick={viewModel.handleOpenCreate}
           icon={<IoAdd size={20} />}
           size="small"
@@ -67,7 +69,7 @@ export default function ChurchManagementPage() {
         />
       </PageHeader>
       <Input
-        placeholder="Pesquisar por nome..."
+        placeholder={t("churches_search_placeholder")}
         value={viewModel.searchQuery}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           viewModel.setSearchQuery(e.target.value)
@@ -107,18 +109,17 @@ export default function ChurchManagementPage() {
           isOpen={viewModel.isDeleteAlertOpen}
           onClose={viewModel.handleCloseModals}
           onConfirm={viewModel.handleDeleteConfirm}
-          title="Excluir Igreja?"
+          title={t("churches_delete_title")}
           message={
-            <>
-              A igreja{" "}
-              <strong style={{ fontWeight: "bold" }}>
-                {viewModel.selectedChurch.name}
-              </strong>{" "}
-              será excluída permanentemente. Perfis associados perderão o
-              vínculo. Esta ação não pode ser desfeita.
-            </>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: t("churches_delete_message", {
+                  name: viewModel.selectedChurch.name,
+                }),
+              }}
+            />
           }
-          confirmText="Sim, excluir"
+          confirmText={t("common_yes_delete")}
           variant="destructive"
           loading={viewModel.isDeleting}
         />

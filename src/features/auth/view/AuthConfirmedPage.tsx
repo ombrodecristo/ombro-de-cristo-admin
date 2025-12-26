@@ -3,6 +3,7 @@ import { IoCheckmarkCircle, IoAlertCircle } from "react-icons/io5";
 import { BaseCard, GlobalLoader } from "@/shared/components";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
   display: flex;
@@ -62,6 +63,7 @@ enum PageState {
 }
 
 export default function AuthConfirmedPage() {
+  const { t } = useTranslation();
   const { initialHash, loading: authLoading } = useAuth();
   const [pageState, setPageState] = useState<PageState>(PageState.Loading);
 
@@ -90,11 +92,14 @@ export default function AuthConfirmedPage() {
   }
 
   const isSuccess = pageState === PageState.Success;
-  const title = isSuccess ? "Conta Confirmada" : "Link Inválido ou Expirado";
+
+  const title = isSuccess
+    ? t("auth_confirmed_title_success")
+    : t("auth_confirmed_title_error");
 
   const message = isSuccess
-    ? "Sua conta foi confirmada com sucesso. Você já pode fechar esta página e acessar o aplicativo."
-    : "Este link de confirmação é inválido ou já foi utilizado. Por favor, tente fazer o login no aplicativo. Se a conta ainda não estiver confirmada, você pode solicitar um novo link de confirmação na tela de login do aplicativo.";
+    ? t("auth_confirmed_message_success")
+    : t("auth_confirmed_message_error");
 
   return (
     <PageContainer>

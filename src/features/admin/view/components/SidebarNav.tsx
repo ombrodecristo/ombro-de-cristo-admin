@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import { IoPeopleOutline, IoHomeOutline, IoBookOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const Nav = styled.nav`
   display: flex;
@@ -78,35 +79,41 @@ type SidebarNavProps = {
   onNavigate: () => void;
 };
 
-const navItems = [
-  { to: "/admin/users", icon: <IoPeopleOutline size={22} />, label: "Perfis" },
-  {
-    to: "/admin/churches",
-    icon: <IoHomeOutline size={22} />,
-    label: "Igrejas",
-  },
-  {
-    to: "/admin/devotionals",
-    icon: <IoBookOutline size={22} />,
-    label: "Devocionais",
-  },
-];
-
 export default function SidebarNav({
   isSidebarOpen,
   onNavigate,
 }: SidebarNavProps) {
+  const { t } = useTranslation();
+
+  const navItems = [
+    {
+      to: "/admin/users",
+      icon: <IoPeopleOutline size={22} />,
+      labelKey: "nav_profiles",
+    },
+    {
+      to: "/admin/churches",
+      icon: <IoHomeOutline size={22} />,
+      labelKey: "nav_churches",
+    },
+    {
+      to: "/admin/devotionals",
+      icon: <IoBookOutline size={22} />,
+      labelKey: "nav_devotionals",
+    },
+  ];
+
   return (
     <Nav>
       {navItems.map(item => (
         <StyledNavLink
           key={item.to}
           to={item.to}
-          title={!isSidebarOpen ? item.label : ""}
+          title={!isSidebarOpen ? t(item.labelKey) : ""}
           onClick={onNavigate}
         >
           {item.icon}
-          <LinkText>{item.label}</LinkText>
+          <LinkText>{t(item.labelKey)}</LinkText>
         </StyledNavLink>
       ))}
     </Nav>

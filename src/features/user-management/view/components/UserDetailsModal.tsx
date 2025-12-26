@@ -3,6 +3,7 @@ import type { ProfileWithRelations } from "@/data/repositories/profileRepository
 import { Button, Modal } from "@/shared/components";
 import { formatGender, formatRole } from "@/core/lib/formatters";
 import { IoPencil } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const Container = styled.div`
   display: flex;
@@ -89,37 +90,43 @@ export function UserDetailsModal({
   profile,
   onEdit,
 }: UserDetailsModalProps) {
+  const { t } = useTranslation();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="512px">
       <Container>
-        <Title>Detalhes do Perfil</Title>
+        <Title>{t("users_details_title")}</Title>
         <ScrollableContent>
           <DetailsList>
             <DetailItem>
-              <DetailLabel>Nome</DetailLabel>
+              <DetailLabel>{t("users_edit_name_label")}</DetailLabel>
               <DetailValue>{profile.full_name}</DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Permissão</DetailLabel>
+              <DetailLabel>{t("users_edit_role_label")}</DetailLabel>
               <DetailValue>{formatRole(profile.role)}</DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Gênero</DetailLabel>
+              <DetailLabel>{t("users_edit_gender_label")}</DetailLabel>
               <DetailValue>{formatGender(profile.gender)}</DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Igreja</DetailLabel>
-              <DetailValue>{profile.churches?.name ?? "N/A"}</DetailValue>
+              <DetailLabel>{t("users_edit_church_label")}</DetailLabel>
+              <DetailValue>
+                {profile.churches?.name ?? t("common_undefined")}
+              </DetailValue>
             </DetailItem>
             <DetailItem>
-              <DetailLabel>Mentoria</DetailLabel>
-              <DetailValue>{profile.mentor?.full_name ?? "N/A"}</DetailValue>
+              <DetailLabel>{t("users_edit_mentor_label")}</DetailLabel>
+              <DetailValue>
+                {profile.mentor?.full_name ?? t("common_undefined")}
+              </DetailValue>
             </DetailItem>
           </DetailsList>
         </ScrollableContent>
         <Actions>
           <Button
-            label="Editar"
+            label={t("users_edit_button")}
             onClick={() => onEdit(profile)}
             icon={<IoPencil />}
             variant="secondary"

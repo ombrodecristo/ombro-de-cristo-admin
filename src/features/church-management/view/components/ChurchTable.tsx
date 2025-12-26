@@ -18,6 +18,7 @@ import {
   TableRow,
   Button,
 } from "@/shared/components";
+import { useTranslation } from "react-i18next";
 
 export type SortConfig = {
   key: keyof Church | null;
@@ -83,6 +84,8 @@ export default function ChurchTable({
   sortConfig,
   requestSort,
 }: ChurchTableProps) {
+  const { t } = useTranslation();
+
   const getSortIcon = (key: keyof Church) => {
     if (sortConfig.key !== key) return null;
 
@@ -99,14 +102,19 @@ export default function ChurchTable({
         <TableHead>
           <TableRow>
             <TableHeaderCell onClick={() => requestSort("name")}>
-              <HeaderCellContent>Nome {getSortIcon("name")}</HeaderCellContent>
+              <HeaderCellContent>
+                {t("churches_table_header_name")} {getSortIcon("name")}
+              </HeaderCellContent>
             </TableHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("updated_at")}>
               <HeaderCellContent>
-                Última Modificação {getSortIcon("updated_at")}
+                {t("churches_table_header_modified")}{" "}
+                {getSortIcon("updated_at")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
-            <TableHeaderCell>Ações</TableHeaderCell>
+            <TableHeaderCell>
+              {t("churches_table_header_actions")}
+            </TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -116,7 +124,7 @@ export default function ChurchTable({
                 colSpan={3}
                 style={{ textAlign: "center", height: "100px" }}
               >
-                Nenhuma igreja encontrada.
+                {t("churches_table_no_results")}
               </TableCell>
             </TableRow>
           ) : (
@@ -131,7 +139,7 @@ export default function ChurchTable({
                 <ActionsContainer>
                   <DesktopActions>
                     <Button
-                      label="Editar"
+                      label={t("churches_details_edit_button")}
                       onClick={() => onEdit(church)}
                       icon={<IoPencil />}
                       variant="secondary"
@@ -139,7 +147,7 @@ export default function ChurchTable({
                       style={{ width: "auto" }}
                     />
                     <Button
-                      label="Excluir"
+                      label={t("churches_details_delete_button")}
                       onClick={() => onDelete(church)}
                       icon={<IoTrashOutline />}
                       variant="destructive"
@@ -149,7 +157,7 @@ export default function ChurchTable({
                   </DesktopActions>
                   <MobileActions>
                     <Button
-                      label="Visualizar"
+                      label={t("common_view")}
                       onClick={() => onDetails(church)}
                       icon={<IoEyeOutline />}
                       variant="secondary"

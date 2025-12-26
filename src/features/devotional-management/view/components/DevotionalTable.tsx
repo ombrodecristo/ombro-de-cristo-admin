@@ -18,6 +18,7 @@ import {
   TableRow,
   Button,
 } from "@/shared/components";
+import { useTranslation } from "react-i18next";
 
 export type SortConfig = {
   key: string | null;
@@ -83,6 +84,8 @@ export default function DevotionalTable({
   sortConfig,
   requestSort,
 }: DevotionalTableProps) {
+  const { t } = useTranslation();
+
   const getSortIcon = (key: string) => {
     if (sortConfig.key !== key) return null;
 
@@ -100,20 +103,23 @@ export default function DevotionalTable({
           <TableRow>
             <TableHeaderCell onClick={() => requestSort("title")}>
               <HeaderCellContent>
-                Título {getSortIcon("title")}
+                {t("devotionals_table_header_title")} {getSortIcon("title")}
               </HeaderCellContent>
             </TableHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("author")}>
               <HeaderCellContent>
-                Autoria {getSortIcon("author")}
+                {t("devotionals_table_header_author")} {getSortIcon("author")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
             <DesktopOnlyHeaderCell onClick={() => requestSort("updated_at")}>
               <HeaderCellContent>
-                Última Modificação {getSortIcon("updated_at")}
+                {t("devotionals_table_header_modified")}{" "}
+                {getSortIcon("updated_at")}
               </HeaderCellContent>
             </DesktopOnlyHeaderCell>
-            <TableHeaderCell>Ações</TableHeaderCell>
+            <TableHeaderCell>
+              {t("churches_table_header_actions")}
+            </TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -123,7 +129,7 @@ export default function DevotionalTable({
                 colSpan={4}
                 style={{ textAlign: "center", height: "100px" }}
               >
-                Nenhum devocional encontrado.
+                {t("devotionals_table_no_results")}
               </TableCell>
             </TableRow>
           ) : (
@@ -133,7 +139,7 @@ export default function DevotionalTable({
                   {devotional.title}
                 </TableCell>
                 <DesktopOnlyCell>
-                  {devotional.author?.full_name ?? "N/A"}
+                  {devotional.author?.full_name ?? t("common_undefined")}
                 </DesktopOnlyCell>
                 <DesktopOnlyCell>
                   {formatDate(devotional.updated_at)}
@@ -141,7 +147,7 @@ export default function DevotionalTable({
                 <ActionsContainer>
                   <DesktopActions>
                     <Button
-                      label="Editar"
+                      label={t("churches_details_edit_button")}
                       onClick={() => onEdit(devotional)}
                       icon={<IoPencil />}
                       variant="secondary"
@@ -149,7 +155,7 @@ export default function DevotionalTable({
                       style={{ width: "auto" }}
                     />
                     <Button
-                      label="Excluir"
+                      label={t("churches_details_delete_button")}
                       onClick={() => onDelete(devotional)}
                       icon={<IoTrashOutline />}
                       variant="destructive"
@@ -159,7 +165,7 @@ export default function DevotionalTable({
                   </DesktopActions>
                   <MobileActions>
                     <Button
-                      label="Visualizar"
+                      label={t("common_view")}
                       onClick={() => onDetails(devotional)}
                       icon={<IoEyeOutline />}
                       variant="secondary"

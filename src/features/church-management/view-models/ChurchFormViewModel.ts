@@ -4,6 +4,7 @@ import { churchRepository } from "@/data/repositories/churchRepository";
 import { logService } from "@/shared/services/logService";
 import type { Church } from "@/core/types/database";
 import { validateChurchName } from "@/core/lib/validators";
+import i18n from "@/core/i18n";
 
 type ChurchFormViewModelProps = {
   churchToEdit: Church | null;
@@ -68,8 +69,8 @@ export class ChurchFormViewModel extends BaseViewModel {
 
     if (apiError) {
       const friendlyMessage = this.isEditing
-        ? "Não foi possível salvar as alterações."
-        : "Não foi possível criar a nova igreja.";
+        ? i18n.t("churches_form_error_update")
+        : i18n.t("churches_form_error_create");
 
       this.error = friendlyMessage;
       await logService.logError(apiError, {
