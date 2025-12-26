@@ -14,6 +14,7 @@ import {
   IoBookOutline,
   IoHeartOutline,
   IoShieldOutline,
+  IoStatsChart,
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
@@ -37,6 +38,9 @@ const Header = styled(Box)`
   flex-shrink: 0;
   width: 100%;
   border-bottom: 1px solid ${props => props.theme.colors.border};
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: ${props => props.theme.spacing.m}px;
+  }
 `;
 
 const Nav = styled(Box)`
@@ -51,6 +55,9 @@ const NavRight = styled(Box)`
   display: flex;
   align-items: center;
   gap: ${props => props.theme.spacing.l}px;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    gap: ${props => props.theme.spacing.s}px;
+  }
 `;
 
 const Main = styled(Box)`
@@ -337,6 +344,8 @@ export default function LandingPage() {
                 variant="secondary"
                 size="small"
                 style={{ width: "auto" }}
+                icon={<IoStatsChart size={22} />}
+                hideTextOnMobile
               />
             </a>
           </NavRight>
