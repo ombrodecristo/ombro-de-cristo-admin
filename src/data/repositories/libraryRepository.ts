@@ -71,6 +71,18 @@ function getFilePublicUrl(filePath: string): string {
   return data.publicUrl;
 }
 
+async function getFileSignedUrl(filePath: string): Promise<string | null> {
+  const { data, error } = await supabase.storage
+    .from("library")
+    .createSignedUrl(filePath, 60 * 60);
+
+  if (error) {
+    return null;
+  }
+
+  return data.signedUrl;
+}
+
 export const libraryRepository = {
   getLibraryItems,
   createLibraryItem,
@@ -79,4 +91,5 @@ export const libraryRepository = {
   uploadFile,
   deleteFile,
   getFilePublicUrl,
+  getFileSignedUrl,
 };

@@ -47,11 +47,11 @@ export class LibraryFormViewModel extends BaseViewModel {
       this.description = this.itemToEdit.description || "";
       this.contentType = this.itemToEdit.content_type;
       this.videoUrl = this.itemToEdit.video_url || "";
-      this.generatePreviewUrl();
+      this.loadPreview();
     }
   }
 
-  private generatePreviewUrl() {
+  private async loadPreview() {
     if (!this.itemToEdit) return;
 
     if (
@@ -59,10 +59,16 @@ export class LibraryFormViewModel extends BaseViewModel {
       this.itemToEdit.video_url
     ) {
       this.previewUrl = this.itemToEdit.video_url;
+      this.notify();
     } else if (this.itemToEdit.file_path) {
-      this.previewUrl = libraryRepository.getFilePublicUrl(
+      const signedUrl = await libraryRepository.getFileSignedUrl(
         this.itemToEdit.file_path
       );
+
+      if (signedUrl) {
+        this.previewUrl = signedUrl;
+        this.notify();
+      }
     }
   }
 
