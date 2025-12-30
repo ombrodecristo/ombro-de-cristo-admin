@@ -10,8 +10,10 @@ export class LibraryManagementViewModel extends BaseViewModel {
   public loading = true;
   public error: string | null = null;
   public selectedItem: LibraryItem | null = null;
+  public selectedItemForDetails: LibraryItem | null = null;
   public isFormOpen = false;
   public isDeleteAlertOpen = false;
+  public isDetailsModalOpen = false;
   public isDeleting = false;
   public searchQuery = "";
   public sortConfig: SortConfig = {
@@ -92,6 +94,18 @@ export class LibraryManagementViewModel extends BaseViewModel {
     this.selectedItem = null;
     this.isFormOpen = false;
     this.isDeleteAlertOpen = false;
+    this.notify();
+  };
+
+  public handleOpenDetailsModal = (item: LibraryItem) => {
+    this.selectedItemForDetails = item;
+    this.isDetailsModalOpen = true;
+    this.notify();
+  };
+
+  public handleCloseDetailsModal = () => {
+    this.selectedItemForDetails = null;
+    this.isDetailsModalOpen = false;
     this.notify();
   };
 

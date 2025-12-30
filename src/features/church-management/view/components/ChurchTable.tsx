@@ -142,7 +142,6 @@ export default function ChurchTable({
                       label={t("churches_details_edit_button")}
                       onClick={() => onEdit(church)}
                       icon={<IoPencil />}
-                      variant="secondary"
                       size="small"
                       style={{ width: "auto" }}
                     />

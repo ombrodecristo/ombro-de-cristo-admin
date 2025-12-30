@@ -150,7 +150,6 @@ export default function DevotionalTable({
                       label={t("churches_details_edit_button")}
                       onClick={() => onEdit(devotional)}
                       icon={<IoPencil />}
-                      variant="secondary"
                       size="small"
                       style={{ width: "auto" }}
                     />

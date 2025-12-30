@@ -4,6 +4,7 @@ import {
   IoTrashOutline,
   IoArrowUp,
   IoArrowDown,
+  IoEyeOutline,
 } from "react-icons/io5";
 import type { LibraryItem } from "@/core/types/database";
 import { formatDate } from "@/core/lib/formatters";
@@ -33,7 +34,10 @@ const HeaderCellContent = styled.div`
 `;
 
 const ActionsContainer = styled(TableCell)`
-  width: 150px;
+  width: auto;
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 220px;
+  }
 `;
 
 const DesktopOnlyCell = styled(TableCell)`
@@ -48,10 +52,26 @@ const DesktopOnlyHeaderCell = styled(TableHeaderCell)`
   }
 `;
 
+const DesktopActions = styled.div`
+  display: flex;
+  gap: 8px;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const MobileActions = styled.div`
+  display: none;
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: flex;
+  }
+`;
+
 type LibraryTableProps = {
   items: LibraryItem[];
   onEdit: (item: LibraryItem) => void;
   onDelete: (item: LibraryItem) => void;
+  onDetails: (item: LibraryItem) => void;
   sortConfig: SortConfig;
   requestSort: (key: keyof LibraryItem) => void;
 };
@@ -60,6 +80,7 @@ export default function LibraryTable({
   items,
   onEdit,
   onDelete,
+  onDetails,
   sortConfig,
   requestSort,
 }: LibraryTableProps) {
@@ -117,26 +138,37 @@ export default function LibraryTable({
                   {item.title}
                 </TableCell>
                 <DesktopOnlyCell>
-                  {item.content_type.toUpperCase()}
+                  {t(`library_form_type_${item.content_type.toLowerCase()}`)}
                 </DesktopOnlyCell>
                 <DesktopOnlyCell>{formatDate(item.updated_at)}</DesktopOnlyCell>
                 <ActionsContainer>
-                  <Button
-                    label={t("churches_details_edit_button")}
-                    onClick={() => onEdit(item)}
-                    icon={<IoPencil />}
-                    variant="secondary"
-                    size="small"
-                    style={{ width: "auto" }}
-                  />
-                  <Button
-                    label={t("churches_details_delete_button")}
-                    onClick={() => onDelete(item)}
-                    icon={<IoTrashOutline />}
-                    variant="destructive"
-                    size="small"
-                    style={{ width: "auto" }}
-                  />
+                  <DesktopActions>
+                    <Button
+                      label={t("churches_details_edit_button")}
+                      onClick={() => onEdit(item)}
+                      icon={<IoPencil />}
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                    <Button
+                      label={t("churches_details_delete_button")}
+                      onClick={() => onDelete(item)}
+                      icon={<IoTrashOutline />}
+                      variant="destructive"
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                  </DesktopActions>
+                  <MobileActions>
+                    <Button
+                      label={t("common_view")}
+                      onClick={() => onDetails(item)}
+                      icon={<IoEyeOutline />}
+                      variant="secondary"
+                      size="small"
+                      style={{ width: "auto" }}
+                    />
+                  </MobileActions>
                 </ActionsContainer>
               </TableRow>
             ))

@@ -11,8 +11,10 @@ import {
 } from "@/shared/components";
 import LibraryTable from "./components/LibraryTable";
 import LibraryFormModal from "./components/LibraryFormModal";
+import { LibraryDetailsModal } from "./components/LibraryDetailsModal";
 import { IoAdd, IoSearchOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import type { LibraryItem } from "@/core/types/database";
 
 const PageContainer = styled.div`
   display: flex;
@@ -45,6 +47,16 @@ export default function LibraryManagementPage() {
     );
   }
 
+  const handleEditFromDetails = (item: LibraryItem) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleOpenEdit(item);
+  };
+
+  const handleDeleteFromDetails = (item: LibraryItem) => {
+    viewModel.handleCloseDetailsModal();
+    viewModel.handleOpenDelete(item);
+  };
+
   return (
     <PageContainer>
       <PageHeader title={t("library_page_title")}>
@@ -68,6 +80,7 @@ export default function LibraryManagementPage() {
         items={viewModel.sortedItems}
         onEdit={viewModel.handleOpenEdit}
         onDelete={viewModel.handleOpenDelete}
+        onDetails={viewModel.handleOpenDetailsModal}
         sortConfig={viewModel.sortConfig}
         requestSort={viewModel.requestSort}
       />
@@ -78,6 +91,16 @@ export default function LibraryManagementPage() {
           itemToEdit={viewModel.selectedItem}
           onClose={viewModel.handleCloseModals}
           onSuccess={viewModel.handleFormSuccess}
+        />
+      )}
+
+      {viewModel.selectedItemForDetails && (
+        <LibraryDetailsModal
+          isOpen={viewModel.isDetailsModalOpen}
+          onClose={viewModel.handleCloseDetailsModal}
+          item={viewModel.selectedItemForDetails}
+          onEdit={handleEditFromDetails}
+          onDelete={handleDeleteFromDetails}
         />
       )}
 
