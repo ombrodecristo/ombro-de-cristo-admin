@@ -150,10 +150,8 @@ export class LibraryFormViewModel extends BaseViewModel {
 
   private async uploadFile(file: File, path: string): Promise<string> {
     const { data, error } = await libraryRepository.uploadFile(path, file);
-
-    if (error || !data) {
-      throw error || new Error("File upload failed and returned no data.");
-    }
+    if (error) throw error;
+    if (!data) throw new Error("File upload failed and returned no data.");
 
     return libraryRepository.getFilePublicUrl(data.path);
   }

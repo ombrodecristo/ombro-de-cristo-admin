@@ -104,27 +104,51 @@ export class LibraryManagementViewModel extends BaseViewModel {
     this.isDeleting = true;
     this.notify();
 
-    const { error: deleteError } = await libraryRepository.deleteLibraryItem(
-      this.selectedItem.id
-    );
+    const { id, file_path, thumbnail_url } = this.selectedItem;
 
-    if (this.selectedItem.file_path) {
-      await libraryRepository.deleteFile(this.selectedItem.file_path);
+    const { error: deleteDbError } =
+      await libraryRepository.deleteLibraryItem(id);
+
+    if (file_path) {
+      try {
+        await libraryRepository.deleteFile(file_path);
+      } catch (e) {
+        logService.logError(e as Error, {
+          component: "LibraryManagementViewModel",
+          context: { message: "Failed to delete main file", path: file_path },
+        });
+      }
     }
+
     if (
-      this.selectedItem.content_type === "video" &&
-      this.selectedItem.thumbnail_url
+      thumbnail_url &&
+      !thumbnail_url.includes("youtube.com") &&
+      !thumbnail_url.includes("ytimg.com")
     ) {
-      const thumbPath = `thumbnails/${this.selectedItem.file_path!.split("/").pop()}.png`;
-      await libraryRepository.deleteFile(thumbPath);
+      try {
+        const url = new URL(thumbnail_url);
+        const pathParts = url.pathname.split("/library/");
+        if (pathParts.length > 1) {
+          const thumbnailPath = pathParts[1];
+          await libraryRepository.deleteFile(thumbnailPath);
+        }
+      } catch (e) {
+        logService.logError(e as Error, {
+          component: "LibraryManagementViewModel",
+          context: {
+            message: "Failed to parse and delete thumbnail file",
+            url: thumbnail_url,
+          },
+        });
+      }
     }
 
     this.isDeleting = false;
-    if (deleteError) {
+    if (deleteDbError) {
       this.error = i18n.t("library_delete_error");
-      await logService.logError(deleteError, {
+      await logService.logError(deleteDbError, {
         component: "LibraryManagementViewModel",
-        context: { itemId: this.selectedItem.id },
+        context: { itemId: id },
       });
     } else {
       this.handleCloseModals();
