@@ -104,7 +104,7 @@ export class LibraryManagementViewModel extends BaseViewModel {
     this.isDeleting = true;
     this.notify();
 
-    const { id, file_path, thumbnail_url } = this.selectedItem;
+    const { id, file_path } = this.selectedItem;
 
     const { error: deleteDbError } =
       await libraryRepository.deleteLibraryItem(id);
@@ -115,30 +115,7 @@ export class LibraryManagementViewModel extends BaseViewModel {
       } catch (e) {
         logService.logError(e as Error, {
           component: "LibraryManagementViewModel",
-          context: { message: "Failed to delete main file", path: file_path },
-        });
-      }
-    }
-
-    if (
-      thumbnail_url &&
-      !thumbnail_url.includes("youtube.com") &&
-      !thumbnail_url.includes("ytimg.com")
-    ) {
-      try {
-        const url = new URL(thumbnail_url);
-        const pathParts = url.pathname.split("/library/");
-        if (pathParts.length > 1) {
-          const thumbnailPath = pathParts[1];
-          await libraryRepository.deleteFile(thumbnailPath);
-        }
-      } catch (e) {
-        logService.logError(e as Error, {
-          component: "LibraryManagementViewModel",
-          context: {
-            message: "Failed to parse and delete thumbnail file",
-            url: thumbnail_url,
-          },
+          context: { message: "Failed to delete file", path: file_path },
         });
       }
     }

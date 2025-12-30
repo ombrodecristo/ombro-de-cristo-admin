@@ -60,8 +60,10 @@ export class LibraryFormViewModel extends BaseViewModel {
   };
 
   public setContentType = (value: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD") => {
-    this.contentType = value;
-    this.resetDependentFields();
+    if (this.contentType !== value) {
+      this.contentType = value;
+      this.resetDependentFields();
+    }
     this.notify();
   };
 
@@ -81,6 +83,7 @@ export class LibraryFormViewModel extends BaseViewModel {
     this.titleError = null;
     this.videoUrlError = null;
     this.fileError = null;
+    this.notify();
   }
 
   private resetDependentFields() {
@@ -100,40 +103,38 @@ export class LibraryFormViewModel extends BaseViewModel {
       return false;
     }
 
-    if (this.contentType === "YOUTUBE") {
-      const urlValidation = validateUrl(this.videoUrl);
-      if (!urlValidation.isValid) {
-        this.videoUrlError = urlValidation.message;
-        this.notify();
+    switch (this.contentType) {
+      case "YOUTUBE": {
+        const urlValidation = validateUrl(this.videoUrl);
+        if (!urlValidation.isValid) {
+          this.videoUrlError = urlValidation.message;
+          this.notify();
 
-        return false;
+          return false;
+        }
+        break;
       }
-    } else {
-      if (!this.file && !this.isEditing) {
-        this.fileError = i18n.t("validation_file_required");
-        this.notify();
+      case "PDF":
+      case "DIRECT_UPLOAD": {
+        if (!this.file && !this.isEditing) {
+          this.fileError = i18n.t("validation_file_required");
+          this.notify();
 
-        return false;
+          return false;
+        }
+        break;
       }
     }
 
     return true;
   }
 
-  private async uploadFile(
-    file: File,
-    path: string
-  ): Promise<{ error: Error | null }> {
-    const { error } = await libraryRepository.uploadFile(path, file);
-    if (error) {
-      await logService.logError(error, {
-        component: "LibraryFormViewModel.uploadFile",
-      });
+  private async uploadFile(file: File, path: string): Promise<string> {
+    const { data, error } = await libraryRepository.uploadFile(path, file);
+    if (error) throw error;
+    if (!data) throw new Error("File upload failed and returned no data.");
 
-      return { error };
-    }
-
-    return { error: null };
+    return data.path;
   }
 
   public handleSubmit = async (e: FormEvent) => {
@@ -155,21 +156,14 @@ export class LibraryFormViewModel extends BaseViewModel {
       if (this.contentType === "PDF" && this.file) {
         const fileExt = this.file.name.split(".").pop();
         const filePath = `pdfs/${uuidv4()}.${fileExt}`;
-        const { error } = await this.uploadFile(this.file, filePath);
-        if (error) throw error;
-        itemPayload.file_path = filePath;
-      }
-
-      if (this.contentType === "DIRECT_UPLOAD" && this.file) {
+        itemPayload.file_path = await this.uploadFile(this.file, filePath);
+      } else if (this.contentType === "DIRECT_UPLOAD" && this.file) {
         const fileExt = this.file.name.split(".").pop();
         const filePath = `videos/${uuidv4()}.${fileExt}`;
-        const { error } = await this.uploadFile(this.file, filePath);
-        if (error) throw error;
-        itemPayload.file_path = filePath;
-      }
-
-      if (this.contentType === "YOUTUBE") {
+        itemPayload.file_path = await this.uploadFile(this.file, filePath);
+      } else if (this.contentType === "YOUTUBE") {
         itemPayload.video_url = this.videoUrl.trim();
+        itemPayload.file_path = null;
       }
 
       const { error } = this.isEditing
