@@ -32,18 +32,40 @@ const FileInputLabel = styled.label<{ disabled: boolean }>`
 
 const FileInfo = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   padding: ${props => props.theme.spacing.s}px;
   background-color: ${props => props.theme.colors.mutedBackground};
   border-radius: ${props => props.theme.radii.s}px;
   color: ${props => props.theme.colors.mainForeground};
+  gap: ${props => props.theme.spacing.s}px;
+`;
+
+const FileHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const ErrorMessage = styled.p(props => ({
   ...props.theme.textVariants.error,
   marginTop: props.theme.spacing.s,
 }));
+
+const ProgressBarContainer = styled.div`
+  width: 100%;
+  height: 6px;
+  background-color: ${props => props.theme.colors.border};
+  border-radius: 3px;
+  overflow: hidden;
+`;
+
+const ProgressBarFill = styled.div<{ progress: number }>`
+  height: 100%;
+  width: ${props => props.progress}%;
+  background-color: ${props => props.theme.colors.primary};
+  transition: width 0.3s ease-in-out;
+`;
 
 interface FileUploadProps {
   label: string;
@@ -95,26 +117,33 @@ export default function FileUpload({
 
       {isUploading && (
         <FileInfo>
-          <span>
+          <span style={{ fontSize: "14px", fontWeight: 500 }}>
             {t("library_form_upload_uploading", { progress: uploadProgress })}
           </span>
+          <ProgressBarContainer>
+            <ProgressBarFill progress={uploadProgress || 0} />
+          </ProgressBarContainer>
         </FileInfo>
       )}
 
       {file && !isUploading && (
         <FileInfo>
-          <IoDocumentTextOutline size={20} style={{ marginRight: "8px" }} />
-          <span>{file.name}</span>
-          <Button
-            label={t("library_form_upload_change_button")}
-            variant="secondary"
-            size="small"
-            style={{ width: "auto", height: "32px", fontSize: "12px" }}
-            onClick={() =>
-              document.getElementById(`file-upload-${label}`)?.click()
-            }
-            disabled={disabled}
-          />
+          <FileHeader>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IoDocumentTextOutline size={20} style={{ marginRight: "8px" }} />
+              <span>{file.name}</span>
+            </div>
+            <Button
+              label={t("library_form_upload_change_button")}
+              variant="secondary"
+              size="small"
+              style={{ width: "auto", height: "32px", fontSize: "12px" }}
+              onClick={() =>
+                document.getElementById(`file-upload-${label}`)?.click()
+              }
+              disabled={disabled}
+            />
+          </FileHeader>
         </FileInfo>
       )}
 

@@ -154,11 +154,30 @@ export class LibraryFormViewModel extends BaseViewModel {
   }
 
   private async uploadFile(file: File, path: string): Promise<string> {
-    const { data, error } = await libraryRepository.uploadFile(path, file);
-    if (error) throw error;
-    if (!data) throw new Error("File upload failed and returned no data.");
+    this.uploadProgress = 0;
+    this.notify();
 
-    return data.path;
+    const progressInterval = setInterval(() => {
+      if (this.uploadProgress !== null && this.uploadProgress < 90) {
+        this.uploadProgress = Math.min(this.uploadProgress + 10, 90);
+        this.notify();
+      }
+    }, 500);
+
+    try {
+      const { data, error } = await libraryRepository.uploadFile(path, file);
+      if (error) throw error;
+      if (!data) throw new Error("File upload failed and returned no data.");
+
+      this.uploadProgress = 100;
+      this.notify();
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      return data.path;
+    } finally {
+      clearInterval(progressInterval);
+    }
   }
 
   public handleSubmit = async (e: FormEvent) => {
@@ -208,6 +227,7 @@ export class LibraryFormViewModel extends BaseViewModel {
       this.fileError = i18n.t("library_form_upload_error");
     } finally {
       this.loading = false;
+      this.uploadProgress = null;
       this.notify();
     }
   };
