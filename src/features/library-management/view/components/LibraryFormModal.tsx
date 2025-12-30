@@ -4,7 +4,7 @@ import { LibraryFormViewModel } from "../../view-models/LibraryFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { LibraryItem } from "@/core/types/database";
-import { IoSaveOutline } from "react-icons/io5";
+import { IoSaveOutline, IoOpenOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import FileUpload from "./FileUpload";
 import ContentTypeSelector from "./ContentTypeSelector";
@@ -61,6 +61,54 @@ const Actions = styled.div`
   flex-shrink: 0;
 `;
 
+const PreviewContainer = styled.div`
+  width: 100%;
+  margin-bottom: ${props => props.theme.spacing.s}px;
+  border-radius: ${props => props.theme.radii.m}px;
+  overflow: hidden;
+  background-color: ${props => props.theme.colors.black};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Iframe = styled.iframe`
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+`;
+
+const Video = styled.video`
+  width: 100%;
+  max-height: 400px;
+  outline: none;
+`;
+
+const PdfObject = styled.object`
+  width: 100%;
+  height: 400px;
+  border: none;
+  background-color: ${props => props.theme.colors.white};
+`;
+
+const PreviewLabel = styled(Label)`
+  margin-top: ${props => props.theme.spacing.m}px;
+  margin-bottom: ${props => props.theme.spacing.xs}px;
+  font-weight: 600;
+  color: ${props => props.theme.colors.primary};
+`;
+
+const PdfFallback = styled.div`
+  padding: ${props => props.theme.spacing.l}px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${props => props.theme.spacing.m}px;
+  background-color: ${props => props.theme.colors.mutedBackground};
+  color: ${props => props.theme.colors.mutedForeground};
+  text-align: center;
+`;
+
 interface LibraryFormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -90,6 +138,21 @@ export default function LibraryFormModal({
   const onFormSubmit = (e: FormEvent) => {
     viewModel.handleSubmit(e);
   };
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+
+    const match = url.match(regExp);
+    const id = match && match[2].length === 11 ? match[2] : null;
+
+    return id ? `https://www.youtube.com/embed/${id}` : null;
+  };
+
+  const showPreview =
+    viewModel.isEditing &&
+    viewModel.previewUrl &&
+    itemToEdit?.content_type === viewModel.contentType;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
@@ -133,6 +196,50 @@ export default function LibraryFormModal({
               disabled={viewModel.loading || viewModel.isEditing}
             />
           </div>
+
+          {showPreview && (
+            <div>
+              <PreviewLabel>Conteúdo Atual</PreviewLabel>
+              <PreviewContainer>
+                {viewModel.contentType === "YOUTUBE" && (
+                  <Iframe
+                    src={getYouTubeEmbedUrl(viewModel.previewUrl!) || ""}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                )}
+                {viewModel.contentType === "DIRECT_UPLOAD" && (
+                  <Video controls src={viewModel.previewUrl!} />
+                )}
+                {viewModel.contentType === "PDF" && (
+                  <PdfObject
+                    data={viewModel.previewUrl!}
+                    type="application/pdf"
+                  >
+                    <PdfFallback>
+                      <p>
+                        Seu navegador não suporta visualização de PDF integrada.
+                      </p>
+                      <a
+                        href={viewModel.previewUrl!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button
+                          type="button"
+                          label="Abrir PDF em nova aba"
+                          variant="secondary"
+                          icon={<IoOpenOutline size={18} />}
+                        />
+                      </a>
+                    </PdfFallback>
+                  </PdfObject>
+                )}
+              </PreviewContainer>
+            </div>
+          )}
 
           {viewModel.contentType === "YOUTUBE" && (
             <div>

@@ -29,6 +29,8 @@ export class LibraryFormViewModel extends BaseViewModel {
   public uploadProgress: number | null = null;
 
   public isEditing: boolean;
+  public previewUrl: string | null = null;
+
   private itemToEdit: LibraryItem | null;
   private onClose: () => void;
   private onSuccess: () => void;
@@ -45,6 +47,22 @@ export class LibraryFormViewModel extends BaseViewModel {
       this.description = this.itemToEdit.description || "";
       this.contentType = this.itemToEdit.content_type;
       this.videoUrl = this.itemToEdit.video_url || "";
+      this.generatePreviewUrl();
+    }
+  }
+
+  private generatePreviewUrl() {
+    if (!this.itemToEdit) return;
+
+    if (
+      this.itemToEdit.content_type === "YOUTUBE" &&
+      this.itemToEdit.video_url
+    ) {
+      this.previewUrl = this.itemToEdit.video_url;
+    } else if (this.itemToEdit.file_path) {
+      this.previewUrl = libraryRepository.getFilePublicUrl(
+        this.itemToEdit.file_path
+      );
     }
   }
 
