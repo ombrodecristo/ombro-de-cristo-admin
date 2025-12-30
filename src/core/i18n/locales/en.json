@@ -240,8 +240,6 @@
     "library_details_type": "Type",
     "library_details_updated": "Last Modified",
     "library_details_description": "Description",
-    "library_details_open_link": "Open Link",
-    "library_details_download": "Download File",
     "validation_url_invalid": "Please enter a valid URL.",
     "validation_file_required": "A file is required.",
     "legal_header": "TERMS & PRIVACY",

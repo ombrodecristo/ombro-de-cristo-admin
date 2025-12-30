@@ -239,8 +239,6 @@
     "library_details_type": "Tipo",
     "library_details_updated": "Última Modificação",
     "library_details_description": "Descrição",
-    "library_details_open_link": "Abrir Link",
-    "library_details_download": "Baixar Arquivo",
     "validation_url_invalid": "Por favor, informe uma URL válida.",
     "validation_file_required": "Um arquivo é obrigatório.",
     "legal_header": "TERMOS E PRIVACIDADE",
