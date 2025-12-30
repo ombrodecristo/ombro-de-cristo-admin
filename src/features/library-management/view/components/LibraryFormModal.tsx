@@ -97,6 +97,12 @@ export default function LibraryFormModal({
     viewModel.handleSubmit(e);
   };
 
+  const contentTypeOptions = [
+    { value: "YOUTUBE", label: t("library_form_type_youtube") },
+    { value: "DIRECT_UPLOAD", label: t("library_form_type_direct_upload") },
+    { value: "PDF", label: t("library_form_type_pdf") },
+  ];
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <FormContainer onSubmit={onFormSubmit}>
@@ -135,57 +141,34 @@ export default function LibraryFormModal({
             <Label>{t("library_form_type_label")}</Label>
             <Select
               value={viewModel.contentType}
-              onChange={v => viewModel.setContentType(v as "pdf" | "video")}
+              onChange={v =>
+                viewModel.setContentType(
+                  v as "PDF" | "YOUTUBE" | "DIRECT_UPLOAD"
+                )
+              }
               disabled={viewModel.loading || viewModel.isEditing}
-              options={[
-                { value: "video", label: t("library_form_type_video") },
-                { value: "pdf", label: t("library_form_type_pdf") },
-              ]}
+              options={contentTypeOptions}
             />
           </div>
 
-          {viewModel.contentType === "video" && (
+          {viewModel.contentType === "YOUTUBE" && (
             <div>
-              <Label>{t("library_form_video_provider_label")}</Label>
-              <Select
-                value={viewModel.videoProvider}
-                onChange={v =>
-                  viewModel.setVideoProvider(v as "youtube" | "storage")
-                }
-                disabled={viewModel.loading || viewModel.isEditing}
-                options={[
-                  {
-                    value: "youtube",
-                    label: t("library_form_video_provider_youtube"),
-                  },
-                  {
-                    value: "storage",
-                    label: t("library_form_video_provider_storage"),
-                  },
-                ]}
+              <Label htmlFor="videoUrl">
+                {t("library_form_youtube_url_label")}
+              </Label>
+              <Input
+                id="videoUrl"
+                value={viewModel.videoUrl}
+                onChange={e => viewModel.setVideoUrl(e.target.value)}
+                disabled={viewModel.loading}
+                required
+                error={viewModel.videoUrlError || ""}
+                placeholder={t("library_form_youtube_url_placeholder")}
               />
             </div>
           )}
 
-          {viewModel.contentType === "video" &&
-            viewModel.videoProvider === "youtube" && (
-              <div>
-                <Label htmlFor="videoUrl">
-                  {t("library_form_youtube_url_label")}
-                </Label>
-                <Input
-                  id="videoUrl"
-                  value={viewModel.videoUrl}
-                  onChange={e => viewModel.setVideoUrl(e.target.value)}
-                  disabled={viewModel.loading}
-                  required
-                  error={viewModel.videoUrlError || ""}
-                  placeholder={t("library_form_youtube_url_placeholder")}
-                />
-              </div>
-            )}
-
-          {viewModel.contentType === "pdf" && (
+          {viewModel.contentType === "PDF" && (
             <FileUpload
               label={t("library_form_upload_label_pdf")}
               file={viewModel.file}
@@ -197,29 +180,17 @@ export default function LibraryFormModal({
             />
           )}
 
-          {viewModel.contentType === "video" &&
-            viewModel.videoProvider === "storage" && (
-              <>
-                <FileUpload
-                  label={t("library_form_upload_label_video")}
-                  file={viewModel.file}
-                  setFile={viewModel.setFile}
-                  uploadProgress={viewModel.uploadProgress}
-                  error={viewModel.fileError}
-                  disabled={viewModel.loading}
-                  accept="video/*"
-                />
-                <FileUpload
-                  label={t("library_form_upload_label_thumbnail")}
-                  file={viewModel.thumbnailFile}
-                  setFile={viewModel.setThumbnailFile}
-                  uploadProgress={viewModel.thumbnailUploadProgress}
-                  error={viewModel.thumbnailError}
-                  disabled={viewModel.loading}
-                  accept="image/*"
-                />
-              </>
-            )}
+          {viewModel.contentType === "DIRECT_UPLOAD" && (
+            <FileUpload
+              label={t("library_form_upload_label_video")}
+              file={viewModel.file}
+              setFile={viewModel.setFile}
+              uploadProgress={viewModel.uploadProgress}
+              error={viewModel.fileError}
+              disabled={viewModel.loading}
+              accept="video/*"
+            />
+          )}
         </ScrollableContent>
         <Actions>
           <Button

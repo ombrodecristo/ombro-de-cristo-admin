@@ -140,12 +140,8 @@ export type Database = {
           description: string | null;
           file_path: string | null;
           id: string;
-          thumbnail_url: string | null;
           title: string;
           updated_at: string;
-          video_provider:
-            | Database["public"]["Enums"]["library_item_video_provider"]
-            | null;
           video_url: string | null;
         };
         Insert: {
@@ -154,12 +150,8 @@ export type Database = {
           description?: string | null;
           file_path?: string | null;
           id?: string;
-          thumbnail_url?: string | null;
           title: string;
           updated_at?: string;
-          video_provider?:
-            | Database["public"]["Enums"]["library_item_video_provider"]
-            | null;
           video_url?: string | null;
         };
         Update: {
@@ -168,12 +160,8 @@ export type Database = {
           description?: string | null;
           file_path?: string | null;
           id?: string;
-          thumbnail_url?: string | null;
           title?: string;
           updated_at?: string;
-          video_provider?:
-            | Database["public"]["Enums"]["library_item_video_provider"]
-            | null;
           video_url?: string | null;
         };
         Relationships: [];
@@ -266,8 +254,7 @@ export type Database = {
       get_user_role: { Args: never; Returns: string };
     };
     Enums: {
-      library_item_content_type: "pdf" | "video";
-      library_item_video_provider: "youtube" | "storage";
+      library_item_content_type: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD";
       user_genders: "MALE" | "FEMALE";
       user_roles: "ADMIN" | "MENTOR" | "MISSIONARY";
     };
@@ -403,8 +390,7 @@ export const Constants = {
   },
   public: {
     Enums: {
-      library_item_content_type: ["pdf", "video"],
-      library_item_video_provider: ["youtube", "storage"],
+      library_item_content_type: ["PDF", "YOUTUBE", "DIRECT_UPLOAD"],
       user_genders: ["MALE", "FEMALE"],
       user_roles: ["ADMIN", "MENTOR", "MISSIONARY"],
     },

@@ -17,20 +17,16 @@ type LibraryFormViewModelProps = {
 export class LibraryFormViewModel extends BaseViewModel {
   public title = "";
   public description = "";
-  public contentType: "pdf" | "video" = "video";
-  public videoProvider: "youtube" | "storage" = "youtube";
+  public contentType: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD" = "YOUTUBE";
   public videoUrl = "";
   public file: File | null = null;
-  public thumbnailFile: File | null = null;
 
   public titleError: string | null = null;
   public videoUrlError: string | null = null;
   public fileError: string | null = null;
-  public thumbnailError: string | null = null;
 
   public loading = false;
   public uploadProgress: number | null = null;
-  public thumbnailUploadProgress: number | null = null;
 
   public isEditing: boolean;
   private itemToEdit: LibraryItem | null;
@@ -48,7 +44,6 @@ export class LibraryFormViewModel extends BaseViewModel {
       this.title = this.itemToEdit.title;
       this.description = this.itemToEdit.description || "";
       this.contentType = this.itemToEdit.content_type;
-      this.videoProvider = this.itemToEdit.video_provider || "youtube";
       this.videoUrl = this.itemToEdit.video_url || "";
     }
   }
@@ -64,14 +59,8 @@ export class LibraryFormViewModel extends BaseViewModel {
     this.notify();
   };
 
-  public setContentType = (value: "pdf" | "video") => {
+  public setContentType = (value: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD") => {
     this.contentType = value;
-    this.resetDependentFields();
-    this.notify();
-  };
-
-  public setVideoProvider = (value: "youtube" | "storage") => {
-    this.videoProvider = value;
     this.resetDependentFields();
     this.notify();
   };
@@ -88,23 +77,15 @@ export class LibraryFormViewModel extends BaseViewModel {
     this.notify();
   };
 
-  public setThumbnailFile = (file: File | null) => {
-    this.thumbnailFile = file;
-    this.thumbnailError = null;
-    this.notify();
-  };
-
   private resetErrors() {
     this.titleError = null;
     this.videoUrlError = null;
     this.fileError = null;
-    this.thumbnailError = null;
   }
 
   private resetDependentFields() {
     this.videoUrl = "";
     this.file = null;
-    this.thumbnailFile = null;
     this.resetErrors();
   }
 
@@ -119,22 +100,13 @@ export class LibraryFormViewModel extends BaseViewModel {
       return false;
     }
 
-    if (this.contentType === "video") {
-      if (this.videoProvider === "youtube") {
-        const urlValidation = validateUrl(this.videoUrl);
-        if (!urlValidation.isValid) {
-          this.videoUrlError = urlValidation.message;
-          this.notify();
+    if (this.contentType === "YOUTUBE") {
+      const urlValidation = validateUrl(this.videoUrl);
+      if (!urlValidation.isValid) {
+        this.videoUrlError = urlValidation.message;
+        this.notify();
 
-          return false;
-        }
-      } else {
-        if (!this.file && !this.isEditing) {
-          this.fileError = i18n.t("validation_file_required");
-          this.notify();
-
-          return false;
-        }
+        return false;
       }
     } else {
       if (!this.file && !this.isEditing) {
@@ -148,12 +120,20 @@ export class LibraryFormViewModel extends BaseViewModel {
     return true;
   }
 
-  private async uploadFile(file: File, path: string): Promise<string> {
-    const { data, error } = await libraryRepository.uploadFile(path, file);
-    if (error) throw error;
-    if (!data) throw new Error("File upload failed and returned no data.");
+  private async uploadFile(
+    file: File,
+    path: string
+  ): Promise<{ error: Error | null }> {
+    const { error } = await libraryRepository.uploadFile(path, file);
+    if (error) {
+      await logService.logError(error, {
+        component: "LibraryFormViewModel.uploadFile",
+      });
 
-    return libraryRepository.getFilePublicUrl(data.path);
+      return { error };
+    }
+
+    return { error: null };
   }
 
   public handleSubmit = async (e: FormEvent) => {
@@ -168,48 +148,28 @@ export class LibraryFormViewModel extends BaseViewModel {
         title: this.title.trim(),
         description: this.description.trim() || null,
         content_type: this.contentType,
-        video_provider: null,
         video_url: null,
         file_path: this.itemToEdit?.file_path || null,
-        thumbnail_url: this.itemToEdit?.thumbnail_url || null,
       };
 
-      if (this.contentType === "pdf" && this.file) {
+      if (this.contentType === "PDF" && this.file) {
         const fileExt = this.file.name.split(".").pop();
         const filePath = `pdfs/${uuidv4()}.${fileExt}`;
-        await this.uploadFile(this.file, filePath);
+        const { error } = await this.uploadFile(this.file, filePath);
+        if (error) throw error;
         itemPayload.file_path = filePath;
-      } else if (this.contentType === "video") {
-        itemPayload.video_provider = this.videoProvider;
+      }
 
-        if (this.videoProvider === "youtube") {
-          itemPayload.video_url = this.videoUrl.trim();
+      if (this.contentType === "DIRECT_UPLOAD" && this.file) {
+        const fileExt = this.file.name.split(".").pop();
+        const filePath = `videos/${uuidv4()}.${fileExt}`;
+        const { error } = await this.uploadFile(this.file, filePath);
+        if (error) throw error;
+        itemPayload.file_path = filePath;
+      }
 
-          const videoId =
-            this.videoUrl.match(
-              /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
-            )?.[1] || null;
-
-          if (videoId) {
-            itemPayload.thumbnail_url = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-          }
-        } else if (this.videoProvider === "storage") {
-          if (this.file) {
-            const fileExt = this.file.name.split(".").pop();
-            const filePath = `videos/${uuidv4()}.${fileExt}`;
-            await this.uploadFile(this.file, filePath);
-            itemPayload.file_path = filePath;
-          }
-
-          if (this.thumbnailFile) {
-            const thumbExt = this.thumbnailFile.name.split(".").pop();
-            const thumbPath = `thumbnails/${uuidv4()}.${thumbExt}`;
-            itemPayload.thumbnail_url = await this.uploadFile(
-              this.thumbnailFile,
-              thumbPath
-            );
-          }
-        }
+      if (this.contentType === "YOUTUBE") {
+        itemPayload.video_url = this.videoUrl.trim();
       }
 
       const { error } = this.isEditing
