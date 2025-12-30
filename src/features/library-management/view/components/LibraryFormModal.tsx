@@ -2,18 +2,12 @@ import { useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
 import { LibraryFormViewModel } from "../../view-models/LibraryFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
-import {
-  Modal,
-  Button,
-  Input,
-  Textarea,
-  Label,
-  Select,
-} from "@/shared/components";
+import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { LibraryItem } from "@/core/types/database";
 import { IoSaveOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import FileUpload from "./FileUpload";
+import ContentTypeSelector from "./ContentTypeSelector";
 
 const FormContainer = styled.form`
   display: flex;
@@ -97,12 +91,6 @@ export default function LibraryFormModal({
     viewModel.handleSubmit(e);
   };
 
-  const contentTypeOptions = [
-    { value: "YOUTUBE", label: t("library_form_type_youtube") },
-    { value: "DIRECT_UPLOAD", label: t("library_form_type_direct_upload") },
-    { value: "PDF", label: t("library_form_type_pdf") },
-  ];
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <FormContainer onSubmit={onFormSubmit}>
@@ -139,15 +127,10 @@ export default function LibraryFormModal({
           </div>
           <div>
             <Label>{t("library_form_type_label")}</Label>
-            <Select
+            <ContentTypeSelector
               value={viewModel.contentType}
-              onChange={v =>
-                viewModel.setContentType(
-                  v as "PDF" | "YOUTUBE" | "DIRECT_UPLOAD"
-                )
-              }
+              onChange={viewModel.setContentType}
               disabled={viewModel.loading || viewModel.isEditing}
-              options={contentTypeOptions}
             />
           </div>
 
