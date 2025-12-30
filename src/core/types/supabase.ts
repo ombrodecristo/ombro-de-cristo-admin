@@ -133,6 +133,51 @@ export type Database = {
           },
         ];
       };
+      library_items: {
+        Row: {
+          content_type: Database["public"]["Enums"]["library_item_content_type"];
+          created_at: string;
+          description: string | null;
+          file_path: string | null;
+          id: string;
+          thumbnail_url: string | null;
+          title: string;
+          updated_at: string;
+          video_provider:
+            | Database["public"]["Enums"]["library_item_video_provider"]
+            | null;
+          video_url: string | null;
+        };
+        Insert: {
+          content_type: Database["public"]["Enums"]["library_item_content_type"];
+          created_at?: string;
+          description?: string | null;
+          file_path?: string | null;
+          id?: string;
+          thumbnail_url?: string | null;
+          title: string;
+          updated_at?: string;
+          video_provider?:
+            | Database["public"]["Enums"]["library_item_video_provider"]
+            | null;
+          video_url?: string | null;
+        };
+        Update: {
+          content_type?: Database["public"]["Enums"]["library_item_content_type"];
+          created_at?: string;
+          description?: string | null;
+          file_path?: string | null;
+          id?: string;
+          thumbnail_url?: string | null;
+          title?: string;
+          updated_at?: string;
+          video_provider?:
+            | Database["public"]["Enums"]["library_item_video_provider"]
+            | null;
+          video_url?: string | null;
+        };
+        Relationships: [];
+      };
       logs: {
         Row: {
           created_at: string;
@@ -221,6 +266,8 @@ export type Database = {
       get_user_role: { Args: never; Returns: string };
     };
     Enums: {
+      library_item_content_type: "pdf" | "video";
+      library_item_video_provider: "youtube" | "storage";
       user_genders: "MALE" | "FEMALE";
       user_roles: "ADMIN" | "MENTOR" | "MISSIONARY";
     };
@@ -356,6 +403,8 @@ export const Constants = {
   },
   public: {
     Enums: {
+      library_item_content_type: ["pdf", "video"],
+      library_item_video_provider: ["youtube", "storage"],
       user_genders: ["MALE", "FEMALE"],
       user_roles: ["ADMIN", "MENTOR", "MISSIONARY"],
     },

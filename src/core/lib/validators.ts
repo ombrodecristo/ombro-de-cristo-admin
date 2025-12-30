@@ -5,7 +5,9 @@ export const FULL_NAME_MIN_LENGTH = 3;
 export const CHURCH_NAME_MIN_LENGTH = 2;
 export const DEVOTIONAL_TITLE_MIN_LENGTH = 3;
 export const DEVOTIONAL_CONTENT_MIN_LENGTH = 10;
+export const LIBRARY_TITLE_MIN_LENGTH = 3;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
 
 export const validateEmail = (
   email: string
@@ -97,6 +99,32 @@ export const validateDevotionalContent = (
     return {
       isValid: false,
       message: `O conteúdo precisa ter no mínimo ${DEVOTIONAL_CONTENT_MIN_LENGTH} caracteres.`,
+    };
+  }
+
+  return { isValid: true };
+};
+
+export const validateLibraryItemTitle = (
+  title: string
+): { isValid: true } | { isValid: false; message: string } => {
+  if (title.trim().length < LIBRARY_TITLE_MIN_LENGTH) {
+    return {
+      isValid: false,
+      message: `O título precisa ter no mínimo ${LIBRARY_TITLE_MIN_LENGTH} caracteres.`,
+    };
+  }
+
+  return { isValid: true };
+};
+
+export const validateUrl = (
+  url: string
+): { isValid: true } | { isValid: false; message: string } => {
+  if (!urlRegex.test(url)) {
+    return {
+      isValid: false,
+      message: i18n.t("validation_url_invalid"),
     };
   }
 

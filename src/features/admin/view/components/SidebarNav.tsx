@@ -1,6 +1,11 @@
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
-import { IoPeopleOutline, IoHomeOutline, IoBookOutline } from "react-icons/io5";
+import {
+  IoPeopleOutline,
+  IoHomeOutline,
+  IoBookOutline,
+  IoFolderOutline,
+} from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 const Nav = styled.nav`
@@ -100,6 +105,11 @@ export default function SidebarNav({
       to: "/admin/devotionals",
       icon: <IoBookOutline size={22} />,
       labelKey: "nav_devotionals",
+    },
+    {
+      to: "/admin/library",
+      icon: <IoFolderOutline size={22} />,
+      labelKey: "nav_library",
     },
   ];
 

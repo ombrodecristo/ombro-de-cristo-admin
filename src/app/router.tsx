@@ -24,6 +24,10 @@ const DevotionalManagementPage = lazy(
     import("@/features/devotional-management/view/DevotionalManagementPage.tsx")
 );
 
+const LibraryManagementPage = lazy(
+  () => import("@/features/library-management/view/LibraryManagementPage.tsx")
+);
+
 const AuthConfirmedPage = lazy(
   () => import("@/features/auth/view/AuthConfirmedPage.tsx")
 );
@@ -72,6 +76,10 @@ export const router = createBrowserRouter([
               {
                 path: "devotionals",
                 element: <DevotionalManagementPage />,
+              },
+              {
+                path: "library",
+                element: <LibraryManagementPage />,
               },
             ],
           },

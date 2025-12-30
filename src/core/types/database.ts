@@ -10,6 +10,7 @@ export type LanguagePreference = "pt" | "en" | "es";
 export type Church = DbTables["churches"]["Row"];
 export type Profile = DbTables["profiles"]["Row"];
 export type Devotional = DbTables["devotionals"]["Row"];
+export type LibraryItem = DbTables["library_items"]["Row"];
 
 export type AppMetadata = {
   role: UserRole;
