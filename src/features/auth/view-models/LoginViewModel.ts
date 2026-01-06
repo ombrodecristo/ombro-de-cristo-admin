@@ -60,9 +60,8 @@ export class LoginViewModel extends BaseViewModel {
       this.password
     );
 
-    this.loading = false;
-
     if (error) {
+      this.loading = false;
       this.password = "";
       this.notify();
 
@@ -77,26 +76,18 @@ export class LoginViewModel extends BaseViewModel {
       };
     }
 
-    if (data?.user) {
-      const user = data.user as User;
-      const role = user.app_metadata?.role;
-
-      if (role !== "ADMIN") {
-        const errorMessage = i18n.t("common_access_denied");
-        await authRepository.signOut();
-        this.notify();
-
-        return { success: false, error: errorMessage };
-      }
-
+    const user = data?.user as User;
+    if (user?.app_metadata?.role !== "ADMIN") {
+      await authRepository.signOut();
+      this.loading = false;
       this.notify();
 
-      return { success: true };
+      return { success: false, error: i18n.t("common_access_denied") };
     }
 
-    const unknownError = i18n.t("error_generic");
+    this.loading = false;
     this.notify();
 
-    return { success: false, error: unknownError };
+    return { success: true };
   }
 }

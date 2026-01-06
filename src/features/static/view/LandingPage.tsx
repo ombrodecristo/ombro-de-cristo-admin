@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  type TouchEvent,
-  useCallback,
-  useMemo,
-} from "react";
+import { useMemo } from "react";
 import styled from "@emotion/styled";
 import { Box, Button, Logo, Text, LanguageSwitcher } from "@/shared/components";
 import {
@@ -17,6 +10,7 @@ import {
   IoStatsChart,
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import { useCarousel } from "../hooks/useCarousel";
 
 const PageContainer = styled(Box)`
   display: flex;
@@ -254,9 +248,6 @@ const FooterLink = styled.a`
 
 export default function LandingPage() {
   const { t } = useTranslation();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const features = useMemo(
     () => [
@@ -279,53 +270,8 @@ export default function LandingPage() {
     [t]
   );
 
-  const minSwipeDistance = 50;
-
-  const resetInterval = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    intervalRef.current = setInterval(() => {
-      setActiveIndex(prevIndex => (prevIndex + 1) % features.length);
-    }, 5000);
-  }, [features.length]);
-
-  useEffect(() => {
-    resetInterval();
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [resetInterval]);
-
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-    setTouchStart(e.targetTouches[0].clientX);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  };
-
-  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
-    const touchEnd = e.changedTouches[0].clientX;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      setActiveIndex(prev => (prev + 1) % features.length);
-    } else if (isRightSwipe) {
-      setActiveIndex(prev => (prev - 1 + features.length) % features.length);
-    }
-
-    resetInterval();
-  };
-
-  const handleDotClick = (index: number) => {
-    setActiveIndex(index);
-    resetInterval();
-  };
+  const { activeIndex, handleTouchStart, handleTouchEnd, handleDotClick } =
+    useCarousel(features.length);
 
   return (
     <PageContainer>
