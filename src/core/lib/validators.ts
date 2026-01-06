@@ -72,7 +72,9 @@ export const validateChurchName = (
   if (name.trim().length < CHURCH_NAME_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `O nome da igreja precisa ter no mínimo ${CHURCH_NAME_MIN_LENGTH} caracteres.`,
+      message: i18n.t("validation_church_name_min_length", {
+        count: CHURCH_NAME_MIN_LENGTH,
+      }),
     };
   }
 
@@ -85,7 +87,9 @@ export const validateDevotionalTitle = (
   if (title.trim().length < DEVOTIONAL_TITLE_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `O título precisa ter no mínimo ${DEVOTIONAL_TITLE_MIN_LENGTH} caracteres.`,
+      message: i18n.t("validation_devotional_title_min_length", {
+        count: DEVOTIONAL_TITLE_MIN_LENGTH,
+      }),
     };
   }
 
@@ -98,7 +102,9 @@ export const validateDevotionalContent = (
   if (content.trim().length < DEVOTIONAL_CONTENT_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `O conteúdo precisa ter no mínimo ${DEVOTIONAL_CONTENT_MIN_LENGTH} caracteres.`,
+      message: i18n.t("validation_devotional_content_min_length", {
+        count: DEVOTIONAL_CONTENT_MIN_LENGTH,
+      }),
     };
   }
 
@@ -111,7 +117,9 @@ export const validateLibraryItemTitle = (
   if (title.trim().length < LIBRARY_TITLE_MIN_LENGTH) {
     return {
       isValid: false,
-      message: `O título precisa ter no mínimo ${LIBRARY_TITLE_MIN_LENGTH} caracteres.`,
+      message: i18n.t("validation_library_title_min_length", {
+        count: LIBRARY_TITLE_MIN_LENGTH,
+      }),
     };
   }
 

@@ -9,6 +9,7 @@ import {
   validateDevotionalTitle,
   validateDevotionalContent,
 } from "@/core/lib/validators";
+import i18n from "@/core/i18n";
 
 type DevotionalFormViewModelProps = {
   authorId: string;
@@ -103,8 +104,8 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
     if (apiError) {
       const friendlyMessage = this.isEditing
-        ? "Não foi possível salvar as alterações."
-        : "Não foi possível criar o novo devocional.";
+        ? i18n.t("devotionals_form_error_update")
+        : i18n.t("devotionals_form_error_create");
 
       this.titleError = friendlyMessage;
       await logService.logError(apiError, {

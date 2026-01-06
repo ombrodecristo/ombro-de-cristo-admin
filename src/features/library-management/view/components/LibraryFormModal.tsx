@@ -227,7 +227,7 @@ export default function LibraryFormModal({
 
           {showPreview && (
             <div>
-              <PreviewLabel>Conteúdo Atual</PreviewLabel>
+              <PreviewLabel>{t("library_form_current_content")}</PreviewLabel>
               <PreviewContainer>
                 {viewModel.contentType === "YOUTUBE" && (
                   <Iframe
@@ -246,9 +246,7 @@ export default function LibraryFormModal({
                     type="application/pdf"
                   >
                     <PdfFallback>
-                      <p>
-                        Seu navegador não suporta visualização de PDF integrada.
-                      </p>
+                      <p>{t("library_pdf_not_supported")}</p>
                       <a
                         href={viewModel.previewUrl!}
                         target="_blank"
@@ -257,7 +255,7 @@ export default function LibraryFormModal({
                       >
                         <Button
                           type="button"
-                          label="Abrir PDF em nova aba"
+                          label={t("library_open_pdf_new_tab")}
                           variant="secondary"
                           icon={<IoOpenOutline size={18} />}
                         />

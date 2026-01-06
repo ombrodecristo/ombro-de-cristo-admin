@@ -4,6 +4,7 @@ import { authRepository } from "@/data/repositories/authRepository";
 import { logService } from "@/shared/services/logService";
 import { profileRepository } from "@/data/repositories/profileRepository";
 import { validateFullName } from "@/core/lib/validators";
+import i18n from "@/core/i18n";
 
 type UserMenuViewModelProps = {
   user: User | null;
@@ -96,7 +97,7 @@ export class UserMenuViewModel extends BaseViewModel {
         component: "UserMenuViewModel.handleDeleteAccount",
       });
 
-      return { error: "Não foi possível excluir sua conta. Tente novamente." };
+      return { error: i18n.t("auth_error_delete_account") };
     } else {
       await this.signOut();
       this.setIsOpen(false);
@@ -139,7 +140,7 @@ export class UserMenuViewModel extends BaseViewModel {
         component: "UserMenuViewModel.handleSaveName",
       });
 
-      return { error: "Não foi possível atualizar seu nome." };
+      return { error: i18n.t("auth_error_update_name") };
     } else {
       this.profile = data;
       this.fullName = data?.full_name ?? "";

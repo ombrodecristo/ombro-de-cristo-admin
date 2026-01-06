@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import styled from "@emotion/styled";
 import { IoChevronDown } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const SelectWrapper = styled.div`
   position: relative;
@@ -112,6 +113,7 @@ export function Select({
   disabled,
   icon,
 }: SelectProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const selectedOption = options.find(opt => opt.value === value);
@@ -171,7 +173,7 @@ export function Select({
             ))
           ) : (
             <DropdownItem isSelected={false} style={{ cursor: "default" }}>
-              Nenhuma opção
+              {t("common_no_option")}
             </DropdownItem>
           )}
         </Dropdown>

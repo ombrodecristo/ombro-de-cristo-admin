@@ -318,6 +318,15 @@
     "legal_privacy_7_header": "7. Changes to this Policy",
     "legal_privacy_7_p1": "We may update our Privacy Policy from time to time.",
     "legal_privacy_8_header": "8. Contact",
-    "legal_privacy_8_p1": "If you have any questions or concerns about our Privacy Policy, please contact us."
+    "legal_privacy_8_p1": "If you have any questions or concerns about our Privacy Policy, please contact us.",
+    "validation_church_name_min_length": "Church name must be at least {{count}} characters long.",
+    "validation_devotional_title_min_length": "The title must be at least {{count}} characters long.",
+    "validation_devotional_content_min_length": "The content must be at least {{count}} characters long.",
+    "validation_library_title_min_length": "The title must be at least {{count}} characters long.",
+    "devotionals_form_error_update": "Could not save the changes.",
+    "devotionals_form_error_create": "Could not create the new devotional.",
+    "library_pdf_not_supported": "Your browser does not support embedded PDF viewing.",
+    "library_open_pdf_new_tab": "Open PDF in new tab",
+    "library_form_current_content": "Current Content"
   }
 }

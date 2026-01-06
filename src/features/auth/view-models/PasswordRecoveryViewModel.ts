@@ -6,6 +6,7 @@ import {
 } from "@/core/lib/validators";
 import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
 import type { User } from "@/core/types/database";
+import i18n from "@/core/i18n";
 
 export class PasswordRecoveryViewModel extends BaseViewModel {
   public password = "";
@@ -99,8 +100,7 @@ export class PasswordRecoveryViewModel extends BaseViewModel {
 
     this.loading = false;
     if (updateError) {
-      this.passwordError =
-        "Não foi possível alterar a senha. O link pode ter expirado.";
+      this.passwordError = i18n.t("auth_error_change_password");
       await logService.logError(updateError, {
         component: "PasswordRecoveryViewModel.Password",
       });
