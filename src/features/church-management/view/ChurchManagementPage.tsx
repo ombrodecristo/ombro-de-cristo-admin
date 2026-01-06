@@ -77,7 +77,7 @@ export default function ChurchManagementPage() {
         icon={<IoSearchOutline size={20} />}
       />
       <ChurchTable
-        churches={viewModel.sortedChurches}
+        churches={viewModel.sortedItems}
         onEdit={viewModel.handleOpenEdit}
         onDelete={viewModel.handleOpenDelete}
         onDetails={viewModel.handleOpenDetailsModal}
@@ -88,23 +88,23 @@ export default function ChurchManagementPage() {
       {viewModel.isFormOpen && (
         <ChurchFormModal
           isOpen={viewModel.isFormOpen}
-          churchToEdit={viewModel.selectedChurch}
+          churchToEdit={viewModel.selectedItem}
           onClose={viewModel.handleCloseModals}
           onSuccess={viewModel.handleFormSuccess}
         />
       )}
 
-      {viewModel.selectedChurchForDetails && (
+      {viewModel.selectedItemForDetails && (
         <ChurchDetailsModal
           isOpen={viewModel.isDetailsModalOpen}
           onClose={viewModel.handleCloseDetailsModal}
-          church={viewModel.selectedChurchForDetails}
+          church={viewModel.selectedItemForDetails}
           onEdit={handleEditFromDetails}
           onDelete={handleDeleteFromDetails}
         />
       )}
 
-      {viewModel.selectedChurch && viewModel.isDeleteAlertOpen && (
+      {viewModel.selectedItem && viewModel.isDeleteAlertOpen && (
         <ConfirmationModal
           isOpen={viewModel.isDeleteAlertOpen}
           onClose={viewModel.handleCloseModals}
@@ -114,7 +114,7 @@ export default function ChurchManagementPage() {
             <span
               dangerouslySetInnerHTML={{
                 __html: t("churches_delete_message", {
-                  name: viewModel.selectedChurch.name,
+                  name: viewModel.selectedItem.name,
                 }),
               }}
             />

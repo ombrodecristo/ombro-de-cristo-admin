@@ -1,155 +1,54 @@
-import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
+import {
+  BaseCrudViewModel,
+  type SortConfig,
+} from "@/shared/view-models/BaseCrudViewModel";
 import { churchRepository } from "@/data/repositories/churchRepository";
-import { logService } from "@/shared/services/logService";
 import type { Church } from "@/core/types/database";
-import type { SortConfig } from "../view/components/ChurchTable";
 import i18n from "@/core/i18n";
 
-export class ChurchManagementViewModel extends BaseViewModel {
-  public churches: Church[] = [];
-  public loading = true;
-  public error: string | null = null;
-  public selectedChurch: Church | null = null;
-  public selectedChurchForDetails: Church | null = null;
-  public isFormOpen = false;
-  public isDeleteAlertOpen = false;
-  public isDetailsModalOpen = false;
-  public isDeleting = false;
-  public searchQuery = "";
-  public sortConfig: SortConfig = {
-    key: "name",
-    direction: "ascending",
-  };
+export class ChurchManagementViewModel extends BaseCrudViewModel<Church> {
+  protected resourceName = i18n.t("resource_churches");
 
   constructor() {
     super();
+    this.sortConfig = { key: "name", direction: "ascending" };
   }
 
-  public init = () => {
-    if (this.churches.length > 0) return;
-    this.fetchChurches();
-  };
+  protected async fetchItemsFromServer() {
+    return churchRepository.getChurches();
+  }
 
-  public setSearchQuery = (query: string) => {
-    this.searchQuery = query;
-    this.notify();
-  };
+  protected async deleteItemFromServer(id: string) {
+    return churchRepository.deleteChurch(id);
+  }
 
-  public get sortedChurches(): Church[] {
-    const filteredChurches = this.churches.filter(church =>
-      church.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+  protected filterItems(items: Church[], query: string): Church[] {
+    if (!query) return items;
+
+    return items.filter(church =>
+      church.name.toLowerCase().includes(query.toLowerCase())
     );
+  }
 
-    const sortableChurches = [...filteredChurches];
-    if (this.sortConfig.key !== null) {
-      sortableChurches.sort((a, b) => {
-        const aValue = a[this.sortConfig.key as keyof Church];
-        const bValue = b[this.sortConfig.key as keyof Church];
+  protected sortItems(items: Church[], config: SortConfig): Church[] {
+    const sortedItems = [...items];
+
+    if (config.key) {
+      sortedItems.sort((a, b) => {
+        const aValue = a[config.key as keyof Church];
+        const bValue = b[config.key as keyof Church];
+
         if (aValue < bValue) {
-          return this.sortConfig.direction === "ascending" ? -1 : 1;
+          return config.direction === "ascending" ? -1 : 1;
         }
         if (aValue > bValue) {
-          return this.sortConfig.direction === "ascending" ? 1 : -1;
+          return config.direction === "ascending" ? 1 : -1;
         }
 
         return 0;
       });
     }
 
-    return sortableChurches;
+    return sortedItems;
   }
-
-  public requestSort = (key: keyof Church) => {
-    let direction: "ascending" | "descending" = "ascending";
-    if (
-      this.sortConfig.key === key &&
-      this.sortConfig.direction === "ascending"
-    ) {
-      direction = "descending";
-    }
-    this.sortConfig = { key, direction };
-    this.notify();
-  };
-
-  public handleOpenCreate = () => {
-    this.selectedChurch = null;
-    this.isFormOpen = true;
-    this.notify();
-  };
-
-  public handleOpenEdit = (church: Church) => {
-    this.selectedChurch = church;
-    this.isFormOpen = true;
-    this.notify();
-  };
-
-  public handleOpenDelete = (church: Church) => {
-    this.selectedChurch = church;
-    this.isDeleteAlertOpen = true;
-    this.notify();
-  };
-
-  public handleCloseModals = () => {
-    this.selectedChurch = null;
-    this.isFormOpen = false;
-    this.isDeleteAlertOpen = false;
-    this.notify();
-  };
-
-  public handleOpenDetailsModal = (church: Church) => {
-    this.selectedChurchForDetails = church;
-    this.isDetailsModalOpen = true;
-    this.notify();
-  };
-
-  public handleCloseDetailsModal = () => {
-    this.selectedChurchForDetails = null;
-    this.isDetailsModalOpen = false;
-    this.notify();
-  };
-
-  public handleFormSuccess = () => {
-    this.fetchChurches();
-  };
-
-  public handleDeleteConfirm = async () => {
-    if (!this.selectedChurch) return;
-    this.isDeleting = true;
-    this.notify();
-
-    const { error: deleteError } = await churchRepository.deleteChurch(
-      this.selectedChurch.id
-    );
-
-    this.isDeleting = false;
-    if (deleteError) {
-      this.error = i18n.t("churches_delete_error");
-      await logService.logError(deleteError, {
-        component: "ChurchManagementViewModel",
-        context: { churchId: this.selectedChurch.id },
-      });
-    } else {
-      this.handleCloseModals();
-      this.fetchChurches();
-    }
-    this.notify();
-  };
-
-  private fetchChurches = async () => {
-    this.loading = true;
-    this.notify();
-    const { data, error } = await churchRepository.getChurches();
-    if (error) {
-      this.error = i18n.t("error_loading_resource", {
-        resource: i18n.t("resource_churches"),
-      });
-      await logService.logError(error, {
-        component: "ChurchManagementViewModel",
-      });
-    } else if (data) {
-      this.churches = data;
-    }
-    this.loading = false;
-    this.notify();
-  };
 }

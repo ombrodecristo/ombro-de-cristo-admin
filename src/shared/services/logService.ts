@@ -1,5 +1,6 @@
 import { supabase } from "@/core/lib/supabaseClient";
 import type { Json } from "@/core/types/supabase";
+import type { PostgrestError } from "@supabase/supabase-js";
 
 type LogLevel = "ERROR" | "INFO" | "WARN";
 
@@ -36,11 +37,16 @@ async function writeLog(
   }
 }
 
-async function logError(error: Error, metadata?: Omit<LogMetadata, "stack">) {
-  await writeLog("ERROR", error.message, {
-    ...metadata,
-    stack: error.stack,
-  });
+async function logError(
+  error: Error | PostgrestError,
+  metadata?: Omit<LogMetadata, "stack">
+) {
+  const logMetadata: LogMetadata = { ...metadata };
+  if (error instanceof Error) {
+    logMetadata.stack = error.stack;
+  }
+
+  await writeLog("ERROR", error.message, logMetadata);
 }
 
 async function logInfo(message: string, metadata?: LogMetadata) {

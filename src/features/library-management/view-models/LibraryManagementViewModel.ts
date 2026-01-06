@@ -1,119 +1,29 @@
-import { BaseViewModel } from "@/shared/view-models/BaseViewModel";
+import {
+  BaseCrudViewModel,
+  type SortConfig,
+} from "@/shared/view-models/BaseCrudViewModel";
 import { libraryRepository } from "@/data/repositories/libraryRepository";
 import { logService } from "@/shared/services/logService";
 import type { LibraryItem } from "@/core/types/database";
-import type { SortConfig } from "../view/components/LibraryTable";
 import i18n from "@/core/i18n";
 
-export class LibraryManagementViewModel extends BaseViewModel {
-  public items: LibraryItem[] = [];
-  public loading = true;
-  public error: string | null = null;
-  public selectedItem: LibraryItem | null = null;
-  public selectedItemForDetails: LibraryItem | null = null;
-  public isFormOpen = false;
-  public isDeleteAlertOpen = false;
-  public isDetailsModalOpen = false;
-  public isDeleting = false;
-  public searchQuery = "";
-  public sortConfig: SortConfig = {
-    key: "updated_at",
-    direction: "descending",
-  };
+export class LibraryManagementViewModel extends BaseCrudViewModel<LibraryItem> {
+  protected resourceName = i18n.t("resource_library");
 
-  public init = () => {
-    if (this.items.length > 0) return;
-    this.fetchItems();
-  };
-
-  public setSearchQuery = (query: string) => {
-    this.searchQuery = query;
-    this.notify();
-  };
-
-  public get sortedItems(): LibraryItem[] {
-    const filteredItems = this.items.filter(item =>
-      item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
-
-    const sortableItems = [...filteredItems];
-    if (this.sortConfig.key !== null) {
-      sortableItems.sort((a, b) => {
-        const aValue = a[this.sortConfig.key as keyof LibraryItem];
-        const bValue = b[this.sortConfig.key as keyof LibraryItem];
-
-        if (aValue === null && bValue !== null) return -1;
-        if (aValue !== null && bValue === null) return 1;
-        if (aValue === null && bValue === null) return 0;
-
-        if (aValue! < bValue!) {
-          return this.sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (aValue! > bValue!) {
-          return this.sortConfig.direction === "ascending" ? 1 : -1;
-        }
-
-        return 0;
-      });
-    }
-
-    return sortableItems;
+  constructor() {
+    super();
+    this.sortConfig = { key: "updated_at", direction: "descending" };
   }
 
-  public requestSort = (key: keyof LibraryItem) => {
-    let direction: "ascending" | "descending" = "ascending";
-    if (
-      this.sortConfig.key === key &&
-      this.sortConfig.direction === "ascending"
-    ) {
-      direction = "descending";
-    }
-    this.sortConfig = { key, direction };
-    this.notify();
-  };
+  protected async fetchItemsFromServer() {
+    return libraryRepository.getLibraryItems();
+  }
 
-  public handleOpenCreate = () => {
-    this.selectedItem = null;
-    this.isFormOpen = true;
-    this.notify();
-  };
+  protected async deleteItemFromServer(id: string) {
+    return libraryRepository.deleteLibraryItem(id);
+  }
 
-  public handleOpenEdit = (item: LibraryItem) => {
-    this.selectedItem = item;
-    this.isFormOpen = true;
-    this.notify();
-  };
-
-  public handleOpenDelete = (item: LibraryItem) => {
-    this.selectedItem = item;
-    this.isDeleteAlertOpen = true;
-    this.notify();
-  };
-
-  public handleCloseModals = () => {
-    this.selectedItem = null;
-    this.isFormOpen = false;
-    this.isDeleteAlertOpen = false;
-    this.notify();
-  };
-
-  public handleOpenDetailsModal = (item: LibraryItem) => {
-    this.selectedItemForDetails = item;
-    this.isDetailsModalOpen = true;
-    this.notify();
-  };
-
-  public handleCloseDetailsModal = () => {
-    this.selectedItemForDetails = null;
-    this.isDetailsModalOpen = false;
-    this.notify();
-  };
-
-  public handleFormSuccess = () => {
-    this.fetchItems();
-  };
-
-  public handleDeleteConfirm = async () => {
+  public override handleDeleteConfirm = async (): Promise<void> => {
     if (!this.selectedItem) return;
     this.isDeleting = true;
     this.notify();
@@ -123,13 +33,16 @@ export class LibraryManagementViewModel extends BaseViewModel {
     const { error: deleteDbError } =
       await libraryRepository.deleteLibraryItem(id);
 
-    if (file_path) {
+    if (!deleteDbError && file_path) {
       try {
         await libraryRepository.deleteFile(file_path);
       } catch (e) {
         logService.logError(e as Error, {
           component: "LibraryManagementViewModel",
-          context: { message: "Failed to delete file", path: file_path },
+          context: {
+            message: "Failed to delete associated file from storage",
+            path: file_path,
+          },
         });
       }
     }
@@ -148,21 +61,35 @@ export class LibraryManagementViewModel extends BaseViewModel {
     this.notify();
   };
 
-  private fetchItems = async () => {
-    this.loading = true;
-    this.notify();
-    const { data, error } = await libraryRepository.getLibraryItems();
-    if (error) {
-      this.error = i18n.t("error_loading_resource", {
-        resource: i18n.t("resource_library"),
+  protected filterItems(items: LibraryItem[], query: string): LibraryItem[] {
+    if (!query) return items;
+
+    return items.filter(item =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  protected sortItems(items: LibraryItem[], config: SortConfig): LibraryItem[] {
+    const sortedItems = [...items];
+
+    if (config.key) {
+      sortedItems.sort((a, b) => {
+        const aValue = a[config.key as keyof LibraryItem];
+        const bValue = b[config.key as keyof LibraryItem];
+
+        if (aValue === null) return 1;
+        if (bValue === null) return -1;
+        if (aValue < bValue) {
+          return config.direction === "ascending" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return config.direction === "ascending" ? 1 : -1;
+        }
+
+        return 0;
       });
-      await logService.logError(error, {
-        component: "LibraryManagementViewModel",
-      });
-    } else if (data) {
-      this.items = data;
     }
-    this.loading = false;
-    this.notify();
-  };
+
+    return sortedItems;
+  }
 }

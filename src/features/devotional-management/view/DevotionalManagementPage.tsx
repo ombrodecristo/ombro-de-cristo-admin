@@ -79,7 +79,7 @@ export default function DevotionalManagementPage() {
         icon={<IoSearchOutline size={20} />}
       />
       <DevotionalTable
-        devotionals={viewModel.sortedDevotionals}
+        devotionals={viewModel.sortedItems}
         onEdit={viewModel.handleOpenEdit}
         onDelete={viewModel.handleOpenDelete}
         onDetails={viewModel.handleOpenDetailsModal}
@@ -90,24 +90,24 @@ export default function DevotionalManagementPage() {
       {viewModel.isFormOpen && (
         <DevotionalFormModal
           isOpen={viewModel.isFormOpen}
-          devotionalToEdit={viewModel.selectedDevotional}
+          devotionalToEdit={viewModel.selectedItem}
           authorId={user!.id}
           onClose={viewModel.handleCloseModals}
           onSuccess={viewModel.handleFormSuccess}
         />
       )}
 
-      {viewModel.selectedDevotionalForDetails && (
+      {viewModel.selectedItemForDetails && (
         <DevotionalDetailsModal
           isOpen={viewModel.isDetailsModalOpen}
           onClose={viewModel.handleCloseDetailsModal}
-          devotional={viewModel.selectedDevotionalForDetails}
+          devotional={viewModel.selectedItemForDetails}
           onEdit={handleEditFromDetails}
           onDelete={handleDeleteFromDetails}
         />
       )}
 
-      {viewModel.selectedDevotional && viewModel.isDeleteAlertOpen && (
+      {viewModel.selectedItem && viewModel.isDeleteAlertOpen && (
         <ConfirmationModal
           isOpen={viewModel.isDeleteAlertOpen}
           onClose={viewModel.handleCloseModals}

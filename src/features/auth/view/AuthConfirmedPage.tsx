@@ -3,7 +3,11 @@ import { IoCheckmarkCircle, IoAlertCircle } from "react-icons/io5";
 import { BaseCard, GlobalLoader } from "@/shared/components";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useViewModel } from "@/shared/hooks/useViewModel";
+import {
+  AuthConfirmedViewModel,
+  PageState,
+} from "../view-models/AuthConfirmedViewModel";
 
 const PageContainer = styled.div`
   display: flex;
@@ -56,62 +60,29 @@ const ContentText = styled.p`
   text-align: center;
 `;
 
-enum PageState {
-  Loading,
-  Success,
-  Error,
-}
-
 export default function AuthConfirmedPage() {
-  const { t } = useTranslation();
   const { initialHash, loading: authLoading } = useAuth();
-  const [pageState, setPageState] = useState<PageState>(PageState.Loading);
+  const [viewModel] = useState(() => new AuthConfirmedViewModel());
+  useViewModel(viewModel);
 
   useEffect(() => {
-    if (authLoading) {
-      setPageState(PageState.Loading);
+    viewModel.processAuthConfirmation(authLoading, initialHash);
+  }, [initialHash, authLoading, viewModel]);
 
-      return;
-    }
-
-    const hashParams = new URLSearchParams(initialHash.substring(1));
-    const errorDescription = hashParams.get("error_description");
-    const tokenType = hashParams.get("type");
-
-    if (errorDescription) {
-      setPageState(PageState.Error);
-    } else if (tokenType === "signup" || tokenType === "invite") {
-      setPageState(PageState.Success);
-    } else {
-      setPageState(PageState.Error);
-    }
-  }, [initialHash, authLoading]);
-
-  if (pageState === PageState.Loading) {
+  if (viewModel.pageState === PageState.Loading) {
     return <GlobalLoader />;
   }
-
-  const isSuccess = pageState === PageState.Success;
-
-  const title = isSuccess
-    ? t("auth_confirmed_title_success")
-    : t("auth_confirmed_title_error");
-
-  const message = isSuccess
-    ? t("auth_confirmed_message_success")
-    : t("auth_confirmed_message_error");
 
   return (
     <PageContainer>
       <StyledCard>
         <Header>
-          <StatusIcon success={isSuccess}>
-            {isSuccess ? <IoCheckmarkCircle /> : <IoAlertCircle />}
+          <StatusIcon success={viewModel.isSuccess}>
+            {viewModel.isSuccess ? <IoCheckmarkCircle /> : <IoAlertCircle />}
           </StatusIcon>
-          <Title success={isSuccess}>{title}</Title>
+          <Title success={viewModel.isSuccess}>{viewModel.title}</Title>
         </Header>
-
-        <ContentText>{message}</ContentText>
+        <ContentText>{viewModel.message}</ContentText>
       </StyledCard>
     </PageContainer>
   );

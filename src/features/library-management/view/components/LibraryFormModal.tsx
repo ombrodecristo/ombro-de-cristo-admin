@@ -154,21 +154,6 @@ export default function LibraryFormModal({
     viewModel.handleSubmit(e);
   };
 
-  const getYouTubeEmbedUrl = (url: string) => {
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-
-    const match = url.match(regExp);
-    const id = match && match[2].length === 11 ? match[2] : null;
-
-    return id ? `https://www.youtube.com/embed/${id}` : null;
-  };
-
-  const showPreview =
-    viewModel.isEditing &&
-    viewModel.previewUrl &&
-    itemToEdit?.content_type === viewModel.contentType;
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <FormContainer onSubmit={onFormSubmit}>
@@ -225,13 +210,13 @@ export default function LibraryFormModal({
             </Alert>
           )}
 
-          {showPreview && (
+          {viewModel.showPreview && (
             <div>
               <PreviewLabel>{t("library_form_current_content")}</PreviewLabel>
               <PreviewContainer>
                 {viewModel.contentType === "YOUTUBE" && (
                   <Iframe
-                    src={getYouTubeEmbedUrl(viewModel.previewUrl!) || ""}
+                    src={viewModel.youtubeEmbedUrl || ""}
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen

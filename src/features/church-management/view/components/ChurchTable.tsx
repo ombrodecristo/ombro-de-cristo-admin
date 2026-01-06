@@ -21,7 +21,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 export type SortConfig = {
-  key: keyof Church | null;
+  key: string | null;
   direction: "ascending" | "descending";
 };
 
@@ -73,7 +73,7 @@ type ChurchTableProps = {
   onDelete: (church: Church) => void;
   onDetails: (church: Church) => void;
   sortConfig: SortConfig;
-  requestSort: (key: keyof Church) => void;
+  requestSort: (key: string) => void;
 };
 
 export default function ChurchTable({
@@ -86,7 +86,7 @@ export default function ChurchTable({
 }: ChurchTableProps) {
   const { t } = useTranslation();
 
-  const getSortIcon = (key: keyof Church) => {
+  const getSortIcon = (key: string) => {
     if (sortConfig.key !== key) return null;
 
     return sortConfig.direction === "ascending" ? (

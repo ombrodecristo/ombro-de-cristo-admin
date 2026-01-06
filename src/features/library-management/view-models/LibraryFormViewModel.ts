@@ -51,6 +51,29 @@ export class LibraryFormViewModel extends BaseViewModel {
     }
   }
 
+  public get youtubeEmbedUrl(): string | null {
+    const url = this.isEditing ? this.itemToEdit?.video_url : this.videoUrl;
+    if (this.contentType !== "YOUTUBE" || !url) {
+      return null;
+    }
+
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+
+    const match = url.match(regExp);
+    const id = match && match[2].length === 11 ? match[2] : null;
+
+    return id ? `https://www.youtube.com/embed/${id}` : null;
+  }
+
+  public get showPreview(): boolean {
+    return (
+      this.isEditing &&
+      !!this.previewUrl &&
+      this.itemToEdit?.content_type === this.contentType
+    );
+  }
+
   private async loadPreview() {
     if (!this.itemToEdit) return;
 

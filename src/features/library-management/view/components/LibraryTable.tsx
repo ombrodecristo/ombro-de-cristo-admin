@@ -21,7 +21,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 export type SortConfig = {
-  key: keyof LibraryItem | null;
+  key: string | null;
   direction: "ascending" | "descending";
 };
 
@@ -73,7 +73,7 @@ type LibraryTableProps = {
   onDelete: (item: LibraryItem) => void;
   onDetails: (item: LibraryItem) => void;
   sortConfig: SortConfig;
-  requestSort: (key: keyof LibraryItem) => void;
+  requestSort: (key: string) => void;
 };
 
 export default function LibraryTable({
@@ -86,7 +86,7 @@ export default function LibraryTable({
 }: LibraryTableProps) {
   const { t } = useTranslation();
 
-  const getSortIcon = (key: keyof LibraryItem) => {
+  const getSortIcon = (key: string) => {
     if (sortConfig.key !== key) return null;
 
     return sortConfig.direction === "ascending" ? (
