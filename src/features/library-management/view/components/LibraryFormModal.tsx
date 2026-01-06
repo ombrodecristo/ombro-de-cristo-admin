@@ -216,7 +216,11 @@ export default function LibraryFormModal({
             <Alert>
               <IoInformationCircleOutline size={28} style={{ flexShrink: 0 }} />
               <div>
-                <p>{t("library_form_edit_type_warning")}</p>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t("library_form_edit_type_warning"),
+                  }}
+                />
               </div>
             </Alert>
           )}
