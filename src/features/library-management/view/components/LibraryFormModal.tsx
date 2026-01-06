@@ -4,7 +4,11 @@ import { LibraryFormViewModel } from "../../view-models/LibraryFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
 import type { LibraryItem } from "@/core/types/database";
-import { IoSaveOutline, IoOpenOutline } from "react-icons/io5";
+import {
+  IoSaveOutline,
+  IoOpenOutline,
+  IoInformationCircleOutline,
+} from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import FileUpload from "./FileUpload";
 import ContentTypeSelector from "./ContentTypeSelector";
@@ -59,6 +63,17 @@ const Actions = styled.div`
   gap: 8px;
   padding-top: ${props => props.theme.spacing.m}px;
   flex-shrink: 0;
+`;
+
+const Alert = styled.div`
+  background-color: ${props => props.theme.colors.mutedBackground};
+  border-radius: ${props => props.theme.radii.s}px;
+  padding: ${props => props.theme.spacing.sm}px;
+  display: flex;
+  gap: ${props => props.theme.spacing.s}px;
+  align-items: center;
+  color: ${props => props.theme.colors.mutedForeground};
+  font-size: 13px;
 `;
 
 const PreviewContainer = styled.div`
@@ -196,6 +211,15 @@ export default function LibraryFormModal({
               disabled={viewModel.loading || viewModel.isEditing}
             />
           </div>
+
+          {viewModel.isEditing && (
+            <Alert>
+              <IoInformationCircleOutline size={28} style={{ flexShrink: 0 }} />
+              <div>
+                <p>{t("library_form_edit_type_warning")}</p>
+              </div>
+            </Alert>
+          )}
 
           {showPreview && (
             <div>

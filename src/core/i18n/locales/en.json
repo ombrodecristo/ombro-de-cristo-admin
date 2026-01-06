@@ -233,6 +233,7 @@
     "library_form_upload_change_button": "Change file",
     "library_form_upload_uploading": "Uploading... {{progress}}%",
     "library_form_upload_error": "Upload failed. Please try again.",
+    "library_form_edit_type_warning": "To change the Content Type, you must delete the current item and create a new one.",
     "library_delete_title": "Delete Item?",
     "library_delete_message": "The item <strong>{{title}}</strong> will be permanently deleted. This action cannot be undone.",
     "library_delete_error": "Error deleting the item.",

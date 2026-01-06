@@ -232,6 +232,7 @@
     "library_form_upload_change_button": "Alterar arquivo",
     "library_form_upload_uploading": "Enviando... {{progress}}%",
     "library_form_upload_error": "Falha no upload. Tente novamente.",
+    "library_form_edit_type_warning": "Para alterar o Tipo de Conteúdo, é necessário excluir o item atual e cadastrar um novo.",
     "library_delete_title": "Excluir Item?",
     "library_delete_message": "O item <strong>{{title}}</strong> será excluído permanentemente. Esta ação não pode ser desfeita.",
     "library_delete_error": "Erro ao excluir o item.",

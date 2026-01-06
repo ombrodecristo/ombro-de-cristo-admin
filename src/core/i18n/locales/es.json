@@ -232,6 +232,7 @@
     "library_form_upload_change_button": "Cambiar archivo",
     "library_form_upload_uploading": "Subiendo... {{progress}}%",
     "library_form_upload_error": "La subida falló. Por favor, inténtalo de nuevo.",
+    "library_form_edit_type_warning": "Para cambiar el Tipo de Contenido, debe eliminar el ítem actual y crear uno nuevo.",
     "library_delete_title": "¿Eliminar Ítem?",
     "library_delete_message": "El ítem <strong>{{title}}</strong> será eliminado permanentemente. Esta acción no se puede deshacer.",
     "library_delete_error": "Error al eliminar el ítem.",
