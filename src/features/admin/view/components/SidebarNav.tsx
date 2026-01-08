@@ -122,9 +122,7 @@ export default function SidebarNav({
   ];
 
   const visibleNavItems = allNavItems.filter(
-    item =>
-      permissions.is_super_admin ||
-      permissions[item.permission as keyof Permissions]
+    item => permissions[item.permission as keyof Permissions]
   );
 
   return (

@@ -47,9 +47,7 @@ export default function UserManagementPage() {
   };
 
   const canEditUsers =
-    user?.app_metadata.permissions?.is_super_admin ||
-    user?.app_metadata.permissions?.can_manage_users ||
-    false;
+    user?.app_metadata.permissions?.can_manage_users || false;
 
   return (
     <PageContainer>

@@ -22,10 +22,6 @@ export default function AdminIndexRedirect() {
   const { user } = useAuth();
   const permissions = user?.app_metadata.permissions || {};
 
-  if (permissions.is_super_admin) {
-    return <Navigate to="/admin/users" replace />;
-  }
-
   const firstAllowedRoute = ALL_ADMIN_ROUTES.find(
     route => permissions[route.permission as keyof Permissions]
   );

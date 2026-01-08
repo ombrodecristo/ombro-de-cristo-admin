@@ -12,7 +12,6 @@ export type Devotional = DbTables["devotionals"]["Row"];
 export type LibraryItem = DbTables["library_items"]["Row"];
 
 export type Permissions = {
-  is_super_admin?: boolean;
   can_manage_users?: boolean;
   can_manage_churches?: boolean;
   can_manage_devotionals?: boolean;

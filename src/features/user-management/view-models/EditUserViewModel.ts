@@ -52,7 +52,7 @@ export class EditUserViewModel extends BaseViewModel {
       ...((props.profile.permissions as Permissions) || {}),
     };
     this.canEditPermissions =
-      props.currentUserPermissions.is_super_admin || false;
+      props.currentUserPermissions.can_manage_users || false;
     this.fetchChurches();
   }
 
