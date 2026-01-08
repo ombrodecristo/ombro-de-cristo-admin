@@ -8,6 +8,7 @@ import {
   IoHeartOutline,
   IoShieldOutline,
   IoStatsChart,
+  IoFolderOutline,
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { useCarousel } from "../hooks/useCarousel";
@@ -265,6 +266,16 @@ export default function LandingPage() {
         icon: <IoShieldOutline size={32} />,
         title: t("landing_feature3_title"),
         description: t("landing_feature3_desc"),
+      },
+      {
+        icon: <IoFolderOutline size={32} />,
+        title: t("landing_feature4_title"),
+        description: t("landing_feature4_desc"),
+      },
+      {
+        icon: <IoBookOutline size={32} />,
+        title: t("landing_feature5_title"),
+        description: t("landing_feature5_desc"),
       },
     ],
     [t]
