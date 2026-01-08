@@ -2,6 +2,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import type { Permissions } from "@/core/types/database";
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
 
 const NoPermissionContainer = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ const ALL_ADMIN_ROUTES = [
 
 export default function AdminIndexRedirect() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const permissions = user?.app_metadata.permissions || {};
 
   const firstAllowedRoute = ALL_ADMIN_ROUTES.find(
@@ -31,8 +33,6 @@ export default function AdminIndexRedirect() {
   }
 
   return (
-    <NoPermissionContainer>
-      Você não tem permissão para acessar nenhuma página de administração.
-    </NoPermissionContainer>
+    <NoPermissionContainer>{t("admin_no_permissions")}</NoPermissionContainer>
   );
 }

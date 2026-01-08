@@ -135,10 +135,22 @@ export default function EditUserModal({
   };
 
   const permissionItems: { key: keyof Permissions; label: string }[] = [
-    { key: "can_manage_users", label: "Gerenciar Perfis" },
-    { key: "can_manage_churches", label: "Gerenciar Igrejas" },
-    { key: "can_manage_devotionals", label: "Gerenciar Devocionais" },
-    { key: "can_manage_library", label: "Gerenciar Biblioteca" },
+    {
+      key: "can_manage_users",
+      label: t("users_permission_manage_users"),
+    },
+    {
+      key: "can_manage_churches",
+      label: t("users_permission_manage_churches"),
+    },
+    {
+      key: "can_manage_devotionals",
+      label: t("users_permission_manage_devotionals"),
+    },
+    {
+      key: "can_manage_library",
+      label: t("users_permission_manage_library"),
+    },
   ];
 
   return (
@@ -172,7 +184,7 @@ export default function EditUserModal({
           </FormGroup>
           {viewModel.canEditPermissions && viewModel.newRole === "ADMIN" && (
             <FormGroup>
-              <Label>Acessos</Label>
+              <Label>{t("users_edit_permissions_label")}</Label>
               {permissionItems.map(item => (
                 <CheckboxContainer key={item.key}>
                   <input
