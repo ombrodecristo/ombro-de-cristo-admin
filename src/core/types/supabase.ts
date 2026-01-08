@@ -202,6 +202,7 @@ export type Database = {
           id: string;
           language_preference: string | null;
           mentor_id: string | null;
+          permissions: Json;
           role: Database["public"]["Enums"]["user_roles"];
           updated_at: string;
         };
@@ -213,6 +214,7 @@ export type Database = {
           id: string;
           language_preference?: string | null;
           mentor_id?: string | null;
+          permissions?: Json;
           role?: Database["public"]["Enums"]["user_roles"];
           updated_at?: string;
         };
@@ -224,6 +226,7 @@ export type Database = {
           id?: string;
           language_preference?: string | null;
           mentor_id?: string | null;
+          permissions?: Json;
           role?: Database["public"]["Enums"]["user_roles"];
           updated_at?: string;
         };

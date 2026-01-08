@@ -4,6 +4,7 @@ import type {
   UserRole,
   UserGender,
   LanguagePreference,
+  Permissions,
 } from "@/core/types/database";
 import type { ServiceResponse } from "@/core/types/service";
 import type { QueryData } from "@supabase/supabase-js";
@@ -17,7 +18,8 @@ const profilesWithRelationsQuery = supabase.from("profiles").select(
     language_preference,
     church_id,
     churches ( name ),
-    mentor:mentor_id ( full_name )
+    mentor:mentor_id ( full_name ),
+    permissions
   `
 );
 
@@ -40,6 +42,7 @@ async function updateAdminProfileDetails(
     gender: UserGender;
     church_id: string | null;
     mentor_id?: string | null;
+    permissions?: Permissions;
   }
 ): Promise<ServiceResponse<Profile>> {
   const { data, error } = await supabase
@@ -49,17 +52,17 @@ async function updateAdminProfileDetails(
     .select()
     .single();
 
-  return { data, error };
+  return { data: data as Profile | null, error };
 }
 
 async function getProfileById(id: string): Promise<ServiceResponse<Profile>> {
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("*, permissions")
     .eq("id", id)
     .single();
 
-  return { data, error };
+  return { data: data as Profile | null, error };
 }
 
 async function updateProfile(
@@ -76,7 +79,7 @@ async function updateProfile(
     .select()
     .single();
 
-  return { data, error };
+  return { data: data as Profile | null, error };
 }
 
 export const profileRepository = {

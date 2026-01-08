@@ -4,6 +4,7 @@ import RootLayout from "./RootLayout.tsx";
 import { GlobalLoader } from "@/shared/components";
 import ProtectedRoute from "@/features/admin/view/components/ProtectedRoute.tsx";
 import AdminLayout from "@/features/admin/view/layouts/AdminLayout.tsx";
+import PermissionGuard from "@/features/admin/view/components/PermissionGuard.tsx";
 
 const LandingPage = lazy(
   () => import("@/features/static/view/LandingPage.tsx")
@@ -66,20 +67,31 @@ export const router = createBrowserRouter([
                 element: <Navigate to="/admin/users" replace />,
               },
               {
-                path: "users",
-                element: <UserManagementPage />,
+                element: <PermissionGuard permission="can_manage_users" />,
+                children: [{ path: "users", element: <UserManagementPage /> }],
               },
               {
-                path: "churches",
-                element: <ChurchManagementPage />,
+                element: <PermissionGuard permission="can_manage_churches" />,
+                children: [
+                  { path: "churches", element: <ChurchManagementPage /> },
+                ],
               },
               {
-                path: "devotionals",
-                element: <DevotionalManagementPage />,
+                element: (
+                  <PermissionGuard permission="can_manage_devotionals" />
+                ),
+                children: [
+                  {
+                    path: "devotionals",
+                    element: <DevotionalManagementPage />,
+                  },
+                ],
               },
               {
-                path: "library",
-                element: <LibraryManagementPage />,
+                element: <PermissionGuard permission="can_manage_library" />,
+                children: [
+                  { path: "library", element: <LibraryManagementPage /> },
+                ],
               },
             ],
           },

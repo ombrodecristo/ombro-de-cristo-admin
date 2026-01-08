@@ -7,6 +7,8 @@ import {
   IoFolderOutline,
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/shared/hooks/useAuth";
+import type { Permissions } from "@/core/types/database";
 
 const Nav = styled.nav`
   display: flex;
@@ -89,33 +91,45 @@ export default function SidebarNav({
   onNavigate,
 }: SidebarNavProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const permissions = user?.app_metadata.permissions || {};
 
-  const navItems = [
+  const allNavItems = [
     {
       to: "/admin/users",
       icon: <IoPeopleOutline size={22} />,
       labelKey: "nav_profiles",
+      permission: "can_manage_users",
     },
     {
       to: "/admin/churches",
       icon: <IoHomeOutline size={22} />,
       labelKey: "nav_churches",
+      permission: "can_manage_churches",
     },
     {
       to: "/admin/devotionals",
       icon: <IoBookOutline size={22} />,
       labelKey: "nav_devotionals",
+      permission: "can_manage_devotionals",
     },
     {
       to: "/admin/library",
       icon: <IoFolderOutline size={22} />,
       labelKey: "nav_library",
+      permission: "can_manage_library",
     },
   ];
 
+  const visibleNavItems = allNavItems.filter(
+    item =>
+      permissions.is_super_admin ||
+      permissions[item.permission as keyof Permissions]
+  );
+
   return (
     <Nav>
-      {navItems.map(item => (
+      {visibleNavItems.map(item => (
         <StyledNavLink
           key={item.to}
           to={item.to}

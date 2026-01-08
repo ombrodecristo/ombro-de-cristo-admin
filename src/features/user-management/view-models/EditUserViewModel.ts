@@ -5,6 +5,7 @@ import type {
   UserRole,
   UserGender,
   Church,
+  Permissions,
 } from "@/core/types/database";
 import {
   profileRepository,
@@ -21,16 +22,20 @@ type EditUserViewModelProps = {
   profile: ProfileWithRelations;
   onClose: () => void;
   onSuccess: (updatedProfile: Profile) => void;
+  currentUserPermissions: Permissions;
 };
 
 export class EditUserViewModel extends BaseViewModel {
   public newRole: UserRole;
   public newGender: UserGender;
   public newChurchId: string | null;
+  public permissions: Permissions;
   public churches: Church[] = [];
   public loadingChurches = true;
   public loading = false;
   public error: string | null = null;
+  public canEditPermissions: boolean;
+
   private profile: ProfileWithRelations;
   private onClose: () => void;
   private onSuccess: (updatedProfile: Profile) => void;
@@ -43,11 +48,17 @@ export class EditUserViewModel extends BaseViewModel {
     this.newRole = props.profile.role;
     this.newGender = props.profile.gender ?? "MALE";
     this.newChurchId = props.profile.church_id;
+    this.permissions = (props.profile.permissions as Permissions) || {};
+    this.canEditPermissions =
+      props.currentUserPermissions.is_super_admin || false;
     this.fetchChurches();
   }
 
   public setNewRole = (role: UserRole) => {
     this.newRole = role;
+    if (role !== "ADMIN") {
+      this.permissions = {};
+    }
     this.notify();
   };
 
@@ -58,6 +69,11 @@ export class EditUserViewModel extends BaseViewModel {
 
   public setNewChurchId = (churchId: string | null) => {
     this.newChurchId = churchId;
+    this.notify();
+  };
+
+  public setPermission = (key: keyof Permissions, value: boolean) => {
+    this.permissions[key] = value;
     this.notify();
   };
 
@@ -79,11 +95,15 @@ export class EditUserViewModel extends BaseViewModel {
 
   public handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (
-      this.newRole === this.profile.role &&
-      this.newGender === this.profile.gender &&
-      this.newChurchId === this.profile.church_id
-    ) {
+
+    const hasChanged =
+      this.newRole !== this.profile.role ||
+      this.newGender !== this.profile.gender ||
+      this.newChurchId !== this.profile.church_id ||
+      JSON.stringify(this.permissions) !==
+        JSON.stringify(this.profile.permissions);
+
+    if (!hasChanged) {
       this.onClose();
 
       return;
@@ -93,14 +113,13 @@ export class EditUserViewModel extends BaseViewModel {
     this.error = null;
     this.notify();
 
-    const detailsToUpdate: {
-      role: UserRole;
-      gender: UserGender;
-      church_id: string | null;
-    } = {
+    const finalPermissions = this.newRole === "ADMIN" ? this.permissions : {};
+
+    const detailsToUpdate = {
       role: this.newRole,
       gender: this.newGender,
       church_id: this.newChurchId,
+      permissions: finalPermissions,
     };
 
     const { data, error: updateError } =

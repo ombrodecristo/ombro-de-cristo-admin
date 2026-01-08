@@ -16,6 +16,7 @@ import {
   TableHeaderCell,
   TableRow,
   Button,
+  Text,
 } from "@/shared/components";
 import { useTranslation } from "react-i18next";
 
@@ -72,6 +73,7 @@ type UserTableProps = {
   onDetails: (profile: ProfileWithRelations) => void;
   sortConfig: SortConfig;
   requestSort: (key: string) => void;
+  canEditUsers: boolean;
 };
 
 export default function UserTable({
@@ -80,6 +82,7 @@ export default function UserTable({
   onDetails,
   sortConfig,
   requestSort,
+  canEditUsers,
 }: UserTableProps) {
   const { t } = useTranslation();
 
@@ -155,25 +158,31 @@ export default function UserTable({
                   {profile.mentor?.full_name ?? t("common_undefined")}
                 </DesktopOnlyCell>
                 <ActionsContainer>
-                  <DesktopActions>
-                    <Button
-                      label={t("users_edit_button")}
-                      onClick={() => onEdit(profile)}
-                      icon={<IoPencil />}
-                      size="small"
-                      style={{ width: "auto" }}
-                    />
-                  </DesktopActions>
-                  <MobileActions>
-                    <Button
-                      label={t("common_view")}
-                      onClick={() => onDetails(profile)}
-                      icon={<IoEyeOutline />}
-                      variant="secondary"
-                      size="small"
-                      style={{ width: "auto" }}
-                    />
-                  </MobileActions>
+                  {canEditUsers ? (
+                    <>
+                      <DesktopActions>
+                        <Button
+                          label={t("users_edit_button")}
+                          onClick={() => onEdit(profile)}
+                          icon={<IoPencil />}
+                          size="small"
+                          style={{ width: "auto" }}
+                        />
+                      </DesktopActions>
+                      <MobileActions>
+                        <Button
+                          label={t("common_view")}
+                          onClick={() => onDetails(profile)}
+                          icon={<IoEyeOutline />}
+                          variant="secondary"
+                          size="small"
+                          style={{ width: "auto" }}
+                        />
+                      </MobileActions>
+                    </>
+                  ) : (
+                    <Text variant="caption">-</Text>
+                  )}
                 </ActionsContainer>
               </TableRow>
             ))

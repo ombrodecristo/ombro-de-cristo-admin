@@ -1,6 +1,11 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ChangeEvent } from "react";
 import styled from "@emotion/styled";
-import type { Profile, UserRole, UserGender } from "@/core/types/database";
+import type {
+  Profile,
+  UserRole,
+  UserGender,
+  Permissions,
+} from "@/core/types/database";
 import type { ProfileWithRelations } from "@/data/repositories/profileRepository";
 import {
   EditUserViewModel,
@@ -12,6 +17,7 @@ import { formatGender, formatRole } from "@/core/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
 import { IoInformationCircleOutline, IoSaveOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 const FormContainer = styled.form`
   display: flex;
@@ -82,6 +88,14 @@ const Alert = styled.div`
   font-size: 13px;
 `;
 
+const CheckboxContainer = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+`;
+
 interface EditUserModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -96,9 +110,17 @@ export default function EditUserModal({
   onSuccess,
 }: EditUserModalProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const currentUserPermissions = user?.app_metadata.permissions || {};
 
   const [viewModel] = useState(
-    () => new EditUserViewModel({ profile, onClose, onSuccess })
+    () =>
+      new EditUserViewModel({
+        profile,
+        onClose,
+        onSuccess,
+        currentUserPermissions,
+      })
   );
 
   useViewModel(viewModel);
@@ -111,6 +133,13 @@ export default function EditUserModal({
   const onFormSubmit = (e: FormEvent) => {
     viewModel.handleSubmit(e);
   };
+
+  const permissionItems: { key: keyof Permissions; label: string }[] = [
+    { key: "can_manage_users", label: "Gerenciar Perfis" },
+    { key: "can_manage_churches", label: "Gerenciar Igrejas" },
+    { key: "can_manage_devotionals", label: "Gerenciar Devocionais" },
+    { key: "can_manage_library", label: "Gerenciar Biblioteca" },
+  ];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="512px">
@@ -134,7 +163,7 @@ export default function EditUserModal({
             <Select
               value={viewModel.newRole}
               onChange={value => viewModel.setNewRole(value as UserRole)}
-              disabled={viewModel.loading}
+              disabled={viewModel.loading || !viewModel.canEditPermissions}
               options={allRoles.map(role => ({
                 value: role,
                 label: formatRole(role),
@@ -169,6 +198,26 @@ export default function EditUserModal({
               }
             />
           </FormGroup>
+
+          {viewModel.canEditPermissions && viewModel.newRole === "ADMIN" && (
+            <FormGroup>
+              <Label>Permissões de Administrador</Label>
+              {permissionItems.map(item => (
+                <CheckboxContainer key={item.key}>
+                  <input
+                    type="checkbox"
+                    checked={viewModel.permissions[item.key] || false}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      viewModel.setPermission(item.key, e.target.checked)
+                    }
+                    disabled={viewModel.loading}
+                  />
+                  {item.label}
+                </CheckboxContainer>
+              ))}
+            </FormGroup>
+          )}
+
           <Alert>
             <IoInformationCircleOutline size={28} style={{ flexShrink: 0 }} />
             <div>

@@ -46,6 +46,8 @@ export default function UserManagementPage() {
     viewModel.handleEdit(profile);
   };
 
+  const canEditUsers = user?.app_metadata.permissions?.is_super_admin || false;
+
   return (
     <PageContainer>
       <PageHeader title={t("users_page_title")} />
@@ -63,6 +65,7 @@ export default function UserManagementPage() {
         onDetails={viewModel.handleOpenDetailsModal}
         sortConfig={viewModel.sortConfig}
         requestSort={viewModel.requestSort}
+        canEditUsers={canEditUsers}
       />
       {viewModel.editingProfile && (
         <EditUserModal
