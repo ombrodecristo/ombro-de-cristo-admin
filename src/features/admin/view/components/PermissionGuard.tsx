@@ -11,7 +11,7 @@ export default function PermissionGuard({ permission }: PermissionGuardProps) {
 
   const permissions = user?.app_metadata.permissions || {};
 
-  if (permissions.is_super_admin || permissions[permission]) {
+  if (permissions[permission]) {
     return <Outlet />;
   }
 
