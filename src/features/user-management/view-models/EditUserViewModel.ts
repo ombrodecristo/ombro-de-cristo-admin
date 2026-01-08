@@ -48,7 +48,9 @@ export class EditUserViewModel extends BaseViewModel {
     this.newRole = props.profile.role;
     this.newGender = props.profile.gender ?? "MALE";
     this.newChurchId = props.profile.church_id;
-    this.permissions = (props.profile.permissions as Permissions) || {};
+    this.permissions = {
+      ...((props.profile.permissions as Permissions) || {}),
+    };
     this.canEditPermissions =
       props.currentUserPermissions.is_super_admin || false;
     this.fetchChurches();

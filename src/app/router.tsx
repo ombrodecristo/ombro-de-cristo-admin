@@ -1,10 +1,11 @@
 import { Suspense, lazy } from "react";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "./RootLayout.tsx";
 import { GlobalLoader } from "@/shared/components";
 import ProtectedRoute from "@/features/admin/view/components/ProtectedRoute.tsx";
 import AdminLayout from "@/features/admin/view/layouts/AdminLayout.tsx";
 import PermissionGuard from "@/features/admin/view/components/PermissionGuard.tsx";
+import AdminIndexRedirect from "@/features/admin/view/components/AdminIndexRedirect.tsx";
 
 const LandingPage = lazy(
   () => import("@/features/static/view/LandingPage.tsx")
@@ -64,7 +65,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Navigate to="/admin/users" replace />,
+                element: <AdminIndexRedirect />,
               },
               {
                 element: <PermissionGuard permission="can_manage_users" />,

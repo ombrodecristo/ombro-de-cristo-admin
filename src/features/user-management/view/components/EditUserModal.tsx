@@ -170,6 +170,24 @@ export default function EditUserModal({
               }))}
             />
           </FormGroup>
+          {viewModel.canEditPermissions && viewModel.newRole === "ADMIN" && (
+            <FormGroup>
+              <Label>Acessos</Label>
+              {permissionItems.map(item => (
+                <CheckboxContainer key={item.key}>
+                  <input
+                    type="checkbox"
+                    checked={viewModel.permissions[item.key] || false}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      viewModel.setPermission(item.key, e.target.checked)
+                    }
+                    disabled={viewModel.loading}
+                  />
+                  {item.label}
+                </CheckboxContainer>
+              ))}
+            </FormGroup>
+          )}
           <FormGroup>
             <Label>{t("users_edit_gender_label")}</Label>
             <Select
@@ -198,25 +216,6 @@ export default function EditUserModal({
               }
             />
           </FormGroup>
-
-          {viewModel.canEditPermissions && viewModel.newRole === "ADMIN" && (
-            <FormGroup>
-              <Label>Permissões de Administrador</Label>
-              {permissionItems.map(item => (
-                <CheckboxContainer key={item.key}>
-                  <input
-                    type="checkbox"
-                    checked={viewModel.permissions[item.key] || false}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      viewModel.setPermission(item.key, e.target.checked)
-                    }
-                    disabled={viewModel.loading}
-                  />
-                  {item.label}
-                </CheckboxContainer>
-              ))}
-            </FormGroup>
-          )}
 
           <Alert>
             <IoInformationCircleOutline size={28} style={{ flexShrink: 0 }} />

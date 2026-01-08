@@ -46,7 +46,10 @@ export default function UserManagementPage() {
     viewModel.handleEdit(profile);
   };
 
-  const canEditUsers = user?.app_metadata.permissions?.is_super_admin || false;
+  const canEditUsers =
+    user?.app_metadata.permissions?.is_super_admin ||
+    user?.app_metadata.permissions?.can_manage_users ||
+    false;
 
   return (
     <PageContainer>
