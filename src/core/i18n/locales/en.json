@@ -337,6 +337,8 @@
     "devotionals_form_error_create": "Could not create the new devotional.",
     "library_pdf_not_supported": "Your browser does not support embedded PDF viewing.",
     "library_open_pdf_new_tab": "Open PDF in new tab",
-    "library_form_current_content": "Current Content"
+    "library_form_current_content": "Current Content",
+    "users_edit_resync_button": "Resync User",
+    "users_toast_resync_success": "User resynced successfully!"
   }
 }

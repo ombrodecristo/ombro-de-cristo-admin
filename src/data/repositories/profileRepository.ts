@@ -82,9 +82,20 @@ async function updateProfile(
   return { data: data as Profile | null, error };
 }
 
+async function resyncUserProfile(
+  userId: string
+): Promise<ServiceResponse<unknown>> {
+  const { data, error } = await supabase.rpc("resync_user_auth_state", {
+    p_user_id: userId,
+  });
+
+  return { data, error };
+}
+
 export const profileRepository = {
   getProfilesWithRelations,
   updateAdminProfileDetails,
   getProfileById,
   updateProfile,
+  resyncUserProfile,
 };

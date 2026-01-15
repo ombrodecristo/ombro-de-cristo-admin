@@ -255,6 +255,7 @@ export type Database = {
       delete_own_user: { Args: never; Returns: undefined };
       get_user_gender: { Args: never; Returns: string };
       get_user_role: { Args: never; Returns: string };
+      resync_user_auth_state: { Args: { p_user_id: string }; Returns: Json };
     };
     Enums: {
       library_item_content_type: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD";

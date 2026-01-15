@@ -33,6 +33,7 @@ export class EditUserViewModel extends BaseViewModel {
   public churches: Church[] = [];
   public loadingChurches = true;
   public loading = false;
+  public isResyncing = false;
   public error: string | null = null;
   public canEditPermissions: boolean;
 
@@ -142,5 +143,31 @@ export class EditUserViewModel extends BaseViewModel {
       this.onClose();
     }
     this.notify();
+  };
+
+  public handleResync = async (): Promise<{ error: string | null }> => {
+    if (this.isResyncing || this.loading)
+      return { error: "Ação já em progresso." };
+
+    this.isResyncing = true;
+    this.notify();
+
+    const { error } = await profileRepository.resyncUserProfile(
+      this.profile.id
+    );
+
+    this.isResyncing = false;
+    this.notify();
+
+    if (error) {
+      await logService.logError(error as Error, {
+        component: "EditUserViewModel.handleResync",
+        context: { profileId: this.profile.id },
+      });
+
+      return { error: error.message };
+    }
+
+    return { error: null };
   };
 }

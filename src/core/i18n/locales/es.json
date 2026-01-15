@@ -337,6 +337,8 @@
     "devotionals_form_error_create": "No se pudo crear el nuevo devocional.",
     "library_pdf_not_supported": "Tu navegador no soporta la visualización de PDF integrada.",
     "library_open_pdf_new_tab": "Abrir PDF en nueva pestaña",
-    "library_form_current_content": "Contenido Actual"
+    "library_form_current_content": "Contenido Actual",
+    "users_edit_resync_button": "Resincronizar Usuario",
+    "users_toast_resync_success": "¡Usuario resincronizado con éxito!"
   }
 }

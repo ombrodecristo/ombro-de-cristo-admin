@@ -15,9 +15,14 @@ import {
 import { useViewModel } from "@/shared/hooks/useViewModel";
 import { formatGender, formatRole } from "@/core/lib/formatters";
 import { Modal, Button, Input, Label, Select } from "@/shared/components";
-import { IoInformationCircleOutline, IoSaveOutline } from "react-icons/io5";
+import {
+  IoInformationCircleOutline,
+  IoSaveOutline,
+  IoSyncOutline,
+} from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { toast } from "sonner";
 
 const FormContainer = styled.form`
   display: flex;
@@ -134,6 +139,15 @@ export default function EditUserModal({
     viewModel.handleSubmit(e);
   };
 
+  const handleResyncClick = async () => {
+    const { error } = await viewModel.handleResync();
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success(t("users_toast_resync_success"));
+    }
+  };
+
   const permissionItems: { key: keyof Permissions; label: string }[] = [
     {
       key: "can_manage_users",
@@ -244,11 +258,19 @@ export default function EditUserModal({
             icon={<IoSaveOutline size={20} />}
           />
           <Button
+            label={t("users_edit_resync_button")}
+            onClick={handleResyncClick}
+            loading={viewModel.isResyncing}
+            disabled={viewModel.loading}
+            variant="secondary"
+            icon={<IoSyncOutline size={20} />}
+          />
+          <Button
             type="button"
             label={t("common_cancel")}
             variant="secondary"
             onClick={onClose}
-            disabled={viewModel.loading}
+            disabled={viewModel.loading || viewModel.isResyncing}
           />
         </Actions>
       </FormContainer>
