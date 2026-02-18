@@ -15,7 +15,7 @@ import { churchRepository } from "@/data/repositories/churchRepository";
 import { logService } from "@/shared/services/logService";
 import i18n from "@/core/i18n";
 
-export const allRoles: UserRole[] = ["MISSIONARY", "MENTOR", "ADMIN"];
+export const allRoles: UserRole[] = ["MENTEE", "MENTOR", "ADMIN"];
 export const allGenders: UserGender[] = ["MALE", "FEMALE"];
 
 type EditUserViewModelProps = {

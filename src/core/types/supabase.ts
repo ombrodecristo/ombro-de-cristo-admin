@@ -39,6 +39,84 @@ export type Database = {
   };
   public: {
     Tables: {
+      chat_messages: {
+        Row: {
+          content: string;
+          created_at: string;
+          id: string;
+          is_read: boolean;
+          room_id: string;
+          sender_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          room_id: string;
+          sender_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          room_id?: string;
+          sender_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_room_id_fkey";
+            columns: ["room_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_rooms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chat_messages_sender_id_fkey";
+            columns: ["sender_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      chat_rooms: {
+        Row: {
+          created_at: string;
+          id: string;
+          mentee_id: string;
+          mentor_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          mentee_id: string;
+          mentor_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          mentee_id?: string;
+          mentor_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_rooms_mentee_id_fkey";
+            columns: ["mentee_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chat_rooms_mentor_id_fkey";
+            columns: ["mentor_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       churches: {
         Row: {
           created_at: string;
@@ -103,7 +181,7 @@ export type Database = {
           content: string;
           created_at: string;
           id: string;
-          missionary_id: string;
+          mentee_id: string;
           shared: boolean;
           updated_at: string;
         };
@@ -111,7 +189,7 @@ export type Database = {
           content: string;
           created_at?: string;
           id?: string;
-          missionary_id: string;
+          mentee_id: string;
           shared?: boolean;
           updated_at?: string;
         };
@@ -119,14 +197,14 @@ export type Database = {
           content?: string;
           created_at?: string;
           id?: string;
-          missionary_id?: string;
+          mentee_id?: string;
           shared?: boolean;
           updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "diary_entries_missionary_id_fkey";
-            columns: ["missionary_id"];
+            foreignKeyName: "diary_entries_mentee_id_fkey";
+            columns: ["mentee_id"];
             isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
@@ -203,6 +281,7 @@ export type Database = {
           language_preference: string | null;
           mentor_id: string | null;
           permissions: Json;
+          push_token: string | null;
           role: Database["public"]["Enums"]["user_roles"];
           updated_at: string;
         };
@@ -215,6 +294,7 @@ export type Database = {
           language_preference?: string | null;
           mentor_id?: string | null;
           permissions?: Json;
+          push_token?: string | null;
           role?: Database["public"]["Enums"]["user_roles"];
           updated_at?: string;
         };
@@ -227,6 +307,7 @@ export type Database = {
           language_preference?: string | null;
           mentor_id?: string | null;
           permissions?: Json;
+          push_token?: string | null;
           role?: Database["public"]["Enums"]["user_roles"];
           updated_at?: string;
         };
@@ -253,6 +334,30 @@ export type Database = {
     };
     Functions: {
       delete_own_user: { Args: never; Returns: undefined };
+      get_chat_rooms_with_details: {
+        Args: never;
+        Returns: {
+          id: string;
+          last_message: Json;
+          other_user: Json;
+          unread_count: number;
+        }[];
+      };
+      get_or_create_chat_room: {
+        Args: { p_user_1: string; p_user_2: string };
+        Returns: {
+          created_at: string;
+          id: string;
+          mentee_id: string;
+          mentor_id: string;
+        }[];
+        SetofOptions: {
+          from: "*";
+          to: "chat_rooms";
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       get_user_gender: { Args: never; Returns: string };
       get_user_role: { Args: never; Returns: string };
       resync_user_auth_state: { Args: { p_user_id: string }; Returns: Json };
@@ -260,7 +365,7 @@ export type Database = {
     Enums: {
       library_item_content_type: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD";
       user_genders: "MALE" | "FEMALE";
-      user_roles: "ADMIN" | "MENTOR" | "MISSIONARY";
+      user_roles: "ADMIN" | "MENTOR" | "MENTEE";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -396,7 +501,7 @@ export const Constants = {
     Enums: {
       library_item_content_type: ["PDF", "YOUTUBE", "DIRECT_UPLOAD"],
       user_genders: ["MALE", "FEMALE"],
-      user_roles: ["ADMIN", "MENTOR", "MISSIONARY"],
+      user_roles: ["ADMIN", "MENTOR", "MENTEE"],
     },
   },
 } as const;
