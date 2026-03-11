@@ -44,7 +44,6 @@ export class DevotionalFormViewModel extends BaseViewModel {
     es: false,
   };
 
-  public autoTranslate = true;
   public originalLanguage: Language =
     (i18n.language.split("-")[0] as Language) || "pt";
   public activeTab: Language = this.originalLanguage;
@@ -109,11 +108,6 @@ export class DevotionalFormViewModel extends BaseViewModel {
     this.originalLanguage = lang;
     this.translations[lang].status = "completed";
     this.activeTab = lang;
-    this.notify();
-  };
-
-  public setAutoTranslate = (value: boolean) => {
-    this.autoTranslate = value;
     this.notify();
   };
 
@@ -234,30 +228,17 @@ export class DevotionalFormViewModel extends BaseViewModel {
         is_original: true,
       };
 
-      const { data: newDevotional, error } =
-        await devotionalRepository.createDevotional(newOriginal, this.authorId);
+      const { error } = await devotionalRepository.createDevotional(
+        newOriginal,
+        this.authorId
+      );
 
-      if (error || !newDevotional) {
+      if (error) {
         this.error = i18n.t("devotionals_form_error_create");
         await logService.logError(error!, {
           component: "DevotionalFormViewModel",
         });
       } else {
-        if (this.autoTranslate) {
-          const languages: Language[] = ["pt", "en", "es"];
-          for (const lang of languages) {
-            if (lang !== this.originalLanguage) {
-              await supabase.from("devotional_translations").insert({
-                devotional_id: newDevotional.id,
-                language_code: lang,
-                title: "...",
-                content: "...",
-                is_original: false,
-                status: "processing",
-              });
-            }
-          }
-        }
         this.onSuccess();
         this.onClose();
       }

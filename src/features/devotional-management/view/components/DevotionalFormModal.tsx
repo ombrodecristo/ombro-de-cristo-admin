@@ -123,15 +123,6 @@ const EmptyStateContainer = styled.div`
   height: 100%;
 `;
 
-const CheckboxContainer = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-  margin-top: ${props => props.theme.spacing.s}px;
-`;
-
 interface DevotionalFormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -291,18 +282,6 @@ export default function DevotionalFormModal({
                 />
               </div>
             </>
-          )}
-
-          {!isEditing && (
-            <CheckboxContainer>
-              <input
-                type="checkbox"
-                checked={viewModel.autoTranslate}
-                onChange={e => viewModel.setAutoTranslate(e.target.checked)}
-                disabled={viewModel.loading}
-              />
-              Gerar automaticamente as traduções usando Inteligência Artificial
-            </CheckboxContainer>
           )}
         </ScrollableContent>
 
