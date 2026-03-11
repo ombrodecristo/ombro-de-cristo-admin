@@ -14,7 +14,7 @@ import DevotionalTable from "./components/DevotionalTable";
 import DevotionalFormModal from "./components/DevotionalFormModal";
 import { IoAdd, IoSearchOutline } from "react-icons/io5";
 import { DevotionalDetailsModal } from "./components/DevotionalDetailsModal";
-import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
+import type { DevotionalWithTranslations } from "@/data/repositories/devotionalRepository";
 import { useTranslation } from "react-i18next";
 
 const PageContainer = styled.div`
@@ -31,6 +31,10 @@ export default function DevotionalManagementPage() {
 
   useEffect(() => {
     viewModel.init();
+
+    return () => {
+      viewModel.cleanup();
+    };
   }, [viewModel]);
 
   if (
@@ -49,12 +53,12 @@ export default function DevotionalManagementPage() {
     );
   }
 
-  const handleEditFromDetails = (devotional: DevotionalWithAuthor) => {
+  const handleEditFromDetails = (devotional: DevotionalWithTranslations) => {
     viewModel.handleCloseDetailsModal();
     viewModel.handleOpenEdit(devotional);
   };
 
-  const handleDeleteFromDetails = (devotional: DevotionalWithAuthor) => {
+  const handleDeleteFromDetails = (devotional: DevotionalWithTranslations) => {
     viewModel.handleCloseDetailsModal();
     viewModel.handleOpenDelete(devotional);
   };
