@@ -1,7 +1,8 @@
 import { supabase } from "@/core/lib/supabaseClient";
 import type { Devotional, DevotionalTranslation } from "@/core/types/database";
 import type { ServiceResponse } from "@/core/types/service";
-import type { QueryData, TablesInsert } from "@supabase/supabase-js";
+import type { TablesInsert } from "@/core/types/supabase";
+import type { QueryData } from "@supabase/supabase-js";
 
 const devotionalsWithTranslationsQuery = supabase.from("devotionals").select(
   `
@@ -42,7 +43,7 @@ async function getDevotionals(): Promise<
 async function createDevotional(
   original: Omit<
     DevotionalTranslationInsert,
-    "id" | "devotional_id" | "status"
+    "id" | "devotional_id" | "status" | "created_at" | "updated_at"
   >,
   authorId: string
 ): Promise<ServiceResponse<Devotional>> {
@@ -57,13 +58,15 @@ async function createDevotional(
 
   if (devotionalError) return { data: null, error: devotionalError };
 
+  const translationPayload: DevotionalTranslationInsert = {
+    ...original,
+    devotional_id: devotional.id,
+    status: "completed",
+  };
+
   const { error: translationError } = await supabase
     .from("devotional_translations")
-    .insert({
-      ...original,
-      devotional_id: devotional.id,
-      status: "completed",
-    });
+    .insert(translationPayload);
 
   if (translationError) {
     await supabase.from("devotionals").delete().eq("id", devotional.id);
