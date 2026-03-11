@@ -7,7 +7,7 @@ const Wrapper = styled.div`
 `;
 
 const StyledTextarea = styled.textarea<{ hasError: boolean }>`
-  min-height: 400px;
+  min-height: 250px;
   width: 100%;
   border-radius: ${props => props.theme.radii.m}px;
   border: 1.5px solid
