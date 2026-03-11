@@ -11,6 +11,7 @@ import i18n from "@/core/i18n";
 import { toast } from "sonner";
 import type { ServiceResponse } from "@/core/types/service";
 import type { DevotionalTranslation } from "@/core/types/database";
+import { supabase } from "@/core/lib/supabaseClient";
 
 type DevotionalFormViewModelProps = {
   authorId: string;
@@ -90,10 +91,11 @@ export class DevotionalFormViewModel extends BaseViewModel {
   }
 
   public get showEmptyState() {
-    return (
-      this.currentTranslation.status === "new" &&
-      !this.isManualEdit[this.activeTab]
-    );
+    const isReprocessable =
+      this.currentTranslation.status === "new" ||
+      this.currentTranslation.status === "error";
+
+    return isReprocessable && !this.isManualEdit[this.activeTab];
   }
 
   public setActiveTab = (tab: Language) => {
@@ -127,35 +129,26 @@ export class DevotionalFormViewModel extends BaseViewModel {
   };
 
   public handleGenerateWithAI = async () => {
-    if (!this.devotionalToEdit) return;
+    const translation = this.translations[this.activeTab];
+    if (!translation || !translation.id) return;
 
     this.loading = true;
     this.notify();
 
-    const { data: newTranslation, error } =
-      await devotionalRepository.createDevotionalTranslation({
-        devotional_id: this.devotionalToEdit.id,
-        language_code: this.activeTab,
-        title: "...",
-        content: "...",
-        is_original: false,
-        status: "processing",
-      });
+    const { data: updatedTranslation, error } =
+      await devotionalRepository.updateTranslationStatus(
+        translation.id,
+        "processing"
+      );
 
     this.loading = false;
     if (error) {
       toast.error(i18n.t("error_generic"));
       await logService.logError(error, {
-        component: "DevotionalFormViewModel",
+        component: "DevotionalFormViewModel.handleGenerateWithAI",
       });
-    } else if (newTranslation) {
-      this.translations[this.activeTab] = {
-        id: newTranslation.id,
-        title: newTranslation.title,
-        content: newTranslation.content,
-        status: "processing",
-      };
-      this.isManualEdit[this.activeTab] = true;
+    } else if (updatedTranslation) {
+      this.translations[this.activeTab].status = "processing";
       this.onSuccess();
     }
     this.notify();
@@ -166,14 +159,20 @@ export class DevotionalFormViewModel extends BaseViewModel {
   ): Promise<ServiceResponse<DevotionalTranslation> | undefined> {
     if (!this.devotionalToEdit) return;
 
-    return devotionalRepository.createDevotionalTranslation({
-      devotional_id: this.devotionalToEdit.id,
-      language_code: lang,
-      title: this.translations[lang].title.trim(),
-      content: this.translations[lang].content.trim(),
-      is_original: false,
-      status: "completed",
-    });
+    const { data, error } = await supabase
+      .from("devotional_translations")
+      .insert({
+        devotional_id: this.devotionalToEdit.id,
+        language_code: lang,
+        title: this.translations[lang].title.trim(),
+        content: this.translations[lang].content.trim(),
+        is_original: false,
+        status: "completed",
+      })
+      .select()
+      .single();
+
+    return { data, error };
   }
 
   public handleSubmit = async (e: FormEvent) => {
@@ -185,6 +184,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
     if (!titleValidation.isValid) {
       this.error = titleValidation.message;
       this.notify();
+
       return;
     }
 
@@ -194,6 +194,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
     if (!contentValidation.isValid) {
       this.error = contentValidation.message;
       this.notify();
+
       return;
     }
 
@@ -246,7 +247,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
           const languages: Language[] = ["pt", "en", "es"];
           for (const lang of languages) {
             if (lang !== this.originalLanguage) {
-              await devotionalRepository.createDevotionalTranslation({
+              await supabase.from("devotional_translations").insert({
                 devotional_id: newDevotional.id,
                 language_code: lang,
                 title: "...",
