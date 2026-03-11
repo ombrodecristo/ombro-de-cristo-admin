@@ -1,7 +1,7 @@
 import { supabase } from "@/core/lib/supabaseClient";
 import type { Devotional, DevotionalTranslation } from "@/core/types/database";
 import type { ServiceResponse } from "@/core/types/service";
-import type { QueryData } from "@supabase/supabase-js";
+import type { QueryData, TablesInsert } from "@supabase/supabase-js";
 
 const devotionalsWithTranslationsQuery = supabase.from("devotionals").select(
   `
@@ -26,6 +26,8 @@ export type DevotionalWithTranslations = QueryData<
   typeof devotionalsWithTranslationsQuery
 >[number];
 
+type DevotionalTranslationInsert = TablesInsert<"devotional_translations">;
+
 async function getDevotionals(): Promise<
   ServiceResponse<DevotionalWithTranslations[]>
 > {
@@ -38,7 +40,10 @@ async function getDevotionals(): Promise<
 }
 
 async function createDevotional(
-  original: Omit<DevotionalTranslation, "id" | "devotional_id" | "status">,
+  original: Omit<
+    DevotionalTranslationInsert,
+    "id" | "devotional_id" | "status"
+  >,
   authorId: string
 ): Promise<ServiceResponse<Devotional>> {
   const { data: devotional, error: devotionalError } = await supabase
@@ -55,10 +60,7 @@ async function createDevotional(
   const { error: translationError } = await supabase
     .from("devotional_translations")
     .insert({
-      title: original.title,
-      content: original.content,
-      language_code: original.language_code,
-      is_original: original.is_original,
+      ...original,
       devotional_id: devotional.id,
       status: "completed",
     });
@@ -104,21 +106,10 @@ async function deleteDevotional(id: string): Promise<ServiceResponse<null>> {
   return { data: null, error };
 }
 
-async function retryTranslation(
-  translationId: string
-): Promise<ServiceResponse<null>> {
-  const { error } = await supabase.rpc("retry_translation", {
-    p_translation_id: translationId,
-  });
-
-  return { data: null, error };
-}
-
 export const devotionalRepository = {
   getDevotionals,
   createDevotional,
   createDevotionalTranslation,
   updateDevotionalTranslation,
   deleteDevotional,
-  retryTranslation,
 };

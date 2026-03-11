@@ -9,6 +9,8 @@ import {
 } from "@/core/lib/validators";
 import i18n from "@/core/i18n";
 import { toast } from "sonner";
+import type { ServiceResponse } from "@/core/types/service";
+import type { DevotionalTranslation } from "@/core/types/database";
 
 type DevotionalFormViewModelProps = {
   authorId: string;
@@ -125,86 +127,54 @@ export class DevotionalFormViewModel extends BaseViewModel {
   };
 
   public handleGenerateWithAI = async () => {
-    const lang = this.activeTab;
-    const translationId = this.translations[lang].id;
-
-    if (translationId) {
-      await this.handleRetryTranslation(lang);
-    } else {
-      await this.createAndTranslate(lang);
-    }
-  };
-
-  private handleRetryTranslation = async (lang: Language) => {
-    const translationId = this.translations[lang].id;
-    if (!translationId) return;
+    if (!this.devotionalToEdit) return;
 
     this.loading = true;
     this.notify();
 
-    const { error } =
-      await devotionalRepository.retryTranslation(translationId);
+    const { data: newTranslation, error } =
+      await devotionalRepository.createDevotionalTranslation({
+        devotional_id: this.devotionalToEdit.id,
+        language_code: this.activeTab,
+        title: "...",
+        content: "...",
+        is_original: false,
+        status: "processing",
+      });
 
     this.loading = false;
     if (error) {
       toast.error(i18n.t("error_generic"));
       await logService.logError(error, {
         component: "DevotionalFormViewModel",
-        context: { action: "retryTranslation", translationId },
       });
-    } else {
-      this.translations[lang].status = "processing";
+    } else if (newTranslation) {
+      this.translations[this.activeTab] = {
+        id: newTranslation.id,
+        title: newTranslation.title,
+        content: newTranslation.content,
+        status: "processing",
+      };
+      this.isManualEdit[this.activeTab] = true;
       this.onSuccess();
     }
     this.notify();
   };
 
-  private createAndTranslate = async (lang: Language) => {
+  private async createTranslation(
+    lang: Language
+  ): Promise<ServiceResponse<DevotionalTranslation> | undefined> {
     if (!this.devotionalToEdit) return;
 
-    this.loading = true;
-    this.notify();
-
-    const { data: newTranslation, error: createError } =
-      await devotionalRepository.createDevotionalTranslation({
-        devotional_id: this.devotionalToEdit.id,
-        language_code: lang,
-        title: "Placeholder",
-        content: "Placeholder for translation.",
-        is_original: false,
-        status: "error",
-      });
-
-    if (createError || !newTranslation) {
-      this.loading = false;
-      toast.error(i18n.t("error_generic"));
-      await logService.logError(
-        createError || new Error("Failed to create placeholder translation."),
-        {
-          component: "DevotionalFormViewModel",
-          context: { action: "createAndTranslate" },
-        }
-      );
-      this.notify();
-      return;
-    }
-
-    const { error: retryError } = await devotionalRepository.retryTranslation(
-      newTranslation.id
-    );
-
-    this.loading = false;
-    if (retryError) {
-      toast.error(i18n.t("error_generic"));
-      await logService.logError(retryError, {
-        component: "DevotionalFormViewModel",
-      });
-    } else {
-      toast.success("Translation has started...");
-      this.onSuccess();
-    }
-    this.notify();
-  };
+    return devotionalRepository.createDevotionalTranslation({
+      devotional_id: this.devotionalToEdit.id,
+      language_code: lang,
+      title: this.translations[lang].title.trim(),
+      content: this.translations[lang].content.trim(),
+      is_original: false,
+      status: "completed",
+    });
+  }
 
   public handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -230,14 +200,8 @@ export class DevotionalFormViewModel extends BaseViewModel {
     this.loading = true;
     this.notify();
 
-    let result:
-      | Awaited<ReturnType<typeof devotionalRepository.createDevotional>>
-      | Awaited<
-          ReturnType<typeof devotionalRepository.updateDevotionalTranslation>
-        >
-      | undefined;
-
     if (this.isEditing) {
+      let result;
       if (activeTranslation.id) {
         result = await devotionalRepository.updateDevotionalTranslation(
           activeTranslation.id,
@@ -249,48 +213,55 @@ export class DevotionalFormViewModel extends BaseViewModel {
       } else {
         result = await this.createTranslation(this.activeTab);
       }
+
+      if (result && !result.error) {
+        this.onSuccess();
+        this.onClose();
+      } else {
+        this.error = i18n.t("devotionals_form_error_update");
+        if (result?.error) {
+          await logService.logError(result.error, {
+            component: "DevotionalFormViewModel",
+          });
+        }
+      }
     } else {
       const newOriginal = {
         language_code: this.originalLanguage,
         title: this.translations[this.originalLanguage].title.trim(),
         content: this.translations[this.originalLanguage].content.trim(),
         is_original: true,
-        created_at: "",
-        updated_at: "",
       };
-      result = await devotionalRepository.createDevotional(
-        newOriginal,
-        this.authorId
-      );
-    }
 
+      const { data: newDevotional, error } =
+        await devotionalRepository.createDevotional(newOriginal, this.authorId);
+
+      if (error || !newDevotional) {
+        this.error = i18n.t("devotionals_form_error_create");
+        await logService.logError(error!, {
+          component: "DevotionalFormViewModel",
+        });
+      } else {
+        if (this.autoTranslate) {
+          const languages: Language[] = ["pt", "en", "es"];
+          for (const lang of languages) {
+            if (lang !== this.originalLanguage) {
+              await devotionalRepository.createDevotionalTranslation({
+                devotional_id: newDevotional.id,
+                language_code: lang,
+                title: "...",
+                content: "...",
+                is_original: false,
+                status: "processing",
+              });
+            }
+          }
+        }
+        this.onSuccess();
+        this.onClose();
+      }
+    }
     this.loading = false;
-
-    if (!result || result.error) {
-      this.error = i18n.t("error_saving_resource", {
-        resource: i18n.t("resource_devotionals"),
-      });
-      await logService.logError(
-        result?.error ||
-          new Error("Operation failed without a specific error."),
-        { component: "DevotionalFormViewModel" }
-      );
-    } else {
-      this.onSuccess();
-      this.onClose();
-    }
     this.notify();
   };
-
-  private async createTranslation(lang: Language) {
-    if (!this.devotionalToEdit) return;
-    return devotionalRepository.createDevotionalTranslation({
-      devotional_id: this.devotionalToEdit.id,
-      language_code: lang,
-      title: this.translations[lang].title.trim(),
-      content: this.translations[lang].content.trim(),
-      is_original: false,
-      status: "completed",
-    });
-  }
 }

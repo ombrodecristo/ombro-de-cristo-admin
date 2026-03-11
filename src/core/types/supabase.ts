@@ -420,10 +420,6 @@ export type Database = {
         Returns: undefined;
       };
       resync_user_auth_state: { Args: { p_user_id: string }; Returns: Json };
-      retry_translation: {
-        Args: { p_translation_id: string };
-        Returns: undefined;
-      };
     };
     Enums: {
       library_item_content_type: "PDF" | "YOUTUBE" | "DIRECT_UPLOAD";
