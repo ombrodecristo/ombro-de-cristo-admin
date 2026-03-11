@@ -9,6 +9,7 @@ export type UserGender = DbEnums["user_genders"];
 export type LanguagePreference = "pt" | "en" | "es";
 export type Church = DbTables["churches"]["Row"];
 export type Devotional = DbTables["devotionals"]["Row"];
+export type DevotionalTranslation = DbTables["devotional_translations"]["Row"];
 export type LibraryItem = DbTables["library_items"]["Row"];
 
 export type Permissions = {

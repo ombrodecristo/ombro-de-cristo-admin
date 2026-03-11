@@ -2,10 +2,25 @@ import { useState, type FormEvent } from "react";
 import styled from "@emotion/styled";
 import { DevotionalFormViewModel } from "../../view-models/DevotionalFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
-import { Modal, Button, Input, Textarea, Label } from "@/shared/components";
-import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
-import { IoSaveOutline } from "react-icons/io5";
+import {
+  Modal,
+  Button,
+  Input,
+  Textarea,
+  Label,
+  Select,
+} from "@/shared/components";
+import type { DevotionalWithTranslations } from "@/data/repositories/devotionalRepository";
+import {
+  IoSaveOutline,
+  IoAlertCircle,
+  IoCheckmarkCircle,
+  IoSync,
+  IoSparklesOutline,
+  IoCreateOutline,
+} from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import type { Theme } from "@/core/lib/theme";
 
 const FormContainer = styled.form`
   display: flex;
@@ -31,24 +46,23 @@ const ScrollableContent = styled.div(props => ({
   display: "flex",
   flexDirection: "column",
   gap: props.theme.spacing.m,
+  padding: `${props.theme.spacing.m}px 0`,
   paddingRight: props.theme.spacing.sm,
 
   "&::-webkit-scrollbar": {
     width: "10px",
   },
   "&::-webkit-scrollbar-track": {
-    background: props.theme.colors.mutedBackground,
-    borderRadius: props.theme.radii.round,
+    background: (props.theme as Theme).colors.mutedBackground,
+    borderRadius: (props.theme as Theme).radii.round,
   },
   "&::-webkit-scrollbar-thumb": {
-    backgroundColor: props.theme.colors.mutedForeground,
-    borderRadius: props.theme.radii.round,
+    backgroundColor: (props.theme as Theme).colors.mutedForeground,
+    borderRadius: (props.theme as Theme).radii.round,
   },
   "&::-webkit-scrollbar-thumb:hover": {
-    backgroundColor: props.theme.colors.primary,
+    backgroundColor: (props.theme as Theme).colors.primary,
   },
-  scrollbarWidth: "auto",
-  scrollbarColor: `${props.theme.colors.mutedForeground} ${props.theme.colors.mutedBackground}`,
 }));
 
 const Actions = styled.div`
@@ -59,12 +73,71 @@ const Actions = styled.div`
   flex-shrink: 0;
 `;
 
+const TabsContainer = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${props => props.theme.colors.border};
+`;
+
+const TabButton = styled.button<{ isActive: boolean }>`
+  padding: 10px 16px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid
+    ${props => (props.isActive ? props.theme.colors.primary : "transparent")};
+  color: ${props =>
+    props.isActive
+      ? props.theme.colors.primary
+      : props.theme.colors.mutedForeground};
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const StatusIcon = styled.span<{
+  status: "completed" | "processing" | "error" | "new";
+}>`
+  display: flex;
+  color: ${props => {
+    switch (props.status) {
+      case "completed":
+        return props.theme.colors.success;
+      case "error":
+      case "new":
+        return props.theme.colors.destructiveBackground;
+      default:
+        return props.theme.colors.mutedForeground;
+    }
+  }};
+`;
+
+const EmptyStateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: ${props => props.theme.spacing.xl}px;
+  gap: ${props => props.theme.spacing.l}px;
+  height: 100%;
+`;
+
+const CheckboxContainer = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: ${props => props.theme.spacing.s}px;
+`;
+
 interface DevotionalFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
   authorId: string;
-  devotionalToEdit: DevotionalWithAuthor | null;
+  devotionalToEdit: DevotionalWithTranslations | null;
 }
 
 export default function DevotionalFormModal({
@@ -75,7 +148,6 @@ export default function DevotionalFormModal({
   devotionalToEdit,
 }: DevotionalFormModalProps) {
   const { t } = useTranslation();
-
   const [viewModel] = useState(
     () =>
       new DevotionalFormViewModel({
@@ -85,55 +157,162 @@ export default function DevotionalFormModal({
         authorId,
       })
   );
-
   useViewModel(viewModel);
+
+  const { currentTranslation, isEditing, activeTab, showEmptyState } =
+    viewModel;
 
   const onFormSubmit = (e: FormEvent) => {
     viewModel.handleSubmit(e);
   };
 
+  const TabStatusIcon = ({
+    lang,
+  }: {
+    lang: keyof typeof viewModel.translations;
+  }) => {
+    const translation = viewModel.translations[lang];
+    if (viewModel.originalLanguage === lang) return <span>🌟</span>;
+    if (translation.status === "new") return null;
+
+    const statusMap = {
+      completed: <IoCheckmarkCircle />,
+      processing: <IoSync style={{ animation: "spin 1s linear infinite" }} />,
+      error: <IoAlertCircle />,
+    };
+
+    return (
+      <StatusIcon status={translation.status}>
+        {statusMap[translation.status as "completed" | "processing" | "error"]}
+      </StatusIcon>
+    );
+  };
+
+  const languages: { key: "pt" | "en" | "es"; label: string }[] = [
+    { key: "pt", label: "Português" },
+    { key: "en", label: "English" },
+    { key: "es", label: "Español" },
+  ];
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
       <FormContainer onSubmit={onFormSubmit}>
         <Title>
-          {viewModel.isEditing
+          {isEditing
             ? t("devotionals_form_edit_title")
             : t("devotionals_form_new_title")}
         </Title>
+
+        {isEditing && (
+          <TabsContainer>
+            {languages.map(({ key, label }) => (
+              <TabButton
+                key={key}
+                type="button"
+                isActive={activeTab === key}
+                onClick={() => viewModel.setActiveTab(key)}
+              >
+                <TabStatusIcon lang={key} />
+                {label}
+                {viewModel.originalLanguage === key && " (Original)"}
+              </TabButton>
+            ))}
+          </TabsContainer>
+        )}
+
         <ScrollableContent>
-          <div>
-            <Label htmlFor="title">{t("devotionals_form_title_label")}</Label>
-            <Input
-              id="title"
-              value={viewModel.title}
-              onChange={e => viewModel.setTitle(e.target.value)}
-              disabled={viewModel.loading}
-              required
-              error={viewModel.titleError || ""}
-              placeholder={t("devotionals_form_title_placeholder")}
-            />
-          </div>
-          <div>
-            <Label htmlFor="content">
-              {t("devotionals_form_content_label")}
-            </Label>
-            <Textarea
-              id="content"
-              value={viewModel.content}
-              onChange={e => viewModel.setContent(e.target.value)}
-              disabled={viewModel.loading}
-              required
-              error={viewModel.contentError || ""}
-              placeholder={t("devotionals_form_content_placeholder")}
-            />
-          </div>
+          {showEmptyState ? (
+            <EmptyStateContainer>
+              <p>Este devocional ainda não possui uma versão neste idioma.</p>
+              <div style={{ display: "flex", gap: "16px" }}>
+                <Button
+                  type="button"
+                  label="Gerar com IA"
+                  onClick={viewModel.handleGenerateWithAI}
+                  loading={viewModel.loading}
+                  variant="secondary"
+                  icon={<IoSparklesOutline size={18} />}
+                />
+                <Button
+                  type="button"
+                  label="Escrever Manualmente"
+                  onClick={viewModel.handleManualEdit}
+                  variant="secondary"
+                  icon={<IoCreateOutline size={18} />}
+                />
+              </div>
+            </EmptyStateContainer>
+          ) : (
+            <>
+              {!isEditing && (
+                <Label>
+                  Idioma Original
+                  <Select
+                    value={viewModel.originalLanguage}
+                    onChange={val =>
+                      viewModel.setOriginalLanguage(val as "pt" | "en" | "es")
+                    }
+                    options={languages.map(l => ({
+                      value: l.key,
+                      label: l.label,
+                    }))}
+                  />
+                </Label>
+              )}
+              <div>
+                <Label htmlFor="title">
+                  {t("devotionals_form_title_label")}
+                </Label>
+                <Input
+                  id="title"
+                  value={currentTranslation.title}
+                  onChange={e =>
+                    viewModel.handleInputChange("title", e.target.value)
+                  }
+                  disabled={viewModel.loading}
+                  required
+                  error={viewModel.error}
+                  placeholder={t("devotionals_form_title_placeholder")}
+                />
+              </div>
+              <div>
+                <Label htmlFor="content">
+                  {t("devotionals_form_content_label")}
+                </Label>
+                <Textarea
+                  id="content"
+                  value={currentTranslation.content}
+                  onChange={e =>
+                    viewModel.handleInputChange("content", e.target.value)
+                  }
+                  disabled={viewModel.loading}
+                  required
+                  placeholder={t("devotionals_form_content_placeholder")}
+                />
+              </div>
+            </>
+          )}
+
+          {!isEditing && (
+            <CheckboxContainer>
+              <input
+                type="checkbox"
+                checked={viewModel.autoTranslate}
+                onChange={e => viewModel.setAutoTranslate(e.target.checked)}
+                disabled={viewModel.loading}
+              />
+              Gerar automaticamente as traduções usando Inteligência Artificial
+            </CheckboxContainer>
+          )}
         </ScrollableContent>
+
         <Actions>
           <Button
             type="submit"
-            label={t("common_save")}
+            label={isEditing ? "Salvar Alterações" : "Publicar Devocional"}
             loading={viewModel.loading}
             icon={<IoSaveOutline size={20} />}
+            disabled={showEmptyState}
           />
           <Button
             type="button"

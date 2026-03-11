@@ -1,5 +1,6 @@
+import { useState } from "react";
 import styled from "@emotion/styled";
-import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
+import type { DevotionalWithTranslations } from "@/data/repositories/devotionalRepository";
 import { Button, Modal } from "@/shared/components";
 import { formatDate } from "@/core/lib/formatters";
 import { IoPencil, IoTrashOutline } from "react-icons/io5";
@@ -42,9 +43,6 @@ const ScrollableContent = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background-color: ${props => props.theme.colors.primary};
   }
-  scrollbar-width: auto;
-  scrollbar-color: ${props => props.theme.colors.mutedForeground}
-    ${props => props.theme.colors.mutedBackground};
 `;
 
 const DetailsList = styled.div`
@@ -79,12 +77,32 @@ const Actions = styled.div`
   flex-shrink: 0;
 `;
 
+const TabsContainer = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${props => props.theme.colors.border};
+  margin-bottom: ${props => props.theme.spacing.m}px;
+`;
+
+const TabButton = styled.button<{ isActive: boolean }>`
+  padding: 10px 16px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid
+    ${props => (props.isActive ? props.theme.colors.primary : "transparent")};
+  color: ${props =>
+    props.isActive
+      ? props.theme.colors.primary
+      : props.theme.colors.mutedForeground};
+  font-weight: 600;
+`;
+
 interface DevotionalDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  devotional: DevotionalWithAuthor;
-  onEdit: (devotional: DevotionalWithAuthor) => void;
-  onDelete: (devotional: DevotionalWithAuthor) => void;
+  devotional: DevotionalWithTranslations;
+  onEdit: (devotional: DevotionalWithTranslations) => void;
+  onDelete: (devotional: DevotionalWithTranslations) => void;
 }
 
 export function DevotionalDetailsModal({
@@ -95,6 +113,12 @@ export function DevotionalDetailsModal({
   onDelete,
 }: DevotionalDetailsModalProps) {
   const { t } = useTranslation();
+  const languages = ["pt", "en", "es"];
+  const [activeTab, setActiveTab] = useState(devotional.original_language);
+
+  const activeTranslation =
+    devotional.translations.find(tr => tr.language_code === activeTab) ||
+    devotional.translations.find(tr => tr.is_original);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
@@ -102,10 +126,6 @@ export function DevotionalDetailsModal({
         <Title>{t("devotionals_details_title")}</Title>
         <ScrollableContent>
           <DetailsList>
-            <DetailItem>
-              <DetailLabel>{t("devotionals_details_title_label")}</DetailLabel>
-              <DetailValue>{devotional.title}</DetailValue>
-            </DetailItem>
             <DetailItem>
               <DetailLabel>{t("devotionals_details_author_label")}</DetailLabel>
               <DetailValue>
@@ -118,11 +138,26 @@ export function DevotionalDetailsModal({
               </DetailLabel>
               <DetailValue>{formatDate(devotional.updated_at)}</DetailValue>
             </DetailItem>
+            <TabsContainer>
+              {languages.map(lang => (
+                <TabButton
+                  key={lang}
+                  isActive={activeTab === lang}
+                  onClick={() => setActiveTab(lang)}
+                >
+                  {t(`profile_language_${lang}`)}
+                </TabButton>
+              ))}
+            </TabsContainer>
+            <DetailItem>
+              <DetailLabel>{t("devotionals_details_title_label")}</DetailLabel>
+              <DetailValue>{activeTranslation?.title}</DetailValue>
+            </DetailItem>
             <DetailItem>
               <DetailLabel>
                 {t("devotionals_details_content_label")}
               </DetailLabel>
-              <DetailValue>{devotional.content}</DetailValue>
+              <DetailValue>{activeTranslation?.content}</DetailValue>
             </DetailItem>
           </DetailsList>
         </ScrollableContent>

@@ -114,7 +114,7 @@ const ErrorMessage = styled.p(props => ({
 }));
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error?: string;
+  error?: string | null;
   icon?: ReactNode;
   isPassword?: boolean;
 }

@@ -4,16 +4,16 @@ import {
 } from "@/shared/view-models/BaseCrudViewModel";
 import {
   devotionalRepository,
-  type DevotionalWithAuthor,
+  type DevotionalWithTranslations,
 } from "@/data/repositories/devotionalRepository";
 import i18n from "@/core/i18n";
 
-export class DevotionalManagementViewModel extends BaseCrudViewModel<DevotionalWithAuthor> {
+export class DevotionalManagementViewModel extends BaseCrudViewModel<DevotionalWithTranslations> {
   protected resourceName = i18n.t("resource_devotionals");
 
   constructor() {
     super();
-    this.sortConfig = { key: "updated_at", direction: "descending" };
+    this.sortConfig = { key: "published_at", direction: "descending" };
   }
 
   protected async fetchItemsFromServer() {
@@ -25,47 +25,61 @@ export class DevotionalManagementViewModel extends BaseCrudViewModel<DevotionalW
   }
 
   protected filterItems(
-    items: DevotionalWithAuthor[],
+    items: DevotionalWithTranslations[],
     query: string
-  ): DevotionalWithAuthor[] {
+  ): DevotionalWithTranslations[] {
     if (!query) return items;
+    const lowerCaseQuery = query.toLowerCase();
 
-    return items.filter(devotional =>
-      devotional.title.toLowerCase().includes(query.toLowerCase())
-    );
+    return items.filter(devotional => {
+      const originalTranslation = devotional.translations.find(
+        t => t.is_original
+      );
+
+      return (
+        originalTranslation?.title.toLowerCase().includes(lowerCaseQuery) ||
+        devotional.author?.full_name?.toLowerCase().includes(lowerCaseQuery)
+      );
+    });
   }
 
   protected sortItems(
-    items: DevotionalWithAuthor[],
+    items: DevotionalWithTranslations[],
     config: SortConfig
-  ): DevotionalWithAuthor[] {
+  ): DevotionalWithTranslations[] {
     const sortedItems = [...items];
+    if (!config.key) return sortedItems;
 
-    if (config.key) {
-      sortedItems.sort((a, b) => {
-        let aValue: string | null;
-        let bValue: string | null;
+    sortedItems.sort((a, b) => {
+      let aValue: string | null | undefined;
+      let bValue: string | null | undefined;
 
-        if (config.key === "author") {
-          aValue = a.author?.full_name ?? "";
-          bValue = b.author?.full_name ?? "";
-        } else {
-          aValue = a[config.key as keyof DevotionalWithAuthor] as string | null;
-          bValue = b[config.key as keyof DevotionalWithAuthor] as string | null;
-        }
+      if (config.key === "title") {
+        aValue = a.translations.find(t => t.is_original)?.title;
+        bValue = b.translations.find(t => t.is_original)?.title;
+      } else if (config.key === "author") {
+        aValue = a.author?.full_name;
+        bValue = b.author?.full_name;
+      } else {
+        aValue = a[config.key as keyof DevotionalWithTranslations] as
+          | string
+          | null;
+        bValue = b[config.key as keyof DevotionalWithTranslations] as
+          | string
+          | null;
+      }
 
-        if (aValue === null) return 1;
-        if (bValue === null) return -1;
-        if (aValue < bValue) {
-          return config.direction === "ascending" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return config.direction === "ascending" ? 1 : -1;
-        }
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
+      if (aValue < bValue) {
+        return config.direction === "ascending" ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return config.direction === "ascending" ? 1 : -1;
+      }
 
-        return 0;
-      });
-    }
+      return 0;
+    });
 
     return sortedItems;
   }

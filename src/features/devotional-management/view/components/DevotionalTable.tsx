@@ -6,7 +6,7 @@ import {
   IoArrowDown,
   IoEyeOutline,
 } from "react-icons/io5";
-import type { DevotionalWithAuthor } from "@/data/repositories/devotionalRepository";
+import type { DevotionalWithTranslations } from "@/data/repositories/devotionalRepository";
 import { formatDate } from "@/core/lib/formatters";
 import {
   Table,
@@ -68,10 +68,10 @@ const MobileActions = styled.div`
 `;
 
 type DevotionalTableProps = {
-  devotionals: DevotionalWithAuthor[];
-  onEdit: (devotional: DevotionalWithAuthor) => void;
-  onDelete: (devotional: DevotionalWithAuthor) => void;
-  onDetails: (devotional: DevotionalWithAuthor) => void;
+  devotionals: DevotionalWithTranslations[];
+  onEdit: (devotional: DevotionalWithTranslations) => void;
+  onDelete: (devotional: DevotionalWithTranslations) => void;
+  onDetails: (devotional: DevotionalWithTranslations) => void;
   sortConfig: SortConfig;
   requestSort: (key: string) => void;
 };
@@ -88,7 +88,6 @@ export default function DevotionalTable({
 
   const getSortIcon = (key: string) => {
     if (sortConfig.key !== key) return null;
-
     return sortConfig.direction === "ascending" ? (
       <IoArrowUp size={16} />
     ) : (
@@ -133,48 +132,54 @@ export default function DevotionalTable({
               </TableCell>
             </TableRow>
           ) : (
-            devotionals.map(devotional => (
-              <TableRow key={devotional.id}>
-                <TableCell style={{ fontWeight: "500" }}>
-                  {devotional.title}
-                </TableCell>
-                <DesktopOnlyCell>
-                  {devotional.author?.full_name ?? t("common_undefined")}
-                </DesktopOnlyCell>
-                <DesktopOnlyCell>
-                  {formatDate(devotional.updated_at)}
-                </DesktopOnlyCell>
-                <ActionsContainer>
-                  <DesktopActions>
-                    <Button
-                      label={t("churches_details_edit_button")}
-                      onClick={() => onEdit(devotional)}
-                      icon={<IoPencil />}
-                      size="small"
-                      style={{ width: "auto" }}
-                    />
-                    <Button
-                      label={t("churches_details_delete_button")}
-                      onClick={() => onDelete(devotional)}
-                      icon={<IoTrashOutline />}
-                      variant="destructive"
-                      size="small"
-                      style={{ width: "auto" }}
-                    />
-                  </DesktopActions>
-                  <MobileActions>
-                    <Button
-                      label={t("common_view")}
-                      onClick={() => onDetails(devotional)}
-                      icon={<IoEyeOutline />}
-                      variant="secondary"
-                      size="small"
-                      style={{ width: "auto" }}
-                    />
-                  </MobileActions>
-                </ActionsContainer>
-              </TableRow>
-            ))
+            devotionals.map(devotional => {
+              const originalTranslation = devotional.translations.find(
+                t => t.is_original
+              );
+
+              return (
+                <TableRow key={devotional.id}>
+                  <TableCell style={{ fontWeight: "500" }}>
+                    {originalTranslation?.title ?? "..."}
+                  </TableCell>
+                  <DesktopOnlyCell>
+                    {devotional.author?.full_name ?? t("common_undefined")}
+                  </DesktopOnlyCell>
+                  <DesktopOnlyCell>
+                    {formatDate(devotional.updated_at)}
+                  </DesktopOnlyCell>
+                  <ActionsContainer>
+                    <DesktopActions>
+                      <Button
+                        label={t("churches_details_edit_button")}
+                        onClick={() => onEdit(devotional)}
+                        icon={<IoPencil />}
+                        size="small"
+                        style={{ width: "auto" }}
+                      />
+                      <Button
+                        label={t("churches_details_delete_button")}
+                        onClick={() => onDelete(devotional)}
+                        icon={<IoTrashOutline />}
+                        variant="destructive"
+                        size="small"
+                        style={{ width: "auto" }}
+                      />
+                    </DesktopActions>
+                    <MobileActions>
+                      <Button
+                        label={t("common_view")}
+                        onClick={() => onDetails(devotional)}
+                        icon={<IoEyeOutline />}
+                        variant="secondary"
+                        size="small"
+                        style={{ width: "auto" }}
+                      />
+                    </MobileActions>
+                  </ActionsContainer>
+                </TableRow>
+              );
+            })
           )}
         </TableBody>
       </Table>
