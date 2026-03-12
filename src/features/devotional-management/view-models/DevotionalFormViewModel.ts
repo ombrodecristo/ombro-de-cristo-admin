@@ -48,7 +48,8 @@ export class DevotionalFormViewModel extends BaseViewModel {
     (i18n.language.split("-")[0] as Language) || "pt";
   public activeTab: Language = this.originalLanguage;
   public loading = false;
-  public error: string | null = null;
+  public titleError: string | null = null;
+  public contentError: string | null = null;
   public isEditing: boolean;
 
   private authorId: string;
@@ -116,7 +117,8 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
   public setActiveTab = (tab: Language) => {
     this.activeTab = tab;
-    this.error = null;
+    this.titleError = null;
+    this.contentError = null;
     this.notify();
   };
 
@@ -135,7 +137,8 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
   public handleInputChange = (field: "title" | "content", value: string) => {
     this.translations[this.activeTab][field] = value;
-    this.error = null;
+    this.titleError = null;
+    this.contentError = null;
     this.notify();
   };
 
@@ -188,12 +191,13 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
   public handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    this.error = null;
+    this.titleError = null;
+    this.contentError = null;
 
     const activeTranslation = this.translations[this.activeTab];
     const titleValidation = validateDevotionalTitle(activeTranslation.title);
     if (!titleValidation.isValid) {
-      this.error = titleValidation.message;
+      this.titleError = titleValidation.message;
       this.notify();
 
       return;
@@ -203,7 +207,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
       activeTranslation.content
     );
     if (!contentValidation.isValid) {
-      this.error = contentValidation.message;
+      this.contentError = contentValidation.message;
       this.notify();
 
       return;
@@ -230,7 +234,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
         this.onSuccess();
         this.onClose();
       } else {
-        this.error = i18n.t("devotionals_form_error_update");
+        this.contentError = i18n.t("devotionals_form_error_update");
         if (result?.error) {
           await logService.logError(result.error, {
             component: "DevotionalFormViewModel",
@@ -251,7 +255,7 @@ export class DevotionalFormViewModel extends BaseViewModel {
       );
 
       if (error) {
-        this.error = i18n.t("devotionals_form_error_create");
+        this.contentError = i18n.t("devotionals_form_error_create");
         await logService.logError(error!, {
           component: "DevotionalFormViewModel",
         });

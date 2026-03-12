@@ -303,7 +303,7 @@ export default function DevotionalFormModal({
                     viewModel.isCurrentTranslationProcessing
                   }
                   required
-                  error={viewModel.error}
+                  error={viewModel.titleError}
                   placeholder={t("devotionals_form_title_placeholder")}
                 />
               </div>
@@ -322,6 +322,7 @@ export default function DevotionalFormModal({
                     viewModel.isCurrentTranslationProcessing
                   }
                   required
+                  error={viewModel.contentError ? viewModel.contentError : ""}
                   placeholder={t("devotionals_form_content_placeholder")}
                 />
               </div>
