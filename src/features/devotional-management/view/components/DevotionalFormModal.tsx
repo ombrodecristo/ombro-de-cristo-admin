@@ -151,9 +151,7 @@ export default function DevotionalFormModal({
   useViewModel(viewModel);
 
   useEffect(() => {
-    if (devotionalToEdit) {
-      viewModel.updateTranslationsState(devotionalToEdit);
-    }
+    viewModel.updateDevotional(devotionalToEdit);
   }, [devotionalToEdit, viewModel]);
 
   const { currentTranslation, isEditing, activeTab, showEmptyState } =

@@ -63,6 +63,17 @@ export default function DevotionalManagementPage() {
     viewModel.handleOpenDelete(devotional);
   };
 
+  const devotionalForEditModal = viewModel.selectedItem
+    ? (viewModel.items.find(item => item.id === viewModel.selectedItem!.id) ??
+      viewModel.selectedItem)
+    : null;
+
+  const devotionalForDetailsModal = viewModel.selectedItemForDetails
+    ? (viewModel.items.find(
+        item => item.id === viewModel.selectedItemForDetails!.id
+      ) ?? viewModel.selectedItemForDetails)
+    : null;
+
   return (
     <PageContainer>
       <PageHeader title={t("devotionals_page_title")}>
@@ -94,18 +105,18 @@ export default function DevotionalManagementPage() {
       {viewModel.isFormOpen && (
         <DevotionalFormModal
           isOpen={viewModel.isFormOpen}
-          devotionalToEdit={viewModel.selectedItem}
+          devotionalToEdit={devotionalForEditModal}
           authorId={user!.id}
           onClose={viewModel.handleCloseModals}
           onSuccess={viewModel.handleFormSuccess}
         />
       )}
 
-      {viewModel.selectedItemForDetails && (
+      {devotionalForDetailsModal && (
         <DevotionalDetailsModal
           isOpen={viewModel.isDetailsModalOpen}
           onClose={viewModel.handleCloseDetailsModal}
-          devotional={viewModel.selectedItemForDetails}
+          devotional={devotionalForDetailsModal}
           onEdit={handleEditFromDetails}
           onDelete={handleDeleteFromDetails}
         />

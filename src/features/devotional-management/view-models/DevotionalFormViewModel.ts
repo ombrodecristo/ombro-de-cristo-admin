@@ -63,11 +63,16 @@ export class DevotionalFormViewModel extends BaseViewModel {
     this.onClose = props.onClose;
     this.onSuccess = props.onSuccess;
     this.isEditing = !!props.devotionalToEdit;
+    this.updateDevotional(props.devotionalToEdit);
+  }
+
+  public updateDevotional(devotional: DevotionalWithTranslations | null) {
+    this.devotionalToEdit = devotional;
+    this.isEditing = !!devotional;
 
     if (this.isEditing && this.devotionalToEdit) {
       this.originalLanguage = this.devotionalToEdit
         .original_language as Language;
-      this.activeTab = this.originalLanguage;
 
       this.devotionalToEdit.translations.forEach(t => {
         const lang = t.language_code as Language;
@@ -81,23 +86,15 @@ export class DevotionalFormViewModel extends BaseViewModel {
         }
       });
     } else {
+      this.originalLanguage = (i18n.language.split("-")[0] as Language) || "pt";
+      this.activeTab = this.originalLanguage;
+      this.translations = {
+        pt: { id: null, title: "", content: "", status: "new" },
+        en: { id: null, title: "", content: "", status: "new" },
+        es: { id: null, title: "", content: "", status: "new" },
+      };
       this.translations[this.originalLanguage].status = "completed";
     }
-  }
-
-  public updateTranslationsState(newDevotional: DevotionalWithTranslations) {
-    newDevotional.translations.forEach(newTranslationData => {
-      const lang = newTranslationData.language_code as Language;
-      const existingState = this.translations[lang];
-
-      if (existingState && existingState.status !== newTranslationData.status) {
-        existingState.status =
-          newTranslationData.status as TranslationState["status"];
-        existingState.title = newTranslationData.title;
-        existingState.content = newTranslationData.content;
-      }
-    });
-
     this.notify();
   }
 
