@@ -65,6 +65,29 @@ const ScrollableContent = styled.div(props => ({
   },
 }));
 
+const FormFieldsContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.m}px;
+`;
+
+const ProcessingOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background-color: rgba(240, 239, 236, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: ${props => props.theme.radii.m}px;
+  gap: ${props => props.theme.spacing.m}px;
+  color: ${props => props.theme.colors.primary};
+  font-weight: 500;
+  text-align: center;
+`;
+
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
@@ -238,7 +261,17 @@ export default function DevotionalFormModal({
               </div>
             </EmptyStateContainer>
           ) : (
-            <>
+            <FormFieldsContainer>
+              {viewModel.isCurrentTranslationProcessing && (
+                <ProcessingOverlay>
+                  <IoSync
+                    size={32}
+                    style={{ animation: "spin 1.5s linear infinite" }}
+                  />
+                  <span>Gerando tradução com IA...</span>
+                </ProcessingOverlay>
+              )}
+
               {!isEditing && (
                 <Label>
                   Idioma Original
@@ -264,7 +297,10 @@ export default function DevotionalFormModal({
                   onChange={e =>
                     viewModel.handleInputChange("title", e.target.value)
                   }
-                  disabled={viewModel.loading}
+                  disabled={
+                    viewModel.loading ||
+                    viewModel.isCurrentTranslationProcessing
+                  }
                   required
                   error={viewModel.error}
                   placeholder={t("devotionals_form_title_placeholder")}
@@ -280,12 +316,15 @@ export default function DevotionalFormModal({
                   onChange={e =>
                     viewModel.handleInputChange("content", e.target.value)
                   }
-                  disabled={viewModel.loading}
+                  disabled={
+                    viewModel.loading ||
+                    viewModel.isCurrentTranslationProcessing
+                  }
                   required
                   placeholder={t("devotionals_form_content_placeholder")}
                 />
               </div>
-            </>
+            </FormFieldsContainer>
           )}
         </ScrollableContent>
 

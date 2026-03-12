@@ -102,6 +102,10 @@ export class DevotionalFormViewModel extends BaseViewModel {
     return this.translations[this.activeTab];
   }
 
+  public get isCurrentTranslationProcessing(): boolean {
+    return this.translations[this.activeTab].status === "processing";
+  }
+
   public get showEmptyState() {
     const isReprocessable =
       this.currentTranslation.status === "new" ||
