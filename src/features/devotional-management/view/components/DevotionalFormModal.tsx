@@ -207,9 +207,9 @@ export default function DevotionalFormModal({
   };
 
   const languages: { key: "pt" | "en" | "es"; label: string }[] = [
-    { key: "pt", label: "Português" },
-    { key: "en", label: "English" },
-    { key: "es", label: "Español" },
+    { key: "pt", label: t("profile_language_pt") },
+    { key: "en", label: t("profile_language_en") },
+    { key: "es", label: t("profile_language_es") },
   ];
 
   return (
@@ -231,8 +231,9 @@ export default function DevotionalFormModal({
                 onClick={() => viewModel.setActiveTab(key)}
               >
                 <TabStatusIcon lang={key} />
-                {label}
-                {viewModel.originalLanguage === key && " (Original)"}
+                {label.split(" ")[0]}
+                {viewModel.originalLanguage === key &&
+                  ` ${t("devotionals_form_original_language_tag")}`}
               </TabButton>
             ))}
           </TabsContainer>
@@ -241,11 +242,11 @@ export default function DevotionalFormModal({
         <ScrollableContent>
           {showEmptyState ? (
             <EmptyStateContainer>
-              <p>Este devocional ainda não possui uma versão neste idioma.</p>
+              <p>{t("devotionals_form_empty_state_message")}</p>
               <div style={{ display: "flex", gap: "16px" }}>
                 <Button
                   type="button"
-                  label="Gerar com IA"
+                  label={t("devotionals_form_generate_ai")}
                   onClick={viewModel.handleGenerateWithAI}
                   loading={viewModel.loading}
                   variant="secondary"
@@ -253,7 +254,7 @@ export default function DevotionalFormModal({
                 />
                 <Button
                   type="button"
-                  label="Escrever Manualmente"
+                  label={t("devotionals_form_write_manually")}
                   onClick={viewModel.handleManualEdit}
                   variant="secondary"
                   icon={<IoCreateOutline size={18} />}
@@ -268,13 +269,13 @@ export default function DevotionalFormModal({
                     size={32}
                     style={{ animation: "spin 1.5s linear infinite" }}
                   />
-                  <span>Gerando tradução com IA...</span>
+                  <span>{t("devotionals_form_generating_ai")}</span>
                 </ProcessingOverlay>
               )}
 
               {!isEditing && (
                 <Label>
-                  Idioma Original
+                  {t("devotionals_form_original_language_label")}
                   <Select
                     value={viewModel.originalLanguage}
                     onChange={val =>
@@ -331,7 +332,11 @@ export default function DevotionalFormModal({
         <Actions>
           <Button
             type="submit"
-            label={isEditing ? "Salvar Alterações" : "Publicar Devocional"}
+            label={
+              isEditing
+                ? t("devotionals_form_save_changes_button")
+                : t("devotionals_form_publish_button")
+            }
             loading={viewModel.loading}
             icon={<IoSaveOutline size={20} />}
             disabled={showEmptyState}

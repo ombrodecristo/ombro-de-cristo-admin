@@ -147,7 +147,7 @@ export class EditUserViewModel extends BaseViewModel {
 
   public handleResync = async (): Promise<{ error: string | null }> => {
     if (this.isResyncing || this.loading)
-      return { error: "Ação já em progresso." };
+      return { error: i18n.t("error_action_in_progress") };
 
     this.isResyncing = true;
     this.notify();

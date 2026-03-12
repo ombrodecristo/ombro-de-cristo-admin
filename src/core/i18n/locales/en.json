@@ -339,6 +339,15 @@
     "library_open_pdf_new_tab": "Open PDF in new tab",
     "library_form_current_content": "Current Content",
     "users_edit_resync_button": "Resync User",
-    "users_toast_resync_success": "User resynced successfully!"
+    "users_toast_resync_success": "User resynced successfully!",
+    "devotionals_form_generate_ai": "Generate with AI",
+    "devotionals_form_write_manually": "Write Manually",
+    "devotionals_form_empty_state_message": "This devotional does not yet have a version in this language.",
+    "devotionals_form_generating_ai": "Generating translation with AI...",
+    "devotionals_form_original_language_label": "Original Language",
+    "devotionals_form_original_language_tag": "(Original)",
+    "devotionals_form_save_changes_button": "Save Changes",
+    "devotionals_form_publish_button": "Publish Devotional",
+    "error_action_in_progress": "Action already in progress."
   }
 }
