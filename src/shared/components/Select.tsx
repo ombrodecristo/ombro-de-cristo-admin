@@ -166,7 +166,7 @@ export function Select({
               <DropdownItem
                 key={option.value}
                 isSelected={value === option.value}
-                onClick={() => handleSelect(option.value)}
+                onMouseDown={() => handleSelect(option.value)}
               >
                 {option.label}
               </DropdownItem>
