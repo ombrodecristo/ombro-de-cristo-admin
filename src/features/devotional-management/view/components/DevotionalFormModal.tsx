@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import { DevotionalFormViewModel } from "../../view-models/DevotionalFormViewModel";
 import { useViewModel } from "@/shared/hooks/useViewModel";
@@ -149,6 +149,12 @@ export default function DevotionalFormModal({
       })
   );
   useViewModel(viewModel);
+
+  useEffect(() => {
+    if (devotionalToEdit) {
+      viewModel.updateTranslationsState(devotionalToEdit);
+    }
+  }, [devotionalToEdit, viewModel]);
 
   const { currentTranslation, isEditing, activeTab, showEmptyState } =
     viewModel;

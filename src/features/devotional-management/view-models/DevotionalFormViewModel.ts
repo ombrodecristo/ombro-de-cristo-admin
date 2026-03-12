@@ -25,10 +25,10 @@ type Language = "pt" | "en" | "es";
 type TranslationStatus = "completed" | "processing" | "error" | "new";
 
 type TranslationState = {
+  id: string | null;
   title: string;
   content: string;
   status: TranslationStatus;
-  id: string | null;
 };
 
 export class DevotionalFormViewModel extends BaseViewModel {
@@ -83,6 +83,22 @@ export class DevotionalFormViewModel extends BaseViewModel {
     } else {
       this.translations[this.originalLanguage].status = "completed";
     }
+  }
+
+  public updateTranslationsState(newDevotional: DevotionalWithTranslations) {
+    newDevotional.translations.forEach(newTranslationData => {
+      const lang = newTranslationData.language_code as Language;
+      const existingState = this.translations[lang];
+
+      if (existingState && existingState.status !== newTranslationData.status) {
+        existingState.status =
+          newTranslationData.status as TranslationState["status"];
+        existingState.title = newTranslationData.title;
+        existingState.content = newTranslationData.content;
+      }
+    });
+
+    this.notify();
   }
 
   public get currentTranslation() {
