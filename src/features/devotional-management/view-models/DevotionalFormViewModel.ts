@@ -144,27 +144,37 @@ export class DevotionalFormViewModel extends BaseViewModel {
 
   public handleGenerateWithAI = async () => {
     const translation = this.translations[this.activeTab];
-    if (!translation || !translation.id) return;
+    if (!this.devotionalToEdit) return;
 
     this.loading = true;
     this.notify();
 
-    const { data: updatedTranslation, error } =
-      await devotionalRepository.updateTranslationStatus(
-        translation.id,
-        "processing"
-      );
+    const result = translation.id
+      ? await devotionalRepository.updateTranslationStatus(
+          translation.id,
+          "processing"
+        )
+      : await devotionalRepository.createTranslationRecord(
+          this.devotionalToEdit.id,
+          this.activeTab
+        );
 
     this.loading = false;
-    if (error) {
+
+    if (result.error) {
       toast.error(i18n.t("error_generic"));
-      await logService.logError(error, {
+      await logService.logError(result.error as Error, {
         component: "DevotionalFormViewModel.handleGenerateWithAI",
+        context: {
+          devotionalId: this.devotionalToEdit.id,
+          lang: this.activeTab,
+          hasId: !!translation.id,
+        },
       });
-    } else if (updatedTranslation) {
-      this.translations[this.activeTab].status = "processing";
+    } else if (result.data) {
       this.onSuccess();
     }
+
     this.notify();
   };
 

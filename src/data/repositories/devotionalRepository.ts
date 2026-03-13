@@ -77,6 +77,26 @@ async function createDevotional(
   return { data: devotional, error: null };
 }
 
+async function createTranslationRecord(
+  devotionalId: string,
+  languageCode: string
+): Promise<ServiceResponse<DevotionalTranslation>> {
+  const { data, error } = await supabase
+    .from("devotional_translations")
+    .insert({
+      devotional_id: devotionalId,
+      language_code: languageCode,
+      title: "...",
+      content: "...",
+      is_original: false,
+      status: "processing",
+    })
+    .select()
+    .single();
+
+  return { data, error };
+}
+
 async function updateTranslationStatus(
   translationId: string,
   status: "processing" | "error" | "completed"
@@ -114,6 +134,7 @@ async function deleteDevotional(id: string): Promise<ServiceResponse<null>> {
 export const devotionalRepository = {
   getDevotionals,
   createDevotional,
+  createTranslationRecord,
   updateTranslationStatus,
   updateDevotionalTranslation,
   deleteDevotional,
